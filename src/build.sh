@@ -1,0 +1,16 @@
+#!/bin/bash
+#Build the operating system
+echo Cleaning previous mess...
+make clean
+echo Compiling kernel...
+make
+echo Setting up GRUB...
+mkdir -p isodir/boot/grub
+cp LiquiDOS.bin isodir/boot/LiquiDOS.bin
+cp grub/grub.cfg isodir/boot/grub/grub.cfg
+echo Making GRUB iso...
+grub-mkrescue -o LiquiDOS.iso isodir
+echo Cleaning up current mess...
+rm -r isodir
+# Comment below line if you want to keep the binary output file
+rm *.bin
