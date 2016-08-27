@@ -104,14 +104,15 @@ void isr_handler(regs_t *r) //We use a pointer reference to our struct
 {
     console_clear(COLOR_LIGHT_RED); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
     //console_clear(COLOR_BLUE);
-    console_writeline("\n\n                    Uh oh, something went very wrong here!");
+    console_write("\n\n\n                                    "); console_setbg(COLOR_LIGHT_BLUE); console_write("LiquiDOS\n"); console_setbg(COLOR_LIGHT_RED);
+    console_print_center("Uh oh, something went very wrong here!"); console_putc('\n');
     if (r->int_no < 32)
     {
         //Something very wrong happened here, to the code
         console_write("                          Received interrupt: "); console_write_dec(r->int_no);
-        console_putc('('); console_write_hex(r->int_no); console_putc(')');
+        console_putc('('); console_write_hex(r->int_no); console_putc(')');  console_putc('\n');
         // Dump the contents of the registers onto the screen
-        console_write("REGDUMP"); console_putc('\n');
+        console_write(" REGDUMP ");
         console_write(" EAX: "); console_write_hex(r->eax); console_write(" EBX: "); console_write_hex(r->ebx);
         console_write(" ECX: "); console_write_hex(r->ecx); console_write(" EDX: "); console_write_hex(r->edx);
         console_write(" ESI: "); console_write_hex(r->esi); console_write(" EDI: "); console_write_hex(r->edi);
