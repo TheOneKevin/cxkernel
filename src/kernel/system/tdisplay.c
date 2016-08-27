@@ -103,12 +103,12 @@ void console_putc(char c)
     uint16_t entry = get_entry(c, attrib);
     uint16_t *location;
     // Backspace by decreasing the cursor x
-    if( c == 0x08 && x)
+    if( c == '\b' && x)
     {
         x --;
     }
     // Tab by setting the cursor x to the nearest divisible by 8 location
-    else if(c == 0x09)
+    else if(c == '\t')
     {
         x = (x+8) & ~(8-1);
     }

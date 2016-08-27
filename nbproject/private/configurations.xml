@@ -13,9 +13,14 @@
           <in>gdt.h</in>
           <in>idt.h</in>
         </df>
+        <df name="drivers">
+          <in>keyboard.h</in>
+        </df>
+        <df name="localization">
+          <in>en_scan.h</in>
+        </df>
         <df name="system">
           <in>irq.h</in>
-          <in>keyboard.h</in>
           <in>pic.h</in>
           <in>pit.h</in>
           <in>tdisplay.h</in>
@@ -32,10 +37,12 @@
           <in>interrupts.s</in>
           <in>tables.s</in>
         </df>
+        <df name="drivers">
+          <in>keyboard.c</in>
+        </df>
         <df name="system">
           <in>common.c</in>
           <in>irq.c</in>
-          <in>keyboard.c</in>
           <in>pic.c</in>
           <in>pit.c</in>
           <in>tdisplay.c</in>

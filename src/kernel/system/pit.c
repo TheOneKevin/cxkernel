@@ -21,8 +21,8 @@ static void timer_callback(regs_t *regs)
 
 void init_timer(uint32_t frequency)
 {
-   // Firstly, register our timer callback.
-   install_handler(32, &timer_callback); // We set the timer as a pointer and then register it
+   // IRQ0 is the PIT IRQ
+   install_handler(IRQ0, &timer_callback); // We set the timer as a pointer and then register it
 
    // The value we send to the PIT is the value to divide it's input clock
    // (1193180 Hz) by, to get our required frequency. Important to note is

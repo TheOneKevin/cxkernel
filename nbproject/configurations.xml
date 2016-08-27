@@ -11,9 +11,14 @@
           <in>gdt.h</in>
           <in>idt.h</in>
         </df>
+        <df name="drivers">
+          <in>keyboard.h</in>
+        </df>
+        <df name="localization">
+          <in>en_scan.h</in>
+        </df>
         <df name="system">
           <in>irq.h</in>
-          <in>keyboard.h</in>
           <in>pic.h</in>
           <in>pit.h</in>
           <in>tdisplay.h</in>
@@ -30,10 +35,12 @@
           <in>interrupts.s</in>
           <in>tables.s</in>
         </df>
+        <df name="drivers">
+          <in>keyboard.c</in>
+        </df>
         <df name="system">
           <in>common.c</in>
           <in>irq.c</in>
-          <in>keyboard.c</in>
           <in>pic.c</in>
           <in>pit.c</in>
           <in>tdisplay.c</in>
@@ -85,9 +92,11 @@
       </item>
       <item path="src/include/common.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/include/system/irq.h" ex="false" tool="3" flavor2="0">
+      <item path="src/include/drivers/keyboard.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/include/system/keyboard.h" ex="false" tool="3" flavor2="0">
+      <item path="src/include/localization/en_scan.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/include/system/irq.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/include/system/pic.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -105,13 +114,13 @@
       </item>
       <item path="src/kernel/assembly/tables.s" ex="false" tool="4" flavor2="0">
       </item>
+      <item path="src/kernel/drivers/keyboard.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="src/kernel/kernel.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/kernel/system/common.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/kernel/system/irq.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/kernel/system/keyboard.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/kernel/system/pic.c" ex="false" tool="0" flavor2="0">
       </item>

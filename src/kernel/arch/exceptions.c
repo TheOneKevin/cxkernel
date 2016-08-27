@@ -45,57 +45,6 @@ char *exception_messages[] =
     "Reserved"
 };
 
-void isr_handler(regs_t *r) //We use a pointer reference to our struct
-{
-    //console_clear(COLOR_LIGHT_RED); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
-    console_clear(COLOR_BLUE);
-    console_writeline("\n\n                    Uh oh, something went very wrong here!");
-    if (r->int_no < 32)
-    {
-        //Something very wrong happened here, to the code
-        console_write("                          Received interrupt: "); console_write_dec(r->int_no);
-        console_putc('('); console_write_hex(r->int_no); console_putc(')');
-        // Dump the contents of the registers onto the screen
-        console_write("REGDUMP"); console_putc('\n');
-        console_write(" EAX: "); console_write_hex(r->eax); console_write(" EBX: "); console_write_hex(r->ebx);
-        console_write(" ECX: "); console_write_hex(r->ecx); console_write(" EDX: "); console_write_hex(r->edx);
-        console_write(" ESI: "); console_write_hex(r->esi); console_write(" EDI: "); console_write_hex(r->edi);
-        console_putc('\n');
-        console_write(" EBP: "); console_write_hex(r->ebp); console_write(" EIP: "); console_write_hex(r->eip);
-        console_write(" CS: "); console_write_hex(r->cs); console_write(" EFLAGS: "); console_write_hex(r->eflags);
-        console_write(" ESP: "); console_write_hex(r->useresp); console_write(" SS: "); console_write_hex(r->ss);
-        console_putc('\n');
-        console_write(" GS: "); console_write_hex(r->gs); console_write(" FS: "); console_write_hex(r->fs);
-        console_write(" ES: "); console_write_hex(r->es); console_write(" DS: "); console_write_hex(r->ds);
-        
-        // Check if it was just a breakpoint or debug thing... (no need to halt)
-        if(r->int_no == 3 || r->int_no == 2)
-        {
-            console_putc('\n');
-            console_print_center(exception_messages[r->int_no]); //Get the message
-            print_dalek();
-        }
-        // Check if there is an error code, then show it
-        else if(r->int_no == 8 || (r->int_no >= 10 && r->int_no <= 14) || r->int_no == 17 || r->int_no == 20)
-        {
-            console_putc('\n');
-            console_write(" Received error code: ");
-            console_write_dec(r->err_code);
-            console_putc('\n');
-            console_print_center(exception_messages[r->int_no]); //Get the message
-            print_dalek();
-            for(;;); //Halt
-        }
-        // Halt for everything else
-        else
-        {
-            console_putc('\n');
-            console_print_center(exception_messages[r->int_no]); //Get the message
-            print_dalek();
-            for(;;); //Halt
-        }
-    }
-}
 // Hehe
 void print_dalek()
 {
@@ -149,4 +98,56 @@ void load_isr()
     idt_set_gate(29, (unsigned)isr29, 0x08, 0x8E);
     idt_set_gate(30, (unsigned)isr30, 0x08, 0x8E);
     idt_set_gate(31, (unsigned)isr31, 0x08, 0x8E);
+}
+
+void isr_handler(regs_t *r) //We use a pointer reference to our struct
+{
+    console_clear(COLOR_LIGHT_RED); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
+    //console_clear(COLOR_BLUE);
+    console_writeline("\n\n                    Uh oh, something went very wrong here!");
+    if (r->int_no < 32)
+    {
+        //Something very wrong happened here, to the code
+        console_write("                          Received interrupt: "); console_write_dec(r->int_no);
+        console_putc('('); console_write_hex(r->int_no); console_putc(')');
+        // Dump the contents of the registers onto the screen
+        console_write("REGDUMP"); console_putc('\n');
+        console_write(" EAX: "); console_write_hex(r->eax); console_write(" EBX: "); console_write_hex(r->ebx);
+        console_write(" ECX: "); console_write_hex(r->ecx); console_write(" EDX: "); console_write_hex(r->edx);
+        console_write(" ESI: "); console_write_hex(r->esi); console_write(" EDI: "); console_write_hex(r->edi);
+        console_putc('\n');
+        console_write(" EBP: "); console_write_hex(r->ebp); console_write(" EIP: "); console_write_hex(r->eip);
+        console_write(" CS: "); console_write_hex(r->cs); console_write(" EFLAGS: "); console_write_hex(r->eflags);
+        console_write(" ESP: "); console_write_hex(r->useresp); console_write(" SS: "); console_write_hex(r->ss);
+        console_putc('\n');
+        console_write(" GS: "); console_write_hex(r->gs); console_write(" FS: "); console_write_hex(r->fs);
+        console_write(" ES: "); console_write_hex(r->es); console_write(" DS: "); console_write_hex(r->ds);
+        
+        // Check if it was just a breakpoint or debug thing... (no need to halt)
+        if(r->int_no == 3 || r->int_no == 2)
+        {
+            console_putc('\n');
+            console_print_center(exception_messages[r->int_no]); //Get the message
+            print_dalek();
+        }
+        // Check if there is an error code, then show it
+        else if(r->int_no == 8 || (r->int_no >= 10 && r->int_no <= 14) || r->int_no == 17 || r->int_no == 20)
+        {
+            console_putc('\n');
+            console_write(" Received error code: ");
+            console_write_dec(r->err_code);
+            console_putc('\n');
+            console_print_center(exception_messages[r->int_no]); //Get the message
+            print_dalek();
+            for(;;); //Halt
+        }
+        // Halt for everything else
+        else
+        {
+            console_putc('\n');
+            console_print_center(exception_messages[r->int_no]); //Get the message
+            print_dalek();
+            for(;;); //Halt
+        }
+    }
 }

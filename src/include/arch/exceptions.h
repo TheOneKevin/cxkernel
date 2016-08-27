@@ -38,6 +38,8 @@ typedef struct rregisters
     unsigned int ss, useresp, eflags, cs, eip;
 } rregs_t;
 
+void print_dalek();
+
 #ifdef __cplusplus
 }
 #endif

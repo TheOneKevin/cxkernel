@@ -3,7 +3,7 @@
 CC=i686-elf-gcc
 AS=i686-elf-as
 LDARGS=-ffreestanding -O2 -nostdlib
-CFLAGS= -ffreestanding -O2 -Wall -Wextra -Iinclude
+CFLAGS= -ffreestanding -O2 -Wall -Wextra -Iinclude -fdiagnostics-color=auto
 # ODIR is going to be the directory storing all the .o files
 # It is important to make sure NONE of the source files have the same name, i.e., kernel/foo.c and kernel/foobar/foo.c
 # or even kernel/foo.c and kernel/foo.s cannot co-exist
