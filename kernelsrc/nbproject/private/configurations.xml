@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df root="src" name="0">
+    <df root="." name="0">
       <df name="boot">
         <in>start.asm</in>
       </df>
@@ -19,6 +19,9 @@
         <df name="localization">
           <in>en_scan.h</in>
         </df>
+        <df name="memory">
+          <in>paging.h</in>
+        </df>
         <df name="system">
           <in>irq.h</in>
           <in>pic.h</in>
@@ -26,6 +29,8 @@
           <in>tdisplay.h</in>
         </df>
         <in>common.h</in>
+        <in>multiboot.h</in>
+        <in>multiboot_old.h</in>
       </df>
       <df name="kernel">
         <df name="arch">
@@ -40,6 +45,10 @@
         <df name="drivers">
           <in>keyboard.c</in>
         </df>
+        <df name="memory">
+          <in>malloc.c</in>
+          <in>paging.c</in>
+        </df>
         <df name="system">
           <in>common.c</in>
           <in>irq.c</in>
@@ -53,7 +62,7 @@
       </df>
     </df>
   </logicalFolder>
-  <projectmakefile></projectmakefile>
+  <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Default" type="0">
       <toolsSet>

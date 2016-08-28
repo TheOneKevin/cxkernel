@@ -39,6 +39,7 @@ typedef struct rregisters
 } rregs_t;
 
 void print_dalek();
+void load_isr();
 
 #ifdef __cplusplus
 }

@@ -40,6 +40,7 @@ extern void irq15();
 typedef void (*irq_t) (regs_t *r);
 void install_handler(uint8_t irq, irq_t handler);
 void uninstall_handler(uint8_t irq);
+void register_irq();
 
 // Define each IRQ so its more organized
 #define IRQ0 32

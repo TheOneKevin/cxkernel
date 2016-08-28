@@ -29,12 +29,7 @@ uint16_t inw(uint16_t port);
 
 void io_wait();
 
-/* Copy "len" bytes from "src" to "dest".
-void memcpy(uint8_t *dest, const uint8_t *src, uint32_t len);
-// Write "len" copies of "val' into "dest".
-void memset(uint8_t *dest, uint8_t val, uint32_t len);
-char *strcpy(char *dest, const char *src);
-char *strcat(char *dest, const char *src);*/
+uint64_t length = 0; uint64_t addr = 0; // Here we get the largest chunk of memory for paging
 
 #ifdef __cplusplus
 }

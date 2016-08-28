@@ -41,8 +41,13 @@ extern "C" {
 #define ICW4_BUF_MASTER	0x0C		/* Buffered mode/master */
 #define ICW4_SFNM	0x10		/* Special fully nested (not) */
 
+// Remaps the PIC interrupts from offset 1 to offset 2. Automatically enables PIC too. If you don't know what
+// you are doing, use the autoremap_PIC();
 void PIC_remap(int offset1, int offset2);
+// Automatically remaps the PIC interrupts to interrupt 32. Automatically enables PIC too.
 void autoremap_PIC();
+// Sends the End Of Interrupt signal
+void PIC_sendEOI(unsigned char irq);
 
 #ifdef __cplusplus
 }
