@@ -52,9 +52,20 @@ void getMemDisplay(multiboot_info_t* mbt)
         }
         console_write("\n");
     }
-    
-    console_write(" Largest chunk of memory: "); console_write_hex(_length);
-    console_write("\n Located at: "); console_write_hex(_addr);
+    console_write_hex(_length); console_write_hex(_addr);
+}
+
+void getMmap(multiboot_info_t* mbt)
+{
+    multiboot_memory_map_t *mmap = mbt -> mmap_addr;
+    while(mmap < mbt->mmap_addr + mbt->mmap_length)
+    {
+        mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
+        if((mmap -> len >= _length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
+        {
+            _length = mmap -> len; _addr = mmap -> addr;
+        }
+    }
 }
 
 void kernel_main(multiboot_info_t* mbt, unsigned int magic)
@@ -70,33 +81,17 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     // Register and start our built-in keyboard driver
     register_keyboard();
     
-    console_write(" Memory map address:");
-    console_write_hex(mbt -> mem_upper); console_putc('\n');
+    getMmap(mbt);
     
-    multiboot_memory_map_t *mmap = mbt -> mmap_addr;
-    while(mmap < mbt->mmap_addr + mbt->mmap_length)
-    {
-        mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
-        console_write("  Entry length:");
-        console_write_hex(mmap -> len);
-        console_write(" Entry address:");
-        console_write_hex(mmap -> addr);
-        console_write("    Entry size:");
-        console_write_hex(mmap -> size);
-        console_putc(' '); console_write_hex(mmap -> type);
-        
-        if((mmap -> len >= _length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
-        {
-            _length = mmap -> len; _addr = mmap -> addr;
-        }
-        console_write("\n");
-    }
-    
-    console_write_hex(_length); console_write_hex(_addr);
-    
+    setup_paging();
     asm volatile("sti");
-    uint32_t* ptr = (uint32_t) 0xA0000000;
-    uint32_t foo = ptr;
+    
+    /* Test page fault
+    uint32_t* ptr = (uint32_t*) 0xA0000000;
+    uint32_t foo = *ptr;
+    console_write_dec(foo);
+     */
+    //console_write_dec(3/0); //Test if interrupts work
     
     for(;;); // Needed for interrupts to work properly
 }

@@ -80,7 +80,7 @@ extern void panic(const char *message, const char *file, uint32_t line)
     // We encountered a massive problem and have to stop.
     asm volatile("cli"); // Disable interrupts.
 
-    console_write("PANIC(");
+    console_write("PANIC (");
     console_write(message);
     console_write(") at ");
     console_write(file);

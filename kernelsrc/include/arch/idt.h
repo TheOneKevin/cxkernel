@@ -55,7 +55,7 @@ extern void isr10();
 extern void isr11();
 extern void isr12();
 extern void isr13();
-extern void isr14();
+//extern void isr14();
 extern void isr15();
 extern void isr16();
 extern void isr17();

@@ -151,13 +151,15 @@ void page_fault(regs_t *r)
    int us       = r -> err_code & 0x4;           // Processor was in user-mode?
    int reserved = r -> err_code & 0x8;     // Overwritten CPU-reserved bits of page entry?
    int id       = r -> err_code & 0x10;          // Caused by an instruction fetch?
-   write_err(r);
+   console_putc('\n');
+   regdump(&r); //Dump regs
    // Output an error message.
-   console_write("Page fault! ( ");
-   if (present) {console_write("present ");}
-   if (rw) {console_write("read-only ");}
-   if (us) {console_write("user-mode ");}
-   if (reserved) {console_write("reserved ");}
+   console_write("Page fault! (");
+   if (present) {console_write("present");}
+   if (rw) {console_write("read-only");}
+   if (us) {console_write("user-mode");}
+   if (reserved) {console_write("reserved");}
+   if (id) { console_write("some instruction fetch error"); }
    console_write(") at 0x");
    console_write_hex(fault_addr);
    console_write("\n");
@@ -167,9 +169,9 @@ void page_fault(regs_t *r)
 void setup_paging()
 {
     uint32_t end_of_page = (uint32_t) (_length + _addr);
-    console_write_hex(end_of_page);
+    //console_putc(' '); console_write_hex(end_of_page);
     nframes = (uint32_t) end_of_page / PAGE_SIZE;
-    console_write_dec(nframes);
+    //console_putc(' '); console_write_dec(nframes);
     frames = (uint32_t *) h_kmalloc(INDEX_FROM_BIT(nframes), false, 0);
     memset(frames, 0, INDEX_FROM_BIT(nframes));
     
@@ -183,9 +185,7 @@ void setup_paging()
         alloc_frame(getPage(i, true, kernel_dir), false, false);
         i += PAGE_SIZE;
     }
-    
-    install_handler(14, &page_fault);
-    
-    enable_paging();
+    idt_set_gate(14, (unsigned)page_fault, 0x08, 0x8E);
     load_page_dir(kernel_dir);
+    enable_paging();
 }

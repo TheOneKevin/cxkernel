@@ -12,9 +12,9 @@
  */
 
 #include "common.h"
-#include "arch/exceptions.h"
-#include "system/irq.h"
 #include "memory/kheap.h"
+#include "arch/idt.h"
+#include "arch/exceptions.h"
 
 
 #ifndef PAGING_H

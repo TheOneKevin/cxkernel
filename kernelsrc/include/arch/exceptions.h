@@ -12,6 +12,8 @@
  */
 
 #include "common.h"
+#include "system/tdisplay.h"
+#include "arch/idt.h"
 
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
@@ -41,6 +43,7 @@ typedef struct rregisters
 void print_dalek();
 void load_isr();
 void write_err(regs_t *r);
+void regdump(regs_t *r);
 
 #ifdef __cplusplus
 }

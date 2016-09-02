@@ -4,9 +4,7 @@
  * and open the template in the editor.
  */
 
-#include "arch/idt.h"
 #include "arch/exceptions.h"
-#include "system/tdisplay.h"
 
 // Firstly, let's set up all our error messages
 char *exception_messages[] =
@@ -80,7 +78,6 @@ void load_isr()
     idt_set_gate(11, (unsigned)isr11, 0x08, 0x8E);
     idt_set_gate(12, (unsigned)isr12, 0x08, 0x8E);
     idt_set_gate(13, (unsigned)isr13, 0x08, 0x8E);
-    idt_set_gate(14, (unsigned)isr14, 0x08, 0x8E);
     idt_set_gate(15, (unsigned)isr15, 0x08, 0x8E);
     idt_set_gate(16, (unsigned)isr16, 0x08, 0x8E);
     idt_set_gate(17, (unsigned)isr17, 0x08, 0x8E);
@@ -100,6 +97,21 @@ void load_isr()
     idt_set_gate(31, (unsigned)isr31, 0x08, 0x8E);
 }
 
+void regdump(regs_t *r)
+{
+    console_write(" REGDUMP ");
+    console_write(" EAX: "); console_write_hex(r->eax); console_write(" EBX: "); console_write_hex(r->ebx);
+    console_write(" ECX: "); console_write_hex(r->ecx); console_write(" EDX: "); console_write_hex(r->edx);
+    console_write(" ESI: "); console_write_hex(r->esi); console_write(" EDI: "); console_write_hex(r->edi);
+    console_putc('\n');
+    console_write(" EBP: "); console_write_hex(r->ebp); console_write(" EIP: "); console_write_hex(r->eip);
+    console_write(" CS: "); console_write_hex(r->cs); console_write(" EFLAGS: "); console_write_hex(r->eflags);
+    console_write(" ESP: "); console_write_hex(r->useresp); console_write(" SS: "); console_write_hex(r->ss);
+    console_putc('\n');
+    console_write(" GS: "); console_write_hex(r->gs); console_write(" FS: "); console_write_hex(r->fs);
+    console_write(" ES: "); console_write_hex(r->es); console_write(" DS: "); console_write_hex(r->ds);
+}
+
 void write_err(regs_t *r)
 {
     console_print_center("Uh oh, something went very wrong here!"); console_putc('\n');
@@ -109,17 +121,7 @@ void write_err(regs_t *r)
         console_write("                          Received interrupt: "); console_write_dec(r->int_no);
         console_putc('('); console_write_hex(r->int_no); console_putc(')');  console_putc('\n');
         // Dump the contents of the registers onto the screen
-        console_write(" REGDUMP ");
-        console_write(" EAX: "); console_write_hex(r->eax); console_write(" EBX: "); console_write_hex(r->ebx);
-        console_write(" ECX: "); console_write_hex(r->ecx); console_write(" EDX: "); console_write_hex(r->edx);
-        console_write(" ESI: "); console_write_hex(r->esi); console_write(" EDI: "); console_write_hex(r->edi);
-        console_putc('\n');
-        console_write(" EBP: "); console_write_hex(r->ebp); console_write(" EIP: "); console_write_hex(r->eip);
-        console_write(" CS: "); console_write_hex(r->cs); console_write(" EFLAGS: "); console_write_hex(r->eflags);
-        console_write(" ESP: "); console_write_hex(r->useresp); console_write(" SS: "); console_write_hex(r->ss);
-        console_putc('\n');
-        console_write(" GS: "); console_write_hex(r->gs); console_write(" FS: "); console_write_hex(r->fs);
-        console_write(" ES: "); console_write_hex(r->es); console_write(" DS: "); console_write_hex(r->ds);
+        regdump(&r);
         
         // Check if it was just a breakpoint or debug thing... (no need to halt)
         if(r->int_no == 3 || r->int_no == 2)
