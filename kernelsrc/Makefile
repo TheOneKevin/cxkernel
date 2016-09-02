@@ -38,3 +38,6 @@ clean:
 	rm -f kernel/**/.o
 	rm -f kernel/*.o
 	rm -f *.bin
+	rm -f *.iso
+	rm -f boot/*.o
+	echo Done!

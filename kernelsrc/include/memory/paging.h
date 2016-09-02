@@ -13,6 +13,8 @@
 
 #include "common.h"
 #include "arch/exceptions.h"
+#include "system/irq.h"
+#include "memory/kheap.h"
 
 
 #ifndef PAGING_H
@@ -22,7 +24,6 @@
 extern "C" {
 #endif
 
-#define PAGE_SIZE 0x1000
 // Macros used in the bitset algorithms.
 #define INDEX_FROM_BIT(a) (a/(8*4))
 #define OFFSET_FROM_BIT(a) (a%(8*4))
@@ -58,7 +59,15 @@ void setup_paging();
 
 void load_page_dir(page_directory_t *dir);
 void enable_paging();
-page_t *get_page(uint32_t address, int make, page_directory_t *dir);
+/**
+ * Gets a page from the address and page directory
+ * @param addr Page address
+ * @param createPage If the page isn't found, create one anyways?
+ * @param dir Directory of the page
+ * @return Page info inside structure
+ */
+page_t *getPage(uint32_t addr, bool createPage, page_directory_t *dir);
+
 void page_fault(regs_t *regs);
 
 #ifdef __cplusplus

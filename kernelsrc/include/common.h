@@ -32,7 +32,10 @@ void io_wait();
 #define PANIC(msg) panic(msg, __FILE__, __LINE__);
 #define ASSERT(b) ((b) ? (void)0 : panic_assert(__FILE__, __LINE__, #b))
 
-uint64_t length = 0; uint64_t addr = 0; // Here we get the largest chunk of memory for paging
+#define PAGE_SIZE 0x1000
+#define PAGE_ALIGN 0xFFFFF000 //0x100000000 - PAGE_SIZE
+
+uint64_t _length; uint64_t _addr; // Here we get the largest chunk of memory for paging
 
 #ifdef __cplusplus
 }

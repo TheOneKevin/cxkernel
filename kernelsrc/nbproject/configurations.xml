@@ -5,15 +5,6 @@
       <df name="boot">
         <in>start.asm</in>
       </df>
-      <df name="include">
-        <df name="memory">
-          <in>kmalloc.h</in>
-          <in>malloc.h</in>
-          <in>paging.h</in>
-        </df>
-        <in>multiboot.h</in>
-        <in>multiboot_old.h</in>
-      </df>
       <df name="kernel">
         <df name="arch">
           <in>exceptions.c</in>
@@ -28,7 +19,7 @@
           <in>keyboard.c</in>
         </df>
         <df name="memory">
-          <in>kmalloc.c</in>
+          <in>kheap.c</in>
           <in>malloc.c</in>
           <in>paging.c</in>
         </df>
@@ -67,8 +58,8 @@
       <makefileType>
         <makeTool>
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
-          <buildCommand>${MAKE} -f Makefile</buildCommand>
-          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <buildCommand>./build.sh</buildCommand>
+          <cleanCommand>make clean</cleanCommand>
           <executablePath></executablePath>
         </makeTool>
         <preBuild>
@@ -77,16 +68,6 @@
         </preBuild>
       </makefileType>
       <item path="boot/start.asm" ex="false" tool="4" flavor2="0">
-      </item>
-      <item path="include/memory/kmalloc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/memory/malloc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/memory/paging.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/multiboot.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/multiboot_old.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="kernel/arch/exceptions.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -102,7 +83,7 @@
       </item>
       <item path="kernel/kernel.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="kernel/memory/kmalloc.c" ex="false" tool="0" flavor2="0">
+      <item path="kernel/memory/kheap.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/memory/malloc.c" ex="false" tool="0" flavor2="0">
       </item>

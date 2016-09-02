@@ -1,3 +1,4 @@
+#define NO_MALLOC_STATS 1
 /*
   This is a version (aka dlmalloc) of malloc/free/realloc written by
   Doug Lea and released to the public domain, as explained at
@@ -577,9 +578,7 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #endif  /* HAVE_MORECORE */
 #endif  /* DARWIN */
 
-#ifndef LACKS_SYS_TYPES_H
-#include <sys/types.h>  /* For size_t */
-#endif  /* LACKS_SYS_TYPES_H */
+#include "common.h"
 
 /* The maximum possible size_t value has all bits set */
 #define MAX_SIZE_T           (~(size_t)0)

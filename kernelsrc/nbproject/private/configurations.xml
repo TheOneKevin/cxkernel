@@ -20,7 +20,7 @@
           <in>en_scan.h</in>
         </df>
         <df name="memory">
-          <in>kmalloc.h</in>
+          <in>kheap.h</in>
           <in>malloc.h</in>
           <in>paging.h</in>
         </df>
@@ -48,7 +48,7 @@
           <in>keyboard.c</in>
         </df>
         <df name="memory">
-          <in>kmalloc.c</in>
+          <in>kheap.c</in>
           <in>malloc.c</in>
           <in>paging.c</in>
         </df>
@@ -70,7 +70,7 @@
     <conf name="Default" type="0">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <platform>3</platform>
+        <platform>2</platform>
       </toolsSet>
       <compile>
         <compiledirpicklist>

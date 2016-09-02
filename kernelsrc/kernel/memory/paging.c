@@ -13,7 +13,7 @@ uint32_t nframes;
 page_directory_t *kernel_dir = 0; // The kernel's page directory
 page_directory_t *current_dir = 0; // The current page directory;
 
-extern uint32_t placement_address;
+extern uint32_t addrPtr;
 
 void enable_paging()
 {
@@ -119,17 +119,25 @@ void free_frame(page_t *page)
     }
 }
 
-void setup_paging()
+page_t *getPage(uint32_t addr, bool createPage, page_directory_t *dir)
 {
-    uint64_t end_of_page = length + addr;
-    nframes = (uint32_t) end_of_page / PAGE_SIZE;
-    frames = (uint32_t *)kmalloc(INDEX_FROM_BIT(nframes));
-    memset(frames, 0, INDEX_FROM_BIT(nframes));
-    
-    kernel_dir = (page_directory_t*)kmalloc_a(sizeof(page_directory_t));
-    memset(kernel_dir, 0, sizeof(page_directory_t));
-    current_dir = kernel_dir;
-    
+    addr /= PAGE_SIZE;
+    uint32_t index = addr / 1024;
+    if(dir->tables[index])
+    {
+        //Return pointer to the page within the directory table
+        //Then get page from a table of pages (every 1024)
+        return &dir -> tables[index] -> pages[addr % 1024];
+    }
+    else if(createPage)
+    {
+        uint32_t tmp;
+        dir -> tables[index] = (page_table_t*)h_kmalloc(sizeof(page_table_t), 1, &tmp);
+        dir -> tablesPhys[index] = tmp | 0x7; //Set present bit, r/w, user
+        return &dir -> tables[index] -> pages[addr % 1024];
+    }
+    else
+        return 0; //Return 0 if no page was found and the user didn't want one made
 }
 
 void page_fault(regs_t *r)
@@ -154,4 +162,30 @@ void page_fault(regs_t *r)
    console_write_hex(fault_addr);
    console_write("\n");
    PANIC("Page fault");
+}
+
+void setup_paging()
+{
+    uint32_t end_of_page = (uint32_t) (_length + _addr);
+    console_write_hex(end_of_page);
+    nframes = (uint32_t) end_of_page / PAGE_SIZE;
+    console_write_dec(nframes);
+    frames = (uint32_t *) h_kmalloc(INDEX_FROM_BIT(nframes), false, 0);
+    memset(frames, 0, INDEX_FROM_BIT(nframes));
+    
+    kernel_dir = (page_directory_t*) h_kmalloc(sizeof(page_directory_t), true, 0);
+    memset(kernel_dir, 0, sizeof(page_directory_t));
+    current_dir = kernel_dir;
+    
+    int i = 0;
+    while(i < addrPtr)
+    {
+        alloc_frame(getPage(i, true, kernel_dir), false, false);
+        i += PAGE_SIZE;
+    }
+    
+    install_handler(14, &page_fault);
+    
+    enable_paging();
+    load_page_dir(kernel_dir);
 }

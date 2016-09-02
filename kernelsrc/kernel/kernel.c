@@ -21,6 +21,7 @@
 #include "system/pic.h"
 #include "system/irq.h"
 #include "system/pit.h"
+#include "memory/paging.h"
 
 #include "drivers/keyboard.h"
 
@@ -45,15 +46,15 @@ void getMemDisplay(multiboot_info_t* mbt)
         console_write_hex(mmap -> size);
         console_putc(' '); console_write_hex(mmap -> type);
         
-        if((mmap -> len >= length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
+        if((mmap -> len >= _length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
         {
-            length = mmap -> len; addr = mmap -> addr;
+            _length = mmap -> len; _addr = mmap -> addr;
         }
         console_write("\n");
     }
     
-    console_write(" Largest chunk of memory: "); console_write_hex(length);
-    console_write("\n Located at: "); console_write_hex(addr);
+    console_write(" Largest chunk of memory: "); console_write_hex(_length);
+    console_write("\n Located at: "); console_write_hex(_addr);
 }
 
 void kernel_main(multiboot_info_t* mbt, unsigned int magic)
@@ -69,15 +70,33 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     // Register and start our built-in keyboard driver
     register_keyboard();
     
-    //Loop through the memory map so we can find stuff
+    console_write(" Memory map address:");
+    console_write_hex(mbt -> mem_upper); console_putc('\n');
+    
     multiboot_memory_map_t *mmap = mbt -> mmap_addr;
     while(mmap < mbt->mmap_addr + mbt->mmap_length)
     {
         mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
-        if((mmap -> len >= length) && (mmap -> type == 0x1)) //We want the LARGEST chunk of free space (free space is marked with 0x1)
-            length = mmap -> len; addr = mmap -> addr; // We store it in length and addr variables, which is in common.h for easy access
+        console_write("  Entry length:");
+        console_write_hex(mmap -> len);
+        console_write(" Entry address:");
+        console_write_hex(mmap -> addr);
+        console_write("    Entry size:");
+        console_write_hex(mmap -> size);
+        console_putc(' '); console_write_hex(mmap -> type);
+        
+        if((mmap -> len >= _length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
+        {
+            _length = mmap -> len; _addr = mmap -> addr;
+        }
+        console_write("\n");
     }
     
+    console_write_hex(_length); console_write_hex(_addr);
+    
     asm volatile("sti");
+    uint32_t* ptr = (uint32_t) 0xA0000000;
+    uint32_t foo = ptr;
+    
     for(;;); // Needed for interrupts to work properly
 }
