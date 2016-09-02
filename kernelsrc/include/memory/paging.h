@@ -23,6 +23,9 @@ extern "C" {
 #endif
 
 #define PAGE_SIZE 0x1000
+// Macros used in the bitset algorithms.
+#define INDEX_FROM_BIT(a) (a/(8*4))
+#define OFFSET_FROM_BIT(a) (a%(8*4))
     
 //The paging tutorial up on the OSDev Wiki used a fixed space
 //for the paging tables and directory, but we don't want anything fixed

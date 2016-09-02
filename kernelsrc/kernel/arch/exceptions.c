@@ -100,11 +100,8 @@ void load_isr()
     idt_set_gate(31, (unsigned)isr31, 0x08, 0x8E);
 }
 
-void isr_handler(regs_t *r) //We use a pointer reference to our struct
+void write_err(regs_t *r)
 {
-    console_clear(COLOR_LIGHT_RED); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
-    //console_clear(COLOR_BLUE);
-    console_write("\n\n\n                                    "); console_setbg(COLOR_LIGHT_BLUE); console_write("LiquiDOS\n"); console_setbg(COLOR_LIGHT_RED);
     console_print_center("Uh oh, something went very wrong here!"); console_putc('\n');
     if (r->int_no < 32)
     {
@@ -151,4 +148,12 @@ void isr_handler(regs_t *r) //We use a pointer reference to our struct
             for(;;); //Halt
         }
     }
+}
+
+void isr_handler(regs_t *r) //We use a pointer reference to our struct
+{
+    console_clear(COLOR_LIGHT_RED); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
+    //console_clear(COLOR_BLUE);
+    console_write("\n\n\n                                    "); console_setbg(COLOR_LIGHT_BLUE); console_write("LiquiDOS\n"); console_setbg(COLOR_LIGHT_RED);
+    write_err(r);
 }

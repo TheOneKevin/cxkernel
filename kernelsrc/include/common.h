@@ -29,6 +29,9 @@ uint16_t inw(uint16_t port);
 
 void io_wait();
 
+#define PANIC(msg) panic(msg, __FILE__, __LINE__);
+#define ASSERT(b) ((b) ? (void)0 : panic_assert(__FILE__, __LINE__, #b))
+
 uint64_t length = 0; uint64_t addr = 0; // Here we get the largest chunk of memory for paging
 
 #ifdef __cplusplus

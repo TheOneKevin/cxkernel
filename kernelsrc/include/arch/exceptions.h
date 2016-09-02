@@ -40,6 +40,7 @@ typedef struct rregisters
 
 void print_dalek();
 void load_isr();
+void write_err(regs_t *r);
 
 #ifdef __cplusplus
 }

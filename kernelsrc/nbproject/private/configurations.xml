@@ -20,6 +20,8 @@
           <in>en_scan.h</in>
         </df>
         <df name="memory">
+          <in>kmalloc.h</in>
+          <in>malloc.h</in>
           <in>paging.h</in>
         </df>
         <df name="system">
@@ -46,6 +48,7 @@
           <in>keyboard.c</in>
         </df>
         <df name="memory">
+          <in>kmalloc.c</in>
           <in>malloc.c</in>
           <in>paging.c</in>
         </df>
