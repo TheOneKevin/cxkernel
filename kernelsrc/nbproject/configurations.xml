@@ -5,6 +5,14 @@
       <df name="boot">
         <in>start.asm</in>
       </df>
+      <df name="include">
+        <df name="drivers">
+          <in>acpi.h</in>
+        </df>
+        <df name="system">
+          <in>PANIC.h</in>
+        </df>
+      </df>
       <df name="kernel">
         <df name="arch">
           <in>exceptions.c</in>
@@ -16,6 +24,7 @@
           <in>tables.s</in>
         </df>
         <df name="drivers">
+          <in>acpi.c</in>
           <in>keyboard.c</in>
         </df>
         <df name="memory">
@@ -24,6 +33,7 @@
           <in>paging.c</in>
         </df>
         <df name="system">
+          <in>PANIC.c</in>
           <in>common.c</in>
           <in>irq.c</in>
           <in>pic.c</in>
@@ -69,6 +79,10 @@
       </makefileType>
       <item path="boot/start.asm" ex="false" tool="4" flavor2="0">
       </item>
+      <item path="include/drivers/acpi.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/system/PANIC.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="kernel/arch/exceptions.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/arch/gdt.c" ex="false" tool="0" flavor2="0">
@@ -79,6 +93,8 @@
       </item>
       <item path="kernel/assembly/tables.s" ex="false" tool="4" flavor2="0">
       </item>
+      <item path="kernel/drivers/acpi.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="kernel/drivers/keyboard.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/kernel.c" ex="false" tool="0" flavor2="0">
@@ -88,6 +104,8 @@
       <item path="kernel/memory/malloc.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/memory/paging.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kernel/system/PANIC.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/system/common.c" ex="false" tool="0" flavor2="0">
       </item>

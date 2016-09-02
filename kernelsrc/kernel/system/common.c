@@ -12,6 +12,10 @@ void outb(uint16_t port, uint8_t value)
 {
     asm volatile("outb %1, %0" : : "dN" (port), "a" (value));
 }
+void outw(uint16_t port, uint16_t value)
+{
+    asm volatile("outw %1, %0" : : "dN" (port), "a" (value));
+}
 uint8_t inb(uint16_t port)
 {
     uint8_t ret;
@@ -25,25 +29,42 @@ uint16_t inw(uint16_t port)
     return ret;
 }
 
-void memcpy(uint8_t *dest, const uint8_t *src, uint32_t len)
+void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size)
 {
-    const uint8_t *sp = (const uint8_t *)src;
-    uint8_t *dp = (uint8_t *)dest;
-    for(; len != 0; len--) *dp++ = *sp++;
+	unsigned char* dst = (unsigned char*) dstptr;
+	const unsigned char* src = (const unsigned char*) srcptr;
+	for (size_t i = 0; i < size; i++)
+		dst[i] = src[i];
+	return dstptr;
 }
 
-// Write "len" copies of "val' into "dest".
-void memset(uint8_t *dest, uint8_t val, uint32_t len)
+void* memset(void* bufptr, int value, size_t size)
 {
-    uint8_t *temp = (uint8_t *)dest;
-    for ( ; len != 0; len--) *temp++ = val;
+	unsigned char* buf = (unsigned char*) bufptr;
+	for (size_t i = 0; i < size; i++)
+		buf[i] = (unsigned char) value;
+	return bufptr;
+}
+
+int memcmp(const void* aptr, const void* bptr, size_t size)
+{
+    const unsigned char* a = (const unsigned char*) aptr;
+    const unsigned char* b = (const unsigned char*) bptr;
+    for (size_t i = 0; i < size; i++)
+    {
+        if (a[i] < b[i])
+            return -1;
+	else if (b[i] < a[i])
+            return 1;
+    }
+    return 0;
 }
 
 // Copy the NULL-terminated string src into dest
 char *strcpy(char *dest, const char* src)
 {
     char *ret = dest;
-    while (*dest++ = *src++)
+    while ((*dest++ = *src++))
         ;
     return ret;
 }
@@ -55,7 +76,7 @@ char *strcat(char *dest, const char *src)
     char *ret = dest;
     while (*dest)
         dest++;
-    while (*dest++ = *src++)
+    while ((*dest++ = *src++))
         ;
     return ret;
 }
@@ -73,36 +94,4 @@ void io_wait()
     /* The Linux kernel seems to think it is free for use :-/ */
     asm volatile ( "outb %%al, $0x80" : : "a"(0) );
     /* %%al instead of %0 makes no difference.  TODO: does the register need to be zeroed? */
-}
-
-extern void panic(const char *message, const char *file, uint32_t line)
-{
-    // We encountered a massive problem and have to stop.
-    asm volatile("cli"); // Disable interrupts.
-
-    console_write("PANIC (");
-    console_write(message);
-    console_write(") at ");
-    console_write(file);
-    console_write(":");
-    console_write_dec(line);
-    console_write("\n");
-    // Halt by going into an infinite loop.
-    for(;;);
-}
-
-extern void panic_assert(const char *file, uint32_t line, const char *desc)
-{
-    // An assertion failed, and we have to panic.
-    asm volatile("cli"); // Disable interrupts.
-
-    console_write("ASSERTION-FAILED(");
-    console_write(desc);
-    console_write(") at ");
-    console_write(file);
-    console_write(":");
-    console_write_dec(line);
-    console_write("\n");
-    // Halt by going into an infinite loop.
-    for(;;);
 }

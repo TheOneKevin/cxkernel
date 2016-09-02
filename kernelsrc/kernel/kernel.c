@@ -90,7 +90,7 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     uint32_t* ptr = (uint32_t*) 0xA0000000;
     uint32_t foo = *ptr;
     console_write_dec(foo);
-     */
+    */
     //console_write_dec(3/0); //Test if interrupts work
     
     for(;;); // Needed for interrupts to work properly

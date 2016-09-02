@@ -15,6 +15,7 @@
 #include "memory/kheap.h"
 #include "arch/idt.h"
 #include "arch/exceptions.h"
+#include "system/PANIC.h"
 
 
 #ifndef PAGING_H

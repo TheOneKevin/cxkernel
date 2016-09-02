@@ -52,7 +52,7 @@ static void clear_frame(uint32_t frame_addr)
     frames[index] &= ~(0x1 << offset);
 }
 // Test frame from our frames bitmap
-static void test_frame(uint32_t frame_addr)
+static uint32_t test_frame(uint32_t frame_addr)
 {
     uint32_t frame  = frame_addr / PAGE_SIZE;
     uint32_t index  = INDEX_FROM_BIT(frame);
@@ -152,18 +152,19 @@ void page_fault(regs_t *r)
    int reserved = r -> err_code & 0x8;     // Overwritten CPU-reserved bits of page entry?
    int id       = r -> err_code & 0x10;          // Caused by an instruction fetch?
    console_putc('\n');
-   regdump(&r); //Dump regs
+   regdump(r); //Dump regs
    // Output an error message.
+   console_write("\n");
    console_write("Page fault! (");
    if (present) {console_write("present");}
    if (rw) {console_write("read-only");}
    if (us) {console_write("user-mode");}
    if (reserved) {console_write("reserved");}
    if (id) { console_write("some instruction fetch error"); }
-   console_write(") at 0x");
+   console_write(") at ");
    console_write_hex(fault_addr);
    console_write("\n");
-   PANIC("Page fault");
+   PANIC("page fault");
 }
 
 void setup_paging()
@@ -179,7 +180,7 @@ void setup_paging()
     memset(kernel_dir, 0, sizeof(page_directory_t));
     current_dir = kernel_dir;
     
-    int i = 0;
+    uint32_t i = 0;
     while(i < addrPtr)
     {
         alloc_frame(getPage(i, true, kernel_dir), false, false);

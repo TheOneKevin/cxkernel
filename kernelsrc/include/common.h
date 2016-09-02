@@ -24,13 +24,17 @@ extern "C" {
 #endif
 
 void     outb(uint16_t port, uint8_t value);
+void     outw(uint16_t port, uint16_t value);
 uint8_t  inb(uint16_t port);
 uint16_t inw(uint16_t port);
 
-void io_wait();
+void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size);
+void* memset(void* bufptr, int value, size_t size);
 
-#define PANIC(msg) panic(msg, __FILE__, __LINE__);
-#define ASSERT(b) ((b) ? (void)0 : panic_assert(__FILE__, __LINE__, #b))
+size_t strlen(const char* str);
+int memcmp(const void *s1, const void *s2, size_t n);
+
+void io_wait();
 
 #define PAGE_SIZE 0x1000
 #define PAGE_ALIGN 0xFFFFF000 //0x100000000 - PAGE_SIZE

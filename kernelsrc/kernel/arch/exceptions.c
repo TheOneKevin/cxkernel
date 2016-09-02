@@ -121,7 +121,7 @@ void write_err(regs_t *r)
         console_write("                          Received interrupt: "); console_write_dec(r->int_no);
         console_putc('('); console_write_hex(r->int_no); console_putc(')');  console_putc('\n');
         // Dump the contents of the registers onto the screen
-        regdump(&r);
+        regdump(r);
         
         // Check if it was just a breakpoint or debug thing... (no need to halt)
         if(r->int_no == 3 || r->int_no == 2)
