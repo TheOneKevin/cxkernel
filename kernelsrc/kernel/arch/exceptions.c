@@ -139,7 +139,7 @@ void write_err(regs_t *r)
             console_putc('\n');
             console_print_center(exception_messages[r->int_no]); //Get the message
             print_dalek();
-            for(;;); //Halt
+            halt(); //Halt
         }
         // Halt for everything else
         else
@@ -147,7 +147,7 @@ void write_err(regs_t *r)
             console_putc('\n');
             console_print_center(exception_messages[r->int_no]); //Get the message
             print_dalek();
-            for(;;); //Halt
+            halt(); //Halt
         }
     }
 }

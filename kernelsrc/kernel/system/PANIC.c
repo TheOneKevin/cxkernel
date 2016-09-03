@@ -18,7 +18,7 @@ extern void panic(const char *message, const char *file, uint32_t line)
     console_write_dec(line);
     console_write("\n");
     // Halt by going into an infinite loop.
-    for(;;);
+    halt();
 }
 
 extern void panic_assert(const char *file, uint32_t line, const char *desc)
@@ -34,5 +34,5 @@ extern void panic_assert(const char *file, uint32_t line, const char *desc)
     console_write_dec(line);
     console_write("\n");
     // Halt by going into an infinite loop.
-    for(;;);
+    halt();
 }

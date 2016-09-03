@@ -22,6 +22,8 @@ extern "C" {
 #endif
 
 void acpiPowerOff(void);
+int initAcpi(void);
+int acpiEnable(void);
 
 #ifdef __cplusplus
 }

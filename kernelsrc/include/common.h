@@ -35,6 +35,7 @@ size_t strlen(const char* str);
 int memcmp(const void *s1, const void *s2, size_t n);
 
 void io_wait();
+void halt();
 
 #define PAGE_SIZE 0x1000
 #define PAGE_ALIGN 0xFFFFF000 //0x100000000 - PAGE_SIZE

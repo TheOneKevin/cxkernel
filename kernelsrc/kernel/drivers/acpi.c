@@ -283,9 +283,13 @@ void acpiPowerOff(void)
 {
    // SCI_EN is set to 1 if acpi shutdown is possible
    if (SCI_EN == 0)
+   {
+      console_write("ACPI poweroff not possible (SCI_EN not set), halting...\n");
+      halt();
       return;
+   }
 
-   acpiEnable();
+   //acpiEnable();
 
    // send the shutdown command
    outw((unsigned int) PM1a_CNT, SLP_TYPa | SLP_EN );
