@@ -12,6 +12,12 @@ bool CAPSF = false; // CAPS flag
 
 uint8_t scan_to_ascii(uint8_t key)
 {
+    //Get the special keys, i.e., enter, backspace, and keys that cannot be *modified*
+    if(key == ENTER) return '\n';
+    else if(key == SPACE) return ' ';
+    //We don't want to delete console written text. We only want to delete keyboard text
+    else if(key == BCKSPACE) { if(!(x <= lx && y == ly)) { console_putck('\b'); console_putck(' '); console_putck('\b'); } return 0; } //In the case of backspace, we want to write something then return nothing
+    else if(key == CAPS){ if(CAPSF){ CAPSF = false; } else { CAPSF = true; } return 0; } //Toggle our CAPS flag
     // Here, we evaluate the different combinations of shift and CAPS flag statues
     // and decide which characters we should return. If its shift and caps, we return the modified special characters i.e., !@$:"|}{
     // but we don't return modified letter i.e., qwertyuiop, however when shift is on, we return modified for everything i.e., ASD{}!)(*)
@@ -23,7 +29,7 @@ uint8_t scan_to_ascii(uint8_t key)
         //Get the modified (shift) character
         if(key == DASH)        return _mdash[0];
         else if(key == EQUALS) return _mequals[0];
-        else if(key == SCH)    return _mforward[key];
+        else if(key == SCH) return _mforward[0];
         else if(key >= TC_S && key <= TC_E) return _mtop_chars[key - TC_S];
         else if(key >= MC_S && key <= MC_E) return _mmiddle_chars[key - MC_S];
         else if(key >= BC_S && key <= BC_E) return _mbottom_chars[key - BC_S];
@@ -38,7 +44,7 @@ uint8_t scan_to_ascii(uint8_t key)
         //Get the modified (shift) characters
         if(key == DASH)        return _mdash[0];
         else if(key == EQUALS) return _mequals[0];
-        else if(key == SCH)    return _mforward[key];
+        else if(key == SCH) return _mforward[0];
         else if(key >= TC_S && key <= TC_E) return _mtop_chars[key - TC_S];
         else if(key >= MC_S && key <= MC_E) return _mmiddle_chars[key - MC_S];
         else if(key >= BC_S && key <= BC_E) return _mbottom_chars[key - BC_S];
@@ -52,7 +58,7 @@ uint8_t scan_to_ascii(uint8_t key)
         //Get the unmodified (shift) character
         if(key == DASH)        return _dash[0];
         else if(key == EQUALS) return _equals[0];
-        else if(key == SCH)    return _forward[key];
+        else if(key == SCH) return _forward[0];
         else if(key >= TC_S && key <= TC_E) return _top_chars[key - TC_S];
         else if(key >= MC_S && key <= MC_E) return _middle_chars[key - MC_S];
         else if(key >= BC_S && key <= BC_E) return _bottom_chars[key - BC_S];
@@ -67,7 +73,7 @@ uint8_t scan_to_ascii(uint8_t key)
         //Get the unmodified (shift) character
         if(key == DASH)        return _dash[0];
         else if(key == EQUALS) return _equals[0];
-        else if(key == SCH)    return _forward[key];
+        else if(key == SCH) return _forward[0];
         else if(key >= TC_S && key <= TC_E) return _top_chars[key - TC_S];
         else if(key >= MC_S && key <= MC_E) return _middle_chars[key - MC_S];
         else if(key >= BC_S && key <= BC_E) return _bottom_chars[key - BC_S];
@@ -76,12 +82,6 @@ uint8_t scan_to_ascii(uint8_t key)
         else if(key >= FIRST_KEY_MIDDLE_ROW && key <= LAST_KEY_MIDDLE_ROW) return _middle_row[key - FIRST_KEY_MIDDLE_ROW];
         else if(key >= FIRST_KEY_BOTTOM_ROW && key <= LAST_KEY_BOTTOM_ROW) return _bottom_row[key - FIRST_KEY_BOTTOM_ROW];
     }
-    
-    //Get the special keys, i.e., enter, backspace, and keys that cannot be *modified*
-    if(key == ENTER) return '\n';
-    else if(key == SPACE) return ' ';
-    else if(key == BCKSPACE) { if(!(x <= lx && y <= ly)) { console_write("\b \b"); } return 0; } //In the case of backspace, we want to write something then return nothing
-    else if(key == CAPS){ if(CAPSF){ CAPSF = false; } else { CAPSF = true; } return 0; } //Toggle our CAPS flag
     
     return 0;
 }

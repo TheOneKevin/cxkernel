@@ -75,6 +75,7 @@
       </df>
       <df name="obj">
       </df>
+      <in>setenv.sh</in>
     </df>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>

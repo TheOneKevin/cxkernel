@@ -23,6 +23,7 @@
 #include "system/irq.h"
 #include "system/pit.h"
 #include "memory/paging.h"
+#include "system/kprintf.h"
 
 #include "drivers/keyboard.h"
 #include "drivers/acpi.h"
@@ -88,18 +89,17 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     initAcpi();
     acpiEnable();
     //Get memory information
-    //getMmap(mbt);
+    //getMmap(mbt); //For silent startup
     getMemDisplay(mbt);
     //Then setup paging based on the information
     setup_paging();
     
     asm volatile("sti");
-    
     // Test page fault :)
-    uint32_t* ptr = (uint32_t*) _addr + _length; //Should cause a nonexistant fault
+    //uint32_t* ptr = (uint32_t*) _addr + _length; //Should cause a nonexistant fault
     //uint32_t* ptr = (uint32_t*) 0xA0000000; //Should cause a protection fault
-    uint32_t foo = *ptr;
-    console_write_dec(foo);
+    //uint32_t foo = *ptr;
+    //console_write_dec(foo);
     //console_write_dec(3/0); //Test if interrupts work
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }

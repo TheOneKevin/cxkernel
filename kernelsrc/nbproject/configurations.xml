@@ -44,6 +44,7 @@
         </df>
         <in>kernel.c</in>
       </df>
+      <in>setenv.sh</in>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -122,6 +123,8 @@
       <item path="kernel/system/pit.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/system/tdisplay.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="setenv.sh" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

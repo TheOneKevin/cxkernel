@@ -5,8 +5,6 @@
  */
 
 #include "common.h"
-#include <stddef.h>
-
 
 void outb(uint16_t port, uint8_t value)
 {
@@ -81,11 +79,42 @@ char *strcat(char *dest, const char *src)
     return ret;
 }
 
-size_t strlen(const char* str) {
-	size_t len = 0;
-	while (str[len])
-		len++;
-	return len;
+size_t strlen(const char* str)
+{
+    size_t len = 0;
+    while (str[len])
+	len++;
+    return len;
+}
+
+size_t intlen(uint32_t n)
+{
+    size_t len = 0;
+    if (n == 0)
+    {
+        return len++;
+    }
+
+    int acc = n;
+    char c[32];
+    int i = 0;
+    while (acc > 0)
+    {
+        c[i] = '0' + acc%10;
+        acc /= 10;
+        i++;
+    }
+    c[i] = 0;
+
+    char c2[32];
+    c2[i--] = 0;
+    int j = 0;
+    while(i >= 0)
+    {
+        c2[i--] = c[j++];
+        len++;
+    }
+    return len;
 }
 
 void io_wait()

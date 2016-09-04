@@ -167,15 +167,11 @@ void page_fault(regs_t *r)
    
    PANIC("page fault");
 }
-/*
-void unmap_page(uint32_t virt_addr)
+
+void invlpg(uint32_t virt_addr)
 {
-    virt_addr /= PAGE_SIZE;
-    uint32_t page = virt_addr / 1024;
-    kernel_dir -> tables[page] -> pages[page % 1024] = 0;
     asm volatile("invlpg (%0)" :: "a" (virt_addr));
 }
-*/
 
 void setup_paging()
 {

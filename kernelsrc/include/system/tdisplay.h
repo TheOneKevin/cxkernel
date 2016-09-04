@@ -68,6 +68,8 @@ void console_write_dec(uint32_t n);
 
 void console_print_center(char *c);
 
+char* utostr(uint32_t n);
+
 #ifdef __cplusplus
 }
 #endif

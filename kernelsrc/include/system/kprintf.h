@@ -21,9 +21,9 @@
 extern "C" {
 #endif
 
-static bool print(const char* data, size_t length);
-int putchar(int ic);
-int printf(const char* restrict format, ...);
+static bool kprint(const char* data, size_t length);
+int kputc(int ic);
+int kprintf(const char* restrict format, ...);
 
 #ifdef __cplusplus
 }
