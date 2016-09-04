@@ -4,10 +4,6 @@
  * and open the template in the editor.
  */
 
-#include "arch/exceptions.h"
-#include "system/irq.h"
-#include "system/tdisplay.h"
-
 #include "drivers/keyboard.h"
 #include "localization/en_scan.h"
 
@@ -84,7 +80,7 @@ uint8_t scan_to_ascii(uint8_t key)
     //Get the special keys, i.e., enter, backspace, and keys that cannot be *modified*
     if(key == ENTER) return '\n';
     else if(key == SPACE) return ' ';
-    else if(key == BCKSPACE) { console_write("\b \b"); return 0; } //In the case of backspace, we want to write something then return nothing
+    else if(key == BCKSPACE) { if(!(x <= lx && y <= ly)) { console_write("\b \b"); } return 0; } //In the case of backspace, we want to write something then return nothing
     else if(key == CAPS){ if(CAPSF){ CAPSF = false; } else { CAPSF = true; } return 0; } //Toggle our CAPS flag
     
     return 0;
@@ -101,7 +97,8 @@ void keyboard_handler(regs_t *r)
     if(scancode == LSHIFT) //See if shift is pressed and held
         SFLAG = true;
     if(scan_to_ascii(scancode) != 0)
-        console_putc(scan_to_ascii(scancode));
+        console_putck(scan_to_ascii(scancode));
+    
 }
 
 void register_keyboard()

@@ -28,6 +28,7 @@
         <df name="system">
           <in>PANIC.h</in>
           <in>irq.h</in>
+          <in>kprintf.h</in>
           <in>pic.h</in>
           <in>pit.h</in>
           <in>tdisplay.h</in>
@@ -35,6 +36,12 @@
         <in>common.h</in>
         <in>multiboot.h</in>
         <in>multiboot_old.h</in>
+      </df>
+      <df name="isodir">
+        <df name="boot">
+          <df name="grub">
+          </df>
+        </df>
       </df>
       <df name="kernel">
         <df name="arch">
@@ -59,6 +66,7 @@
           <in>PANIC.c</in>
           <in>common.c</in>
           <in>irq.c</in>
+          <in>kprintf.c</in>
           <in>pic.c</in>
           <in>pit.c</in>
           <in>tdisplay.c</in>

@@ -159,18 +159,18 @@ int acpiEnable(void)
                io_wait();
             }
          if (i<300) {
-            console_write("enabled acpi.\n");
+            console_write("Enabled ACPI!\n");
             return 0;
          } else {
-            console_write("couldn't enable acpi.\n");
+            console_write("Couldn't enable ACPI!\n");
             return -1;
          }
       } else {
-         console_write("no known way to enable acpi.\n");
+         console_write("No known way to enable ACPI!\n");
          return -1;
       }
    } else {
-      //console_write("acpi was already enabled.\n");
+      console_write("ACPI was already enabled!\n");
       return 0;
    }
 }
@@ -258,20 +258,20 @@ int initAcpi(void)
 
                      return 0;
                   } else {
-                     console_write("\\_S5 parse error.\n");
+                     console_write("\\_S5 parse error!\n");
                   }
                } else {
-                  console_write("\\_S5 not present.\n");
+                  console_write("\\_S5 not present!\n");
                }
             } else {
-               console_write("DSDT invalid.\n");
+               console_write("DSDT invalid!\n");
             }
          }
          ptr++;
       }
-      console_write("no valid FACP present.\n");
+      console_write("No valid FACP present! Enable I/O ACPI in VirtualBox!\n");
    } else {
-      console_write("no acpi.\n");
+      console_write("No ACPI!\n");
    }
 
    return -1;
@@ -284,7 +284,7 @@ void acpiPowerOff(void)
    // SCI_EN is set to 1 if acpi shutdown is possible
    if (SCI_EN == 0)
    {
-      console_write("ACPI poweroff not possible (SCI_EN not set), halting...\n");
+      console_write("ACPI power off is not possible (SCI_EN not set), halting now...\n");
       halt();
       return;
    }
@@ -296,7 +296,7 @@ void acpiPowerOff(void)
    if ( PM1b_CNT != 0 )
       outw((unsigned int) PM1b_CNT, SLP_TYPb | SLP_EN );
 
-   console_write("acpi poweroff failed.\n");
+   console_write("ACPI power off failed!\n");
 }
 
 void reboot()

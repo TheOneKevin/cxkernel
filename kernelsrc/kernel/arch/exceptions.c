@@ -102,14 +102,16 @@ void regdump(regs_t *r)
     console_write(" REGDUMP ");
     console_write(" EAX: "); console_write_hex(r->eax); console_write(" EBX: "); console_write_hex(r->ebx);
     console_write(" ECX: "); console_write_hex(r->ecx); console_write(" EDX: "); console_write_hex(r->edx);
-    console_write(" ESI: "); console_write_hex(r->esi); console_write(" EDI: "); console_write_hex(r->edi);
     console_putc('\n');
+    console_write(" ESI: "); console_write_hex(r->esi); console_write(" EDI: "); console_write_hex(r->edi);
     console_write(" EBP: "); console_write_hex(r->ebp); console_write(" EIP: "); console_write_hex(r->eip);
+    console_putc('\n');
     console_write(" CS: "); console_write_hex(r->cs); console_write(" EFLAGS: "); console_write_hex(r->eflags);
     console_write(" ESP: "); console_write_hex(r->useresp); console_write(" SS: "); console_write_hex(r->ss);
     console_putc('\n');
     console_write(" GS: "); console_write_hex(r->gs); console_write(" FS: "); console_write_hex(r->fs);
     console_write(" ES: "); console_write_hex(r->es); console_write(" DS: "); console_write_hex(r->ds);
+    console_putc('\n');
 }
 
 void write_err(regs_t *r)

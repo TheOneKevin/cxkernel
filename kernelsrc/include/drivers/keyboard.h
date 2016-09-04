@@ -12,6 +12,10 @@
  */
 
 #include "common.h"
+#include "arch/exceptions.h"
+#include "system/irq.h"
+#include "system/tdisplay.h"
+
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H

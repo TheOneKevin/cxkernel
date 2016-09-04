@@ -5,33 +5,29 @@
  */
 
 /* 
- * File:   acpi.h
+ * File:   kprintf.h
  * Author: Kevin
  *
- * Created on September 2, 2016, 5:09 PM
+ * Created on September 3, 2016, 10:57 PM
  */
 
 #include "common.h"
 #include "system/tdisplay.h"
 
-#ifndef ACPI_H
-#define ACPI_H
+#ifndef KPRINTF_H
+#define KPRINTF_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void acpiPowerOff(void);
-int initAcpi(void);
-int acpiEnable(void);
-void reboot();
-int acpiCheckHeader(unsigned int *ptr, char *sig);
-unsigned int *acpiCheckRSDPtr(unsigned int *ptr);
-unsigned int *acpiGetRSDPtr(void);
+static bool print(const char* data, size_t length);
+int putchar(int ic);
+int printf(const char* restrict format, ...);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* ACPI_H */
+#endif /* KPRINTF_H */
 

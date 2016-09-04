@@ -9,8 +9,13 @@
 enum text_color background = COLOR_BLACK;
 enum text_color foreground = COLOR_WHITE;
 
-uint8_t x = 0; uint8_t y = 0; //Our current cursor positions
 uint16_t *vram = (uint16_t *)0xB8000; //Pointer to the VGA frame buffer
+
+void console_init()
+{
+    console_clear(COLOR_BLACK);
+    lastx = 0; lasty = 0; x = 0; y = 0;
+}
 
 void console_setbg(enum text_color bg)
 {
@@ -96,7 +101,7 @@ void console_clear(enum text_color bg)
     move_cursor();
 }
 
-void console_putc(char c)
+void console_putc_raw(char c, bool isKey)
 {
     //Let's get the entry we're going to write to RAM first
     uint8_t attrib = get_attrib();
@@ -135,10 +140,23 @@ void console_putc(char c)
     {
         x = 0; y++;
     }
-    
+    if(!isKey)
+    {
+        lx = x; ly = y; //Make sure keyboard cannot backspace printed text
+    }
     // Scroll if needed, then move the cursor by one
     scroll();
     move_cursor();
+}
+
+void console_putc(char c)
+{
+    console_putc_raw(c, false);
+}
+
+void console_putck(char c)
+{
+    console_putc_raw(c, true);
 }
 
 void console_write(char *c)

@@ -17,6 +17,7 @@ extern void panic(const char *message, const char *file, uint32_t line)
     console_write(":");
     console_write_dec(line);
     console_write("\n");
+    console_write("Kernel panic can be fixed (usually) by a restart. CPU is going to halt now...");
     // Halt by going into an infinite loop.
     halt();
 }

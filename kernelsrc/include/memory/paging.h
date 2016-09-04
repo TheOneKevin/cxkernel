@@ -43,7 +43,7 @@ typedef struct page
     uint32_t unused   : 7;
     uint32_t frame    : 20;
 } page_t;
-
+// A page table has 1024 entries
 typedef struct page_table
 {
     page_t pages[1024];
@@ -70,6 +70,9 @@ void enable_paging();
 page_t *getPage(uint32_t addr, bool createPage, page_directory_t *dir);
 
 void page_fault(regs_t *regs);
+
+page_directory_t *kernel_dir;
+page_directory_t *current_dir;
 
 #ifdef __cplusplus
 }

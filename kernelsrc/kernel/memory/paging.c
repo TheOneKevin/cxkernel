@@ -9,9 +9,6 @@
 // Our frames bitset/bitmap
 uint32_t *frames;
 uint32_t nframes;
-// Our directories
-page_directory_t *kernel_dir = 0; // The kernel's page directory
-page_directory_t *current_dir = 0; // The current page directory;
 
 extern uint32_t addrPtr;
 
@@ -62,9 +59,6 @@ static uint32_t test_frame(uint32_t frame_addr)
 
 static uint32_t first_free_frame()
 {
-    //TODO: Keep a pointer to the last *successful* allocation
-    //to greatly improve search time, as we know that all previous
-    //frames have been taken
     uint32_t i, j;
     // Loop through all the frames in our bitmap
     for(i = 0; i < INDEX_FROM_BIT(nframes); i++)
@@ -146,47 +140,74 @@ void page_fault(regs_t *r)
     asm volatile("mov %%cr2, %0" : "=r" (fault_addr));
     
    // The error code gives us details of what happened.
-   int present  = !(r -> err_code & 0x1); // Page not present
-   int rw       = r -> err_code & 0x2;           // Write operation?
-   int us       = r -> err_code & 0x4;           // Processor was in user-mode?
-   int reserved = r -> err_code & 0x8;     // Overwritten CPU-reserved bits of page entry?
-   int id       = r -> err_code & 0x10;          // Caused by an instruction fetch?
+   int errcode = r -> err_code;
+   int p        = (1 << 0) & errcode;
+   int rw       = (1 << 1) & errcode;
+   int us       = (1 << 2) & errcode;
    console_putc('\n');
    regdump(r); //Dump regs
    // Output an error message.
    console_write("\n");
-   console_write("Page fault! (");
-   if (present) {console_write("present");}
-   if (rw) {console_write("read-only");}
-   if (us) {console_write("user-mode");}
-   if (reserved) {console_write("reserved");}
-   if (id) { console_write("some instruction fetch error"); }
-   console_write(") at ");
+   console_write("Page fault!\n");
+   
+   if(!us && !rw && !p) console_write("Supervisory process tried to read a non-present page entry!");
+   if(!us && !rw &&  p) console_write("Supervisory process tried to read a page and caused a protection fault!");
+   if(!us &&  rw && !p) console_write("Supervisory process tried to write to a non-present page entry!");
+   if(!us &&  rw &&  p) console_write("Supervisory process tried to write a page and caused a protection fault!");
+   if(us  && !rw && !p) console_write("User process tried to read a non-present page entry!");
+   if(us  && !rw &&  p) console_write("User process tried to read a page and caused a protection fault!");
+   if(us  &&  rw && !p) console_write("User process tried to write to a non-present page entry!");
+   if(us  &&  rw &&  p) console_write("User process tried to write a page and caused a protection fault!");
+   
+   console_write("\nAt ");
    console_write_hex(fault_addr);
    console_write("\n");
+   
+   print_dalek();
+   
    PANIC("page fault");
 }
+/*
+void unmap_page(uint32_t virt_addr)
+{
+    virt_addr /= PAGE_SIZE;
+    uint32_t page = virt_addr / 1024;
+    kernel_dir -> tables[page] -> pages[page % 1024] = 0;
+    asm volatile("invlpg (%0)" :: "a" (virt_addr));
+}
+*/
 
 void setup_paging()
 {
-    uint32_t end_of_page = (uint32_t) (_length + _addr);
-    //console_putc(' '); console_write_hex(end_of_page);
+    // Our directories
+    kernel_dir = 0; // The kernel's page directory
+    current_dir = 0; // The current page directory;
+    // Here we get the length of usable memory
+    uint32_t end_of_page = (uint32_t) (_length + _addr); //_length and _addr is obtained during startup
+    console_write("End of kernel: "); console_write_hex(addrPtr);
+    console_write(" End of page: "); console_write_hex(end_of_page);
+    // We get the amount of frames from the length
     nframes = (uint32_t) end_of_page / PAGE_SIZE;
-    //console_putc(' '); console_write_dec(nframes);
+    console_write(" Number of page frames: "); console_write_dec(nframes);
+    // We then allocate RAM for the page frames
     frames = (uint32_t *) h_kmalloc(INDEX_FROM_BIT(nframes), false, 0);
+    // And clear it
     memset(frames, 0, INDEX_FROM_BIT(nframes));
     
+    // Let's set up the kernel directory
     kernel_dir = (page_directory_t*) h_kmalloc(sizeof(page_directory_t), true, 0);
     memset(kernel_dir, 0, sizeof(page_directory_t));
     current_dir = kernel_dir;
     
     uint32_t i = 0;
-    while(i < addrPtr)
+    while(i < addrPtr) //While we are still within the kernel memory area
     {
-        alloc_frame(getPage(i, true, kernel_dir), false, false);
+        // Then identity map the pages that the kernel is in to make our lives easier (i < end_of_kernel)
+        alloc_frame(getPage(i, true, kernel_dir), true, false);
         i += PAGE_SIZE;
     }
-    idt_set_gate(14, (unsigned)page_fault, 0x08, 0x8E);
-    load_page_dir(kernel_dir);
-    enable_paging();
+    idt_set_gate(14, (unsigned)page_fault, 0x08, 0x8E); // Install page fault handler
+    load_page_dir(kernel_dir); // Load the directory
+    enable_paging(); // Enable paging
+    console_write("\nPaging enabled!\n");
 }

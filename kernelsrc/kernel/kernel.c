@@ -12,6 +12,7 @@
 */
 
 #include "multiboot.h"
+//#include "multiboot2.h"
 
 #include "common.h"
 #include "arch/gdt.h"
@@ -54,6 +55,7 @@ void getMemDisplay(multiboot_info_t* mbt)
         console_write("\n");
     }
     console_write_hex(_length); console_write_hex(_addr);
+    console_write("\n");
 }
 
 void getMmap(multiboot_info_t* mbt)
@@ -71,7 +73,7 @@ void getMmap(multiboot_info_t* mbt)
 
 void kernel_main(multiboot_info_t* mbt, unsigned int magic)
 {
-    console_clear(COLOR_BLACK);
+    console_init();
     // First, we install our GDT and IDT, then we fill the IDT with CPU exceptions
     // We then prepare the PIC for usage, and register our 15 PIC interrupts
     install_gdt();
@@ -81,22 +83,23 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     register_irq();
     // Register and start our built-in keyboard driver
     register_keyboard();
-    //init_timer(50); //Test if multiple ints work :)
+    //init_timer(50); //Test if multiple interrupts work :)
     //Initialize ACPI and enable it
     initAcpi();
     acpiEnable();
     //Get memory information
-    getMmap(mbt);
+    //getMmap(mbt);
+    getMemDisplay(mbt);
     //Then setup paging based on the information
     setup_paging();
+    
     asm volatile("sti");
     
     // Test page fault :)
-    /*uint32_t* ptr = (uint32_t*) 0xA0000000;
+    uint32_t* ptr = (uint32_t*) _addr + _length; //Should cause a nonexistant fault
+    //uint32_t* ptr = (uint32_t*) 0xA0000000; //Should cause a protection fault
     uint32_t foo = *ptr;
-    console_write_dec(foo);*/
+    console_write_dec(foo);
     //console_write_dec(3/0); //Test if interrupts work
-    //acpiPowerOff();
-    
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }

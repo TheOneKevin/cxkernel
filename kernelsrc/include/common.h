@@ -16,6 +16,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <limits.h>
+#include <stdarg.h>
+
 #ifndef COMMON_H
 #define COMMON_H
 

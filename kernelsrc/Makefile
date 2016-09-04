@@ -39,7 +39,7 @@ LiquiDOS.bin: $(OBJ)
 	echo Making GRUB iso...
 	grub-mkrescue -o LiquiDOS.iso isodir
 	echo Cleaning up current mess...
-	rm -r isodir
+	#rm -r isodir
 .PHONY: clean
 clean:
 	rm -f $(ODIR)/*.o

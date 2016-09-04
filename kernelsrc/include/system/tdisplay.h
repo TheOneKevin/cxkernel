@@ -39,6 +39,12 @@ enum text_color {
 	COLOR_WHITE = 15,
 };
 
+uint8_t lastx; uint8_t lasty;
+uint8_t x; uint8_t y; //Our current cursor positions
+uint8_t lx; uint8_t ly; //Lock x, lock y
+
+//Initializes the console display
+void console_init();
 //Sets the console background to the specified colour
 void console_setbg(enum text_color bg);
 //Sets the console background to the specified colour
@@ -49,6 +55,8 @@ void set_cursorpos(uint8_t xpos, uint8_t ypos);
 void console_clear(enum text_color bg);
 //Writes a character on screen
 void console_putc(char c);
+//Assumes the keyboard is printing to the screen
+void console_putck(char c);
 //Writes a string on screen
 void console_write(char *c);
 //Writes a string on screen with newline at the end
