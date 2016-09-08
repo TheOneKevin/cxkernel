@@ -11,8 +11,18 @@
  * Created on August 24, 2016, 4:48 PM
 */
 
+//All the (local) kernel options
+#define DEBUGMSG     1   // Enable to see messages
+#define TEST_NOPAGE  0   // Enable to test non existant fault
+#define TEST_NOPAGE2 0   // Enable to test non existant fault
+#define CPU_EXCEP    0   // Test CPU exceptions
+#define GRUB_2       1
+
 #include "multiboot.h"
-//#include "multiboot2.h"
+
+#if GRUB_2
+#include "multiboot2.h"
+#endif
 
 #include "common.h"
 
@@ -31,12 +41,6 @@
 
 #include "drivers/keyboard.h"
 #include "drivers/acpi.h"
-
-//All the (local) kernel options
-#define DEBUGMSG     1   // Enable to see messages
-#define TEST_NOPAGE  0   // Enable to test non existant fault
-#define TEST_NOPAGE2 0   // Enable to test non existant fault
-#define CPU_EXCEP    0   // Test CPU exceptions
 
 // http://wiki.osdev.org/ <- GODSEND. Contains almost all the info I used to create LiquiDOS
 // http://wiki.osdev.org/What_order_should_I_make_things_in <- Read.
@@ -89,7 +93,7 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     //Then setup paging based on the information
     setup_paging();
     // Enable interrupts
-    sti();
+    asm volatile("sti");
     bprintok(); console_write("OS ready!");
     #if TEST_NOPAGE
     // Test page fault :)
@@ -109,7 +113,7 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     console_write_dec(3/0); //Test if interrupts work
     #endif
     
-    init_terminal();
+    //init_terminal();
     
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }

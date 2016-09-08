@@ -10,15 +10,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/drivers/keyboard.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/drivers/acpi.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/memory/paging.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/arch/exceptions.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/include/memory/paging.h</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/kernel.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/include/system/tdisplay.h</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/system/kprintf.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/system/tdisplay.c</file>
+            <file>file:/home/kevin/Documents/GitHub/LiquiDOS/kernelsrc/kernel/kernel.c</file>
         </group>
     </open-files>
 </project-private>

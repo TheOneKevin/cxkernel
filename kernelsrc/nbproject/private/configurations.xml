@@ -36,6 +36,7 @@
         </df>
         <in>common.h</in>
         <in>multiboot.h</in>
+        <in>multiboot2.h</in>
         <in>multiboot_old.h</in>
       </df>
       <df name="isodir">
