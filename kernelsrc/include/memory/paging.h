@@ -16,6 +16,7 @@
 #include "arch/idt.h"
 #include "arch/exceptions.h"
 #include "system/PANIC.h"
+#include "system/kprintf.h"
 
 
 #ifndef PAGING_H
@@ -43,17 +44,17 @@ typedef struct page
     uint32_t unused   : 7;
     uint32_t frame    : 20;
 } page_t;
-// A page table has 1024 entries
+// A page table has 1024 pages
 typedef struct page_table
 {
     page_t pages[1024];
 } page_table_t;
-
+// We have the physical table, and the virtual table, along with the physical address of the directory
 typedef struct page_directory
 {
     page_table_t *tables[1024]; //Array of pointers to the page tables
     uint32_t tablesPhys[1024];  //Pointers to the (physical address) page tables
-    uint32_t physAddr;          //Physical address of the array above
+    uint32_t physAddr;          //Physical address of the directory
 } page_directory_t;
 
 void setup_paging();

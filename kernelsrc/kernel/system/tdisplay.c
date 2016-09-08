@@ -14,7 +14,9 @@ uint16_t *vram = (uint16_t *)0xB8000; //Pointer to the VGA frame buffer
 void console_init()
 {
     console_clear(COLOR_BLACK);
-    lastx = 0; lasty = 0; x = 0; y = 0;
+    //lastx = 0; lasty = 0;
+    x = 0; y = 0;
+    bprintok(); console_writeline("Console display initialized");
 }
 
 void console_setbg(enum text_color bg)
@@ -173,7 +175,7 @@ void console_writeline(char *c)
     console_write(c); console_putc('\n');
 }
 
-// From James Molly's Tutorial
+// From James Molloy's Tutorial
 void console_write_hex(uint32_t n)
 {
     int tmp;
@@ -250,4 +252,23 @@ void console_print_center(char *c)
         length--;
     }
     console_write(c);
+}
+
+// Just for boot because I'm lazy ;)
+void bprintok()
+{
+    console_putc('[');
+    console_setfg(COLOR_GREEN);
+    console_write("  OK  ");
+    console_setfg(COLOR_WHITE);
+    console_write("]   ");
+}
+
+void bprinterr()
+{
+    console_putc('[');
+    console_setfg(COLOR_GREEN);
+    console_write(" ERRD ");
+    console_setfg(COLOR_WHITE);
+    console_write("]   ");
 }

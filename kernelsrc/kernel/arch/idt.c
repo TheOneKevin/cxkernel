@@ -18,6 +18,7 @@ void install_idt()
     memset(&idt_entries, 0 , sizeof(idt_entry_t) * 256);
     // Call our external assembly method
     load_idt((uint32_t)&idt_ptr);
+    bprintok(); console_writeline("IDT initialized!");
 }
 
 //Let's add an IDT entry!

@@ -39,9 +39,11 @@ int memcmp(const void *s1, const void *s2, size_t n);
 
 void io_wait();
 void halt();
+void cli();
+void sti();
 
 #define PAGE_SIZE 0x1000
-#define PAGE_ALIGN 0xFFFFF000 //0x100000000 - PAGE_SIZE
+#define PAGE_MASK 0xFFFFF000 //0x100000000 - PAGE_SIZE
 
 uint64_t _length; uint64_t _addr; // Here we get the largest chunk of memory for paging
 

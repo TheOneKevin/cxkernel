@@ -28,6 +28,11 @@ void load_page_dir(page_directory_t *dir)
     asm volatile("mov %0, %%cr3" :: "r"(&dir -> tablesPhys));
 }
 
+void invlpg(uint32_t virt_addr)
+{
+    asm volatile("invlpg (%0)" :: "a" (virt_addr));
+}
+
 // Set frame inside our frames bitmap
 static void set_frame(uint32_t frame_addr)
 {
@@ -89,6 +94,7 @@ void alloc_frame(page_t *page, bool isK, bool rw)
         uint32_t index = first_free_frame();
         if(index == (uint32_t)-1)
         {
+            bprinterr(); console_writeline("No free frames available!");
             PANIC("No free frames available!");
         }
         set_frame(index * PAGE_SIZE);
@@ -104,12 +110,12 @@ void free_frame(page_t *page)
     uint32_t frame;
     // Store the page's frame into our frame variable
     if(!(frame = page -> frame))
-        return; //However, if there's no allocated frame, then return
+        return; //If there's no allocated frame, then return
     else
     {
         //Else, we free our frame
         clear_frame(frame);
-        page->frame = 0x0; //And set the frame flag to 0 (not used)
+        page->frame = 0x0; //And set the frame flag to 0
     }
 }
 
@@ -159,18 +165,11 @@ void page_fault(regs_t *r)
    if(us  &&  rw && !p) console_write("User process tried to write to a non-present page entry!");
    if(us  &&  rw &&  p) console_write("User process tried to write a page and caused a protection fault!");
    
-   console_write("\nAt ");
-   console_write_hex(fault_addr);
-   console_write("\n");
+   kprintf("\nAt %X \n", fault_addr);
    
    print_dalek();
    
    PANIC("page fault");
-}
-
-void invlpg(uint32_t virt_addr)
-{
-    asm volatile("invlpg (%0)" :: "a" (virt_addr));
 }
 
 void setup_paging()
@@ -180,11 +179,10 @@ void setup_paging()
     current_dir = 0; // The current page directory;
     // Here we get the length of usable memory
     uint32_t end_of_page = (uint32_t) (_length + _addr); //_length and _addr is obtained during startup
-    console_write("End of kernel: "); console_write_hex(addrPtr);
-    console_write(" End of page: "); console_write_hex(end_of_page);
+    kprintf("End of kernel: %X", addrPtr); kprintf(" End of page: %X", end_of_page);
     // We get the amount of frames from the length
     nframes = (uint32_t) end_of_page / PAGE_SIZE;
-    console_write(" Number of page frames: "); console_write_dec(nframes);
+    kprintf(" Number of page frames: %u", nframes);
     // We then allocate RAM for the page frames
     frames = (uint32_t *) h_kmalloc(INDEX_FROM_BIT(nframes), false, 0);
     // And clear it
@@ -205,5 +203,5 @@ void setup_paging()
     idt_set_gate(14, (unsigned)page_fault, 0x08, 0x8E); // Install page fault handler
     load_page_dir(kernel_dir); // Load the directory
     enable_paging(); // Enable paging
-    console_write("\nPaging enabled!\n");
+    console_putc('\n'); bprintok(); console_writeline("Paging enabled!");
 }

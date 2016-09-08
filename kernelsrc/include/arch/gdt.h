@@ -12,6 +12,7 @@
  */
 
 #include "common.h"
+#include "system/tdisplay.h"
 
 #ifndef GDT_H
 #define GDT_H

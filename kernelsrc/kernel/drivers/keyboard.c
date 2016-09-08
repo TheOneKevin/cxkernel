@@ -5,10 +5,16 @@
  */
 
 #include "drivers/keyboard.h"
+#include "arch/exceptions.h"
+#include "system/irq.h"
+#include "system/tdisplay.h"
 #include "localization/en_scan.h"
 
 bool SFLAG = false; // Shift flag
 bool CAPSF = false; // CAPS flag
+bool display = true;
+uint8_t lastScan = 0;
+uint8_t lastScanCode = 0;
 
 uint8_t scan_to_ascii(uint8_t key)
 {
@@ -97,11 +103,36 @@ void keyboard_handler(regs_t *r)
     if(scancode == LSHIFT) //See if shift is pressed and held
         SFLAG = true;
     if(scan_to_ascii(scancode) != 0)
-        console_putck(scan_to_ascii(scancode));
-    
+    {
+        if(display)
+            console_putck(scan_to_ascii(scancode));
+        lastScan = scan_to_ascii(scancode);
+        lastScanCode = scancode;
+    }
 }
 
 void register_keyboard()
 {
     install_handler(33, &keyboard_handler);
+    bprintok(); console_writeline("Registered keyboard handler");
+}
+
+void noDisplay(bool yesno)
+{
+    display = yesno;
+}
+
+uint8_t getLastScan()
+{
+    return lastScan;
+}
+
+uint8_t getLastScanCode()
+{
+    return lastScanCode;
+}
+
+void flush_cache()
+{
+    lastScan = 0; lastScanCode = 0;
 }

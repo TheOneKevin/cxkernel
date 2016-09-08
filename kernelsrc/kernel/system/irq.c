@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-#include "arch/idt.h"
-#include "arch/exceptions.h"
+
 #include "system/irq.h"
-#include "system/pic.h"
-#include "system/tdisplay.h"
 
 irq_t interrupt_handlers[256]; // 16 will do... but no
 
@@ -29,6 +26,7 @@ void register_irq()
     idt_set_gate(45, (unsigned)irq13, 0x08, 0x8E);
     idt_set_gate(46, (unsigned)irq14, 0x08, 0x8E);
     idt_set_gate(47, (unsigned)irq15, 0x08, 0x8E);
+    bprintok(); console_writeline("Registered IRQ handlers");
 }
 
 void irq_handler(regs_t *regs) // We need to call regs as a reference or it won't work :)
@@ -47,9 +45,11 @@ void irq_handler(regs_t *regs) // We need to call regs as a reference or it won'
 void install_handler(uint8_t irq, irq_t handler)
 {
     interrupt_handlers[irq] = handler; // Register the handler pointer
+    bprintok(); kprintf("Installed handler: %u\n", (uint32_t) irq);
 }
 
 void uninstall_handler(uint8_t irq)
 {
     interrupt_handlers[irq] = 0; // Clear the handler pointer
+    bprintok(); kprintf("Uninstalled handler: %u\n", (uint32_t) irq);
 }

@@ -12,6 +12,11 @@
  */
 
 #include "common.h"
+#include "system/pic.h"
+#include "system/tdisplay.h"
+#include "system/kprintf.h"
+#include "arch/idt.h"
+#include "arch/exceptions.h"
 
 #ifndef IRQ_H
 #define IRQ_H

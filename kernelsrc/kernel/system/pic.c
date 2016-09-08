@@ -56,4 +56,5 @@ void autoremap_PIC()
     outb(0xA1, 0x01);
     outb(0x21, 0x0);
     outb(0xA1, 0x0);
+    bprintok(); console_writeline("Initialized and remapped PIC");
 }

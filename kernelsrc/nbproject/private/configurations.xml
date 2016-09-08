@@ -32,6 +32,7 @@
           <in>pic.h</in>
           <in>pit.h</in>
           <in>tdisplay.h</in>
+          <in>terminal.h</in>
         </df>
         <in>common.h</in>
         <in>multiboot.h</in>
@@ -70,6 +71,7 @@
           <in>pic.c</in>
           <in>pit.c</in>
           <in>tdisplay.c</in>
+          <in>terminal.c</in>
         </df>
         <in>kernel.c</in>
       </df>

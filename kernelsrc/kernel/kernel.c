@@ -15,18 +15,28 @@
 //#include "multiboot2.h"
 
 #include "common.h"
-#include "arch/gdt.h"
-#include "arch/idt.h"
-#include "arch/exceptions.h"
+
 #include "system/tdisplay.h"
 #include "system/pic.h"
 #include "system/irq.h"
 #include "system/pit.h"
-#include "memory/paging.h"
 #include "system/kprintf.h"
+#include "system/terminal.h"
+
+#include "arch/gdt.h"
+#include "arch/idt.h"
+#include "arch/exceptions.h"
+
+#include "memory/paging.h"
 
 #include "drivers/keyboard.h"
 #include "drivers/acpi.h"
+
+//All the (local) kernel options
+#define DEBUGMSG     1   // Enable to see messages
+#define TEST_NOPAGE  0   // Enable to test non existant fault
+#define TEST_NOPAGE2 0   // Enable to test non existant fault
+#define CPU_EXCEP    0   // Test CPU exceptions
 
 // http://wiki.osdev.org/ <- GODSEND. Contains almost all the info I used to create LiquiDOS
 // http://wiki.osdev.org/What_order_should_I_make_things_in <- Read.
@@ -34,42 +44,28 @@
 // Here for debugging purposes :)
 void getMemDisplay(multiboot_info_t* mbt)
 {
-    console_write(" Memory map address:");
-    console_write_hex(mbt -> mem_upper); console_putc('\n');
-    
+    #if DEBUGMSG
+    kprintf("Memory map address: %X \n", mbt -> mem_upper);
+    #endif
     multiboot_memory_map_t *mmap = mbt -> mmap_addr;
     while(mmap < mbt->mmap_addr + mbt->mmap_length)
     {
         mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
-        console_write("  Entry length:");
-        console_write_hex(mmap -> len);
-        console_write(" Entry address:");
-        console_write_hex(mmap -> addr);
-        console_write("    Entry size:");
-        console_write_hex(mmap -> size);
-        console_putc(' '); console_write_hex(mmap -> type);
-        
-        if((mmap -> len >= _length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
-        {
-            _length = mmap -> len; _addr = mmap -> addr;
-        }
-        console_write("\n");
-    }
-    console_write_hex(_length); console_write_hex(_addr);
-    console_write("\n");
-}
-
-void getMmap(multiboot_info_t* mbt)
-{
-    multiboot_memory_map_t *mmap = mbt -> mmap_addr;
-    while(mmap < mbt->mmap_addr + mbt->mmap_length)
-    {
-        mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
+        #if DEBUGMSG
+        kprintf(" Entry length: %X Entry address %X (%X) \n", (uint32_t)mmap -> len, (uint32_t)mmap -> addr, (uint32_t)mmap -> type);
+        #endif
         if((mmap -> len >= _length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
         {
             _length = mmap -> len; _addr = mmap -> addr;
         }
     }
+    #if DEBUGMSG
+    // Print out the data sizes in GB, MB, KB and then B 
+    if(_length >= 1073741824) { uint32_t tmp = _length / 1073741824; kprintf("Length of memory: %u GB Address: %X \n", tmp, _addr); }
+    else if(_length >= 1048576) { uint32_t tmp = _length / 1048576; kprintf("Length of memory: %u MB Address: %X \n", tmp, _addr); }
+    else if(_length >= 1024) { uint32_t tmp = _length / 1024; kprintf("Length of memory: %u KB Address: %X \n", tmp, _addr); }
+    else { kprintf("Length of memory: %u B Address: %X \n", _length, _addr); }
+    #endif
 }
 
 void kernel_main(multiboot_info_t* mbt, unsigned int magic)
@@ -89,17 +85,31 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     initAcpi();
     acpiEnable();
     //Get memory information
-    //getMmap(mbt); //For silent startup
     getMemDisplay(mbt);
     //Then setup paging based on the information
     setup_paging();
-    
-    asm volatile("sti");
+    // Enable interrupts
+    sti();
+    bprintok(); console_write("OS ready!");
+    #if TEST_NOPAGE
     // Test page fault :)
-    //uint32_t* ptr = (uint32_t*) _addr + _length; //Should cause a nonexistant fault
-    //uint32_t* ptr = (uint32_t*) 0xA0000000; //Should cause a protection fault
-    //uint32_t foo = *ptr;
-    //console_write_dec(foo);
-    //console_write_dec(3/0); //Test if interrupts work
+    uint32_t* ptr = (uint32_t*) _addr + _length; //Should cause a nonexistant fault
+    #endif
+    
+    #if TEST_NOPAGE2
+    uint32_t* ptr = (uint32_t*) 0xA0000000; //Should cause a protection fault
+    #endif
+    
+    #if TEST_NOPAGE || TEST_NOPAGE2
+    uint32_t foo = *ptr;
+    console_write_dec(foo);
+    #endif
+    
+    #if CPU_EXCEP
+    console_write_dec(3/0); //Test if interrupts work
+    #endif
+    
+    init_terminal();
+    
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }

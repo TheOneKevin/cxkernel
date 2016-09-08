@@ -12,6 +12,7 @@
         <df name="system">
           <in>PANIC.h</in>
           <in>kprintf.h</in>
+          <in>terminal.h</in>
         </df>
       </df>
       <df name="kernel">
@@ -41,6 +42,7 @@
           <in>pic.c</in>
           <in>pit.c</in>
           <in>tdisplay.c</in>
+          <in>terminal.c</in>
         </df>
         <in>kernel.c</in>
       </df>
@@ -88,6 +90,8 @@
       </item>
       <item path="include/system/kprintf.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/system/terminal.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="kernel/arch/exceptions.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/arch/gdt.c" ex="false" tool="0" flavor2="0">
@@ -123,6 +127,8 @@
       <item path="kernel/system/pit.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/system/tdisplay.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kernel/system/terminal.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="setenv.sh" ex="false" tool="3" flavor2="0">
       </item>

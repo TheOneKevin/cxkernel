@@ -12,6 +12,7 @@
  */
 
 #include "common.h"
+#include "system/tdisplay.h"
 
 #ifndef IDT_H
 #define IDT_H

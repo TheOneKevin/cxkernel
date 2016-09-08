@@ -159,18 +159,18 @@ int acpiEnable(void)
                io_wait();
             }
          if (i<300) {
-            console_write("Enabled ACPI!\n");
+            bprintok(); console_write("Enabled ACPI!\n");
             return 0;
          } else {
-            console_write("Couldn't enable ACPI!\n");
+            bprinterr(); console_write("Couldn't enable ACPI!\n");
             return -1;
          }
       } else {
-         console_write("No known way to enable ACPI!\n");
+         bprinterr(); console_write("No known way to enable ACPI!\n");
          return -1;
       }
    } else {
-      console_write("ACPI was already enabled!\n");
+      bprintok(); console_write("ACPI was already enabled!\n"); //TODO: Is this an error or OK?
       return 0;
    }
 }
@@ -258,20 +258,20 @@ int initAcpi(void)
 
                      return 0;
                   } else {
-                     console_write("\\_S5 parse error!\n");
+                     bprinterr(); console_write("\\_S5 parse error!\n");
                   }
                } else {
-                  console_write("\\_S5 not present!\n");
+                  bprinterr(); console_write("\\_S5 not present!\n");
                }
             } else {
-               console_write("DSDT invalid!\n");
+               bprinterr(); console_write("DSDT invalid!\n");
             }
          }
          ptr++;
       }
-      console_write("No valid FACP present! Enable I/O ACPI in VirtualBox!\n");
+      bprinterr(); console_write("No valid FACP present! Enable I/O ACPI in VirtualBox!\n");
    } else {
-      console_write("No ACPI!\n");
+      bprinterr(); console_write("No ACPI!\n");
    }
 
    return -1;

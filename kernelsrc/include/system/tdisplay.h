@@ -39,7 +39,7 @@ enum text_color {
 	COLOR_WHITE = 15,
 };
 
-uint8_t lastx; uint8_t lasty;
+//uint8_t lastx; uint8_t lasty;
 uint8_t x; uint8_t y; //Our current cursor positions
 uint8_t lx; uint8_t ly; //Lock x, lock y
 
@@ -65,10 +65,11 @@ void console_writeline(char *c);
 void console_write_hex(uint32_t n);
 //Writes a decimal onto the screen
 void console_write_dec(uint32_t n);
-
+//Prints a string centered on screen
 void console_print_center(char *c);
 
-char* utostr(uint32_t n);
+void bprintok();
+void bprinterr();
 
 #ifdef __cplusplus
 }

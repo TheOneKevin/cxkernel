@@ -5,30 +5,30 @@
  */
 
 /* 
- * File:   keyboard.h
+ * File:   terminal.h
  * Author: Kevin
  *
- * Created on August 26, 2016, 9:05 AM
+ * Created on September 5, 2016, 9:47 PM
  */
 
 #include "common.h"
+#include "drivers/keyboard.h"
 
-#ifndef KEYBOARD_H
-#define KEYBOARD_H
+#ifndef TERMINAL_H
+#define TERMINAL_H
+
+void init_terminal();
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void register_keyboard();
-void noDisplay(bool yesno);
-uint8_t getLastScan();
-uint8_t getLastScanCode();
-void flush_cache();
+
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* KEYBOARD_H */
+#endif /* TERMINAL_H */
 

@@ -19,6 +19,7 @@ void install_gdt()
     gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
     // Call our external assembly function to load the GDT
     load_gdt((uint32_t)&gdt_ptr);
+    bprintok(); console_writeline("GDT initialized!");
 }
 // Let's add a GDT entry
 void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran)
