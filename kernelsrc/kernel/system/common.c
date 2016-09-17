@@ -67,11 +67,15 @@ char *strcpy(char *dest, const char* src)
     return ret;
 }
 
-int strcmp(const char* s1, const char* s2)
+int strcmp(char* s1, char* s2)
 {
-    while(*s1 && (*s1==*s2))
-        s1++,s2++;
-    return *(const unsigned char*)s1-*(const unsigned char*)s2;
+    while(*s1 && *s2 && (*s1++ == *s2++));
+    if(*s1 == '\0' && *s2 == '\0')
+        return 0;
+    else if(*s1 == '\0')
+        return -1;
+    else
+        return 1;
 }
 
 // Concatenate the NULL-terminated string src onto

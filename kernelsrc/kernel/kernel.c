@@ -96,8 +96,9 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     init_terminal();
     
     // Enable interrupts
-    asm volatile("sti");
     bprintok(); console_write("OS ready!\n");
+    
+    asm volatile("sti");
     #if TEST_NOPAGE
     // Test page fault :)
     uint32_t* ptr = (uint32_t*) _addr + _length; //Should cause a nonexistant fault
@@ -115,6 +116,6 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     #if CPU_EXCEP
     console_write_dec(3/0); //Test if interrupts work
     #endif
-    
+    kprintf("\n0:\\>");
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }
