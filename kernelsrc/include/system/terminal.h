@@ -23,8 +23,7 @@ void init_terminal();
 extern "C" {
 #endif
 
-
-
+void init_terminal();
 
 #ifdef __cplusplus
 }

@@ -6,34 +6,25 @@
 
 #include "system/terminal.h"
 
-static int status;
 char buffer[256]; // TODO: We will use malloc() in the future but for now...
+int i = 0;
+
+void interpret_cmd(uint8_t scancode)
+{
+    buffer[i] = scan_to_ascii(scancode);
+    i++;
+    if(scancode == 0x1C) //Check for enter key
+    {
+        //Interpret this stuff
+        console_write(buffer);
+        memset(&buffer, 0, 256);
+        i = 0;
+    }
+}
 
 void init_terminal()
 {
-    status = 1;
-    do
-    {
-        interpret_cmd();
-    } while(status);
-}
-
-void interpret_cmd()
-{
-    int i = 0;
-    while(getLastScan() != '\n')
-    {
-        if(getLastScan() != 0)
-        {
-            buffer[i] = getLastScan();
-            i++;
-            flush_cache();
-        }
-    }
-    buffer[i+1] = 0;
-    
-    //Interpret this stuff
-    console_write(buffer);
-    if(strcmp(buffer, "help") == 1){ console_write("hoy!"); }
-    else { console_write("hoy2!"); }
+    //Let's register our keyboard hook now
+    installKeyHandler(&interpret_cmd, 0);
+    setHandlerFlag(0);
 }

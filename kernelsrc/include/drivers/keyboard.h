@@ -22,9 +22,15 @@ extern "C" {
 
 void register_keyboard();
 void noDisplay(bool yesno);
-uint8_t getLastScan();
-uint8_t getLastScanCode();
 void flush_cache();
+
+uint8_t scan_to_ascii(uint8_t key);
+
+typedef void (*keyH) (uint8_t scancode);
+
+void installKeyHandler(keyH handler, int number);
+void uninstallKeyHandler(int number);
+void setHandlerFlag(int handler);
 
 #ifdef __cplusplus
 }

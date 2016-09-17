@@ -16,7 +16,7 @@
 #define TEST_NOPAGE  0   // Enable to test non existant fault
 #define TEST_NOPAGE2 0   // Enable to test non existant fault
 #define CPU_EXCEP    0   // Test CPU exceptions
-#define GRUB_2       1
+#define GRUB_2       0
 
 #include "multiboot.h"
 
@@ -92,9 +92,12 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     getMemDisplay(mbt);
     //Then setup paging based on the information
     setup_paging();
+    
+    init_terminal();
+    
     // Enable interrupts
     asm volatile("sti");
-    bprintok(); console_write("OS ready!");
+    bprintok(); console_write("OS ready!\n");
     #if TEST_NOPAGE
     // Test page fault :)
     uint32_t* ptr = (uint32_t*) _addr + _length; //Should cause a nonexistant fault
@@ -112,8 +115,6 @@ void kernel_main(multiboot_info_t* mbt, unsigned int magic)
     #if CPU_EXCEP
     console_write_dec(3/0); //Test if interrupts work
     #endif
-    
-    //init_terminal();
     
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }

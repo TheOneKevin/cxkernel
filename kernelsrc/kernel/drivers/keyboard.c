@@ -13,8 +13,9 @@
 bool SFLAG = false; // Shift flag
 bool CAPSF = false; // CAPS flag
 bool display = true;
-uint8_t lastScan = 0;
-uint8_t lastScanCode = 0;
+
+keyH keyboard_handlers[16];
+int handlerInt = 0;
 
 uint8_t scan_to_ascii(uint8_t key)
 {
@@ -106,8 +107,9 @@ void keyboard_handler(regs_t *r)
     {
         if(display)
             console_putck(scan_to_ascii(scancode));
-        lastScan = scan_to_ascii(scancode);
-        lastScanCode = scancode;
+        
+        keyH handler = keyboard_handlers[handlerInt];
+        handler(scancode);
     }
 }
 
@@ -122,17 +124,19 @@ void noDisplay(bool yesno)
     display = yesno;
 }
 
-uint8_t getLastScan()
+void setHandlerFlag(int handler)
 {
-    return lastScan;
+    handlerInt = handler;
 }
 
-uint8_t getLastScanCode()
+void installKeyHandler(keyH handler, int number)
 {
-    return lastScanCode;
+    keyboard_handlers[number] = handler;
+    bprintok(); kprintf("Installed keyboard hook: %u\n", (uint32_t) number);
 }
 
-void flush_cache()
+void uninstallKeyHandler(int number)
 {
-    lastScan = 0; lastScanCode = 0;
+    keyboard_handlers[number] = 0;
+    bprintok(); kprintf("Uninstalled keyboard hook: %u\n", (uint32_t) number);
 }
