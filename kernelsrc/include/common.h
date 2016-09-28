@@ -37,6 +37,10 @@ void* memset(void* bufptr, int value, size_t size);
 size_t strlen(const char* str);
 int memcmp(const void *s1, const void *s2, size_t n);
 
+char *strcat(char *dest, const char *src);
+int strcmp(char* s1, char* s2);
+char *strcpy(char *dest, const char* src);
+
 void io_wait();
 void halt();
 void cli();
@@ -45,7 +49,8 @@ void sti();
 #define PAGE_SIZE 0x1000
 #define PAGE_MASK 0xFFFFF000 //0x100000000 - PAGE_SIZE
 
-uint64_t _length; uint64_t _addr; // Here we get the largest chunk of memory for paging
+extern uint64_t _length; extern uint64_t _addr; // Here we get the largest chunk of memory for paging
+extern bool doBootLog; uint8_t debugBuffer[4096];
 
 #ifdef __cplusplus
 }

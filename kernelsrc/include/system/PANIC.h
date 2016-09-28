@@ -11,7 +11,6 @@
  * Created on September 2, 2016, 6:08 PM
  */
 #include "common.h"
-#include "system/tdisplay.h"
 
 #ifndef PANIC_H
 #define PANIC_H
@@ -20,12 +19,13 @@
 extern "C" {
 #endif
 
-#define PANIC(msg) panic(msg, __FILE__, __LINE__);
-#define ASSERT(b) ((b) ? (void)0 : panic_assert(__FILE__, __LINE__, #b))
+void panic(const char *message);
+void assert(bool assertStatus, const char *message);
+#define PANIC panic
+#define ASSERT assert
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* PANIC_H */
-

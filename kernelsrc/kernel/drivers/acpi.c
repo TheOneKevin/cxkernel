@@ -1,4 +1,5 @@
 #include "drivers/acpi.h"
+#include "system/tdisplay.h"
 
 uint32_t *SMI_CMD;
 uint8_t ACPI_ENABLE;
@@ -170,7 +171,7 @@ int acpiEnable(void)
          return -1;
       }
    } else {
-      bprintok(); console_write("ACPI was already enabled!\n"); //TODO: Is this an error or OK?
+      bprintok(); console_write("ACPI was already enabled!\n"); //Is this an error or is this OK?
       return 0;
    }
 }

@@ -17,13 +17,19 @@
 %endmacro
 
 %macro IRQ 2
-  global irq%1
+  [GLOBAL irq%1]
   irq%1:
     cli
     push 0
     push %2
     jmp irq_common_stub
 %endmacro
+
+[GLOBAL pagingf]
+pagingf:
+    cli
+    push 14
+    jmp pagingf_common_stub
 
 ISR_NOERRCODE 0
 ISR_NOERRCODE 1
@@ -95,6 +101,32 @@ isr_common_stub:
     mov eax, esp   ; Push us the stack
     push eax
     call isr_handler
+    pop eax
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    popa
+    add esp, 8     ; Cleans up the pushed error code and pushed ISR number
+    iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
+
+;In paging.c
+[EXTERN page_fault]
+
+pagingf_common_stub:
+    pusha
+    push ds
+    push es
+    push fs
+    push gs
+    mov ax, 0x10   ; Load the Kernel Data Segment descriptor!
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov eax, esp   ; Push us the stack
+    push eax
+    call page_fault
     pop eax
     pop gs
     pop fs

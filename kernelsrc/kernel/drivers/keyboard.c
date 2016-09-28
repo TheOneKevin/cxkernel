@@ -8,6 +8,7 @@
 #include "arch/exceptions.h"
 #include "system/irq.h"
 #include "system/tdisplay.h"
+#include "system/kprintf.h"
 #include "localization/en_scan.h"
 
 bool SFLAG = false; // Shift flag
@@ -23,7 +24,7 @@ uint8_t scan_to_ascii(uint8_t key)
     if(key == ENTER) return '\n';
     else if(key == SPACE) return ' ';
     //We don't want to delete console written text. We only want to delete keyboard text
-    else if(key == BCKSPACE) { if(!(x <= lx && y == ly)) { console_putck('\b'); console_putck(' '); console_putck('\b'); } return 0; } //In the case of backspace, we want to write something then return nothing
+    else if(key == BCKSPACE) { return '\b'; } //In the case of backspace, we want to write something then return nothing
     else if(key == CAPS){ if(CAPSF){ CAPSF = false; } else { CAPSF = true; } return 0; } //Toggle our CAPS flag
     // Here, we evaluate the different combinations of shift and CAPS flag statues
     // and decide which characters we should return. If its shift and caps, we return the modified special characters i.e., !@$:"|}{
@@ -105,7 +106,12 @@ void keyboard_handler(regs_t *r)
         SFLAG = true;
     if(scan_to_ascii(scancode) != 0)
     {
-        if(display)
+        if(display && scan_to_ascii(scancode) == '\b')
+        {
+            if(!(x <= lx && y == ly)) { console_putck('\b'); console_putck(' '); console_putck('\b'); }
+        }
+        
+        else if(display)
             console_putck(scan_to_ascii(scancode));
         
         keyH handler = keyboard_handlers[handlerInt];

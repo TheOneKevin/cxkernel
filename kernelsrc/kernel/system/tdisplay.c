@@ -5,18 +5,21 @@
  */
 
 #include "system/tdisplay.h"
+#include "memory/kheap.h"
 
 enum text_color background = COLOR_BLACK;
 enum text_color foreground = COLOR_WHITE;
 
 uint16_t *vram = (uint16_t *)0xB8000; //Pointer to the VGA frame buffer
 
+uint32_t debugPtr; bool doBootLog;
+
 void console_init()
 {
     console_clear(COLOR_BLACK);
     //lastx = 0; lasty = 0;
     x = 0; y = 0;
-    bprintok(); console_writeline("Console display initialized");
+    bprintok(); console_write("Console display initialized : "); console_write_hex((uint32_t)debugBuffer); console_putc('\n');
 }
 
 void console_setbg(enum text_color bg)
@@ -103,7 +106,7 @@ void console_clear(enum text_color bg)
     move_cursor();
 }
 
-void console_putc_raw(char c, bool isKey)
+void console_putc_raw(const char c, bool isKey)
 {
     //Let's get the entry we're going to write to RAM first
     uint8_t attrib = get_attrib();
@@ -151,17 +154,19 @@ void console_putc_raw(char c, bool isKey)
     move_cursor();
 }
 
-void console_putc(char c)
+void console_putc(const char c)
 {
     console_putc_raw(c, false);
+    //Write our entire boot sequence into RAM
+    if(debugPtr < 4096 && doBootLog) { debugBuffer[debugPtr] = c; debugPtr++; } //Failsafe!
 }
 
-void console_putck(char c)
+void console_putck(const char c)
 {
     console_putc_raw(c, true);
 }
 
-void console_write(char *c)
+void console_write(const char *c)
 {
     int i = 0;
     while(c[i])
@@ -170,7 +175,7 @@ void console_write(char *c)
     }
 }
 
-void console_writeline(char *c)
+void console_writeline(const char *c)
 {
     console_write(c); console_putc('\n');
 }
@@ -243,7 +248,7 @@ void console_write_dec(uint32_t n)
     console_write(c2);
 }
 
-void console_print_center(char *c)
+void console_print_center(const char *c)
 {
     size_t length = (80 - strlen(c)) / 2;
     while(length > 0)
@@ -258,7 +263,7 @@ void console_print_center(char *c)
 void bprintok()
 {
     console_putc('[');
-    console_setfg(COLOR_GREEN);
+    console_setfg(COLOR_LIGHT_GREEN);
     console_write("  OK  ");
     console_setfg(COLOR_WHITE);
     console_write("]   ");
@@ -267,8 +272,26 @@ void bprintok()
 void bprinterr()
 {
     console_putc('[');
-    console_setfg(COLOR_GREEN);
+    console_setfg(COLOR_RED);
     console_write(" ERRD ");
+    console_setfg(COLOR_WHITE);
+    console_write("]   ");
+}
+
+void bprintinfo()
+{
+    console_putc('[');
+    console_setfg(COLOR_LIGHT_CYAN);
+    console_write(" INFO ");
+    console_setfg(COLOR_WHITE);
+    console_write("]   ");
+}
+
+void bprintwarn()
+{
+    console_putc('[');
+    console_setfg(COLOR_YELLOW);
+    console_write(" WARN ");
     console_setfg(COLOR_WHITE);
     console_write("]   ");
 }

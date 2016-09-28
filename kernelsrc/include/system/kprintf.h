@@ -12,7 +12,6 @@
  */
 
 #include "common.h"
-#include "system/tdisplay.h"
 
 #ifndef KPRINTF_H
 #define KPRINTF_H
@@ -21,7 +20,7 @@
 extern "C" {
 #endif
 
-static bool kprint(const char* data, size_t length);
+//static bool kprint(const char* data, size_t length);
 int kputc(int ic);
 int kprintf(const char* restrict format, ...);
 
@@ -30,4 +29,3 @@ int kprintf(const char* restrict format, ...);
 #endif
 
 #endif /* KPRINTF_H */
-

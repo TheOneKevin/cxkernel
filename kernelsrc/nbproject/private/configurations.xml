@@ -15,15 +15,17 @@
         </df>
         <df name="drivers">
           <in>acpi.h</in>
+          <in>cpuid.h</in>
           <in>keyboard.h</in>
         </df>
         <df name="localization">
           <in>en_scan.h</in>
+          <in>scanmap.h</in>
         </df>
         <df name="memory">
           <in>kheap.h</in>
-          <in>malloc.h</in>
           <in>paging.h</in>
+          <in>pmm.h</in>
         </df>
         <df name="system">
           <in>PANIC.h</in>
@@ -35,15 +37,10 @@
           <in>terminal.h</in>
         </df>
         <in>common.h</in>
+        <in>cpufeatset.h</in>
         <in>multiboot.h</in>
         <in>multiboot2.h</in>
         <in>multiboot_old.h</in>
-      </df>
-      <df name="isodir">
-        <df name="boot">
-          <df name="grub">
-          </df>
-        </df>
       </df>
       <df name="kernel">
         <df name="arch">
@@ -57,12 +54,13 @@
         </df>
         <df name="drivers">
           <in>acpi.c</in>
+          <in>cpuid.c</in>
           <in>keyboard.c</in>
         </df>
         <df name="memory">
           <in>kheap.c</in>
-          <in>malloc.c</in>
           <in>paging.c</in>
+          <in>pmm.c</in>
         </df>
         <df name="system">
           <in>PANIC.c</in>

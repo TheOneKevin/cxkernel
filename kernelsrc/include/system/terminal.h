@@ -12,7 +12,6 @@
  */
 
 #include "common.h"
-#include "drivers/keyboard.h"
 
 #ifndef TERMINAL_H
 #define TERMINAL_H

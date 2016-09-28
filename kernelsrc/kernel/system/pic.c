@@ -6,6 +6,7 @@
 
 #include "arch/idt.h"
 #include "system/pic.h"
+#include "system/tdisplay.h"
 
 void PIC_remap(int offset1, int offset2)
 {

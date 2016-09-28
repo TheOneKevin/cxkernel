@@ -1,143 +1,94 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Auuuuuuauaaaaauauuauauauauugh! I hate paging. I hate paging. This is a nightmare. Here's a life lesson:
+ * NEVER. EVER. USE. James Molloy's CODE. If you plan on using his code, don't. Use it as a REFERENCE. You can
+ * Thank me later. Ugh.
  */
 
+#include "memory/kheap.h"
 #include "memory/paging.h"
+#include "memory/pmm.h"
 
-// Our frames bitset/bitmap
-uint32_t *frames;
-uint32_t nframes;
+#include "system/PANIC.h"
+#include "system/tdisplay.h"
+#include "system/kprintf.h"
 
-extern uint32_t addrPtr;
+#include "arch/exceptions.h"
 
-void enable_paging()
-{
-    // We enable paging by or-ing our CR0 register
-    uint32_t cr0;
-    asm volatile("mov %%cr0, %0" : "=r"(cr0));
-    cr0 |= 0x80000000;
-    asm volatile("mov %0, %%cr0" :: "r"(cr0));
-}
+// Page directory entry format
+//Name: P R U W D A 0 S G Av. Addr.
+//Size: 1 1 1 1 1 1 1 1 1 3   20
+// Page table entry format
+//Name: P R U W C A D 0 G Av. Addr.
+//Size: 1 1 1 1 1 1 1 1 1 3   20
 
-void load_page_dir(page_directory_t *dir)
-{
-    // We load the directory into the CR3 register
-    current_dir = dir;
-    asm volatile("mov %0, %%cr3" :: "r"(&dir -> tablesPhys));
-}
+// We got to remember that memory addresses works in bytes. So, 0x0 to 0x4000 will be 4096 bytes of RAM.
+// We also know that each page directory OR page table ENTRY will be 4 BYTES LONG! Each table/directory will be
+// 1024 entries long. So, the page directory AND page table will be 1024 * 4 = 4096 BYTES long each!! So, placing
+// everything into RAM will require AT LEAST 0x400000 bytes, which is around 4 MB.
 
-void invlpg(uint32_t virt_addr)
-{
-    asm volatile("invlpg (%0)" :: "a" (virt_addr));
-}
+//So, we'll reserve the first MB for the kernel, the following 3 to heap, and 4 more to paging. Totaling 8 MB for kernel stuff.
 
-// Set frame inside our frames bitmap
-static void set_frame(uint32_t frame_addr)
-{
-    // We first get the frame number from the address
-    uint32_t frame  = frame_addr / PAGE_SIZE;
-    // We get the index to our bitmap from our page index
-    uint32_t index  = INDEX_FROM_BIT(frame);
-    // We get the offset of our bitmap from our page index
-    uint32_t offset = OFFSET_FROM_BIT(frame);
-    // We mark the frame as used
-    frames[index] |= (0x1 << offset);
-}
-// Clear frame from our frames bitmap
-static void clear_frame(uint32_t frame_addr)
-{
-    uint32_t frame  = frame_addr / PAGE_SIZE;
-    uint32_t index  = INDEX_FROM_BIT(frame);
-    uint32_t offset = OFFSET_FROM_BIT(frame);
-    frames[index] &= ~(0x1 << offset);
-}
-// Test frame from our frames bitmap
-static uint32_t test_frame(uint32_t frame_addr)
-{
-    uint32_t frame  = frame_addr / PAGE_SIZE;
-    uint32_t index  = INDEX_FROM_BIT(frame);
-    uint32_t offset = OFFSET_FROM_BIT(frame);
-    return (frames[index] & (0x1 << offset));
-}
+uint64_t _length;
+uint64_t _addr;
+KHEAPBM *kheap;
 
-static uint32_t first_free_frame()
+extern uint32_t end;
+uint32_t framestart;
+
+static uint32_t* page_directory = 0;
+static uint32_t page_dir_ptr = 0;
+static uint32_t* kpt = 0;
+
+void paging_map_virtual_to_phys(uint32_t virt, uint32_t phys, uint32_t flags)
 {
-    uint32_t i, j;
-    // Loop through all the frames in our bitmap
-    for(i = 0; i < INDEX_FROM_BIT(nframes); i++)
+    //uint16_t pdid = pageAlign(virt) >> 22; //Get the page directory index from the virtual address
+    //uint16_t ptid = pageAlign(virt) >> 12 & 0x03FF; //Page align the virtual address and get the index for the page table
+    
+    uint32_t pdid = virt / 0x400000;
+    uint32_t ptid = (virt / 0x1000) % 1024;
+    
+    uint32_t* pt = (uint32_t *)(page_directory[pdid] & ~0xFFF);
+    if(page_directory[pdid] == 0) //If the page table does not exist
     {
-        // If our current frame index bitmap thing doesn't have
-        // any free entries, exit
-        if(frames[i] != 0xFFFFFFFF)
-        {
-            // Else, we find the one that's free
-            for(j = 0; j < 32; j++)
-            {
-                uint32_t toTest = 0x1 << j;
-                if(!(frames[i] & toTest))
-                    return i * 4 * 8 + j;
-            }
-        }
+        uint32_t a = allocFrame(); //Allocate a frame to the page table itself
+        uint32_t tmp = kpt[1023]; //Store the last entry of the KERNEL page table
+        kpt[1023] = (a | (flags & 0xFFF)); //Replace that entry with a new temporary mapping for the new tables location
+        
+        page_directory[pdid] = kpt[1023]; //Add an entry in the page directory to point to that new mapped address + flags
+        pt = (uint32_t *)a; //And set the pointer to point to that address
+        kpt[1023] = tmp; //Reset the last entry of the kernel page table
     }
-    return -1;
+    
+    if(pt[ptid] != 0)
+    {
+        //TODO: Uh oh, we need to overwrite something!
+        //return;
+    }
+    pt[ptid] = pageAlign(phys) | (flags & 0xFFF) | 0x1; //Set the entry
 }
 
-void alloc_frame(page_t *page, bool isK, bool rw)
+uint32_t get_physaddr(uint32_t virt)
 {
-    // Get the frame from our page, and see if it's taken
-    if(page -> frame != 0)
-        return;
-    else
-    {
-        uint32_t index = first_free_frame();
-        if(index == (uint32_t)-1)
-        {
-            bprinterr(); console_writeline("No free frames available!");
-            PANIC("No free frames available!");
-        }
-        set_frame(index * PAGE_SIZE);
-        page -> present = 1;
-        page -> rw = (rw) ? 1 : 0;
-        page -> user = (isK) ? 0 : 1;
-        page -> frame = index;
-    }
+    uint32_t pdid = virt / 0x400000;
+    uint32_t ptid = (virt / 0x1000) % 1024;
+    
+    if(page_directory[pdid] == 0)
+        return -1; //Entry does not exist
+    
+    uint32_t* pt = (uint32_t *)(page_directory[pdid] & ~0xFFF);
+    
+    if(pt[ptid] == 0)
+        return -1; //Entry does not exist
+    //Something should be changed here
+    return (pt[ptid] & ~0xFFF);
 }
 
-void free_frame(page_t *page)
+void paging_enable()
 {
-    uint32_t frame;
-    // Store the page's frame into our frame variable
-    if(!(frame = page -> frame))
-        return; //If there's no allocated frame, then return
-    else
-    {
-        //Else, we free our frame
-        clear_frame(frame);
-        page->frame = 0x0; //And set the frame flag to 0
-    }
-}
-
-page_t *getPage(uint32_t addr, bool createPage, page_directory_t *dir)
-{
-    addr /= PAGE_SIZE;
-    uint32_t index = addr / 1024;
-    if(dir->tables[index])
-    {
-        //Return pointer to the page within the directory table
-        //Then get page from a table of pages (every 1024)
-        return &dir -> tables[index] -> pages[addr % 1024];
-    }
-    else if(createPage)
-    {
-        uint32_t tmp;
-        dir -> tables[index] = (page_table_t*)h_kmalloc(sizeof(page_table_t), 1, &tmp);
-        dir -> tablesPhys[index] = tmp | 0x7; //Set present bit, r/w, user
-        return &dir -> tables[index] -> pages[addr % 1024];
-    }
-    else
-        return 0; //Return 0 if no page was found and the user didn't want one made
+    asm volatile("mov %%eax, %%cr3": :"a"(page_dir_ptr));	
+    asm volatile("mov %cr0, %eax");
+    asm volatile("orl $0x80000000, %eax");
+    asm volatile("mov %eax, %cr0");
 }
 
 void page_fault(regs_t *r)
@@ -169,39 +120,24 @@ void page_fault(regs_t *r)
    
    print_dalek();
    
-   PANIC("page fault");
+   PANIC("PAGE FAULT");
 }
 
-void setup_paging()
+void paging_init()
 {
-    // Our directories
-    kernel_dir = 0; // The kernel's page directory
-    current_dir = 0; // The current page directory;
-    // Here we get the length of usable memory
-    uint32_t end_of_page = (uint32_t) (_length + _addr); //_length and _addr is obtained during startup
-    kprintf("End of kernel: %X", addrPtr); kprintf(" End of page: %X", end_of_page);
-    // We get the amount of frames from the length
-    nframes = (uint32_t) end_of_page / PAGE_SIZE;
-    kprintf(" Number of page frames: %u", nframes);
-    // We then allocate RAM for the page frames
-    frames = (uint32_t *) h_kmalloc(INDEX_FROM_BIT(nframes), false, 0);
-    // And clear it
-    memset(frames, 0, INDEX_FROM_BIT(nframes));
+    bprintinfo(); kprintf("Setting up paging\n");
+    page_directory = (uint32_t*)allocFrame(); //Allocate one frame for the page directory
+    page_dir_ptr = (uint32_t)page_directory;
+    kpt = (uint32_t *)allocFrame(); //Let's allocate one frame for the kernel table right now
+    memset(page_directory, 0, 1024); //Clear the page directory
+    page_directory[0] = (uint32_t)kpt | 0x3; //Make the first page directory point to the kernel page table
     
-    // Let's set up the kernel directory
-    kernel_dir = (page_directory_t*) h_kmalloc(sizeof(page_directory_t), true, 0);
-    memset(kernel_dir, 0, sizeof(page_directory_t));
-    current_dir = kernel_dir;
+    //We map all the memory from 0 to the start of the frames (kernel + kernel heap)
+    for(uint32_t i = 0; i <= (framestart / 0x1000); i++)
+        paging_map_virtual_to_phys(i * 0x1000, i * 0x1000, 0x3);
     
-    uint32_t i = 0;
-    while(i < addrPtr) //While we are still within the kernel memory area
-    {
-        // Then identity map the pages that the kernel is in to make our lives easier (i < end_of_kernel)
-        alloc_frame(getPage(i, true, kernel_dir), true, false);
-        i += PAGE_SIZE;
-    }
-    idt_set_gate(14, (unsigned)page_fault, 0x08, 0x8E); // Install page fault handler
-    load_page_dir(kernel_dir); // Load the directory
-    enable_paging(); // Enable paging
-    console_putc('\n'); bprintok(); console_writeline("Paging enabled!");
+    ASSERT(get_physaddr(0x1000) == 0x1000, "Memory improperly mapped!");
+    
+    paging_enable(); //Enable paging
+    bprintok(); kprintf("Paging was successfully enabled!\n"); //Display that we are aye-ok
 }

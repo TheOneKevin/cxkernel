@@ -5,29 +5,27 @@
  */
 
 /* 
- * File:   paging.h
+ * File:   cpuid.h
  * Author: Kevin
  *
- * Created on September 20, 2016, 6:04 AM
+ * Created on September 17, 2016, 5:29 PM
  */
 
-#include "common.h"
+#include "../common.h"
+#include "../cpufeatset.h"
 
-#ifndef PAGING_H
-#define PAGING_H
+#ifndef CPUID_H
+#define CPUID_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define PAGE_MASK         0xFFFFF000
-#define PAGE_SIZE         0x1000
-    
-void paging_init();
+void cpu_detect();
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* PAGING_H */
+#endif /* CPUID_H */
 

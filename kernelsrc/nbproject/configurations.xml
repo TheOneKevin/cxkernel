@@ -8,12 +8,21 @@
       <df name="include">
         <df name="drivers">
           <in>acpi.h</in>
+          <in>cpuid.h</in>
+        </df>
+        <df name="localization">
+          <in>scanmap.h</in>
+        </df>
+        <df name="memory">
+          <in>paging.h</in>
+          <in>pmm.h</in>
         </df>
         <df name="system">
           <in>PANIC.h</in>
           <in>kprintf.h</in>
           <in>terminal.h</in>
         </df>
+        <in>cpufeatset.h</in>
       </df>
       <df name="kernel">
         <df name="arch">
@@ -27,12 +36,13 @@
         </df>
         <df name="drivers">
           <in>acpi.c</in>
+          <in>cpuid.c</in>
           <in>keyboard.c</in>
         </df>
         <df name="memory">
           <in>kheap.c</in>
-          <in>malloc.c</in>
           <in>paging.c</in>
+          <in>pmm.c</in>
         </df>
         <df name="system">
           <in>PANIC.c</in>
@@ -84,7 +94,17 @@
       </makefileType>
       <item path="boot/start.asm" ex="false" tool="4" flavor2="0">
       </item>
+      <item path="include/cpufeatset.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/drivers/acpi.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/drivers/cpuid.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/localization/scanmap.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/memory/paging.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/memory/pmm.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/system/PANIC.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -104,15 +124,17 @@
       </item>
       <item path="kernel/drivers/acpi.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="kernel/drivers/cpuid.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="kernel/drivers/keyboard.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/kernel.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/memory/kheap.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="kernel/memory/malloc.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="kernel/memory/paging.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kernel/memory/pmm.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/system/PANIC.c" ex="false" tool="0" flavor2="0">
       </item>

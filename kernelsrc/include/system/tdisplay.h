@@ -35,7 +35,7 @@ enum text_color {
 	COLOR_LIGHT_CYAN = 11,
 	COLOR_LIGHT_RED = 12,
 	COLOR_LIGHT_MAGENTA = 13,
-	COLOR_LIGHT_BROWN = 14,
+	COLOR_YELLOW = 14,
 	COLOR_WHITE = 15,
 };
 
@@ -54,22 +54,27 @@ void set_cursorpos(uint8_t xpos, uint8_t ypos);
 //Clears the console background to the specified colour
 void console_clear(enum text_color bg);
 //Writes a character on screen
-void console_putc(char c);
+void console_putc(const char c);
 //Assumes the keyboard is printing to the screen
-void console_putck(char c);
+void console_putck(const char c);
 //Writes a string on screen
-void console_write(char *c);
+void console_write(const char *c);
 //Writes a string on screen with newline at the end
-void console_writeline(char *c);
+void console_writeline(const char *c);
 //Writes a hexadecimal onto the screen
 void console_write_hex(uint32_t n);
 //Writes a decimal onto the screen
 void console_write_dec(uint32_t n);
 //Prints a string centered on screen
-void console_print_center(char *c);
-
+void console_print_center(const char *c);
+//Print OK message
 void bprintok();
+//Print Error message
 void bprinterr();
+//Print Information message
+void bprintinfo();
+//Print Warning message
+void bprintwarn();
 
 #ifdef __cplusplus
 }

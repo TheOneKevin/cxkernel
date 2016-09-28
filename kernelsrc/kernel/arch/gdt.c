@@ -5,6 +5,7 @@
  */
 
 #include "arch/gdt.h"
+#include "system/tdisplay.h"
 
 void install_gdt()
 {

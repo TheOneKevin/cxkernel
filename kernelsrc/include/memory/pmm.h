@@ -5,29 +5,31 @@
  */
 
 /* 
- * File:   paging.h
+ * File:   pmm.h
  * Author: Kevin
  *
- * Created on September 20, 2016, 6:04 AM
+ * Created on September 24, 2016, 1:52 PM
  */
 
 #include "common.h"
 
-#ifndef PAGING_H
-#define PAGING_H
+#ifndef PMM_H
+#define PMM_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define PAGE_MASK         0xFFFFF000
-#define PAGE_SIZE         0x1000
-    
-void paging_init();
+void initPmm();
+uint32_t allocFrame();
+void freeFrame(uint32_t a);
+uint32_t pageAlign(uint32_t addr);
+
+extern uint32_t framestart;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* PAGING_H */
+#endif /* PMM_H */
 

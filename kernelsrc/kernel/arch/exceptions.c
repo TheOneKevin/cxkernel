@@ -5,6 +5,11 @@
  */
 
 #include "arch/exceptions.h"
+#include "arch/idt.h"
+
+#include "system/tdisplay.h"
+#include "system/kprintf.h"
+#include "system/PANIC.h"
 
 // Firstly, let's set up all our error messages
 char *exception_messages[] =
@@ -78,6 +83,7 @@ void load_isr()
     idt_set_gate(11, (unsigned)isr11, 0x08, 0x8E);
     idt_set_gate(12, (unsigned)isr12, 0x08, 0x8E);
     idt_set_gate(13, (unsigned)isr13, 0x08, 0x8E);
+    idt_set_gate(14, (unsigned)pagingf, 0x08, 0x8E); //Page fault
     idt_set_gate(15, (unsigned)isr15, 0x08, 0x8E);
     idt_set_gate(16, (unsigned)isr16, 0x08, 0x8E);
     idt_set_gate(17, (unsigned)isr17, 0x08, 0x8E);
@@ -145,10 +151,18 @@ void write_err(regs_t *r)
             halt(); //Halt
         }
         // Halt for everything else
-        else
+        else if(r -> int_no < 32)
         {
             console_putc('\n');
             console_print_center(exception_messages[r->int_no]); //Get the message
+            print_dalek();
+            halt(); //Halt
+        }
+        else
+        {
+            console_putc('\n');
+            console_write("Unhandled interrupt"); //Get the message
+            console_write_hex(r->int_no); console_putc('\n');
             print_dalek();
             halt(); //Halt
         }
@@ -159,6 +173,7 @@ void isr_handler(regs_t *r) //We use a pointer reference to our struct
 {
     console_clear(COLOR_LIGHT_RED); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
     //console_clear(COLOR_BLUE);
+    kprintf("DBGBUFFER: %X", (uint32_t)debugBuffer);
     console_write("\n\n\n                                    "); console_setbg(COLOR_LIGHT_BLUE); console_write("LiquiDOS\n"); console_setbg(COLOR_LIGHT_RED);
     write_err(r);
 }

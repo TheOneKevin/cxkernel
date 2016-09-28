@@ -19,14 +19,25 @@
 extern "C" {
 #endif
 
-/**
- * Allocates the next free chunk of memory
- * @param size The size of the chunk (size_t)
- * @param align Whether you want it page aligned or not
- * @param physicalAddr The return pointer to physical address
- * @return The return address
- */
-uint32_t h_kmalloc(size_t size, bool align, uint32_t *physicalAddr);
+typedef struct _KHEAPBLOCKBM
+{
+    struct _KHEAPBLOCKBM       *next;
+    uint32_t			size;
+    uint32_t			used;
+    uint32_t			bsize;
+    uint32_t                    lfb;
+} KHEAPBLOCKBM;
+ 
+typedef struct _KHEAPBM {
+    KHEAPBLOCKBM    *fblock;
+} KHEAPBM;
+
+void k_heapBMInit(KHEAPBM *heap);
+int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, uint32_t size, uint32_t bsize);
+void *k_heapBMAlloc(KHEAPBM *heap, uint32_t size);
+void k_heapBMFree(KHEAPBM *heap, void *ptr);
+
+extern KHEAPBM* kheap;
 
 #ifdef __cplusplus
 }

@@ -12,8 +12,6 @@
  */
 
 #include "common.h"
-#include "system/tdisplay.h"
-#include "arch/idt.h"
 
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H

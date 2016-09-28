@@ -5,6 +5,11 @@
  */
 
 #include "system/irq.h"
+#include "system/pic.h"
+#include "system/tdisplay.h"
+#include "system/kprintf.h"
+#include "arch/idt.h"
+#include "arch/exceptions.h"
 
 irq_t interrupt_handlers[256]; // 16 will do... but no
 
@@ -39,7 +44,8 @@ void irq_handler(regs_t *regs) // We need to call regs as a reference or it won'
         irq_t handler = interrupt_handlers[regs->int_no];
         handler(regs); //Call our handler pointer from the array
     }
-    PIC_sendEOI(regs->int_no - 32); // Send our EOI, so if IRQ breaks down, we KNOW this isn't the culprit
+    if(regs->int_no >= 32)
+        PIC_sendEOI(regs->int_no - 32); // Send our EOI, so if IRQ breaks down, we KNOW this isn't the culprit
 }
 
 void install_handler(uint8_t irq, irq_t handler)

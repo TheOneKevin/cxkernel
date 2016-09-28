@@ -11,7 +11,7 @@
 
 uint32_t tick = 0;
 
-static void timer_callback(regs_t *regs)
+static void timer_callback(regs_t *r)
 {
    tick++;
    console_write("Tick: ");
