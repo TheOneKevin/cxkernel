@@ -1,5 +1,5 @@
 #include "drivers/acpi.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 
 uint32_t *SMI_CMD;
 uint8_t ACPI_ENABLE;

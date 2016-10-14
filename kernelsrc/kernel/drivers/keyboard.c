@@ -7,7 +7,7 @@
 #include "drivers/keyboard.h"
 #include "arch/exceptions.h"
 #include "system/irq.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 #include "system/kprintf.h"
 #include "localization/en_scan.h"
 
@@ -121,7 +121,7 @@ void keyboard_handler(regs_t *r)
 
 void register_keyboard()
 {
-    install_handler(33, &keyboard_handler);
+    install_handler(IRQ1, &keyboard_handler);
     bprintok(); console_writeline("Registered keyboard handler");
 }
 

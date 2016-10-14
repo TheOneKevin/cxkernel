@@ -13,7 +13,7 @@
 
 //All the (local) kernel options
 #define DEBUGMSG     0   // Enable to see messages
-#define GRUB_2       0   // Are we using GRUB2?
+#define GRUB_2       0   // Are we using the GRUB multiboot2 header?
 #define SAVAGEMODE   1   // Savage mode for errors and warnings ;)
 //All dem tests!
 #define TEST_HEAP    0   // Test the heap
@@ -22,15 +22,15 @@
 #define TEST_NOPAGE2 0   // Enable to test protection fault
 #define CPU_EXCEP    0   // Test CPU exceptions
 
-#include "multiboot.h"
-
 #if GRUB_2
-#include "multiboot2.h"
+    #include "multiboot2.h"
 #endif
+#include "multiboot.h"
 
 #include "common.h"
 
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
+
 #include "system/pic.h"
 #include "system/irq.h"
 #include "system/pit.h"
@@ -49,6 +49,7 @@
 #include "drivers/keyboard.h"
 #include "drivers/acpi.h"
 #include "drivers/cpuid.h"
+#include "drivers/vesa.h"
 
 // http://wiki.osdev.org/ <- GODSEND. Contains almost all the info I used to create LiquiDOS
 // http://wiki.osdev.org/What_order_should_I_make_things_in <- Read.
@@ -58,7 +59,11 @@ uint64_t _length;
 uint64_t _addr;
 KHEAPBM *kheap;
 extern uint32_t end;
+//Our switch to real mode function
+extern uint8_t enablevesa();
 bool doBootLog;
+// Store multiboot in case it corrupts
+multiboot_info_t* mbt;
 
 void getMemDisplay(multiboot_info_t* mbt)
 {
@@ -95,13 +100,33 @@ void getMemDisplay(multiboot_info_t* mbt)
     else { bprintwarn(); kprintf("OS might run out of RAM! Recommended 16 MB of RAM!\n"); }
 }
 
-void kernel_main(multiboot_info_t* mbt)
+void initVbe()
 {
-    //TODO: Add some GUI initialization of the console, like a VESA/VBE console of sorts
+    uint16_t* s;
+    enablevesa(); // Call our assembly function
+    asm volatile("mov %%eax, %0" : "=r" (s)); //We know the return code info pointer is in the EAX register
+    if(*s == 1) //If the return code status is 1
+    {
+        setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
+        clearScreen();
+    }
+    else
+    {
+        kprintf("%X %u %u %u %X %X %X %X", s, *s, *(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
+    }
+}
+
+void kernel_main(multiboot_info_t* multi)
+{
+    mbt = multi; //Store the multiboot header in case we accidently corrupt it
+    // We need to clear off an area for the VESA tables to sit in
+    //memset((void *) 0x7C00, 0, 0x100);
+    //initVbe();
+    
+    //asm volatile("cli"); We know that enablevesa() does that for us
     doBootLog = true; //Begin boot sequence
     console_init();
     
-    //kprintf("Magic number: %X\n", magic);
     cpu_detect();
     // First, we install our GDT and IDT, then we fill the IDT with CPU exceptions
     // We then prepare the PIC for usage, and register our 15 PIC interrupts

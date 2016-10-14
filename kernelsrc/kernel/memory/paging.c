@@ -9,7 +9,7 @@
 #include "memory/pmm.h"
 
 #include "system/PANIC.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 #include "system/kprintf.h"
 
 #include "arch/exceptions.h"

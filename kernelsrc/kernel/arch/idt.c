@@ -5,7 +5,7 @@
  */
 
 #include "arch/idt.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 
 idt_entry_t idt_entries[256];
 idt_ptr_t idt_ptr;

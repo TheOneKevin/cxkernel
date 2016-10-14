@@ -5,7 +5,7 @@
  */
 
 #include "system/kprintf.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 
 static bool kprint(const char* data, size_t length)
 {

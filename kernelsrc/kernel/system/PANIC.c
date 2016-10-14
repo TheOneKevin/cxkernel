@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 #include "system/PANIC.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 #include "system/kprintf.h"
 
 void panic(const char *message)

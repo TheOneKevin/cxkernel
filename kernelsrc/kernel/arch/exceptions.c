@@ -7,7 +7,7 @@
 #include "arch/exceptions.h"
 #include "arch/idt.h"
 
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 #include "system/kprintf.h"
 #include "system/PANIC.h"
 

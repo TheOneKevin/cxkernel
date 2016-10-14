@@ -9,6 +9,7 @@
         <df name="drivers">
           <in>acpi.h</in>
           <in>cpuid.h</in>
+          <in>vesa.h</in>
         </df>
         <df name="localization">
           <in>scanmap.h</in>
@@ -31,13 +32,16 @@
           <in>idt.c</in>
         </df>
         <df name="assembly">
-          <in>interrupts.s</in>
-          <in>tables.s</in>
+          <in>vesadriver.asm</in>
+        </df>
+        <df name="display">
+          <in>tdisplay.c</in>
         </df>
         <df name="drivers">
           <in>acpi.c</in>
           <in>cpuid.c</in>
           <in>keyboard.c</in>
+          <in>vesa.c</in>
         </df>
         <df name="memory">
           <in>kheap.c</in>
@@ -51,7 +55,6 @@
           <in>kprintf.c</in>
           <in>pic.c</in>
           <in>pit.c</in>
-          <in>tdisplay.c</in>
           <in>terminal.c</in>
         </df>
         <in>kernel.c</in>
@@ -100,6 +103,8 @@
       </item>
       <item path="include/drivers/cpuid.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/drivers/vesa.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/localization/scanmap.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/memory/paging.h" ex="false" tool="3" flavor2="0">
@@ -118,15 +123,17 @@
       </item>
       <item path="kernel/arch/idt.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="kernel/assembly/interrupts.s" ex="false" tool="4" flavor2="0">
+      <item path="kernel/assembly/vesadriver.asm" ex="false" tool="4" flavor2="0">
       </item>
-      <item path="kernel/assembly/tables.s" ex="false" tool="4" flavor2="0">
+      <item path="kernel/display/tdisplay.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/drivers/acpi.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/drivers/cpuid.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/drivers/keyboard.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kernel/drivers/vesa.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/kernel.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -147,8 +154,6 @@
       <item path="kernel/system/pic.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/system/pit.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="kernel/system/tdisplay.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/system/terminal.c" ex="false" tool="0" flavor2="0">
       </item>

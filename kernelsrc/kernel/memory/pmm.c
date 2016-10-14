@@ -7,7 +7,7 @@
 #include "memory/pmm.h"
 #include "memory/kheap.h"
 
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 #include "system/PANIC.h"
 #include "system/kprintf.h"
 

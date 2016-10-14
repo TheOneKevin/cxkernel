@@ -5,7 +5,7 @@
  */
 
 #include "arch/gdt.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 
 void install_gdt()
 {
@@ -18,6 +18,10 @@ void install_gdt()
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
     gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
     gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
+    
+    //gdt_set_gate(5, 0, 0xFFFFFFFF, 0x9A, 0x0F); // 16 bit code segment
+    //gdt_set_gate(6, 0, 0xFFFFFFFF, 0x92, 0x0F); // 16 bit data segment
+    
     // Call our external assembly function to load the GDT
     load_gdt((uint32_t)&gdt_ptr);
     bprintok(); console_writeline("GDT initialized!");

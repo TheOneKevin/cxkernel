@@ -6,7 +6,7 @@
 
 #include "system/irq.h"
 #include "system/pic.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 #include "system/kprintf.h"
 #include "arch/idt.h"
 #include "arch/exceptions.h"

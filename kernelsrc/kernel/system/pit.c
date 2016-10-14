@@ -7,7 +7,7 @@
 #include "arch/exceptions.h"
 #include "system/pit.h"
 #include "system/irq.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 
 uint32_t tick = 0;
 

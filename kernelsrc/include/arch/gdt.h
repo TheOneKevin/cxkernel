@@ -38,7 +38,7 @@ struct gdt_ptr
 } __attribute__((packed));
 typedef struct gdt_ptr gdt_ptr_t;
 
-gdt_entry_t gdt_entries[5];
+gdt_entry_t gdt_entries[5]; //null, code, data, user code, user data
 gdt_ptr_t gdt_ptr;
 
 void install_gdt();

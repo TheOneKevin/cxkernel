@@ -1,13 +1,9 @@
-# Welcome to hell
-# I will try to document this to the best of my ability
+# Welcome to hell number 2
+# I will not document this well...
 CC=i686-elf-gcc
-AS=i686-elf-as
 LDARGS=-ffreestanding -O2 -nostdlib
-CFLAGS= -ffreestanding -O2 -Wall -Wextra -Iinclude
 OBJ = $(wildcard *.o)
+# Link 'em all up
 LiquiDOS.bin: $(OBJ)
-	$(CC) -T ../linker.ld -o $@ $(LDARGS) $^ -lgcc
+	$(CC) -T../linker.ld -o $@ $(LDARGS) $^ -lgcc
 	mv LiquiDOS.bin ../
-.PHONY: clean
-clean:
-	rm -f *.o

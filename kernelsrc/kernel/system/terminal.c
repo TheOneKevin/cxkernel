@@ -6,7 +6,7 @@
 
 #include "system/terminal.h"
 #include "system/kprintf.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 
 #include "drivers/acpi.h"
 #include "drivers/keyboard.h"
@@ -59,7 +59,7 @@ void interpret_cmd(uint8_t scancode)
         i--; buffer[i] = 0;
     }
     
-    else
+    else if(scancode != BCKSPACE) //Make sure backspace doesn't exceed the buffer (and underflow the array)
     {
         buffer[i] = scan_to_ascii(scancode);
         i++;

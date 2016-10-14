@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 #include "memory/kheap.h"
 
 enum text_color background = COLOR_BLACK;

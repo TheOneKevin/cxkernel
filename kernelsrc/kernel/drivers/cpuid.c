@@ -6,7 +6,7 @@
 
 #include "drivers/cpuid.h"
 #include "system/kprintf.h"
-#include "system/tdisplay.h"
+#include "display/tdisplay.h"
 
 enum
 {

@@ -13,10 +13,14 @@
           <in>gdt.h</in>
           <in>idt.h</in>
         </df>
+        <df name="display">
+          <in>tdisplay.h</in>
+        </df>
         <df name="drivers">
           <in>acpi.h</in>
           <in>cpuid.h</in>
           <in>keyboard.h</in>
+          <in>vesa.h</in>
         </df>
         <df name="localization">
           <in>en_scan.h</in>
@@ -33,7 +37,6 @@
           <in>kprintf.h</in>
           <in>pic.h</in>
           <in>pit.h</in>
-          <in>tdisplay.h</in>
           <in>terminal.h</in>
         </df>
         <in>common.h</in>
@@ -42,6 +45,12 @@
         <in>multiboot2.h</in>
         <in>multiboot_old.h</in>
       </df>
+      <df name="isodir">
+        <df name="boot">
+          <df name="grub">
+          </df>
+        </df>
+      </df>
       <df name="kernel">
         <df name="arch">
           <in>exceptions.c</in>
@@ -49,13 +58,18 @@
           <in>idt.c</in>
         </df>
         <df name="assembly">
-          <in>interrupts.s</in>
-          <in>tables.s</in>
+          <in>interrupts.asm</in>
+          <in>tables.asm</in>
+          <in>vesadriver.asm</in>
+        </df>
+        <df name="display">
+          <in>tdisplay.c</in>
         </df>
         <df name="drivers">
           <in>acpi.c</in>
           <in>cpuid.c</in>
           <in>keyboard.c</in>
+          <in>vesa.c</in>
         </df>
         <df name="memory">
           <in>kheap.c</in>
@@ -69,7 +83,6 @@
           <in>kprintf.c</in>
           <in>pic.c</in>
           <in>pit.c</in>
-          <in>tdisplay.c</in>
           <in>terminal.c</in>
         </df>
         <in>kernel.c</in>
