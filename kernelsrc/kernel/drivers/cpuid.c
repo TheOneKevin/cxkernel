@@ -137,7 +137,7 @@ void cpu_detect()
     char vendor[12];
     cpuid(CPUID_GETVENDORSTRING, &largestFunc, (uint32_t*) (vendor + 0), (uint32_t*) (vendor + 8), (uint32_t*) (vendor + 4));
     //vendor[12] = 0;
-    bprintinfo(); kprintf("CPU Vendor: %s", vendor);
+    bprintinfo(); kprintf("CPU Vendor: %s\n", vendor);
     if(vendor == CPUID_VENDOR_AMD)
         isIntel = 2;
     else if(vendor == CPUID_VENDOR_INTEL)

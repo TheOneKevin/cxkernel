@@ -25,11 +25,11 @@ uint32_t getPixelAddr(uint32_t x, uint32_t y)
 
 void clearScreen()
 {
-    for(uint32_t y = screen.height + 1; y >= 0; y--)
+    for(uint32_t y = screen.height + 1; y >= 1; y--)
     {
-        for(uint32_t x = screen.width + 1; x >= 0; x--)
+        for(uint32_t x = screen.width + 1; x >= 1; x--)
         {
-            uint32_t *pixel = getPixelAddr(x, y);
+            uint32_t *pixel = getPixelAddr(x - 1, y - 1);
             *pixel = 0x000080FF; //TODO: Don't assume RGB field sizes & positions
         }
     }

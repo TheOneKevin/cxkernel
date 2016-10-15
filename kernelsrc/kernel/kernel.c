@@ -121,7 +121,7 @@ void kernel_main(multiboot_info_t* multi)
     mbt = multi; //Store the multiboot header in case we accidently corrupt it
     // We need to clear off an area for the VESA tables to sit in
     //memset((void *) 0x7C00, 0, 0x100);
-    //initVbe();
+    initVbe();
     
     //asm volatile("cli"); We know that enablevesa() does that for us
     doBootLog = true; //Begin boot sequence
@@ -151,7 +151,7 @@ void kernel_main(multiboot_info_t* multi)
     initPmm();
     paging_init();
     //Enable our terminal
-    init_terminal();
+    init_terminal(mbt);
     //Print OS OK text
     bprintok(); console_write("OS ready!\n");
     doBootLog = false; //End of boot sequence

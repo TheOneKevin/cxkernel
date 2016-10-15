@@ -5,6 +5,7 @@
  */
 
 #include "common.h"
+#include "cpufeatset.h"
 
 void outb(uint16_t port, uint8_t value)
 {
@@ -29,19 +30,19 @@ uint16_t inw(uint16_t port)
 
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size)
 {
-	unsigned char* dst = (unsigned char*) dstptr;
-	const unsigned char* src = (const unsigned char*) srcptr;
-	for (size_t i = 0; i < size; i++)
-		dst[i] = src[i];
-	return dstptr;
+    unsigned char* dst = (unsigned char*) dstptr;
+    const unsigned char* src = (const unsigned char*) srcptr;
+    for (size_t i = 0; i < size; i++)
+        dst[i] = src[i];
+    return dstptr;
 }
 
 void* memset(void* bufptr, int value, size_t size)
 {
-	unsigned char* buf = (unsigned char*) bufptr;
-	for (size_t i = 0; i < size; i++)
-		buf[i] = (unsigned char) value;
-	return bufptr;
+    unsigned char* buf = (unsigned char*) bufptr;
+    for (size_t i = 0; i < size; i++)
+        buf[i] = (unsigned char) value;
+    return bufptr;
 }
 
 int memcmp(const void* aptr, const void* bptr, size_t size)
