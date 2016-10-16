@@ -14,13 +14,19 @@
           <in>idt.h</in>
         </df>
         <df name="display">
+          <in>font8x8.h</in>
           <in>tdisplay.h</in>
+          <in>textModeHooks.h</in>
+          <in>vesaModeHooks.h</in>
         </df>
         <df name="drivers">
           <in>acpi.h</in>
           <in>cpuid.h</in>
           <in>keyboard.h</in>
           <in>vesa.h</in>
+        </df>
+        <df name="fs">
+          <in>initrd.h</in>
         </df>
         <df name="localization">
           <in>en_scan.h</in>
@@ -64,12 +70,18 @@
         </df>
         <df name="display">
           <in>tdisplay.c</in>
+          <in>textModeHooks.c</in>
+          <in>vesaFontRender.c</in>
+          <in>vesaModeHooks.c</in>
         </df>
         <df name="drivers">
           <in>acpi.c</in>
           <in>cpuid.c</in>
           <in>keyboard.c</in>
           <in>vesa.c</in>
+        </df>
+        <df name="fs">
+          <in>initrd.c</in>
         </df>
         <df name="memory">
           <in>kheap.c</in>
@@ -88,6 +100,8 @@
         <in>kernel.c</in>
       </df>
       <df name="obj">
+      </df>
+      <df name="tasking">
       </df>
       <in>setenv.sh</in>
     </df>

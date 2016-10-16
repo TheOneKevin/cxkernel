@@ -86,7 +86,10 @@ struct VesaScreen
 typedef struct VesaScreen vscreen_t;
 
 void setVScreen(uint16_t width, uint16_t height, uint16_t mode, uint16_t pitch, uint16_t bpp, uint32_t videoptr);
-void clearScreen();
+void setPixel(uint32_t x, uint32_t y, uint32_t c);
+void clearScreen(uint32_t colour);
+uint32_t getPixelAddr(uint32_t x, uint32_t y);
+extern vscreen_t vhscreen;
 
 #ifdef __cplusplus
 }

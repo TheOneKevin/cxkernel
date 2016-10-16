@@ -5,165 +5,60 @@
  */
 
 #include "display/tdisplay.h"
+#include "display/textModeHooks.h"
 #include "memory/kheap.h"
-
-enum text_color background = COLOR_BLACK;
-enum text_color foreground = COLOR_WHITE;
-
-uint16_t *vram = (uint16_t *)0xB8000; //Pointer to the VGA frame buffer
 
 uint32_t debugPtr; bool doBootLog;
 
+screeninfo_t screen; //Might add more than one console!
+
+// Our stuff
+vHookA _scroll;
+vHookA _updc;
+vHookB _putc;
+vHookC _clear;
+
 void console_init()
 {
+    // Setup screen variables
+    screen._x = 0; screen._y = 0;
+    screen.foreground = COLOR_WHITE;
+    screen.background = COLOR_BLACK;
     console_clear(COLOR_BLACK);
-    //lastx = 0; lasty = 0;
-    x = 0; y = 0;
     bprintok(); console_write("Console display initialized : "); console_write_hex((uint32_t)debugBuffer); console_putc('\n');
 }
 
 void console_setbg(enum text_color bg)
 {
-    background = bg;
+    screen.background = bg;
 }
 
 void console_setfg(enum text_color fg)
 {
-    foreground = fg;
+    screen.foreground = fg;
 }
 
-uint8_t get_attrib()
-{
-    return (background << 4) | (foreground & 0x0F);
-}
-
-uint16_t get_entry(char c, uint8_t attrib)
-{
-    uint16_t c16 = c; uint16_t attrib16 = attrib;
-    return c16 | attrib16 << 8;
-}
-
-//For internal use only
-static void move_cursor()
-{
-    uint16_t loc = y * 80 + x;
-    outb(0x3D4, 14);                  // Tell the VGA board we are setting the high cursor byte.
-    outb(0x3D5, loc >> 8); // Send the high cursor byte.
-    outb(0x3D4, 15);                  // Tell the VGA board we are setting the low cursor byte.
-    outb(0x3D5, loc);      // Send the low cursor byte.
-}
-
-//Sets the cursor position to the x position and y position specified
 void set_cursorpos(uint8_t xpos, uint8_t ypos)
 {
-    x = xpos; y = ypos; move_cursor();
-}
-
-static void scroll()
-{
-    // Get a space character with the default colour attributes.
-    uint16_t blank = get_entry(' ', get_attrib());
-
-    // Row 25 is the end, this means we need to scroll up
-    if(y >= 25)
-    {
-        // Move the current text chunk that makes up the screen
-        // back in the buffer by a line
-        int i;
-        for (i = 0*80; i < 24*80; i++)
-        {
-            vram[i] = vram[i+80];
-        }
-
-        // The last line should now be blank. Do this by writing
-        // 80 spaces to it.
-        for (i = 24*80; i < 25*80; i++)
-        {
-            vram[i] = blank;
-        }
-        // The cursor should now be on the last line.
-        y = 24;
-    }
+    screen._x = xpos; screen._y = ypos;
+    _updc();
 }
 
 void console_clear(enum text_color bg)
 {
-    background = bg;
-    // Make an attribute byte for the default colours
-    // We are not going to use the get_attrib() as we have a custom fg
-    uint8_t attrib = get_attrib();
-    uint16_t entry = get_entry(' ', attrib);
-
-    int i;
-    for (i = 0; i < 80*25; i++)
-    {
-        vram[i] = entry;
-    }
-
-    // Move the hardware cursor back to the start.
-    x = 0;
-    y = 0;
-    move_cursor();
-}
-
-void console_putc_raw(const char c, bool isKey)
-{
-    //Let's get the entry we're going to write to RAM first
-    uint8_t attrib = get_attrib();
-    uint16_t entry = get_entry(c, attrib);
-    uint16_t *location;
-    // Backspace by decreasing the cursor x
-    if( c == '\b' && x)
-    {
-        x --;
-    }
-    // Tab by setting the cursor x to the nearest divisible by 8 location
-    else if(c == '\t')
-    {
-        x = (x+8) & ~(8-1);
-    }
-    // Carriage return
-    else if(c == '\r')
-    {
-        x = 0;
-    }
-    // Newline
-    else if(c == '\n')
-    {
-        x = 0; y++;
-    }
-    // Handle any other characters
-    else if(c >= ' ')
-    {
-        // Get the ram location we're going to write to
-        location = vram + (y * 80 + x);
-        *location = entry;
-        x++;
-    }
-    // Have we reached the end of the line? If so, add new line
-    if(x >= 80)
-    {
-        x = 0; y++;
-    }
-    if(!isKey)
-    {
-        lx = x; ly = y; //Make sure keyboard cannot backspace printed text
-    }
-    // Scroll if needed, then move the cursor by one
-    scroll();
-    move_cursor();
+    _clear(bg);
 }
 
 void console_putc(const char c)
 {
-    console_putc_raw(c, false);
+    _putc(c, false);
     //Write our entire boot sequence into RAM
     if(debugPtr < 4096 && doBootLog) { debugBuffer[debugPtr] = c; debugPtr++; } //Failsafe!
 }
 
 void console_putck(const char c)
 {
-    console_putc_raw(c, true);
+    _putc(c, true);
 }
 
 void console_write(const char *c)
@@ -180,7 +75,7 @@ void console_writeline(const char *c)
     console_write(c); console_putc('\n');
 }
 
-// From James Molloy's Tutorial
+// From James Molloy's Tutorial :P
 void console_write_hex(uint32_t n)
 {
     int tmp;

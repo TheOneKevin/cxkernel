@@ -7,6 +7,8 @@
 #include "system/kprintf.h"
 #include "display/tdisplay.h"
 
+screeninfo_t screen;
+
 static bool kprint(const char* data, size_t length)
 {
     const unsigned char* bytes = (const unsigned char*) data;
@@ -81,17 +83,17 @@ int kprintf(const char* restrict format, ...)
             // We are relying on the fact here that no stupid
             // person is going to add a \n inside our console_write_dec thing
             // I mean why would you do it anyway?
-            uint32_t laspos = (uint32_t)(y * 80 + x);
+            uint32_t laspos = (uint32_t)(screen._y * 80 + screen._x);
             console_write_dec(str);
-            written += (uint32_t)(laspos - (y * 80 + x));
+            written += (uint32_t)(laspos - (screen._y * 80 + screen._x));
         }
         else if(*format == 'X')
         {
             format++;
             uint32_t str = va_arg(parameters, uint32_t);
-            uint32_t laspos = (uint32_t)(y * 80 + x);
+            uint32_t laspos = (uint32_t)(screen._y * 80 + screen._x);
             console_write_hex(str);
-            written += (uint32_t)(laspos - (y * 80 + x));
+            written += (uint32_t)(laspos - (screen._y * 80 + screen._x));
         }
         else
         {

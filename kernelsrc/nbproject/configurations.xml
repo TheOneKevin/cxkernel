@@ -6,10 +6,18 @@
         <in>start.asm</in>
       </df>
       <df name="include">
+        <df name="display">
+          <in>font8x8.h</in>
+          <in>textModeHooks.h</in>
+          <in>vesaModeHooks.h</in>
+        </df>
         <df name="drivers">
           <in>acpi.h</in>
           <in>cpuid.h</in>
           <in>vesa.h</in>
+        </df>
+        <df name="fs">
+          <in>initrd.h</in>
         </df>
         <df name="localization">
           <in>scanmap.h</in>
@@ -36,12 +44,18 @@
         </df>
         <df name="display">
           <in>tdisplay.c</in>
+          <in>textModeHooks.c</in>
+          <in>vesaFontRender.c</in>
+          <in>vesaModeHooks.c</in>
         </df>
         <df name="drivers">
           <in>acpi.c</in>
           <in>cpuid.c</in>
           <in>keyboard.c</in>
           <in>vesa.c</in>
+        </df>
+        <df name="fs">
+          <in>initrd.c</in>
         </df>
         <df name="memory">
           <in>kheap.c</in>
@@ -89,6 +103,11 @@
           <buildCommand>./build.sh</buildCommand>
           <cleanCommand>make clean</cleanCommand>
           <executablePath></executablePath>
+          <cTool>
+            <incDir>
+              <pElem>include</pElem>
+            </incDir>
+          </cTool>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
@@ -99,11 +118,19 @@
       </item>
       <item path="include/cpufeatset.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/display/font8x8.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/display/textModeHooks.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/display/vesaModeHooks.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/drivers/acpi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/drivers/cpuid.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/drivers/vesa.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/fs/initrd.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/localization/scanmap.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -127,6 +154,12 @@
       </item>
       <item path="kernel/display/tdisplay.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="kernel/display/textModeHooks.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kernel/display/vesaFontRender.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kernel/display/vesaModeHooks.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="kernel/drivers/acpi.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/drivers/cpuid.c" ex="false" tool="0" flavor2="0">
@@ -134,6 +167,8 @@
       <item path="kernel/drivers/keyboard.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/drivers/vesa.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="kernel/fs/initrd.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="kernel/kernel.c" ex="false" tool="0" flavor2="0">
       </item>

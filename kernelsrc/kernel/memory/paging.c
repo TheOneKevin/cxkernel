@@ -9,10 +9,12 @@
 #include "memory/pmm.h"
 
 #include "system/PANIC.h"
-#include "display/tdisplay.h"
 #include "system/kprintf.h"
 
 #include "arch/exceptions.h"
+
+#include "display/tdisplay.h"
+#include "drivers/vesa.h"
 
 // Page directory entry format
 //Name: P R U W D A 0 S G Av. Addr.
@@ -34,6 +36,7 @@ KHEAPBM *kheap;
 
 extern uint32_t end;
 uint32_t framestart;
+vscreen_t vhscreen;
 
 static uint32_t* page_directory = 0;
 static uint32_t page_dir_ptr = 0;
@@ -134,6 +137,9 @@ void paging_init()
     
     //We map all the memory from 0 to the start of the frames (kernel + kernel heap)
     for(uint32_t i = 0; i <= (framestart / 0x1000); i++)
+        paging_map_virtual_to_phys(i * 0x1000, i * 0x1000, 0x3);
+    
+    for(uint32_t i = 0; i <= getPixelAddr(vhscreen.width, vhscreen.height) / 0x1000; i++)
         paging_map_virtual_to_phys(i * 0x1000, i * 0x1000, 0x3);
     
     ASSERT(get_physaddr(0x1000) == 0x1000, "Memory improperly mapped!");

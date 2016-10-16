@@ -30,6 +30,8 @@
 #include "common.h"
 
 #include "display/tdisplay.h"
+#include "display/vesaModeHooks.h"
+#include "display/textModeHooks.h"
 
 #include "system/pic.h"
 #include "system/irq.h"
@@ -108,19 +110,21 @@ void initVbe()
     if(*s == 1) //If the return code status is 1
     {
         setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
-        clearScreen();
+        //clearScreen();
+        _iinitVesaConsole();
     }
-    else
+    /*else
     {
         kprintf("%X %u %u %u %X %X %X %X", s, *s, *(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
-    }
+    }*/
 }
 
 void kernel_main(multiboot_info_t* multi)
 {
     mbt = multi; //Store the multiboot header in case we accidently corrupt it
+    _iinitNormalConsole(); //Install regular VGA-text hooks
     // We need to clear off an area for the VESA tables to sit in
-    //memset((void *) 0x7C00, 0, 0x100);
+    memset((void *) 0x7C00, 0, 0x100);
     initVbe();
     
     //asm volatile("cli"); We know that enablevesa() does that for us

@@ -17,6 +17,7 @@ bool display = true;
 
 keyH keyboard_handlers[16];
 int handlerInt = 0;
+screeninfo_t screen;
 
 uint8_t scan_to_ascii(uint8_t key)
 {
@@ -108,7 +109,7 @@ void keyboard_handler(regs_t *r)
     {
         if(display && scan_to_ascii(scancode) == '\b')
         {
-            if(!(x <= lx && y == ly)) { console_putck('\b'); console_putck(' '); console_putck('\b'); }
+            if(!(screen._x <= screen._lx && screen._y == screen._ly)) { console_putck('\b'); console_putck(' '); console_putck('\b'); }
         }
         
         else if(display)

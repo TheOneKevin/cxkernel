@@ -20,28 +20,45 @@ extern "C" {
 #endif
 
 /* Hardware text mode color constants. */
-enum text_color {
-	COLOR_BLACK = 0,
-	COLOR_BLUE = 1,
-	COLOR_GREEN = 2,
-	COLOR_CYAN = 3,
-	COLOR_RED = 4,
-	COLOR_MAGENTA = 5,
-	COLOR_BROWN = 6,
-	COLOR_LIGHT_GREY = 7,
-	COLOR_DARK_GREY = 8,
-	COLOR_LIGHT_BLUE = 9,
-	COLOR_LIGHT_GREEN = 10,
-	COLOR_LIGHT_CYAN = 11,
-	COLOR_LIGHT_RED = 12,
-	COLOR_LIGHT_MAGENTA = 13,
-	COLOR_YELLOW = 14,
-	COLOR_WHITE = 15,
+enum text_color
+{
+    COLOR_BLACK =           0, //0x00000000
+    COLOR_BLUE =            1, //0x000000FF
+    COLOR_GREEN =           2, //0x0000FF00
+    COLOR_CYAN =            3, //0x0000FFFF
+    COLOR_RED =             4, //0x00FF0000
+    COLOR_MAGENTA =         5, //0x00FF00FF
+    COLOR_BROWN =           6, //0x00550000
+    COLOR_LIGHT_GREY =      7, //0x00C0C0C0
+    COLOR_DARK_GREY =       8, //0x00909090
+    COLOR_LIGHT_BLUE =      9, //0x000055AA
+    COLOR_LIGHT_GREEN =     10, //0x0000FF55
+    COLOR_LIGHT_CYAN =      11, //0x0000FFAA
+    COLOR_LIGHT_RED =       12, //0x00FF5555
+    COLOR_LIGHT_MAGENTA =   13, //0x00FF55FF
+    COLOR_YELLOW =          14, //0x00FFFF00
+    COLOR_WHITE =           15, //0x00FFFFFF
 };
 
-//uint8_t lastx; uint8_t lasty;
-uint8_t x; uint8_t y; //Our current cursor positions
-uint8_t lx; uint8_t ly; //Lock x, lock y
+struct screenInfo
+{
+    uint8_t _x; uint8_t _y; //Our current cursor positions
+    uint8_t _lx; uint8_t _ly; //Lock x, lock y
+    // The screen colours
+    enum text_color background;
+    enum text_color foreground;
+}; typedef struct screenInfo screeninfo_t;
+
+typedef void (*vHookA) (); //This is our putC hook!
+typedef void (*vHookB) (const char c, bool isKey); //This is our putC hook!
+typedef void (*vHookC) (enum text_color bg); //This is our putC hook!
+
+extern screeninfo_t screen;
+
+extern vHookA _scroll;
+extern vHookA _updc;
+extern vHookB _putc;
+extern vHookC _clear;
 
 //Initializes the console display
 void console_init();
