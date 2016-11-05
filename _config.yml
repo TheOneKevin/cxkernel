@@ -1,0 +1,20 @@
+# Site settings
+title: LiquiDOS
+email: kevindai02@outlook.com
+description: > # this means to ignore newlines until "baseurl:"
+  LiquiDOS is a modular hobbyist operating system. It aims to increase user friendlieness
+  while still allowing developers to do their mumbo jumbo. Developed by a 14-year old immature child.
+baseurl: "/LiquiDOS" # the subpath of your site, e.g. /blog/
+url: "http://thecool1james.github.io" # the base hostname & protocol for your site
+twitter_username: thecool1james
+github_username:  thecool1james
+
+# Build settings
+markdown: kramdown
+
+# Pagination path
+paginate_path: "blog/page:num/"
+paginate: 5
+gems:
+  - jekyll-paginate
+  - jemoji

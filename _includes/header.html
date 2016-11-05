@@ -1,0 +1,19 @@
+<!-- Header -->
+<header id="header" class="skel-layers-fixed">
+    <h1><a href="{{ site.baseurl }}/" class="site-title" >{{ site.title }}</a></h1>
+    <nav id="nav">
+        <ul>
+            <li><a href="{{ site.baseurl }}/">Home</a></li>
+            <li><a href="{{ site.baseurl }}/liquidos-overview.html">Overview</a></li>
+            <li><a href="{{ site.baseurl }}/officialdocs.html">Documentation</a></li>
+			<li><a href="{{ site.baseurl }}/faqs.html">FAQs</a></li>
+            <li><a href="{{ site.baseurl }}/contact-me.html">Contact Me</a></li>
+            {% for page in site.pages %}
+                  {% if page.title %}
+                    <li><a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a></li>
+                  {% endif %}
+            {% endfor %}
+            <li><a href="http://github.com/TheCool1James/LiquiDOS" class="button special">GitHub</a></li>
+        </ul>
+    </nav>
+</header>

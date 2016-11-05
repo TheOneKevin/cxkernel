@@ -1,0 +1,19 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "Welcome to the LiquiDOS Docs!\n\n\nWelcome to the LiquiDOS official documentation! YAY! Now what?\n\n\nProject folder:  \nkernelsrc\n\n\n\n\n\n\n\n\nFolder/File Name\n\n\nDescription\n\n\n\n\n\n\n\n\n\n\nboot\n\n\nContains the GRUB multiboot assembly file.\n\n\n\n\n\n\ngrub\n\n\nHas the GRUB iso config number.\n\n\n\n\n\n\ninclude\n\n\nContains all the C headers for the kernel.\n\n\n\n\n\n\nisodir\n\n\nDon't touch if you don't know what  you're doing. Used for grub iso generation.\n\n\n\n\n\n\nkernel\n\n\nContains all the kernel source code.\n\n\n\n\n\n\nobj\n\n\nUsed to store object files during compilation.\n\n\n\n\n\n\nMakefile\n\n\nUsed to compile the kernel\n\n\n\n\n\n\nlinker.ld\n\n\nLinker script for the linker\n\n\n\n\n\n\nsetenv.sh\n\n\nSets up the environment for you\n\n\n\n\n\n\nbuild.sh\n\n\nBuilds the kernel (make clean && make)",
+            "title": "Home"
+        },
+        {
+            "location": "/#welcome-to-the-liquidos-docs",
+            "text": "Welcome to the LiquiDOS official documentation! YAY! Now what?",
+            "title": "Welcome to the LiquiDOS Docs!"
+        },
+        {
+            "location": "/#project-folder-kernelsrc",
+            "text": "Folder/File Name  Description      boot  Contains the GRUB multiboot assembly file.    grub  Has the GRUB iso config number.    include  Contains all the C headers for the kernel.    isodir  Don't touch if you don't know what  you're doing. Used for grub iso generation.    kernel  Contains all the kernel source code.    obj  Used to store object files during compilation.    Makefile  Used to compile the kernel    linker.ld  Linker script for the linker    setenv.sh  Sets up the environment for you    build.sh  Builds the kernel (make clean && make)",
+            "title": "Project folder:  kernelsrc"
+        }
+    ]
+}

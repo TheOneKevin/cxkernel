@@ -1,0 +1,22 @@
+
+<!-- Post List Start -->
+
+<center>
+
+<h4>
+  <strong>{{ post.date | date_to_string }}</strong>
+</h4>
+  
+  <h3>
+  <a href="{{site.baseurl}}{{post.url}}">
+    <strong>{{ post.title }}</strong>
+  </a>
+  </h3>
+  
+<h4>
+  <small><a href="{{site.baseurl}}{{post.url}}#disqus_thread">Comments</a></small>
+</h4>
+<hr />
+</center>
+
+<!-- Post List End -->

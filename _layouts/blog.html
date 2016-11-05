@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    
+    {% include /head.html %}
+
+	<body id="top">
+
+        {% include /header.html %}
+		
+		<!-- Banner -->
+		<section id="banner">
+			<div class="inner">
+				<h2>My Blog</h2>
+			</div>
+		</section>
+		<section id="main" class="wrapper style1">
+			<div>
+			{% for post in paginator.posts %}
+				{% include post-list.html%}
+			{% endfor %}
+			{% include pagination.html %}
+			</div>
+		</section>
+		
+        {% include /footer.html %}
+
+    </body>
+</html>
