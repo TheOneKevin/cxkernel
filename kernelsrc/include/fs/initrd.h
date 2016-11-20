@@ -11,6 +11,8 @@
  * Created on October 16, 2016, 10:52 AM
  */
 
+#include "common.h"
+
 #ifndef INITRD_H
 #define INITRD_H
 
@@ -29,6 +31,7 @@ struct tar_header
     char chksum[8];
     char typeflag[1];
 };
+typedef struct tar_header tar_header_t;
 
 #ifdef __cplusplus
 }

@@ -125,6 +125,8 @@ bool _RDRAND = false;
 
 bool _IA64 = false;
 
+uint32_t _CORES = 0;
+
 static inline void cpuid(uint32_t code, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx)
 {
     asm volatile("cpuid" : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx) : "0" (code));
@@ -170,10 +172,14 @@ void cpu_detect()
         if(c & CPUID_FEAT_ECX_SSE4_2) { kprintf("SSE4.2 "); _SSE4_2 = true; }
         if(c & CPUID_FEAT_ECX_AVX)    { kprintf("AVX "); _AVX = true; }
         if(c & CPUID_FEAT_ECX_F16C)   { kprintf("F16C "); _F16C = true; }
-        if(c & CPUID_FEAT_ECX_RDRAND) { kprintf("RDRAND"); _RDRAND = true; }
-        console_putc('\n');
+        if(c & CPUID_FEAT_ECX_RDRAND) { kprintf("RDRAND "); _RDRAND = true; }
         
-        if(_HTT) {  } //TODO: Add CPU core count detection thingymobobard
+        if(_HTT)
+        {
+            _CORES = (b >> 16) & ~(~0 << (23 - 16 + 1 ));
+        }
+        
+        console_putc('\n');
     }
     
     uint32_t largestFuncX;

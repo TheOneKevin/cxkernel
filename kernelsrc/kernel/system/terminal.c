@@ -10,6 +10,7 @@
 
 #include "drivers/acpi.h"
 #include "drivers/keyboard.h"
+#include "drivers/cpuid.h"
 
 #include "localization/scanmap.h"
 #include "multiboot.h"
@@ -19,8 +20,8 @@ int i = 0;
 uint32_t j = 0;
 multiboot_info_t* mbt;
 
-char *builtinCmds[] = { "help", "reboot", "shutdown", "mmap", "debug" };
-uint32_t size = 5; //Size of array
+char *builtinCmds[] = { "help", "reboot", "shutdown", "mmap", "debug", "cpuid" };
+uint32_t size = 6; //Size of array
 
 // The functions below are for built-in commands
 
@@ -37,13 +38,27 @@ void mmap()
     while((uint32_t)mmap < mbt->mmap_addr + mbt->mmap_length)
     {
         mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
-        kprintf(" Section length: %X Start address: %X (%X) \n", (uint32_t)mmap -> len, (uint32_t)mmap -> addr, (uint32_t)mmap -> type);
+        // Print out the data sizes in GB, MB, KB and then B 
+        if((uint32_t)mmap -> len  >= 1073741824)   { kprintf(" Length of section: %u GB", (uint32_t)mmap -> len / 1073741824); }
+        else if((uint32_t)mmap -> len  >= 1048576) { kprintf(" Length of section: %u MB", (uint32_t)mmap -> len / 1048576); }
+        else if((uint32_t)mmap -> len  >= 1024)    { kprintf(" Length of section: %u KB", (uint32_t)mmap -> len / 1024); }
+        else { kprintf(" Length of section: %u B ", (uint32_t)mmap -> len); }
+        kprintf(" Start address: %X (%X) \n", (uint32_t)mmap -> addr, (uint32_t)mmap -> type);
     }
 }
 
 void debug()
 {
     kprintf("Debug buffer: %X\n", (uint32_t)debugBuffer);
+}
+
+void cpuid()
+{
+    cpu_detect();
+    if(_CORES == 0)
+        kprintf("CPU Cores: 1\n\n");
+    else
+        kprintf("CPU Cores: %u\n\n", _CORES);
 }
 
 // Other stuff
@@ -57,6 +72,7 @@ void fetchCommand(int id)
         case 2: kprintf("Going down for shutdown..."); acpiPowerOff(); break;
         case 3: mmap(); break;
         case 4: debug(); break;
+        case 5: cpuid(); break;
         default: kprintf("Command not recognized!\n"); break;
     }
 }

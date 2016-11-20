@@ -10,11 +10,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/include/drivers/vesa.h</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/memory/paging.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/include/fs/initrd.h</file>
+            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/display/textModeHooks.c</file>
+            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/tasking/elfloader.c</file>
             <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/kernel.c</file>
-            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/drivers/vesa.c</file>
+            <file>file:/C:/HashiCorp/Vagrant/LiquiDOS/kernelsrc/kernel/fs/initrd.c</file>
         </group>
     </open-files>
 </project-private>

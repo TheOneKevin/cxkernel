@@ -31,7 +31,7 @@ struct fontStruct
 extern font_t currentfont;
 
 void _iinitVesaConsole();
-void printChar(uint32_t x, uint32_t y, uint32_t fg, uint32_t bg, bool transparant, char c);
+void printChar(uint32_t x, uint32_t y, uint32_t fg, uint32_t bg, bool transparant, uint8_t c);
 
 #ifdef __cplusplus
 }

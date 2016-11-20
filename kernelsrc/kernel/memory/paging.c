@@ -32,7 +32,6 @@
 
 uint64_t _length;
 uint64_t _addr;
-KHEAPBM *kheap;
 
 extern uint32_t end;
 uint32_t framestart;
@@ -138,9 +137,11 @@ void paging_init()
     //We map all the memory from 0 to the start of the frames (kernel + kernel heap)
     for(uint32_t i = 0; i <= (framestart / 0x1000); i++)
         paging_map_virtual_to_phys(i * 0x1000, i * 0x1000, 0x3);
-    
-    for(uint32_t i = 0; i <= getPixelAddr(vhscreen.width, vhscreen.height) / 0x1000; i++)
-        paging_map_virtual_to_phys(i * 0x1000, i * 0x1000, 0x3);
+    if(vhscreen.width != 0 && vhscreen.height != 0)
+    {
+        for(uint32_t i = 0; i <= getPixelAddr(vhscreen.width, vhscreen.height) / 0x1000; i++)
+            paging_map_virtual_to_phys(i * 0x1000, i * 0x1000, 0x3);
+    }
     
     ASSERT(get_physaddr(0x1000) == 0x1000, "Memory improperly mapped!");
     

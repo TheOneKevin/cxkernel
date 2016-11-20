@@ -14,6 +14,7 @@
 //All the (local) kernel options
 #define DEBUGMSG     0   // Enable to see messages
 #define GRUB_2       0   // Are we using the GRUB multiboot2 header?
+#define VESA         0   // Use VESA to print? NO
 #define SAVAGEMODE   1   // Savage mode for errors and warnings ;)
 //All dem tests!
 #define TEST_HEAP    0   // Test the heap
@@ -56,16 +57,19 @@
 // http://wiki.osdev.org/ <- GODSEND. Contains almost all the info I used to create LiquiDOS
 // http://wiki.osdev.org/What_order_should_I_make_things_in <- Read.
 
-//Memory infornmation
+//Memory information
 uint64_t _length;
 uint64_t _addr;
 KHEAPBM *kheap;
 extern uint32_t end;
 //Our switch to real mode function
-extern uint8_t enablevesa();
 bool doBootLog;
-// Store multiboot in case it corrupts
+// Store multiboot pointer address in case it corrupts
 multiboot_info_t* mbt;
+
+#if VESA
+    extern uint8_t enablevesa();
+#endif
 
 void getMemDisplay(multiboot_info_t* mbt)
 {
@@ -102,6 +106,7 @@ void getMemDisplay(multiboot_info_t* mbt)
     else { bprintwarn(); kprintf("OS might run out of RAM! Recommended 16 MB of RAM!\n"); }
 }
 
+#if VESA
 void initVbe()
 {
     uint16_t* s;
@@ -110,24 +115,23 @@ void initVbe()
     if(*s == 1) //If the return code status is 1
     {
         setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
-        //clearScreen();
         _iinitVesaConsole();
     }
-    /*else
-    {
-        kprintf("%X %u %u %u %X %X %X %X", s, *s, *(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
-    }*/
 }
+#endif
 
 void kernel_main(multiboot_info_t* multi)
 {
     mbt = multi; //Store the multiboot header in case we accidently corrupt it
     _iinitNormalConsole(); //Install regular VGA-text hooks
-    // We need to clear off an area for the VESA tables to sit in
-    memset((void *) 0x7C00, 0, 0x100);
-    initVbe();
     
-    //asm volatile("cli"); We know that enablevesa() does that for us
+    #if VESA
+        // We need to clear off an area for the VESA tables to sit in
+        memset((void *) 0x7C00, 0, 0x100);
+        initVbe();
+        //asm volatile("cli"); We know that enablevesa() does that for us
+    #endif
+    
     doBootLog = true; //Begin boot sequence
     console_init();
     
@@ -141,7 +145,6 @@ void kernel_main(multiboot_info_t* multi)
     register_irq();
     // Register and start our built-in keyboard driver
     register_keyboard();
-    //init_timer(50); //Test if multiple interrupts work :)
     //Initialize ACPI and enable it
     initAcpi();
     acpiEnable();
@@ -182,7 +185,7 @@ void kernel_main(multiboot_info_t* multi)
     
     #if TEST_HEAP
     char* ptr;
-    ptr = (char*)k_heapBMAlloc(kheap, 4);
+    ptr = (char*)kmalloc(kheap, 4);
     *ptr = 4;
     kprintf("%X\n%X", ptr, *ptr); //Should display 0x4 on the second line
     k_heapBMFree(kheap, ptr);

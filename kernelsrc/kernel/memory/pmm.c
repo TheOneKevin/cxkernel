@@ -37,7 +37,7 @@ void initPmm()
     framestart = pageAlign((uint32_t)(&end + kheap -> fblock -> size));
     
     nframes = (uint32_t) (_length - (framestart - _addr)) / 0x1000;
-    framemap = (uint32_t *) k_heapBMAlloc(kheap, nframes / 8); //Every 8 bytes (32 bits) we have one entry
+    framemap = (uint32_t *) kmalloc(kheap, nframes / 8); //Every 8 bytes (32 bits) we have one entry
     memset(framemap, 0, sizeof(framemap));
     bprintinfo();
     kprintf("Loc: %X ", framemap);

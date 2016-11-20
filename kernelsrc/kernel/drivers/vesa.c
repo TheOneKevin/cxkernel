@@ -36,7 +36,7 @@ void clearScreen(uint32_t colour)
         for(uint32_t x = vhscreen.width + 1; x >= 1; x--)
         {
             uint32_t *pixel = (uint32_t *) getPixelAddr(x - 1, y - 1);
-            *pixel = colour; //TODO: Don't assume RGB field sizes & positions
+            *pixel = colour;
         }
     }
 }

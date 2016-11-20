@@ -44,6 +44,8 @@ extern bool _RDRAND;
 
 extern bool _IA64;
 
+extern uint32_t _CORES;
+
 #ifdef __cplusplus
 }
 #endif

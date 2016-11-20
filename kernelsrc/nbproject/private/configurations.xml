@@ -49,7 +49,6 @@
         <in>cpufeatset.h</in>
         <in>multiboot.h</in>
         <in>multiboot2.h</in>
-        <in>multiboot_old.h</in>
       </df>
       <df name="isodir">
         <df name="boot">
@@ -68,6 +67,9 @@
           <in>tables.asm</in>
           <in>vesadriver.asm</in>
         </df>
+        <df name="common">
+          <in>common.c</in>
+        </df>
         <df name="display">
           <in>tdisplay.c</in>
           <in>textModeHooks.c</in>
@@ -78,6 +80,7 @@
           <in>acpi.c</in>
           <in>cpuid.c</in>
           <in>keyboard.c</in>
+          <in>serial.c</in>
           <in>vesa.c</in>
         </df>
         <df name="fs">
@@ -90,18 +93,18 @@
         </df>
         <df name="system">
           <in>PANIC.c</in>
-          <in>common.c</in>
           <in>irq.c</in>
           <in>kprintf.c</in>
           <in>pic.c</in>
           <in>pit.c</in>
           <in>terminal.c</in>
         </df>
+        <df name="tasking">
+          <in>elfloader.c</in>
+        </df>
         <in>kernel.c</in>
       </df>
       <df name="obj">
-      </df>
-      <df name="tasking">
       </df>
       <in>setenv.sh</in>
     </df>

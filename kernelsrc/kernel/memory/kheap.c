@@ -3,17 +3,18 @@
  */
 
 #include "memory/kheap.h"
+#include "system/kprintf.h"
  
 void k_heapBMInit(KHEAPBM *heap)
 {
     heap->fblock = 0;
 }
  
-int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, uint32_t size, uint32_t bsize)
+int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, size_t size, size_t bsize)
 {
     KHEAPBLOCKBM    *b;
-    uint32_t        bcnt;
-    uint32_t        x;
+    size_t          bcnt;
+    size_t          x;
     uint8_t         *bm;
 
     b = (KHEAPBLOCKBM*)addr;
@@ -48,13 +49,13 @@ static uint8_t k_heapBMGetNID(uint8_t a, uint8_t b)
     return c;
 }
  
-void *k_heapBMAlloc(KHEAPBM *heap, uint32_t size)
+void *k_heapBMAlloc(KHEAPBM *heap, size_t size)
 {
     KHEAPBLOCKBM    *b;
     uint8_t         *bm;
-    uint32_t        bcnt;
-    uint32_t        x, y, z;
-    uint32_t        bneed;
+    size_t          bcnt;
+    size_t          x, y, z;
+    size_t          bneed;
     uint8_t         nid;
 
     // Iterate blocks
@@ -100,7 +101,7 @@ void *k_heapBMAlloc(KHEAPBM *heap, uint32_t size)
     return 0;
 }
  
-void k_heapBMFree(KHEAPBM *heap, void *ptr)
+int k_heapBMFree(KHEAPBM *heap, void *ptr)
 {
     KHEAPBLOCKBM    *b;	
     uintptr_t       ptroff;
@@ -128,10 +129,21 @@ void k_heapBMFree(KHEAPBM *heap, void *ptr)
             
             // Update free block count
             b->used -= x - bi;
-            return;
+            return 1;
         }
     }
     
-    // TODO: This error needs to be raised or reported somehow
-    return;
+    return 0;
+}
+
+void *kmalloc(KHEAPBM *heap, size_t size)
+{
+    return k_heapBMAlloc(heap, size);
+}
+
+void kfree(KHEAPBM *heap, void *ptr)
+{
+    int ret = k_heapBMFree(heap, ptr);
+    if(ret == 0)
+        kprintf("Cannot free block!"); // TODO: This error needs to be raised or reported somehow
 }
