@@ -39,7 +39,7 @@ int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, uint32_t size, uint32_t bsiz
 void *kmalloc(KHEAPBM *heap, size_t size);
 void kfree(KHEAPBM *heap, void *ptr);
 
-extern KHEAPBM* kheap;
+extern KHEAPBM* kheap; //Kernel heap
 
 #ifdef __cplusplus
 }

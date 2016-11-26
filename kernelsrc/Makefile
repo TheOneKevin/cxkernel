@@ -26,6 +26,17 @@ $(ODIR)/%.o: $(SOURCES)
 	for b in kernel/*.c; do \
 	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
+	
+# We recurse through the root directory of mm
+	for b in mm/*.c; do \
+	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
+	done
+	
+# We recurse through the root directory of tasking
+	for b in tasking/*.c; do \
+	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
+	done
+	
 # We find all the asm files in the assembly folder
 	for b in kernel/assembly/*.asm; do \
 	    nasm -felf $$b -o $$b.o; \
@@ -35,6 +46,8 @@ $(ODIR)/%.o: $(SOURCES)
 # Move all the .o files to $(ODIR)
 	mv kernel/**/*.o $(ODIR)
 	mv kernel/*.o $(ODIR)
+	mv mm/*.o $(ODIR)
+	mv tasking/*.o $(ODIR)
 	mv *.o $(ODIR)
 LiquiDOS.bin: $(OBJ) # Target for the binary
 # Execute make in the object folder (see other Makefile)

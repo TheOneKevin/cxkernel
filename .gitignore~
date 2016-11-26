@@ -31,5 +31,4 @@
 # Debug files
 *.dSYM/
 *.su
-kernelsrc/nbproject/
-.git/
+/kernelsrc/nbproject/

@@ -6,6 +6,7 @@
 
 #include "fs/initrd.h"
 #include "memory/kheap.h"
+#include "system/kprintf.h"
 
 KHEAPBM* kheap;
 struct tar_header* filesPtr;
@@ -85,7 +86,7 @@ void closeInitrd()
 uint32_t findFile(char* fileName)
 {
     uint32_t ret = ramdiskAddress;
-    for(int i = 0; i < getFileAmount(ramdiskAddress); i++)
+    for(uint32_t i = 0; i < getFileAmount(ramdiskAddress); i++)
     {
         if(strcmp(filesPtr[i].filename, fileName) == 0)
         {

@@ -138,7 +138,6 @@ void cpu_detect()
     uint32_t largestFunc;
     char vendor[12];
     cpuid(CPUID_GETVENDORSTRING, &largestFunc, (uint32_t*) (vendor + 0), (uint32_t*) (vendor + 8), (uint32_t*) (vendor + 4));
-    //vendor[12] = 0;
     bprintinfo(); kprintf("CPU Vendor: %s\n", vendor);
     if(vendor == CPUID_VENDOR_AMD)
         isIntel = 2;
@@ -176,7 +175,8 @@ void cpu_detect()
         
         if(_HTT)
         {
-            _CORES = (b >> 16) & ~(~0 << (23 - 16 + 1 ));
+            //Get core count from bits 16 to 23
+            _CORES = (b >> 16) & ~(~0 << (23 - 16 + 1));
         }
         
         console_putc('\n');

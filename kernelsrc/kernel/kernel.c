@@ -14,7 +14,7 @@
 //All the (local) kernel options
 #define DEBUGMSG     0   // Enable to see messages
 #define GRUB_2       0   // Are we using the GRUB multiboot2 header?
-#define VESA         0   // Use VESA to print? NO
+#define VESA         1   // Use VESA to print? NO
 #define SAVAGEMODE   1   // Savage mode for errors and warnings ;)
 //All dem tests!
 #define TEST_HEAP    0   // Test the heap
@@ -153,7 +153,7 @@ void kernel_main(multiboot_info_t* multi)
     //Initialize our kernel heap
     k_heapBMInit(kheap);
     k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x400000, 16);
-    bprintinfo(); kprintf("Kernel heap starts: %X Kernel heap ends: %X\n", &end, &end + kheap -> fblock -> size);
+    bprintinfo(); kprintf("Kernel heap starts: %X Kernel size: %X\n", &end, kheap -> fblock -> size);
     //Enable out physical and virtual memory managers
     initPmm();
     paging_init();
@@ -191,6 +191,7 @@ void kernel_main(multiboot_info_t* multi)
     k_heapBMFree(kheap, ptr);
     #endif
     
-    kprintf("\n0:\\>");
+    kprintf("\n Uh, oh, kernel has reached the end... halting!");
+    print_dalek();
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }
