@@ -67,6 +67,9 @@ bool doBootLog;
 // Store multiboot pointer address in case it corrupts
 multiboot_info_t* mbt;
 
+uint32_t* vcache;
+vscreen_t vhscreen;
+
 #if VESA
     extern uint8_t enablevesa();
 #endif
@@ -114,6 +117,9 @@ void initVbe()
     asm volatile("mov %%eax, %0" : "=r" (s)); //We know the return code info pointer is in the EAX register
     if(*s == 1) //If the return code status is 1
     {
+        //Initialize our kernel heap
+        k_heapBMInit(kheap);
+        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x900000, 16);
         setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
         _iinitVesaConsole();
     }
@@ -130,6 +136,14 @@ void kernel_main(multiboot_info_t* multi)
         memset((void *) 0x7C00, 0, 0x100);
         initVbe();
         //asm volatile("cli"); We know that enablevesa() does that for us
+    #endif
+
+    #if !VESA
+
+    //Initialize our kernel heap
+    k_heapBMInit(kheap);
+    k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x900000, 16);
+    
     #endif
     
     doBootLog = true; //Begin boot sequence
@@ -150,20 +164,18 @@ void kernel_main(multiboot_info_t* multi)
     acpiEnable();
     //Get memory information
     getMemDisplay(mbt);
-    //Initialize our kernel heap
-    k_heapBMInit(kheap);
-    k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x400000, 16);
     bprintinfo(); kprintf("Kernel heap starts: %X Kernel size: %X\n", &end, kheap -> fblock -> size);
     //Enable out physical and virtual memory managers
     initPmm();
     paging_init();
-    //Enable our terminal
-    init_terminal(mbt);
     //Print OS OK text
     bprintok(); console_write("OS ready!\n");
     doBootLog = false; //End of boot sequence
     // Enable interrupts
     asm volatile("sti");
+    
+    //Enable our terminal
+    init_terminal(mbt);
     
     #if TEST_NOPAGE
     // Test page fault :)
@@ -191,7 +203,7 @@ void kernel_main(multiboot_info_t* multi)
     k_heapBMFree(kheap, ptr);
     #endif
     
+    halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
     kprintf("\n Uh, oh, kernel has reached the end... halting!");
     print_dalek();
-    halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
 }

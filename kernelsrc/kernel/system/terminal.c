@@ -15,17 +15,26 @@
 
 #include "localization/scanmap.h"
 #include "multiboot.h"
+#include "drivers/vesa.h"
 
 char buffer[256];
 //Some counters
 int i = 0;
 uint32_t j = 0;
+
+char *builtinCmds[] = {
+    "help", "reboot", "shutdown", "mmap", "debug", "cpuid", "mm", "clear", "game"
+};
+uint32_t size = 9; //Size of array
+
+//External variables
+screeninfo_t screen;
+uint32_t* vcache;
+vscreen_t vhscreen;
 multiboot_info_t* mbt;
 KHEAPBM *kheap;
 
-char *builtinCmds[] = { "help", "reboot", "shutdown", "mmap", "debug", "cpuid", "mm" };
-uint32_t size = 7; //Size of array
-
+//This is HIGHLY experimental iotoa (int to string more specifically)
 char* iotoa(uint32_t n)
 {
     if (n == 0)
@@ -44,7 +53,7 @@ char* iotoa(uint32_t n)
     }
     c[i] = 0;
 
-    char* c2 = (char*)kmalloc(kheap, 32);
+    char* c2 = (char*)kmalloc(kheap, 32 * sizeof(char));
     c2[i--] = 0;
     int j = 0;
     while(i >= 0)
@@ -96,7 +105,7 @@ const char * convertToUnit(uint32_t input)
 
 void help()
 {
-    kprintf("List of available commands: \nhelp, reboot, shutdown, mmap, debug, cpuid, mm\n");
+    kprintf("List of available commands: \nhelp, reboot, shutdown, mmap, debug, cpuid, mm, clear, game\n");
 }
 
 void mmap()
@@ -106,7 +115,7 @@ void mmap()
     
     while((uint32_t)mmap < mbt->mmap_addr + mbt->mmap_length)
     {
-        mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
+        mmap = (multiboot_memory_map_t*) ((uint32_t)mmap + mmap->size + sizeof(uint32_t));
         // Print out the data sizes in GB, MB, KB and then B 
         kprintf(" Length of section: %s", convertToUnit(mmap -> len));
         kprintf(" Start address: %X (%X) \n", (uint32_t)mmap -> addr, (uint32_t)mmap -> type);
@@ -138,6 +147,10 @@ void mm()
     kprintf("Percent used: %u% ", (usage * 100) / size);
     
     kprintf("\n");
+    
+    kprintf("V-Cache: %X V-Actual: %X", vcache, vhscreen.framebuffer);
+    
+    kprintf("\n"); //Every command has to follow with a newline
 }
 
 /* =====================================================================================================
@@ -155,6 +168,8 @@ void fetchCommand(int id)
         case 4: debug(); break;
         case 5: cpuid(); break;
         case 6: mm(); break;
+        case 7: console_clear(); screen._x = 0; screen._y = 0; break;
+        case 8: kprintf("Command not recognized   :P\n"); break;
         default: kprintf("Command not recognized!\n"); break;
     }
 }
@@ -199,4 +214,5 @@ void init_terminal(multiboot_info_t* multi)
     //Let's register our keyboard hook now
     installKeyHandler(&interpret_cmd, 0);
     setHandlerFlag(0);
+    kprintf("\n0:\\>");
 }

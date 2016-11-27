@@ -44,10 +44,9 @@ void set_cursorpos(uint8_t xpos, uint8_t ypos)
     _updc();
 }
 
-void console_clear(enum text_color bg)
+void console_clear()
 {
-    _clear(bg);
-    console_setbg(bg);
+    _clear(screen.background);
 }
 
 void console_putc(const char c)

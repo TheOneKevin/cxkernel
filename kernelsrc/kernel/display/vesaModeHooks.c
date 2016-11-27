@@ -12,6 +12,7 @@
 screeninfo_t screen;
 vscreen_t vhscreen;
 font_t currentfont;
+uint32_t* vcache;
 
 vHookA _scroll;
 vHookA _updc;
@@ -30,7 +31,7 @@ uint32_t colours [16] = {
     0x00909090,
     0x000055AA,
     0x0000FF55,
-    0x0000FFAA,
+    0x002BEDFF,
     0x00FF5555,
     0x00FF55FF,
     0x00FFFF00,
@@ -39,19 +40,49 @@ uint32_t colours [16] = {
 
 static void iupdatecur()
 {
-    //Nothing to put here :P
+    //Nothing to put here yet :P
 }
 
-static void iscroll()
+uint32_t getAddrOffset(uint32_t x, uint32_t y)
 {
-    
+    return (y * vhscreen.pitch) + (x * (vhscreen.bpp / 8));
+}
+
+static void iscroll()    
+{
+    if(screen._y > currentfont.charY)
+    {
+        //Shift everything up by one
+        for(uint32_t y = 0; y <= vhscreen.height; y++)
+        {
+            for(uint32_t x = 0; x <= vhscreen.width; x++)
+                setPixel(x, y, *(getAddrOffset(x, y + currentfont.characterHeight) + vcache));
+        }
+        
+        for(uint32_t y = 0; y <= currentfont.characterHeight; y++)
+        {
+            for(uint32_t x = 0; x <= vhscreen.width; x++)
+                setPixel(x, vhscreen.height - y, screen.background);
+        }
+        
+        // The cursor should now be on the last line.
+        screen._y = currentfont.charY;
+    }
 }
 
 void iputcraw2(const char c, bool isKey)
 {
-    if(c == '\b' && screen._x)
+    //Detect which key is pressed, and then take appropriate action
+    if(c == '\b')
     {
-        screen._x --;
+        if(screen._x > 0)
+            screen._x --;
+        else if(screen._x <= 0) //If we hit the end of a line, backspace up 1 line
+        {
+            screen._y --;
+            screen._x = currentfont.charX - 1;
+        }
+        
     }
     else if(c == '\t')
     {
@@ -71,7 +102,7 @@ void iputcraw2(const char c, bool isKey)
         screen._x ++;
     }
     
-    if(screen._x >= currentfont.charX)
+    if(screen._x > currentfont.charX - 1)
     {
         screen._x = 0; screen._y ++;
     }
@@ -80,7 +111,8 @@ void iputcraw2(const char c, bool isKey)
     {
         screen._lx = screen._x; screen._ly = screen._y;
     }
-    iscroll();
+    
+    iscroll(); //Scroll if needed
     iupdatecur();
 }
 
@@ -98,8 +130,8 @@ void _iinitVesaConsole()
     _clear  = &iconsclear2; // Clear the screen to a colour
     _scroll = &iscroll; // Scroll the screen when needed
     // Setup font
-    currentfont.characterWidth = 8; //Change to your preference
-    currentfont.characterHeight = 8;
-    currentfont.charX = vhscreen.width / currentfont.characterWidth;
-    currentfont.charY = vhscreen.height / currentfont.characterHeight;
+    currentfont.characterWidth = queryWidth(); //Change based on font
+    currentfont.characterHeight = queryHeight();
+    currentfont.charX = (vhscreen.width / currentfont.characterWidth) - 1; //1 character is our buffer from the screen edges
+    currentfont.charY = (vhscreen.height / currentfont.characterHeight) - 1;
 }

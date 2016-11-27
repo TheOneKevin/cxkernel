@@ -91,6 +91,8 @@ void clearScreen(uint32_t colour);
 uint32_t getPixelAddr(uint32_t x, uint32_t y);
 extern vscreen_t vhscreen;
 
+extern uint32_t* vcache;
+
 #ifdef __cplusplus
 }
 #endif

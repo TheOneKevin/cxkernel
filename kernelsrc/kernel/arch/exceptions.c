@@ -171,7 +171,8 @@ void write_err(regs_t *r)
 
 void isr_handler(regs_t *r) //We use a pointer reference to our struct
 {
-    console_clear(COLOR_LIGHT_RED); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
+    console_setbg(COLOR_LIGHT_RED);
+    console_clear(); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
     //console_clear(COLOR_BLUE);
     kprintf("DBGBUFFER: %X", (uint32_t)debugBuffer);
     console_write("\n\n\n                                    "); console_setbg(COLOR_LIGHT_BLUE); console_write("LiquiDOS\n"); console_setbg(COLOR_LIGHT_RED);

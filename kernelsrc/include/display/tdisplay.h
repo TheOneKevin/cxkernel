@@ -33,7 +33,7 @@ enum text_color
     COLOR_DARK_GREY =       8, //0x00909090
     COLOR_LIGHT_BLUE =      9, //0x000055AA
     COLOR_LIGHT_GREEN =     10, //0x0000FF55
-    COLOR_LIGHT_CYAN =      11, //0x0000FFAA
+    COLOR_LIGHT_CYAN =      11, //0x002BEDFF
     COLOR_LIGHT_RED =       12, //0x00FF5555
     COLOR_LIGHT_MAGENTA =   13, //0x00FF55FF
     COLOR_YELLOW =          14, //0x00FFFF00
@@ -69,7 +69,7 @@ void console_setfg(enum text_color fg);
 //Sets the console cursor to the specified positions
 void set_cursorpos(uint8_t xpos, uint8_t ypos);
 //Clears the console background to the specified colour
-void console_clear(enum text_color bg);
+void console_clear();
 //Writes a character on screen
 void console_putc(const char c);
 //Assumes the keyboard is printing to the screen

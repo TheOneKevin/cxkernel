@@ -28,6 +28,9 @@ struct fontStruct
     uint32_t charY; //Amount of characters in the Y axis
 }; typedef struct fontStruct font_t;
 
+uint32_t queryWidth();
+uint32_t queryHeight();
+
 extern font_t currentfont;
 
 void _iinitVesaConsole();
