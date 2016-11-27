@@ -39,7 +39,9 @@ char* iotoa(uint32_t n)
 {
     if (n == 0)
     {
-        return "0";
+        char* c2 = (char*)kmalloc(kheap, 32 * sizeof(char));
+        *c2 = "0";
+        return c2;
     }
 
     int acc = n;
@@ -64,38 +66,38 @@ char* iotoa(uint32_t n)
     return c2;
 }
 
-const char * convertToUnit(uint32_t input)
+char* convertToUnit(uint32_t input)
 {
     if(input  >= 1073741824)
     {
         char* tmp = iotoa((uint32_t)input / 1073741824);
-        char* tmp2 = strcat(tmp, " GB");
+        char* res = strcat(tmp, " GB");
         kfree(kheap, tmp); //Gettin' down and dirty with memory management
-        return tmp2;
+        return res;
     }
     
     else if(input  >= 1048576)
     {
         char* tmp = iotoa((uint32_t)input / 1048576);
-        char* tmp2 = strcat(tmp, " MB");
+        char* res = strcat(tmp, " MB");
         kfree(kheap, tmp);
-        return tmp2;
+        return res;
     }
     
     else if(input  >= 1024)
     {
         char* tmp = iotoa((uint32_t)input / 1024);
-        char* tmp2 = strcat(tmp, " KB");
+        char* res = strcat(tmp, " KB");
         kfree(kheap, tmp);
-        return tmp2;
+        return res;
     }
     
     else
     {
         char* tmp = iotoa((uint32_t)input);
-        char* tmp2 = strcat(tmp, " B");
+        char* res = strcat(tmp, " B");
         kfree(kheap, tmp);
-        return tmp2;
+        return res;
     }
 }
 
