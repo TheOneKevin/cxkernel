@@ -23,7 +23,7 @@ void console_init()
     // Setup screen variables
     screen._x = 0; screen._y = 0;
     screen.foreground = COLOR_WHITE;
-    screen.background = COLOR_DARK_GREY;
+    screen.background = COLOR_BLACK;
     console_clear(COLOR_BLACK);
     bprintok(); console_write("Console display initialized : "); console_write_hex((uint32_t)debugBuffer); console_putc('\n');
 }
