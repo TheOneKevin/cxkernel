@@ -23,9 +23,10 @@ int i = 0;
 uint32_t j = 0;
 
 char *builtinCmds[] = {
-    "help", "reboot", "shutdown", "mmap", "debug", "cpuid", "mm", "clear", "game"
+    "help", "reboot", "shutdown", "mmap", "debug", "cpuid", "mm", "clear", "game",
+    "memtest", "testint", "vbeinfo"
 };
-uint32_t size = 9; //Size of array
+uint32_t size = 12; //Size of array
 
 //External variables
 screeninfo_t screen;
@@ -40,7 +41,7 @@ char* iotoa(uint32_t n)
     if (n == 0)
     {
         char* c2 = (char*)kmalloc(kheap, 32 * sizeof(char));
-        *c2 = "0";
+        *c2 = (char)'0';
         return c2;
     }
 
@@ -105,9 +106,19 @@ char* convertToUnit(uint32_t input)
  * The functions below are for built-in commands
  * ===================================================================================================== */
 
+const char* helpMessage =
+"List of available commands======================================================\n"
+"help: Displays this message\n"
+"reboot: Reboots the PC             shutdown: Warm shuts down the computer\n"
+"clear: Clears the screen           mmap: Displays memory map\n"
+"cpuid: Displays CPU information    mm: Display memory usage information\n"
+"game: Hehe. Find out yourself      memtest: Tests heap allocation\n"
+"testint: Tests the interrupt system by dividing by 0. Crash alert!\n"
+"vbeinfo: Gives information on current vbe screen (if applicable)\n";
+
 void help()
 {
-    kprintf("List of available commands: \nhelp, reboot, shutdown, mmap, debug, cpuid, mm, clear, game\n");
+    kprintf("%s", helpMessage);
 }
 
 void mmap()
@@ -126,16 +137,16 @@ void mmap()
 
 void debug()
 {
-    kprintf("Debug buffer: %X\n", (uint32_t)debugBuffer);
+    bprintinfo(); kprintf("Debug buffer: %X\n", (uint32_t)debugBuffer);
 }
 
 void cpuid()
 {
     cpu_detect();
     if(_CORES == 0)
-        kprintf("CPU Cores: 1\n\n");
+        kprintf("CPU Cores: 1\n");
     else
-        kprintf("CPU Cores: %u\n\n", _CORES);
+        kprintf("CPU Cores: %u\n", _CORES);
 }
 
 void mm()
@@ -143,16 +154,35 @@ void mm()
     KHEAPBLOCKBM *b = kheap -> fblock;
     size_t size = b -> size;
     uint32_t usage = b -> used;
+    bprintwarn();
     kprintf("Note, all the values are inaccurate (no float support yet)!\n");
-    kprintf("Size of heap: %s | ", convertToUnit((uint32_t)size));
-    kprintf("Amount used: %s | ", convertToUnit(usage));
-    kprintf("Percent used: %u% ", (usage * 100) / size);
-    
-    kprintf("\n");
-    
-    kprintf("V-Cache: %X V-Actual: %X", vcache, vhscreen.framebuffer);
+    bprintinfo(); kprintf("Size of heap: %s\n", convertToUnit((uint32_t)size));
+    bprintinfo(); kprintf("Amount used: %s\n", convertToUnit(usage));
+    bprintinfo(); kprintf("Percent used: %u%\n", (usage * 100) / size);
     
     kprintf("\n"); //Every command has to follow with a newline
+}
+
+void memtest()
+{
+    kprintf("This is where we test whether our heap is working or not: \n");
+    kprintf("This should output \"0xBADBEEF\" on the first line and throw an error on the second \n");
+    uint32_t *p = (uint32_t *)kmalloc(kheap, sizeof(uint32_t));
+    *p = 0xBADBEEF; kprintf("%X\n", *p);
+    kfree(kheap, p);
+    char* undef = 0; kfree(kheap, undef); //This should throw error
+}
+
+void divByZero() { uint32_t p = 9 / 0; kprintf("%u", p); }
+
+void vbeInfo()
+{
+    bprintinfo(); kprintf("Screen resolution: %ux%u\n", vhscreen.width, vhscreen.height);
+    bprintinfo(); kprintf("Pitch: %u\n", vhscreen.pitch);
+    bprintinfo(); kprintf("BPP: %u\n", vhscreen.bpp);
+    bprintinfo(); kprintf("Framebuffer: %X\n", vhscreen.framebuffer);
+    bprintinfo(); kprintf("V-Cache: %X V-Actual: %X", vcache, vhscreen.framebuffer);
+    kprintf("\n");
 }
 
 /* =====================================================================================================
@@ -172,6 +202,9 @@ void fetchCommand(int id)
         case 6: mm(); break;
         case 7: console_clear(); screen._x = 0; screen._y = 0; break;
         case 8: kprintf("Command not recognized   :P\n"); break;
+        case 9: memtest(); break;
+        case 10: divByZero(); break;
+        case 11: vbeInfo(); break;
         default: kprintf("Command not recognized!\n"); break;
     }
 }

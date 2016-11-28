@@ -199,8 +199,11 @@ void kernel_main(multiboot_info_t* multi)
     char* ptr;
     ptr = (char*)kmalloc(kheap, 4);
     *ptr = 4;
-    kprintf("%X\n%X", ptr, *ptr); //Should display 0x4 on the second line
+    //kprintf("%X\n%X", ptr, *ptr); //Should display 0x4 on the second line
     k_heapBMFree(kheap, ptr);
+    
+    //If there's a nonexistent pointer
+    char* _ppap = 0; kfree(kheap, _ppap);
     #endif
     
     halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early

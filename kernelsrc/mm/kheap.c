@@ -4,6 +4,7 @@
 
 #include "memory/kheap.h"
 #include "system/kprintf.h"
+#include "display/tdisplay.h"
  
 void k_heapBMInit(KHEAPBM *heap)
 {
@@ -143,7 +144,16 @@ void *kmalloc(KHEAPBM *heap, size_t size)
 
 void kfree(KHEAPBM *heap, void *ptr)
 {
-    int ret = k_heapBMFree(heap, ptr);
-    if(ret == 0)
-        kprintf("Cannot free block!"); // TODO: This error needs to be raised or reported somehow
+    if(ptr > (void *)heap -> fblock && ptr <= (void *)((heap -> fblock) + (uint32_t) (heap -> fblock -> size)))
+    {
+        int ret = k_heapBMFree(heap, ptr);
+        if(ret == 0)
+            kprintf("Cannot free block!"); // TODO: This error needs to be raised or reported somehow
+    }
+    
+    else
+    {
+        bprinterr();
+        kprintf("Error freeing non-existent pointer!\n");
+    }
 }

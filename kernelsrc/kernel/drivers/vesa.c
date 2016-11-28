@@ -48,8 +48,7 @@ void clearScreen(uint32_t colour)
         {
             uint32_t *pixel = (uint32_t *) getPixelAddr(x - 1, y - 1);
             *pixel = colour;
+            *(vcache + (uint32_t)((y * vhscreen.pitch) + (x * (vhscreen.bpp / 8)))) = colour;
         }
     }
-    
-    memset(vcache, colour, (vhscreen.height * vhscreen.pitch) + (vhscreen.width * (vhscreen.bpp / 8)));
 }

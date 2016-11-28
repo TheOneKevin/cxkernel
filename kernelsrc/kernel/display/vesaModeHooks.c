@@ -59,10 +59,10 @@ static void iscroll()
                 setPixel(x, y, *(getAddrOffset(x, y + currentfont.characterHeight) + vcache));
         }
         
-        for(uint32_t y = 0; y <= currentfont.characterHeight; y++)
+        for(uint32_t y = vhscreen.height; y >= screen._y * currentfont.characterHeight; y--)
         {
             for(uint32_t x = 0; x <= vhscreen.width; x++)
-                setPixel(x, vhscreen.height - y, screen.background);
+                setPixel(x, y, colours[screen.background]);
         }
         
         // The cursor should now be on the last line.

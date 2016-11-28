@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   kheap.h
- * Author: Kevin
+ * Author: Kevin Dai, based off of kheap.c
  *
  * Created on August 29, 2016, 11:36 AM
  */
+
 #include "common.h"
 
 #ifndef KHEAP_H

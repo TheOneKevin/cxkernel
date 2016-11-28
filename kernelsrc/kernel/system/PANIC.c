@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+#define Hardcore 0
+
 #include "system/PANIC.h"
 #include "display/tdisplay.h"
 #include "system/kprintf.h"
@@ -24,6 +26,8 @@ void assert(bool assertStatus, const char *message)
     {
         kprintf("Debug buffer: %X \n", (uint32_t)debugBuffer);
         kprintf("Assertation failed! %s", message);
+#if Hardcore
         halt();
+#endif
     }
 }

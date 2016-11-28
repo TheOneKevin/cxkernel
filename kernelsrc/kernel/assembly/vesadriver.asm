@@ -143,17 +143,30 @@ loop_vbe: use16
     jmp 0x0000 : c(nextEntry)
 
 stodim: use16 ; Here, we store both the height and the width
+    
+    push ds
+    push 0
+    pop ds
+    mov ax, [c(lastwidth)]
+    pop ds
     ; Fetch the variables again
     mov dx, [di + 18]
-    
     ; Make sure width doesn't exceed an amount
-    cmp dx, 800
+    cmp dx, 2000
     ja nextEntry
-    
-    mov bx, [di + 20]
+    cmp dx, ax
+    jb nextEntry
 
-    cmp bx, 1200
+    push ds
+    push 0
+    pop ds
+    mov ax, [c(lastheight)]
+    pop ds
+    mov bx, [di + 20]
+    cmp bx, 800
     ja nextEntry
+    cmp bx, ax
+    jb nextEntry
     
     mov al, [di + 25]
     ; Everytime you see the push DS thing, it's to set it to 0 so I can save the things
