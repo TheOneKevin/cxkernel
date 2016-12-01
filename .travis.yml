@@ -1,3 +1,6 @@
+sudo: required
+before-install:
+    - sudo apt-get install -y nasm
 install: . ./setenv.sh
 language: c
 script: cd kernelsrc && make
