@@ -1,5 +1,6 @@
 # LiquiDOS
-[]:https://travis-ci.org/TheCool1James/LiquiDOS.svg?branch=master
+[![Build Status](https://travis-ci.org/TheCool1James/LiquiDOS.svg?branch=master)](https://travis-ci.org/TheCool1James/LiquiDOS)
+
 A DOS-Style Operating System created from scratch. It uses GRUB to boot. Currently these are the only features implemented:  
 
 1. Hardware interrupts (IRQs). Currently, only keyboard and PIT (timer) are supported. Added extendability for keymaps (if anyone wants to remap the keyboard, just look at the en_scan.h). Kprintf works too!  
