@@ -2,6 +2,7 @@
  * Our highly experimental header with experimental stuff
  */
 #include "exp_common.h" //Experimental
+#include "memory/kheap.h"
 
 //This is HIGHLY experimental iotoa (int to string more specifically)
 char* iotoa(uint32_t n)
