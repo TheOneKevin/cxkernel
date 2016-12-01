@@ -117,11 +117,18 @@ void initVbe()
     asm volatile("mov %%eax, %0" : "=r" (s)); //We know the return code info pointer is in the EAX register
     if(*s == 1) //If the return code status is 1
     {
-        //Initialize our kernel heap
+        //Initialize our kernel heap if it succeeds
         k_heapBMInit(kheap);
         k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x900000, 16);
         setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
         _iinitVesaConsole();
+    }
+    
+    else
+    {
+        //Initialize our kernel heap if it fails, so we aren't heapless
+        k_heapBMInit(kheap);
+        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x900000, 16);
     }
 }
 #endif

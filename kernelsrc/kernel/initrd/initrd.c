@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This is the code to parse the TAR format of our Initial Ram disk (initrd)
  */
 
 #include "fs/initrd.h"
@@ -44,7 +42,7 @@ uint32_t getFileAmount(uint32_t address)
     return i;
 }
 
-//Returns the number of files in the archive there are!
+//Add all of the headers to filesPtr[]
 void parse(uint32_t address)
 {
     uint32_t i;
@@ -67,7 +65,7 @@ void initInitrd(uint32_t addr)
 {
     if(getFileAmount(addr) == 0)
     {
-        kprintf("Initial ramdisk corrupted!");
+        kprintf("Initial ramdisk corrupted/no ramdisk present!");
         //TODO: Ramdisk corrupt protocol
     }
     else

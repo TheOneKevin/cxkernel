@@ -62,6 +62,44 @@ goreal: use16
     
     xchg bx, bx
     
+    ; TODO: Figure out how to do EDID
+    ; We check if EDID is supported. It should return AX=4Fh if it's supported
+    ; and AH = 0 if theres no error
+    mov ax, 0x4F15
+    mov bl, 0
+    int 10h
+    cmp ax, 0x004F
+    jne noedid
+    cmp ah, 0x00
+    jne noedid
+    
+    
+    push 0x5000
+    pop es
+    mov di, 0
+    
+    mov ax, 0x4F15
+    mov bl, 1
+    xor cx, cx
+    xor dx, dx
+    int 10h
+    
+    push ds
+    push es
+    pop ds
+    
+    mov ax, [di]
+    mov bx, [di + 2]
+    
+    push ds
+    push 0
+    pop ds
+    pop ds
+    
+    pop ds
+
+continue: use16
+    xchg bx, bx
     ; Put the memory segment address into es, and offset into di
     push 0x5000
     pop es
@@ -76,7 +114,10 @@ goreal: use16
     lds si, [es : di + 14]
     add di, 0x200
     jmp 0x0000 : c(loop_vbe)
-    
+
+noedid: use16
+    jmp continue
+
 ; ==================================== GET VBE INFO ==================================== ;
 loop_vbe: use16
     mov cx, [si]
@@ -144,29 +185,15 @@ loop_vbe: use16
 
 stodim: use16 ; Here, we store both the height and the width
     
-    push ds
-    push 0
-    pop ds
-    mov ax, [c(lastwidth)]
-    pop ds
     ; Fetch the variables again
-    mov dx, [di + 18]
-    ; Make sure width doesn't exceed an amount
-    cmp dx, 2000
+    mov dx, [di + 18] ;Width
+    cmp dx, 3000
     ja nextEntry
-    cmp dx, ax
-    jb nextEntry
 
-    push ds
-    push 0
-    pop ds
-    mov ax, [c(lastheight)]
-    pop ds
-    mov bx, [di + 20]
+    ; Fetch the variables again
+    mov bx, [di + 20] ;Height
     cmp bx, 800
-    ja nextEntry
-    cmp bx, ax
-    jb nextEntry
+    ja nextEntry 
     
     mov al, [di + 25]
     ; Everytime you see the push DS thing, it's to set it to 0 so I can save the things
@@ -351,6 +378,8 @@ largestMode:  dw 0
 bpp:          dw 0
 pitch:        dw 0
 framebuffer1: dd 0
+
+aspectratio: dw 0
 
 dd 0xBEBAD00D ; Marker to the end of the variable section
 

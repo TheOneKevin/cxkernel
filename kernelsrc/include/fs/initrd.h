@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   initrd.h
  * Author: Kevin
@@ -32,6 +26,16 @@ struct tar_header
     char typeflag[1];
 };
 typedef struct tar_header tar_header_t;
+
+extern struct tar_header* filesPtr;
+extern uint32_t ramdiskAddress;
+
+uint32_t translateSize(const char*);
+uint32_t getFileAmount(uint32_t);
+void parse(uint32_t);
+void initInitrd(uint32_t);
+void closeInitrd();
+uint32_t findFile(char*);
 
 #ifdef __cplusplus
 }
