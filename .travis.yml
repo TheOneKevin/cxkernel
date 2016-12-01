@@ -1,4 +1,4 @@
 install: . ./setenv.sh
 language: c
-script: make
+script: cd kernelsrc && make
 
