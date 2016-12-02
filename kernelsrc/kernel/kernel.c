@@ -98,15 +98,16 @@ void getMemDisplay(multiboot_info_t* mbt)
     else if(_length >= 1024) { uint32_t tmp = _length / 1024; bprintinfo(); kprintf("Length of memory: %u KB Address: %X \n", tmp, _addr); }
     else { kprintf("Length of memory: %u B Address: %X \n", _length, _addr); }
     //Memory check!
-    if(_length < 1024 * 1024 * 8)
+    const int EPSILON = 1024;
+    if(_length + EPSILON < 1024 * 1024 * 64 || _length - EPSILON < 1024 * 1024 * 64)
     {
         bprinterr(); kprintf("Not enough RAM! Recommended 16 MB of RAM!\n");
         #if SAVAGEMODE
         PANIC("More RAM needed!");
         #endif
     }
-    else if(_length > 1024 * 1024 * 16) { bprintok(); kprintf("Sufficient RAM installed :)\n"); }
-    else { bprintwarn(); kprintf("OS might run out of RAM! Recommended 16 MB of RAM!\n"); }
+    else if(_length + EPSILON > 1024 * 1024 * 64 || _length - EPSILON > 1024 * 1024 * 64) { bprintok(); kprintf("Sufficient RAM installed :)\n"); }
+    else { bprintwarn(); kprintf("OS might run out of RAM! Recommended 128 MB of RAM!\n"); }
 }
 
 #if VESA
