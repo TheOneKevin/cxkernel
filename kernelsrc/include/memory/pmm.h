@@ -26,6 +26,7 @@ void freeFrame(uint32_t a);
 uint32_t pageAlign(uint32_t addr);
 
 extern uint32_t framestart;
+uint32_t* startheap;
 
 #ifdef __cplusplus
 }

@@ -47,7 +47,7 @@ void cli();
 void sti();
 
 #define PAGE_SIZE 0x1000
-#define PAGE_MASK 0xFFFFF000 //0x100000000 - PAGE_SIZE
+#define PAGE_MASK 0xFFFFF000 //PAGE_SIZE but masked
 
 extern uint64_t _length; extern uint64_t _addr; // Here we get the largest chunk of memory for paging
 extern bool doBootLog; uint8_t debugBuffer[4096];

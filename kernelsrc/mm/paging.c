@@ -33,7 +33,6 @@
 uint64_t _length;
 uint64_t _addr;
 
-extern uint32_t end;
 uint32_t framestart;
 vscreen_t vhscreen;
 

@@ -70,6 +70,8 @@ multiboot_info_t* mbt;
 uint32_t* vcache;
 vscreen_t vhscreen;
 
+uint32_t* startheap;
+
 #if VESA
     extern uint8_t enablevesa();
 #endif
@@ -120,7 +122,7 @@ void initVbe()
     {
         //Initialize our kernel heap if it succeeds
         k_heapBMInit(kheap);
-        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x900000, 16);
+        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x800000, 16);
         setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
         _iinitVesaConsole();
     }
@@ -129,13 +131,14 @@ void initVbe()
     {
         //Initialize our kernel heap if it fails, so we aren't heapless
         k_heapBMInit(kheap);
-        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x900000, 16);
+        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x800000, 16);
     }
 }
 #endif
 
 void kernel_main(multiboot_info_t* multi)
 {
+    startheap = &end;
     mbt = multi; //Store the multiboot header in case we accidently corrupt it
     _iinitNormalConsole(); //Install regular VGA-text hooks
     
@@ -150,7 +153,7 @@ void kernel_main(multiboot_info_t* multi)
 
     //Initialize our kernel heap
     k_heapBMInit(kheap);
-    k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x900000, 16);
+    k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x800000, 16);
     
     #endif
     

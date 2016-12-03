@@ -13,6 +13,7 @@
 
 uint64_t _length;
 uint64_t _addr;
+uint32_t* startheap;
 extern uint32_t end;
 KHEAPBM *kheap;
 
@@ -20,13 +21,13 @@ static uint32_t* framemap  = 0;
 static uint32_t nframes    = 0;
 uint32_t framestart = 0;
 
-uint32_t pageAlign(uint32_t addr)
+uint32_t pageAlign(const uint32_t addr)
 {
     uint32_t a = addr;
-    if(a & 0xFFFFF000)
+    if(addr & 0xFFFFF000)
     {
         a &= 0xFFFFF000;
-        //This line has been modified because of the numerous bugs that was occurring
+        //This line has been modified because of the numerous bugs that were occurring
         a = addr > a ? a + 0x1000 : a; //If the aligned address is smaller than the original, add 0x1000 to it
     }
     return a;
@@ -34,9 +35,9 @@ uint32_t pageAlign(uint32_t addr)
 
 void initPmm()
 {
-    framestart = pageAlign((uint32_t)(&end + kheap -> fblock -> size));
+    framestart = pageAlign((uint32_t)startheap + (uint32_t)kheap -> fblock -> size + 0x1000);
     
-    nframes = (uint32_t) (_length - (framestart - _addr)) / 0x1000;
+    nframes = (uint32_t) (_addr + _length - framestart) / 0x1000;
     framemap = (uint32_t *) kmalloc(kheap, nframes / 8); //Every 8 bytes (32 bits) we have one entry
     memset(framemap, 0, sizeof(framemap));
     bprintinfo();

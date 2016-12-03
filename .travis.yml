@@ -12,5 +12,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: TheCool1James/LiquiDOS
-    tags: false
+    tags: true
     overwrite: true

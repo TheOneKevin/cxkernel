@@ -57,6 +57,7 @@ LiquiDOS.bin: $(OBJ) # Target for the binary
 	mkdir -p isodir/boot/grub
 	cp LiquiDOS.bin isodir/boot/LiquiDOS.bin
 	cp grub/grub.cfg isodir/boot/grub/grub.cfg
+	cp grub/background.jpg isodir/boot/background.jpg
 	echo Making GRUB iso...
 	grub-mkrescue -o LiquiDOS.iso isodir
 	echo Cleaning up current mess...
