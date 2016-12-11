@@ -23,6 +23,7 @@ extern "C" {
 void acpiPowerOff(void);
 int initAcpi(void);
 int acpiEnable(void);
+void acpiDisable(void);
 void reboot();
 int acpiCheckHeader(unsigned int *ptr, char *sig);
 unsigned int *acpiCheckRSDPtr(unsigned int *ptr);

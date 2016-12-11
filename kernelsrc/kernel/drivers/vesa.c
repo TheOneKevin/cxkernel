@@ -20,7 +20,7 @@ void setVScreen(uint16_t width, uint16_t height, uint16_t mode, uint16_t pitch, 
     vhscreen.bpp = bpp;
     vhscreen.framebuffer = videoptr;
     
-    vcache = (uint32_t *)kmalloc(kheap, (height * vhscreen.pitch) + (width * (vhscreen.bpp / 8)));
+    vcache = (uint32_t *)kmalloc(kheap, sizeof(uint64_t) * width * height);
 }
 
 uint32_t getPixelAddr(uint32_t x, uint32_t y)
@@ -36,7 +36,7 @@ void setPixel(uint32_t x, uint32_t y, uint32_t c)
         uint32_t *pixel = (uint32_t *) getPixelAddr(x, y);
         *pixel = c;
         //Do the cache thing
-        *(vcache + (uint32_t)((y * vhscreen.pitch) + (x * (vhscreen.bpp / 8)))) = c;
+        *(vcache + (uint32_t)(vhscreen.width * y + x)) = c;
     }
 }
 
@@ -48,7 +48,7 @@ void clearScreen(uint32_t colour)
         {
             uint32_t *pixel = (uint32_t *) getPixelAddr(x - 1, y - 1);
             *pixel = colour;
-            *(vcache + (uint32_t)((y * vhscreen.pitch) + (x * (vhscreen.bpp / 8)))) = colour;
+            *(vcache + (uint32_t)(vhscreen.width * y + x)) = colour;
         }
     }
 }

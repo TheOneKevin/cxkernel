@@ -27,15 +27,13 @@ uint32_t pageAlign(const uint32_t addr)
     if(addr & 0xFFFFF000)
     {
         a &= 0xFFFFF000;
-        //This line has been modified because of the numerous bugs that were occurring
-        a = addr > a ? a + 0x1000 : a; //If the aligned address is smaller than the original, add 0x1000 to it
     }
     return a;
 }
 
 void initPmm()
 {
-    framestart = pageAlign((uint32_t)startheap + (uint32_t)kheap -> fblock -> size + 0x1000);
+    framestart = pageAlign((uint32_t)startheap + (uint32_t)kheap -> fblock -> size + 0x2000);
     
     nframes = (uint32_t) (_addr + _length - framestart) / 0x1000;
     framemap = (uint32_t *) kmalloc(kheap, nframes / 8); //Every 8 bytes (32 bits) we have one entry

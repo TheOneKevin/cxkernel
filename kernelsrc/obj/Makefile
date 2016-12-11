@@ -6,5 +6,5 @@ CC=i686-elf-ld
 OBJ = $(wildcard *.o)
 # Link 'em all up
 LiquiDOS.bin: $(OBJ)
-	$(CC) -T../linker.ld -o $@ $(LDARGS) $^
+	$(CC) -T ../linker.ld -o $@ $(LDARGS) $^
 	mv LiquiDOS.bin ../

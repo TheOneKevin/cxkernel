@@ -53,6 +53,7 @@
 #include "drivers/acpi.h"
 #include "drivers/cpuid.h"
 #include "drivers/vesa.h"
+#include "fs/initrd.h"
 
 // http://wiki.osdev.org/ <- GODSEND. Contains almost all the info I used to create LiquiDOS
 // http://wiki.osdev.org/What_order_should_I_make_things_in <- Read.
@@ -71,6 +72,9 @@ uint32_t* vcache;
 vscreen_t vhscreen;
 
 uint32_t* startheap;
+
+uint32_t initrd_location;
+uint32_t initrd_end;
 
 #if VESA
     extern uint8_t enablevesa();
@@ -122,7 +126,7 @@ void initVbe()
     {
         //Initialize our kernel heap if it succeeds
         k_heapBMInit(kheap);
-        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x800000, 16);
+        k_heapBMAddBlock(kheap, (uintptr_t)startheap, 0x800000, 16);
         setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
         _iinitVesaConsole();
     }
@@ -131,15 +135,19 @@ void initVbe()
     {
         //Initialize our kernel heap if it fails, so we aren't heapless
         k_heapBMInit(kheap);
-        k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x800000, 16);
+        k_heapBMAddBlock(kheap, (uintptr_t)startheap, 0x800000, 16);
     }
 }
 #endif
 
 void kernel_main(multiboot_info_t* multi)
 {
-    startheap = &end;
     mbt = multi; //Store the multiboot header in case we accidently corrupt it
+    //Initrd stuff
+    initrd_location = *((uint32_t*)mbt->mods_addr);
+    initrd_end = *(uint32_t*)(mbt->mods_addr+4);
+    startheap = &end + initrd_end + 0x100; //0x100 as buffer
+    
     _iinitNormalConsole(); //Install regular VGA-text hooks
     
     #if VESA
@@ -153,13 +161,12 @@ void kernel_main(multiboot_info_t* multi)
 
     //Initialize our kernel heap
     k_heapBMInit(kheap);
-    k_heapBMAddBlock(kheap, (uintptr_t)&end, 0x800000, 16);
+    k_heapBMAddBlock(kheap, (uintptr_t)startheap, 0x800000, 16);
     
     #endif
     
     doBootLog = true; //Begin boot sequence
     console_init();
-    
     cpu_detect();
     // First, we install our GDT and IDT, then we fill the IDT with CPU exceptions
     // We then prepare the PIC for usage, and register our 15 PIC interrupts
@@ -179,6 +186,10 @@ void kernel_main(multiboot_info_t* multi)
     //Enable out physical and virtual memory managers
     initPmm();
     paging_init();
+    
+    //Enable our initrd
+    initInitrd(initrd_location);
+    
     //Print OS OK text
     bprintok(); console_write("OS ready!\n");
     doBootLog = false; //End of boot sequence

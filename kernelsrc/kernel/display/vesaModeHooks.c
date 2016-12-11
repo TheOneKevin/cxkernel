@@ -45,7 +45,7 @@ static void iupdatecur()
 
 uint32_t getAddrOffset(uint32_t x, uint32_t y)
 {
-    return (y * vhscreen.pitch) + (x * (vhscreen.bpp / 8));
+    return vhscreen.width * y + x;
 }
 
 static void iscroll()    

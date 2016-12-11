@@ -73,7 +73,7 @@ goreal: use16
     cmp ah, 0x00
     jne noedid
     
-    
+    ; Get the EDID.. Now I can't really test this inside a VM :(
     push 0x5000
     pop es
     mov di, 0
@@ -187,12 +187,14 @@ stodim: use16 ; Here, we store both the height and the width
     
     ; Fetch the variables again
     mov dx, [di + 18] ;Width
-    cmp dx, 3000
+    ;cmp dx, 3000
+    cmp dx, 2000
     ja nextEntry
 
     ; Fetch the variables again
     mov bx, [di + 20] ;Height
-    cmp bx, 800
+    ;cmp bx, 800
+    cmp bx, 700
     ja nextEntry 
     
     mov al, [di + 25]

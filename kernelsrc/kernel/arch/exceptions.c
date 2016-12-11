@@ -173,6 +173,7 @@ void write_err(regs_t *r)
 
 void isr_handler(regs_t *r) //We use a pointer reference to our struct
 {
+    //acpiDisable();
     console_setbg(COLOR_LIGHT_RED);
     console_clear(); //Make it all pink so you feel happy and not panic when you see the BSOD (now PSOD bc its pink) ;)
     //console_clear(COLOR_BLUE);

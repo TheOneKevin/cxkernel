@@ -26,11 +26,8 @@ int kputc(int ic)
     return ic;
 }
 
-int kprintf(const char* restrict format, ...)
+int vprintf(const char* restrict format, va_list parameters)
 {
-    va_list parameters;
-    va_start(parameters, format);
-
     int written = 0;
 
     while (*format != 0)
@@ -112,4 +109,11 @@ int kprintf(const char* restrict format, ...)
     
     va_end(parameters);
     return written;
+}
+
+int kprintf(const char* restrict format, ...)
+{
+    va_list parameters;
+    va_start(parameters, format);
+    return vprintf(format, parameters);
 }

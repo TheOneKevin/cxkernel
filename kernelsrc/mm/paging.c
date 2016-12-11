@@ -40,13 +40,13 @@ static uint32_t* page_directory = 0;
 static uint32_t page_dir_ptr = 0;
 static uint32_t* kpt = 0;
 
-void paging_map_virtual_to_phys(uint32_t virt, uint32_t phys, uint32_t flags)
+void paging_map_virtual_to_phys(const uint32_t virt, const uint32_t phys, const uint32_t flags)
 {
     //uint16_t pdid = pageAlign(virt) >> 22; //Get the page directory index from the virtual address
     //uint16_t ptid = pageAlign(virt) >> 12 & 0x03FF; //Page align the virtual address and get the index for the page table
-    
-    uint32_t pdid = virt / 0x400000;
-    uint32_t ptid = (virt / 0x1000) % 1024;
+    uint32_t v = pageAlign(virt);
+    uint32_t pdid = v / 0x400000; //1024 table entries * 0x1000 per entry = size of 1 directory entry
+    uint32_t ptid = (v / 0x1000) % 1024;
     
     uint32_t* pt = (uint32_t *)(page_directory[pdid] & ~0xFFF);
     if(page_directory[pdid] == 0) //If the page table does not exist
@@ -134,8 +134,8 @@ void paging_init()
     page_directory[0] = (uint32_t)kpt | 0x3; //Make the first page directory point to the kernel page table
     
     //We map all the memory from 0 to the start of the frames (kernel + kernel heap)
-    for(uint32_t i = 0; i <= (framestart / 0x1000); i++)
-        paging_map_virtual_to_phys(i * 0x1000, i * 0x1000, 0x3);
+    for(uint32_t i = 0; i <= framestart; i += 0x1000)
+        paging_map_virtual_to_phys(i, i, 0x3);
     if(vhscreen.width != 0 && vhscreen.height != 0)
     {
         for(uint32_t i = 0; i <= getPixelAddr(vhscreen.width, vhscreen.height) / 0x1000; i++)

@@ -131,7 +131,13 @@ int acpiCheckHeader(unsigned int *ptr, char *sig)
    return -1;
 }
 
-
+void acpiDisable(void)
+{
+    if ((inw((unsigned int) PM1a_CNT) &SCI_EN) == 0) //Check if ACPI is enabled
+    {
+        outb((unsigned int) SMI_CMD, ACPI_DISABLE); // send acpi disable command
+    }
+}
 
 int acpiEnable(void)
 {

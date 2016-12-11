@@ -5,6 +5,8 @@
 #include "fs/initrd.h"
 #include "memory/kheap.h"
 #include "system/kprintf.h"
+#include "system/PANIC.h"
+#include "display/tdisplay.h"
 
 KHEAPBM* kheap;
 struct tar_header* filesPtr;
@@ -42,6 +44,30 @@ uint32_t getFileAmount(uint32_t address)
     return i;
 }
 
+//Get ramfs size
+uint32_t parseSize(uint32_t address)
+{
+    uint32_t i; uint32_t s = 0;
+    for (i = 0; ; i++) //We loop through each header
+    {
+        tar_header_t *header = (tar_header_t *)address;
+        if (header -> filename[0] == '\0') //until we hit 0
+            break;
+ 
+        uint32_t size = translateSize(header -> size);
+        s += size + 512;
+        address += ((size / 512) + 1) * 512; //Isn't this basically address += size + 512?
+        
+        if (size % 512)
+        {
+            s += 512;
+            address += 512;
+        }
+    }
+    
+    return s;
+}
+
 //Add all of the headers to filesPtr[]
 void parse(uint32_t address)
 {
@@ -70,9 +96,11 @@ void initInitrd(uint32_t addr)
     }
     else
     {
-        addr = ramdiskAddress;
+        ramdiskAddress = addr;
         filesPtr = (tar_header_t *)kmalloc(kheap, getFileAmount(ramdiskAddress) * sizeof(tar_header_t));
         parse(ramdiskAddress);
+        ASSERT(strcmp(filesPtr->filename, "Hello") == 0, "Initrd initialization failed\n");
+        bprintok(); kprintf("Initrd successfully initialized and loaded\n");
     }
 }
 

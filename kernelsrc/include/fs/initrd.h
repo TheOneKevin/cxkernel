@@ -32,10 +32,14 @@ extern uint32_t ramdiskAddress;
 
 uint32_t translateSize(const char*);
 uint32_t getFileAmount(uint32_t);
+uint32_t parseSize(uint32_t);
 void parse(uint32_t);
 void initInitrd(uint32_t);
 void closeInitrd();
 uint32_t findFile(char*);
+
+extern uint32_t initrd_location;
+extern uint32_t initrd_end;
 
 #ifdef __cplusplus
 }
