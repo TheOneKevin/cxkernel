@@ -9,8 +9,9 @@
 #include "display/tdisplay.h"
 
 KHEAPBM* kheap;
-struct tar_header* filesPtr;
-uint32_t ramdiskAddress;
+tar_header_t* filesPtr; //Array of files
+uint32_t initrd_location; //Address 
+uint32_t initrd_files; //Amount of files/array size
 
 uint32_t translateSize(const char *in)
 {
@@ -44,30 +45,6 @@ uint32_t getFileAmount(uint32_t address)
     return i;
 }
 
-//Get ramfs size
-uint32_t parseSize(uint32_t address)
-{
-    uint32_t i; uint32_t s = 0;
-    for (i = 0; ; i++) //We loop through each header
-    {
-        tar_header_t *header = (tar_header_t *)address;
-        if (header -> filename[0] == '\0') //until we hit 0
-            break;
- 
-        uint32_t size = translateSize(header -> size);
-        s += size + 512;
-        address += ((size / 512) + 1) * 512; //Isn't this basically address += size + 512?
-        
-        if (size % 512)
-        {
-            s += 512;
-            address += 512;
-        }
-    }
-    
-    return s;
-}
-
 //Add all of the headers to filesPtr[]
 void parse(uint32_t address)
 {
@@ -87,23 +64,25 @@ void parse(uint32_t address)
     }
 }
 
-void initInitrd(uint32_t addr)
+//Open stream
+void initInitrd()
 {
-    if(getFileAmount(addr) == 0)
+    if(getFileAmount(initrd_location) == 0)
     {
         kprintf("Initial ramdisk corrupted/no ramdisk present!");
         //TODO: Ramdisk corrupt protocol
     }
     else
     {
-        ramdiskAddress = addr;
-        filesPtr = (tar_header_t *)kmalloc(kheap, getFileAmount(ramdiskAddress) * sizeof(tar_header_t));
-        parse(ramdiskAddress);
+        initrd_files = getFileAmount(initrd_location);
+        filesPtr = (tar_header_t *)kmalloc(kheap, initrd_files * sizeof(tar_header_t));
+        parse(initrd_location);
         ASSERT(strcmp(filesPtr->filename, "Hello") == 0, "Initrd initialization failed\n");
         bprintok(); kprintf("Initrd successfully initialized and loaded\n");
     }
 }
 
+//Close stream
 void closeInitrd()
 {
     kfree(kheap, filesPtr);
@@ -111,8 +90,8 @@ void closeInitrd()
 
 uint32_t findFile(char* fileName)
 {
-    uint32_t ret = ramdiskAddress;
-    for(uint32_t i = 0; i < getFileAmount(ramdiskAddress); i++)
+    uint32_t ret = initrd_location;
+    for(uint32_t i = 0; i < getFileAmount(initrd_location); i++)
     {
         if(strcmp(filesPtr[i].filename, fileName) == 0)
         {

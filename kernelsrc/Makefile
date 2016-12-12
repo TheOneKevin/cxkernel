@@ -37,6 +37,11 @@ $(ODIR)/%.o: $(SOURCES)
 	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
 	
+# We recurse through the root directory of fs
+	for b in fs/*.c; do \
+	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
+	done
+	
 # We find all the asm files in the assembly folder
 	for b in kernel/assembly/*.asm; do \
 	    nasm -felf $$b -o $$b.o; \
@@ -47,6 +52,7 @@ $(ODIR)/%.o: $(SOURCES)
 	mv kernel/**/*.o $(ODIR)
 	mv kernel/*.o $(ODIR)
 	mv mm/*.o $(ODIR)
+	mv fs/*.o $(ODIR)
 	mv tasking/*.o $(ODIR)
 	mv *.o $(ODIR)
 LiquiDOS.bin: $(OBJ) # Target for the binary
@@ -69,8 +75,11 @@ clean:
 	rm -f $(ODIR)/*.o
 	rm -f kernel/**/.o
 	rm -f kernel/*.o
+	rm -f mm/*.o
+	rm -f tasking/*.o
+	rm -f fs/*.o
 	rm -f *.bin
 	rm -f *.iso
 	rm -f boot/*.o
-	rm -r isodir
+	rm -rf isodir
 	echo Done!

@@ -3,10 +3,12 @@
  * we can re-initialize the terminal via this one :)
 */
 
+#include "multiboot.h"
 #include "exp_common.h"
 
 #include "system/terminal.h"
 #include "system/kprintf.h"
+
 #include "display/tdisplay.h"
 
 #include "memory/kheap.h"
@@ -14,10 +16,10 @@
 #include "drivers/acpi.h"
 #include "drivers/keyboard.h"
 #include "drivers/cpuid.h"
+#include "drivers/vesa.h"
 
 #include "localization/scanmap.h"
-#include "multiboot.h"
-#include "drivers/vesa.h"
+#include "fs/initrd.h"
 
 char buffer[256];
 //Some counters
@@ -26,9 +28,9 @@ uint32_t j = 0;
 
 char *builtinCmds[] = {
     "help", "reboot", "shutdown", "mmap", "debug", "cpuid", "mm", "clear", "game",
-    "memtest", "testint", "vbeinfo"
+    "memtest", "testint", "vbeinfo", "ls"
 };
-uint32_t size = 12; //Size of array
+uint32_t size = 13; //Size of array
 
 //External variables
 screeninfo_t screen;
@@ -36,6 +38,10 @@ uint32_t* vcache;
 vscreen_t vhscreen;
 multiboot_info_t* mbt;
 KHEAPBM *kheap;
+uint32_t initrd_location;
+//uint32_t initrd_end;
+uint32_t initrd_files;
+tar_header_t* filesPtr;
 
 /* =====================================================================================================
  * The functions below are for built-in commands
@@ -43,11 +49,11 @@ KHEAPBM *kheap;
 
 const char* helpMessage =
 "List of available commands======================================================\n"
-"help: Displays this message\n"
-"reboot: Reboots the PC             shutdown: Warm shuts down the computer\n"
-"clear: Clears the screen           mmap: Displays memory map\n"
-"cpuid: Displays CPU information    mm: Display memory usage information\n"
-"game: Hehe. Find out yourself      memtest: Tests heap allocation\n"
+"help:   Displays this message       ls:       Lists all mount points and files\n"
+"reboot: Reboots the PC              shutdown: Warm shuts down the computer\n"
+"clear:  Clears the screen           mmap:     Displays memory map\n"
+"cpuid:  Displays CPU information    mm:       Display memory usage information\n"
+"game:   Hehe. Find out yourself     memtest:  Tests heap allocation\n"
 "testint: Tests the interrupt system by dividing by 0. Crash alert!\n"
 "vbeinfo: Gives information on current vbe screen (if applicable)\n";
 
@@ -120,6 +126,14 @@ void vbeInfo()
     kprintf("\n");
 }
 
+void ls()
+{
+    for(uint32_t i = 0; i < initrd_files; i++)
+    {
+        kprintf("%s\n", filesPtr[i].filename);
+    }
+}
+
 /* =====================================================================================================
  * Other stuff (Interpret command, etc)
  * ===================================================================================================== */
@@ -140,6 +154,7 @@ void fetchCommand(int id)
         case 9: memtest(); break;
         case 10: divByZero(); break;
         case 11: vbeInfo(); break;
+        case 12: ls(); break;
         default: kprintf("Command not recognized!\n"); break;
     }
 }

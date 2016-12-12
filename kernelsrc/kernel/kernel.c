@@ -188,7 +188,7 @@ void kernel_main(multiboot_info_t* multi)
     paging_init();
     
     //Enable our initrd
-    initInitrd(initrd_location);
+    initInitrd();
     
     //Print OS OK text
     bprintok(); console_write("OS ready!\n");
