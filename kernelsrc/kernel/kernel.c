@@ -54,6 +54,7 @@
 #include "drivers/cpuid.h"
 #include "drivers/vesa.h"
 #include "fs/initrd.h"
+#include "fs/vfs.h"
 
 // http://wiki.osdev.org/ <- GODSEND. Contains almost all the info I used to create LiquiDOS
 // http://wiki.osdev.org/What_order_should_I_make_things_in <- Read.
@@ -143,9 +144,13 @@ void initVbe()
 void kernel_main(multiboot_info_t* multi)
 {
     mbt = multi; //Store the multiboot header in case we accidently corrupt it
-    //Initrd stuff
-    initrd_location = *((uint32_t*)mbt->mods_addr);
-    initrd_end = *(uint32_t*)(mbt->mods_addr+4);
+    //Check if initial ramdisk exists or not
+    if(mbt -> mods_addr != 0 && mbt -> mods_count > 0)
+    {
+        //Initrd stuff
+        initrd_location = *((uint32_t*)mbt->mods_addr);
+        initrd_end = *(uint32_t*)(mbt->mods_addr+4);
+    }
     startheap = &end + initrd_end + 0x100; //0x100 as buffer
     
     _iinitNormalConsole(); //Install regular VGA-text hooks
@@ -187,8 +192,12 @@ void kernel_main(multiboot_info_t* multi)
     initPmm();
     paging_init();
     
+    vfs_init();
     //Enable our initrd
-    initInitrd();
+    if(mbt -> mods_count > 0)
+        initInitrd(initrd_location, initrd_end);
+    else
+        PANIC("Initial ramdisk not properly loaded!");
     
     //Print OS OK text
     bprintok(); console_write("OS ready!\n");

@@ -13,10 +13,13 @@
 extern "C" {
 #endif
 
-    int errno;
+typedef uint32_t status_t;
     
-#define ENOMEM 1
-#define EINVAL 2
+#define ENOMEM 1 // No memory left
+#define EINVAL 2 // Invalid input
+#define ENOENT 3 // File/dir not found
+#define ENODEV 4 // Devices all full/device not found
+#define EWRITE 5 // Writing to a read-only medium
 
 #ifdef __cplusplus
 }

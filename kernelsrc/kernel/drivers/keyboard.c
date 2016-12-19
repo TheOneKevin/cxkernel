@@ -11,6 +11,8 @@
 #include "system/kprintf.h"
 #include "localization/en_scan.h"
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 bool SFLAG = false; // Shift flag
 bool CAPSF = false; // CAPS flag
 bool display = true;

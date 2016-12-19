@@ -16,7 +16,9 @@ BOOT:=$(wildcard boot/*.asm)
 # Here we remove the .c ending and .s ending and replace it with a .o ending and add the ODIR to it
 OBJ := $(addprefix $(ODIR)/,$(notdir $(SOURCES:.c=.o))) $(addprefix $(ODIR)/,$(notdir $(ASM:.s=.o))) $(addprefix $(ODIR)/,$(notdir $(BOOT:.asm=.o)))
 # Then we compile all the stuff, and I suck balls, cuz it still isn't recursive
-$(ODIR)/%.o: $(SOURCES)
+#$(ODIR)/%.o: $(SOURCES)
+.PHONY: all
+all:
 # Here, I got lazy and used loops to loop through each directory and compile the code accordingly
 # We recurse through the subdirectories of kernel
 	for a in kernel/**/*.c; do \
@@ -42,6 +44,11 @@ $(ODIR)/%.o: $(SOURCES)
 	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
 	
+	# We recurse through the root directory of fs
+	for b in fs/**/*.c; do \
+	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
+	done
+	
 # We find all the asm files in the assembly folder
 	for b in kernel/assembly/*.asm; do \
 	    nasm -felf $$b -o $$b.o; \
@@ -53,12 +60,12 @@ $(ODIR)/%.o: $(SOURCES)
 	mv kernel/*.o $(ODIR)
 	mv mm/*.o $(ODIR)
 	mv fs/*.o $(ODIR)
+	mv fs/**/*.o $(ODIR)
 	mv tasking/*.o $(ODIR)
 	mv *.o $(ODIR)
-LiquiDOS.bin: $(OBJ) # Target for the binary
-# Execute make in the object folder (see other Makefile)
+	# Execute make in the object folder (see other Makefile)
 	cd obj && make
-# Make the GRUB iso
+	# Make the GRUB iso
 	echo Setting up GRUB...
 	mkdir -p isodir/boot/grub
 	cp LiquiDOS.bin isodir/boot/LiquiDOS.bin
@@ -69,7 +76,7 @@ LiquiDOS.bin: $(OBJ) # Target for the binary
 	echo Making GRUB iso...
 	grub-mkrescue -o LiquiDOS.iso isodir
 	echo Cleaning up current mess...
-#rm -r isodir
+
 .PHONY: clean
 clean:
 	rm -f $(ODIR)/*.o
@@ -78,6 +85,7 @@ clean:
 	rm -f mm/*.o
 	rm -f tasking/*.o
 	rm -f fs/*.o
+	rm -f fs/**/*.o
 	rm -f *.bin
 	rm -f *.iso
 	rm -f boot/*.o

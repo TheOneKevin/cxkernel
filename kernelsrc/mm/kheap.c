@@ -153,7 +153,7 @@ void kfree(KHEAPBM *heap, void *ptr)
     
     else
     {
-        bprinterr();
-        kprintf("Error freeing non-existent pointer!\n");
+        //bprinterr();
+        //kprintf("Error freeing non-existent pointer!\n");
     }
 }

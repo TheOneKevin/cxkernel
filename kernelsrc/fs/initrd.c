@@ -7,102 +7,41 @@
 #include "system/kprintf.h"
 #include "system/PANIC.h"
 #include "display/tdisplay.h"
+#include "drivers/device.h"
+#include "fs/tar/tar.h"
+#include "fs/vfs.h"
 
 KHEAPBM* kheap;
-tar_header_t* filesPtr; //Array of files
-uint32_t initrd_location; //Address 
-uint32_t initrd_files; //Amount of files/array size
-
-uint32_t translateSize(const char *in)
-{
-    uint32_t size = 0;
-    uint32_t j;
-    uint32_t count = 1;
-    
-    for(j = 11; j > 0; j--, count *= 8)
-        size += ((in[j-1] - '0') * count);
-    
-    return size;
-}
-
-//Returns the number of files in the archive there are!
-uint32_t getFileAmount(uint32_t address)
-{
-    uint32_t i;
-    for (i = 0; ; i++) //We loop through each header
-    {
-        tar_header_t *header = (tar_header_t *)address;
-        if (header -> filename[0] == '\0') //until we hit 0
-            break;
- 
-        uint32_t size = translateSize(header -> size);
-        address += ((size / 512) + 1) * 512;
-        
-        if (size % 512)
-            address += 512;
-    }
-    
-    return i;
-}
-
-//Add all of the headers to filesPtr[]
-void parse(uint32_t address)
-{
-    uint32_t i;
-    for (i = 0; ; i++) //We loop through each header
-    {
-        tar_header_t *header = (tar_header_t *)address;
-        if (header -> filename[0] == '\0') //until we hit 0
-            break;
- 
-        uint32_t size = translateSize(header -> size);
-        filesPtr[i] = *header;
-        address += ((size / 512) + 1) * 512;
-        
-        if (size % 512)
-            address += 512;
-    }
-}
 
 //Open stream
-void initInitrd()
+void initInitrd(uint32_t initrd_start, uint32_t initrd_end)
 {
-    if(getFileAmount(initrd_location) == 0)
+    if(!initrd_start || !initrd_end)
     {
         kprintf("Initial ramdisk corrupted/no ramdisk present!");
         //TODO: Ramdisk corrupt protocol
     }
     else
     {
-        initrd_files = getFileAmount(initrd_location);
-        filesPtr = (tar_header_t *)kmalloc(kheap, initrd_files * sizeof(tar_header_t));
-        parse(initrd_location);
-        ASSERT(strcmp(filesPtr->filename, "Hello") == 0, "Initrd initialization failed\n");
-        bprintok(); kprintf("Initrd successfully initialized and loaded\n");
-    }
-}
-
-//Close stream
-void closeInitrd()
-{
-    kfree(kheap, filesPtr);
-}
-
-uint32_t findFile(char* fileName)
-{
-    uint32_t ret = initrd_location;
-    for(uint32_t i = 0; i < getFileAmount(initrd_location); i++)
-    {
-        if(strcmp(filesPtr[i].filename, fileName) == 0)
-        {
-            return ret + 512;
-        }
+        device_t* initrd_device = (device_t*)kmalloc(kheap, sizeof(device_t));
+        initrdpriv_t* initrd_priv = (initrdpriv_t*)kmalloc(kheap, sizeof(initrdpriv_t));
+        initrd_priv -> initrd_loc = initrd_start;
+        initrd_priv -> initrd_end = initrd_end;
         
-        uint32_t size = translateSize(filesPtr[i].size);
-        ret += ((size / 512) + 1) * 512;
-        if (size % 512)
-            ret += 512;
+        initrd_device -> id           = 42;
+        initrd_device -> flags        = DEVICE_FLAG_NOWRITE | DEVICE_FLAG_BLOCK;
+        initrd_device -> isValid      = true;
+        initrd_device -> name         = "initrd";
+        initrd_device -> fs           = 0;
+        initrd_device -> read         = 0;
+        initrd_device -> write        = 0;
+        initrd_device -> private_data = initrd_priv;
+        
+        tar_probe(initrd_device);
+        initrd_device -> fs -> mount(initrd_device);
+        
+        uint32_t out = vfs_try_mount(initrd_device, "/initrd/");
+        if(out == 0) { bprintok(); kprintf("Initrd successfully initialized and loaded\n"); }
+        else    { bprinterr();  kprintf("Uh, oh! Something happened to the initrd\n"); }
     }
-    
-    return -1;
 }

@@ -8,6 +8,8 @@
 #include "system/kprintf.h"
 #include "display/tdisplay.h"
 
+#pragma GCC diagnostic ignored "-Wshift-negative-value"
+
 enum
 {
     CPUID_FEAT_ECX_SSE3         = 1 << 0, 

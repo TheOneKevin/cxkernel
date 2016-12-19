@@ -21,6 +21,7 @@ extern "C" {
 #endif
 
 char* iotoa(uint32_t);
+uint32_t atoio(char*);
 char* convertToUnit(uint32_t);
 
 #ifdef __cplusplus

@@ -59,7 +59,7 @@ static void iscroll()
                 setPixel(x, y, *(getAddrOffset(x, y + currentfont.characterHeight) + vcache));
         }
         
-        for(uint32_t y = vhscreen.height; y >= screen._y * currentfont.characterHeight; y--)
+        for(uint32_t y = vhscreen.height; y >= vhscreen.height - currentfont.characterHeight; y--)
         {
             for(uint32_t x = 0; x <= vhscreen.width; x++)
                 setPixel(x, y, colours[screen.background]);

@@ -8,6 +8,7 @@
 #include "system/pit.h"
 #include "system/irq.h"
 #include "display/tdisplay.h"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 uint32_t tick = 0;
 

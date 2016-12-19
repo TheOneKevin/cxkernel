@@ -26,27 +26,30 @@ uint16_t inw(uint16_t port)
     return ret;
 }
 
+//Copy n = size amount of src into dst
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size)
 {
-    unsigned char* dst = (unsigned char*) dstptr;
-    const unsigned char* src = (const unsigned char*) srcptr;
+    uint8_t* dst = (uint8_t*)dstptr;
+    const uint8_t* src = (const uint8_t*) srcptr;
     for (size_t i = 0; i < size; i++)
         dst[i] = src[i];
     return dstptr;
 }
 
-void* memset(void* bufptr, int value, size_t size)
+//Set n = size amount of value at buf
+void* memset(void* bufptr, uint32_t value, size_t size)
 {
-    unsigned char* buf = (unsigned char*) bufptr;
+    uint8_t* buf = (uint8_t*)bufptr;
     for (size_t i = 0; i < size; i++)
-        buf[i] = (unsigned char) value;
+        buf[i] = (uint8_t)value;
     return bufptr;
 }
 
+//Compare n = size amount of a to b
 int memcmp(const void* aptr, const void* bptr, size_t size)
 {
-    const unsigned char* a = (const unsigned char*) aptr;
-    const unsigned char* b = (const unsigned char*) bptr;
+    const uint8_t* a = (const uint8_t*) aptr;
+    const uint8_t* b = (const uint8_t*) bptr;
     for (size_t i = 0; i < size; i++)
     {
         if (a[i] < b[i])
@@ -66,15 +69,18 @@ char *strcpy(char *dest, const char* src)
     return ret;
 }
 
-int strcmp(char* s1, char* s2)
+int strcmp(char *s1, char *s2)
 {
-    while(*s1 && *s2 && (*s1++ == *s2++));
-    if(*s1 == '\0' && *s2 == '\0')
-        return 0;
-    else if(*s1 == '\0')
-        return -1;
-    else
-        return 1;
+    uint8_t c1, c2;
+    while (1)
+    {
+        c1 = *s1++;
+        c2 = *s2++;
+        if (c1 != c2) return c1 < c2 ? -1 : 1;
+        if (!c1) break;
+    }
+    
+    return 0;
 }
 
 // Concatenate the NULL-terminated string src onto

@@ -19,6 +19,8 @@
 #include <limits.h>
 #include <stdarg.h>
 
+#include "errno.h"
+
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -32,7 +34,7 @@ uint8_t  inb (uint16_t port);
 uint16_t inw (uint16_t port);
 
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size);
-void* memset(void* bufptr, int value, size_t size);
+void* memset(void* bufptr, uint32_t value, size_t size);
 
 size_t strlen(const char* str);
 int memcmp(const void *s1, const void *s2, size_t n);

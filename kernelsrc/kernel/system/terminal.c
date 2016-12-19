@@ -20,6 +20,9 @@
 
 #include "localization/scanmap.h"
 #include "fs/initrd.h"
+#include "fs/vfs.h"
+
+#pragma GCC diagnostic ignored "-Wdiv-by-zero"
 
 char buffer[256];
 //Some counters
@@ -38,10 +41,6 @@ uint32_t* vcache;
 vscreen_t vhscreen;
 multiboot_info_t* mbt;
 KHEAPBM *kheap;
-uint32_t initrd_location;
-//uint32_t initrd_end;
-uint32_t initrd_files;
-tar_header_t* filesPtr;
 
 /* =====================================================================================================
  * The functions below are for built-in commands
@@ -121,17 +120,24 @@ void vbeInfo()
     bprintinfo(); kprintf("Screen resolution: %ux%u\n", vhscreen.width, vhscreen.height);
     bprintinfo(); kprintf("Pitch: %u\n", vhscreen.pitch);
     bprintinfo(); kprintf("BPP: %u\n", vhscreen.bpp);
-    bprintinfo(); kprintf("Framebuffer: %X\n", vhscreen.framebuffer);
+    //bprintinfo(); kprintf("Framebuffer: %X\n", vhscreen.framebuffer);
     bprintinfo(); kprintf("V-Cache: %X V-Actual: %X", vcache, vhscreen.framebuffer);
     kprintf("\n");
 }
 
 void ls()
 {
-    for(uint32_t i = 0; i < initrd_files; i++)
-    {
-        kprintf("%s\n", filesPtr[i].filename);
-    }
+    kprintf("Devices currently mounted\n");
+    vfs_list_mount();
+    kprintf("Files and directories on root\n");
+    vfs_ls("/");
+    fstat_t* stat = (fstat_t*)kmalloc(kheap, sizeof(fstat_t));
+    fsnode_t* file = vfs_openfile("/initrd/Hello");
+    vfs_stat(file, stat);
+    uint32_t* buffer = (uint32_t*)kmalloc(kheap, stat -> st_size);
+    vfs_read("/initrd/Hello", buffer, Read);
+    kprintf("Contents of /initrd/Hello: %s\n", buffer);
+    kfree(kheap, buffer); kfree(kheap, file);
 }
 
 /* =====================================================================================================
