@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   paging.h
  * Author: Kevin
  *
@@ -22,12 +22,14 @@ extern "C" {
 
 #define PAGE_MASK         0xFFFFF000
 #define PAGE_SIZE         0x1000
-    
+
 void paging_init();
+status_t paging_map_virtual_to_phys(const uint32_t virt, const uint32_t phys, const uint32_t flags);
+void paging_unalloc(uint32_t virt);
+uint32_t get_physaddr(uint32_t virt);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* PAGING_H */
-

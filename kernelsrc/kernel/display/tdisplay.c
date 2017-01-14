@@ -81,7 +81,7 @@ void console_write_hex(uint32_t n)
     int tmp;
     console_write("0x");
     char noZeroes = 1;
-    
+
     int i;
     for (i = 28; i > 0; i -= 4)
     {
@@ -90,7 +90,7 @@ void console_write_hex(uint32_t n)
         {
             continue;
         }
-    
+
         if (tmp >= 0xA)
         {
             noZeroes = 0;
@@ -102,7 +102,7 @@ void console_write_hex(uint32_t n)
             console_putc(tmp + '0');
         }
     }
-  
+
     tmp = n & 0xF;
     if (tmp >= 0xA)
     {

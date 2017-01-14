@@ -3,13 +3,16 @@ global enablevesa
 
 ; This little piece of sh*t caused me to rewrite this entire script That's why there's a macro here
 ; because of some obscure bracket rule that I apparently needed to know...
-%define c(x) (((x) - lowerhalf) + 0x7C00) ; This annoying thing that we have to c every address bc we moved
+; This annoying thing that we have to c every address bc we moved
+; Formula is: new address = offset - (origin - BASE) + NEWBASE <- Represented as an offset from NEWBASE
+%define c(x) (((x) - (lowerhalf - 0xC0000000)) + 0x7C00)
 %define d(x, y) ((x) - (y))
 
 enablevesa:
-    ;xchg bx, bx
+    xchg bx, bx
     cli
     pusha
+
     mov [stack32p], esp ; Save our stack right now, because our stack pointer is going to change soon
     mov esi, lowerhalf
     mov edi, 0x7C00
@@ -22,6 +25,10 @@ lowerhalf:
     sgdt [c(sgdtptr)]
     sidt [c(sidtptr)]
     lgdt [c(gdtptr)]
+
+    mov eax, cr3
+    mov [c(savecr3)], eax
+
     jmp word 0x18 : c(pmodereal)
 
 pmodereal: use16
@@ -36,6 +43,8 @@ pmodereal: use16
     mov [c(savecr0)], eax
     and eax, 0x7FFFFFFe ; Disable the paging bit and enable 16 bit pmode
     mov cr0, eax
+    mov eax, 0
+    mov cr3, eax
     jmp word 0x0000 : c(goreal) ; Far jump to set CS
 
 
@@ -51,7 +60,7 @@ goreal: use16
     mov ss, ax
     lidt [c(rmodeivt)] ; Load the real mode idt
     sti ; Enable interrupts
-    
+
     ; See if VESA is already enabled or not. If it is, we don't need to do anything
     ; and assume the enabling action was taken by the user
     mov ax, 0x4F03
@@ -59,9 +68,9 @@ goreal: use16
     shr bx, 8
     cmp bx, 0
     jne vbe_exists ; We handle it
-    
+
     xchg bx, bx
-    
+
     ; TODO: Figure out how to do EDID
     ; We check if EDID is supported. It should return AX=4Fh if it's supported
     ; and AH = 0 if theres no error
@@ -72,30 +81,30 @@ goreal: use16
     jne noedid
     cmp ah, 0x00
     jne noedid
-    
+
     ; Get the EDID.. Now I can't really test this inside a VM :(
     push 0x5000
     pop es
     mov di, 0
-    
+
     mov ax, 0x4F15
     mov bl, 1
     xor cx, cx
     xor dx, dx
     int 10h
-    
+
     push ds
     push es
     pop ds
-    
+
     mov ax, [di]
     mov bx, [di + 2]
-    
+
     push ds
     push 0
     pop ds
     pop ds
-    
+
     pop ds
 
 continue: use16
@@ -110,7 +119,7 @@ continue: use16
     ; Do some checkings
     cmp ax, 0x004F ; Check if al is 0x004F and ah is 0
     jne vbe_fail
-    
+
     lds si, [es : di + 14]
     add di, 0x200
     jmp 0x0000 : c(loop_vbe)
@@ -123,37 +132,37 @@ loop_vbe: use16
     mov cx, [si]
     cmp cx, 0xFFFF
     je done
-    
+
     mov ax, 0x4F01
     int 0x10
     cmp ax, 0x004F ; Check if al is 0x004F and ah is 0
     jne nextEntry
-    
+
     push ds ; Save ds
     push es ; Push es
     pop ds  ; Pop es into ds
-    
+
     ;xchg bx, bx
-    
+
     ; Check if this graphics mode supports LFB
     mov ax, [di]
     and al, 0x99
     cmp al, 0x99
     jne nextEntry
-    
+
     ; Check if this graphics mode is packed pixel or direct colour
     mov al, [di + 27]
     and al, 0xFD ; Make sure the memory model isn't 4 nor 6
     cmp al, 4
     jne nextEntry
-    
+
     ; Check if hardware support is given
     mov ax, [di]
     shr ax, 0
     and ax, 1
     cmp ax, 1
     jne nextEntry
-    
+
     ; Get the f*cking LFB address
     mov eax, DWORD[di + 40]
     push ds
@@ -161,7 +170,7 @@ loop_vbe: use16
     pop ds
     mov [c(framebuffer1)], eax
     pop ds
-    
+
     ; Find the largest width
     mov dx, [di + 18]
     push ds ; To read from the lastwidth variable, we must set ds to 0
@@ -170,7 +179,7 @@ loop_vbe: use16
     cmp dx, [c(lastwidth)]
     pop ds ; restore ds = es
     jae stodim ; Store it if it is
-    
+
     ; Find the largest height
     mov dx, [di + 20]
     push ds
@@ -179,12 +188,12 @@ loop_vbe: use16
     cmp dx, [c(lastheight)]
     pop ds
     jae stodim ; Store it if it is
-    
+
     ; We set the segment here bc we modified the ES and DS
     jmp 0x0000 : c(nextEntry)
 
 stodim: use16 ; Here, we store both the height and the width
-    
+
     ; Fetch the variables again
     mov dx, [di + 18] ;Width
     ;cmp dx, 3000
@@ -195,8 +204,8 @@ stodim: use16 ; Here, we store both the height and the width
     mov bx, [di + 20] ;Height
     ;cmp bx, 800
     cmp bx, 700
-    ja nextEntry 
-    
+    ja nextEntry
+
     mov al, [di + 25]
     ; Everytime you see the push DS thing, it's to set it to 0 so I can save the things
     push ds ; Save ds
@@ -210,14 +219,14 @@ stodim: use16 ; Here, we store both the height and the width
     mov bx, [c(lastheight)]
     mov dx, [c(lastwidth)]
     pop ds ; Restore ds
-    
+
     mov ax, [di + 16]
     push ds
     push 0
     pop ds
     mov [c(pitch)], ax
     pop ds
-    
+
     ; Continue
     jmp 0x0000 : c(nextEntry)
 
@@ -226,14 +235,14 @@ nextEntry: use16
     inc si
     inc si
     jmp 0x0000 : c(loop_vbe)
-    
+
 done: use16
     mov ax, 0
     mov ds, ax ; Reset the modified segments es and ds
     mov es, ax
     xchg bx, bx
     ; ================================= ENABLE VIDEO MODE ===================================== ;
-    
+
     ; Enable the mode we found best fit
     mov bx, [c(largestMode)]
     or bx, 0x4000
@@ -242,9 +251,9 @@ done: use16
     int 10h
     cmp ax, 0x004F
     jne vbe_fail_wrap
-    
+
     ; ======================================================================================== ;
-    
+
     mov ax, 1
     mov [c(returnstatus)], ax
     jmp 0x0000 : c(switchpm) ; Jump to protected real mode
@@ -256,20 +265,20 @@ vbe_fail: use16
     xor ax, ax
     mov [c(returnstatus)], ax
     jmp 0x0000 : c(switchpm)
-    
+
 vbe_fail_wrap: use16
     jmp 0x0000 : c(vbe_fail)
-    
+
 vbe_exists: use16
     ; Set our error code to 2 (VBE_EXISTS)
     mov ax, 2
     mov [c(returnstatus)], ax
     ; Return
     jmp 0x0000 : c(switchpm)
-    
+
 ; ==================================== END of our VESA code ==================================== ;
 ; ==================================================================================================== ;
-   
+
 switchpm: use16
     cli ; Turn off interrupts and prepare to enter pmode
     mov ax, 0
@@ -278,15 +287,21 @@ switchpm: use16
     mov fs, ax
     mov gs, ax
     mov ss, ax
+
     ; I don't even know why we have this CR0 switch here when we saved the CR0, maybe I'm just stupid
     mov eax, cr0
     inc eax
     mov cr0, eax
+
+    ; Enable fucking paging
+    mov eax, [c(savecr3)]
+    mov cr3, eax
+
     ; Restore our CR0
     mov eax, [c(savecr0)] ; Get our CR0 back
     mov cr0, eax
-    jmp dword 0x08 : c(getback) ;Far jump to our pmode code
-    
+    jmp dword 0x08 : c(getback) ; Far jump to our pmode code
+
 getback: use32
     ; Set up 32 bit data segment stack
     mov ax, 0x10
@@ -320,10 +335,12 @@ stack32p:
 rmodeivt:
     dw 0x03FF       ; The table is 256 entries @ 4b each
     dd 0x00000000   ; The real mode IVT is at 0x0000
-; We need to save the state of our CR0
+; We need to save the state of our CR0 and CR3 (paging)
 savecr0:
     dd 0
-    
+savecr3:
+    dd 0
+
 sidtptr:
     dw 0
     dd 0
@@ -351,7 +368,7 @@ gdt16:
     db 0x92
     db 0xCF
     db 0x00
-    
+
 .rcode:
     dw 0xFFFF
     dw 0x0000
@@ -359,7 +376,7 @@ gdt16:
     db 0x9A
     db 0x0F
     db 0x00
-    
+
 .rdata:
     dw 0xFFFF
     dw 0x0000

@@ -16,6 +16,23 @@
 .long FLAGS
 .long CHECKSUM
 
+# We want to put the following things into the data section of the file
+# This will include paging tables to remap our kernel into the higher half memory
+# These data structures (page directory and tables) must be page-aligned (to 0x1000)
+
+.section .bss
+.align 0x1000
+_kernel_pd:
+    .skip 0x1000
+_kernel_pt:
+    .skip 0x1000
+_tempHeap1_pt:
+    .skip 0x1000
+_tempHeap2_pt:
+    .skip 0x1000
+_ramdisk_pt:
+    .skip 0x1000
+
 # The multiboot standard does not define the value of the stack pointer register
 # (esp) and it is up to the kernel to provide a stack. This allocates room for a
 # small stack by creating a symbol at the bottom of it, then allocating 16384
@@ -26,10 +43,10 @@
 # System V ABI standard and de-facto extensions. The compiler will assume the
 # stack is properly aligned and failure to align the stack will result in
 # undefined behavior.
-.section .bss
+.section .bootloader_stack
 .align 16
 stack_bottom:
-.skip 16384 # 16 KiB
+.skip 0x4000 # 16 KiB
 stack_top:
 
 # The linker script specifies _start as the entry point to the kernel and the
@@ -39,6 +56,107 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
+        xchg %bx, %bx
+        # We first need to retrieve the physical address of the page table
+        movl $(_kernel_pt - 0xC0000000), %edi
+        # Map 0 = 0xC0000000, so 0x100000 = 0xC0100000. Set esi as our "map pointer," increasing the address
+        # held within esi by 1 page (0x1000) each time until we reach, or go over _kernel_end
+        movl $0, %esi
+        # And we want to do this 1023 times
+        movl $1023, %ecx
+
+1:
+        # We first need to map from 0x0 to the kernel end. So, we check if the "map pointer" AKA esi
+        # has reached the _kernel_end or not. If it has reached _kernel_end, then we break (jump to 3)
+        cmpl $0, %esi
+        jl 2f
+        cmpl $(_kernel_end - 0xC0000000), %esi
+        jge 10f
+
+        # Map the physical address, and then mark it as "present" and "writable"
+        # This also means that .text and .rodata are "writable" as well. Security may be compromised
+        movl %esi, %edx
+        orl $0x003, %edx # 0x003 = 011, write and present flags are on
+        movl %edx, (%edi)
+
+2:
+        # Size of each page is 4096 bytes or 4 KiB
+        addl $0x1000, %esi
+        # We know the size of each entry of a table is 4 bytes long
+        addl $4, %edi
+        loop 1b
+
+# Map heap
+10:
+        xchg %bx, %bx
+        # We first need to retrieve the physical address of the page table
+        movl $(_tempHeap1_pt - 0xC0000000), %edi
+        # Map 0 = 0xC0000000, so 0x100000 = 0xC0100000. Set esi as our "map pointer," increasing the address
+        # held within esi by 1 page (0x1000) each time until we reach, or go over _kernel_end
+        movl $(_kernel_end - 0xC0000000 + 0x1000), %esi
+        # And we want to do this 1024 times
+        movl $1024, %ecx
+
+11:
+        # We first need to map from 0x0 to the kernel end. So, we check if the "map pointer" AKA esi
+        # has reached the _kernel_end or not. If it has reached _kernel_end, then we break (jump to 3)
+        cmpl $0, %ecx
+        jle 3f
+
+        # Map the physical address, and then mark it as "present" and "writable"
+        # This also means that .text and .rodata are "writable" as well. Security may be compromised
+        movl %esi, %edx
+        orl $0x003, %edx # 0x003 = 011, write and present flags are on
+        addl $0x400000, %edx
+        movl %edx, (%edi)
+
+        addl $0x400000, %edx
+        addl $0x1000, %edi # Advance edi to next page table
+        movl %edx, (%edi)
+
+        subl $0x800000, %edx # Map ramdisk portion
+        addl $0x1000, %edi # Advance edi to the next page table again
+        movl %edx, (%edi)
+
+        subl $0x2000, %edi # Reset pointer to the first page table
+
+12:
+        # Size of each page is 4096 bytes or 4 KiB
+        addl $0x1000, %esi
+        # We know the size of each entry of a table is 4 bytes long
+        addl $4, %edi
+        loop 11b
+
+
+3:
+        # Map the VGA video memory to 0xC03FF000 as "present" and "writable"
+        movl $(0x000B8000 | 0x003), _kernel_pt - 0xC0000000 + 1023 * 4
+
+        # Map both the page table to 0x00000000 (identity) and 0xC0000000 to avoid triple faulting
+        # when the CPU can't find the table at 0x00000000
+        movl $(_kernel_pt - 0xC0000000 + 0x003), _kernel_pd - 0xC0000000 + 0
+        movl $(_kernel_pt - 0xC0000000 + 0x003), _kernel_pd - 0xC0000000 + 0xC00
+        movl $(_ramdisk_pt - 0xC0000000 + 0x003), _kernel_pd - 0xC0000000 + 0xC10
+        movl $(_tempHeap1_pt - 0xC0000000 + 0x003), _kernel_pd - 0xC0000000 + 0xFF8
+        movl $(_tempHeap2_pt - 0xC0000000 + 0x003), _kernel_pd - 0xC0000000 + 0xFFC
+
+        # Set the CR3 register to the address of the page directory
+        movl $(_kernel_pd - 0xC0000000), %ecx
+        movl %ecx, %cr3
+
+        # Enable the paging and write-protect bit in CR0
+        movl %cr0, %ecx
+        orl $0x80010000, %ecx
+        movl %ecx, %cr0
+
+        # Jump to the higher half kernel
+        lea 4f, %ecx
+        jmp *%ecx
+
+4:
+    # Here, we do not umap the identity mapped 1st MB since
+    # Our VESA driver will need to use the identity mapped portion
+
 	# The bootloader has loaded us into 32-bit protected mode on a x86
 	# machine. Interrupts are disabled. Paging is disabled. The processor
 	# state is as defined in the multiboot standard. The kernel has full
@@ -54,7 +172,7 @@ _start:
 	# stack (as it grows downwards on x86 systems). This is necessarily done
 	# in assembly as languages such as C cannot function without a stack.
 	mov $stack_top, %esp
-        
+        addl $0xC0000000, %ebx
         push %ebx
 	# This is a good place to initialize crucial processor state before the
 	# high-level kernel is entered. It's best to minimize the early
@@ -84,8 +202,8 @@ _start:
 	# 3) Jump to the hlt instruction if it ever wakes up due to a
 	#    non-maskable interrupt occurring or due to system management mode.
 	cli
-1:	hlt
-	jmp 1b
+5:	hlt
+	jmp 5b
 
 # Set the size of the _start symbol to the current location '.' minus its start.
 # This is useful when debugging or when you implement call tracing.

@@ -4,11 +4,11 @@
  * sorts of personal. Firstly, I would like to invite you to the kernel. This is where everything begins. Enjoy the scenery
  */
 
-/* 
+/*
  * File:   kernel.c
- * Author: Kevin Dai <- That's me!
- * 
- * Created on August 24, 2016, 4:48 PM
+ * Author: Kevin Dai < That's me! >
+ *
+ * Created on August 24, 2016, 4:48 PM < This date will forever live on >
 */
 
 //All the (local) kernel options
@@ -58,12 +58,12 @@
 
 // http://wiki.osdev.org/ <- GODSEND. Contains almost all the info I used to create LiquiDOS
 // http://wiki.osdev.org/What_order_should_I_make_things_in <- Read.
-
 //Memory information
 uint64_t _length;
 uint64_t _addr;
 KHEAPBM *kheap;
-extern uint32_t end;
+KHEAPBM tkh;
+extern uint32_t _kernel_end;
 //Our switch to real mode function
 bool doBootLog;
 // Store multiboot pointer address in case it corrupts
@@ -86,9 +86,9 @@ void getMemDisplay(multiboot_info_t* mbt)
     #if DEBUGMSG
     kprintf("Memory map address: %X \n", mbt -> mem_upper);
     #endif
-    multiboot_memory_map_t *mmap = (multiboot_memory_map_t *) mbt -> mmap_addr;
-    
-    while((uint32_t)mmap < mbt->mmap_addr + mbt->mmap_length)
+    multiboot_memory_map_t *mmap = (multiboot_memory_map_t *) (mbt -> mmap_addr + KRNLBASE);
+
+    while((uint32_t)mmap < mbt->mmap_addr + mbt->mmap_length + KRNLBASE)
     {
         mmap = (multiboot_memory_map_t*) ((unsigned int)mmap + mmap->size + sizeof(unsigned int));
         #if DEBUGMSG
@@ -96,10 +96,10 @@ void getMemDisplay(multiboot_info_t* mbt)
         #endif
         if((mmap -> len >= _length) && (mmap -> type == 0x1)) //We want the largest chunk of free space
         {
-            _length = mmap -> len; _addr = mmap -> addr; //Then store it in these variables
+            _length = mmap -> len; _addr = mmap -> addr + KRNLBASE; //Then store it in these variables
         }
     }
-    // Print out the data sizes in GB, MB, KB and then B 
+    // Print out the data sizes in GB, MB, KB and then . Why the HELL I used base 10 is completely out of the question. I was probably crazy.
     if(_length >= 1073741824) { uint32_t tmp = _length / 1073741824; bprintinfo(); kprintf("Length of memory: %u GB Address: %X \n", tmp, _addr); }
     else if(_length >= 1048576) { uint32_t tmp = _length / 1048576; bprintinfo(); kprintf("Length of memory: %u MB Address: %X \n", tmp, _addr); }
     else if(_length >= 1024) { uint32_t tmp = _length / 1024; bprintinfo(); kprintf("Length of memory: %u KB Address: %X \n", tmp, _addr); }
@@ -117,61 +117,74 @@ void getMemDisplay(multiboot_info_t* mbt)
     else { bprintwarn(); kprintf("OS might run out of RAM! Recommended 128 MB of RAM!\n"); }
 }
 
-#if VESA
 void initVbe()
 {
     uint16_t* s;
     enablevesa(); // Call our assembly function
-    asm volatile("mov %%eax, %0" : "=r" (s)); //We know the return code info pointer is in the EAX register
+    //for(;;);
+    asm volatile("mov %%eax, %0" : "=r" (s)); //We know the return code info pointer is in the EAX register]
     if(*s == 1) //If the return code status is 1
     {
-        //Initialize our kernel heap if it succeeds
-        k_heapBMInit(kheap);
-        k_heapBMAddBlock(kheap, (uintptr_t)startheap, 0x800000, 16);
         setVScreen(*(s + 1), *(s + 2), *(s + 3), *(s + 5), *(s + 4), *(uint32_t *)(s + 6));
         _iinitVesaConsole();
+        vhscreen.enabled = true;
     }
-    
+
     else
     {
-        //Initialize our kernel heap if it fails, so we aren't heapless
-        k_heapBMInit(kheap);
-        k_heapBMAddBlock(kheap, (uintptr_t)startheap, 0x800000, 16);
+        return;
     }
 }
-#endif
 
 void kernel_main(multiboot_info_t* multi)
 {
+    vhscreen.enabled = false;
     mbt = multi; //Store the multiboot header in case we accidently corrupt it
-    //Check if initial ramdisk exists or not
-    if(mbt -> mods_addr != 0 && mbt -> mods_count > 0)
-    {
-        //Initrd stuff
-        initrd_location = *((uint32_t*)mbt->mods_addr);
-        initrd_end = *(uint32_t*)(mbt->mods_addr+4);
-    }
-    startheap = &end + initrd_end + 0x100; //0x100 as buffer
-    
+    //mbt = 0xC0010000;
+    startheap = (uint32_t*) 0x400000; //0x100 as buffer
     _iinitNormalConsole(); //Install regular VGA-text hooks
-    
+    doBootLog = true; //Begin boot sequence
+
+    // Clear out an area for memory stuff
+    memset((uint32_t*)FRAMEBSE, 0, 0x800000);
+    kheap = &tkh;
+    //Initialize our kernel heap
+    k_heapBMInit(kheap);
+    k_heapBMAddBlock(kheap, (uintptr_t)0xFFC00000, 0x400000, 16); //3 MiB not 4 for a good reason
+
     #if VESA
         // We need to clear off an area for the VESA tables to sit in
-        memset((void *) 0x7C00, 0, 0x100);
+        memset((void *)(0x7C00 + KRNLBASE), 0, 0x100);
         initVbe();
+
+        //Enable our physical memory managers
+        pmm_init();
+        pmm_addBlock((uintptr_t)FRAMEBSE, 0x400, 1);
+        paging_init();
+        console_init();
         //asm volatile("cli"); We know that enablevesa() does that for us
     #endif
 
     #if !VESA
+        console_init();
 
-    //Initialize our kernel heap
-    k_heapBMInit(kheap);
-    k_heapBMAddBlock(kheap, (uintptr_t)startheap, 0x800000, 16);
-    
+        //Enable our physical memory managers
+        pmm_init();
+        pmm_addBlock((uintptr_t)FRAMEBSE, 0x400, 1);
+        paging_init();
     #endif
-    
-    doBootLog = true; //Begin boot sequence
-    console_init();
+
+    //Check if initial ramdisk exists or not
+    if(mbt -> mods_addr != 0 && mbt -> mods_count > 0)
+    {
+        // Get initrd addresses
+        initrd_location = *((uint32_t*)(mbt->mods_addr + KRNLBASE));
+        initrd_end = *((uint32_t*)(mbt->mods_addr + 4 + KRNLBASE));
+        // Convert the addresses into linear
+        initrd_location = (initrd_location - pageAlign((uint32_t)&_kernel_end - KRNLBASE) - 0x1000) + INRDBASE;
+        initrd_end = (initrd_end - pageAlign((uint32_t)&_kernel_end - KRNLBASE) - 0x1000) + INRDBASE;
+    }
+
     cpu_detect();
     // First, we install our GDT and IDT, then we fill the IDT with CPU exceptions
     // We then prepare the PIC for usage, and register our 15 PIC interrupts
@@ -182,62 +195,74 @@ void kernel_main(multiboot_info_t* multi)
     register_irq();
     // Register and start our built-in keyboard driver
     register_keyboard();
+
     //Initialize ACPI and enable it
     initAcpi();
     acpiEnable();
+    //Unmap all the ACPI stuff :)
+    //for(uint32_t i = 0; i <= KRNLBASE; i += 0x1000)
+    //    paging_unalloc(i);
+
     //Get memory information
     getMemDisplay(mbt);
-    bprintinfo(); kprintf("Kernel heap starts: %X Kernel size: %X\n", &end, kheap -> fblock -> size);
-    //Enable out physical and virtual memory managers
-    initPmm();
-    paging_init();
-    
+    bprintinfo(); kprintf("Kernel heap starts: %X Kernel size: %X\n", &_kernel_end, kheap -> fblock -> size);
+
     vfs_init();
     //Enable our initrd
     if(mbt -> mods_count > 0)
         initInitrd(initrd_location, initrd_end);
     else
         PANIC("Initial ramdisk not properly loaded!");
-    
+
     //Print OS OK text
     bprintok(); console_write("OS ready!\n");
     doBootLog = false; //End of boot sequence
     // Enable interrupts
     asm volatile("sti");
-    
-    //Enable our terminal
-    init_terminal(mbt);
-    
+
+    //Enable our terminal if real terminal doesn't exist
+    //if(!vfs_exists("/initrd/terminal.elf"))
+        init_terminal(mbt);
+    //else
+    //{
+        //asm volatile("cli"); // Disable interrupts
+        //kprintf("Real terminal not implemented yet!");
+    //}
+
+    halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
+    kprintf("\n Uh, oh, kernel has reached the end... halting!");
+    print_dalek(); //When we screwed over all the things, just call the lord of destruction
+}
+
+void testInt()
+{
+
     #if TEST_NOPAGE
     // Test page fault :)
     uint32_t* _ptr = (uint32_t*) (0xFFF); //Should cause a nonexistant fault
     #endif
-    
+
     #if TEST_NOPAGE2
     uint32_t* _ptr = (uint32_t*) 0xA0000000; //Should cause a protection fault
     #endif
-    
+
     #if TEST_NOPAGE || TEST_NOPAGE2
     uint32_t foo = *_ptr;
     console_write_dec(foo);
     #endif
-    
+
     #if CPU_EXCEP
     console_write_dec(3/0); //Test if interrupts work
     #endif
-    
+
     #if TEST_HEAP
     char* ptr;
     ptr = (char*)kmalloc(kheap, 4);
     *ptr = 4;
     //kprintf("%X\n%X", ptr, *ptr); //Should display 0x4 on the second line
     k_heapBMFree(kheap, ptr);
-    
+
     //If there's a nonexistent pointer
     char* _ppap = 0; kfree(kheap, _ppap);
     #endif
-    
-    halt(); // Needed for interrupts to work properly - Prevents the kernel from exiting early
-    kprintf("\n Uh, oh, kernel has reached the end... halting!");
-    print_dalek();
 }

@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   vesa.h
  * Author: Kevin
- * 
+ *
  * Created on October 2, 2016, 6:45 PM
  */
 
@@ -82,6 +82,7 @@ struct VesaScreen
     uint16_t pitch;
     uint16_t bpp;
     uint32_t framebuffer;
+    bool enabled;
 };
 typedef struct VesaScreen vscreen_t;
 
@@ -98,4 +99,3 @@ extern uint32_t* vcache;
 #endif
 
 #endif /* VESA_H */
-

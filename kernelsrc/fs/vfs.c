@@ -13,7 +13,8 @@ uint8_t _vfs_findmount(char* file)
 {
     for(int i = 0; i < MAX_MOUNTS; i++)
     {
-        char* f = (char*)kmalloc(kheap, sizeof(char));
+        if(mounts[i] == 0) break; //Addded check
+        char* f = (char*)kmalloc(kheap, sizeof(char) * (strlen(file) + 1));
         strcpy(f, file);
         char* s = mounts[i] -> mount;
         f[strlen(s)] = 0;
@@ -22,10 +23,8 @@ uint8_t _vfs_findmount(char* file)
             kfree(kheap, f);
             return i;
         }
-        
         kfree(kheap, f);
     }
-    
     return 0;
 }
 
@@ -46,7 +45,7 @@ bool vfs_isdir(char* file)
 {
     if(!file) return -EINVAL;
     if(!vfs_exists(file)) return -ENOENT;
-    
+
     return vfs_openfile(file) -> isDir;
 }
 
@@ -83,7 +82,7 @@ status_t vfs_write(char* file, uint32_t* buffer, uint32_t length, enum FileMode 
             return mounts[f -> mountID] -> dev -> fs ->
                     write(f, buffer, length, mounts[f -> mountID] -> dev);
     }
-    
+
     return -EINVAL;
 }
 
@@ -100,7 +99,7 @@ status_t vfs_read(char* file, uint32_t* buffer, enum FileMode mode)
             return mounts[f -> mountID] -> dev -> fs ->
                     readall(f, buffer, mounts[f -> mountID] -> dev);
     }
-    
+
     return -EINVAL;
 }
 
@@ -133,7 +132,7 @@ status_t vfs_ls(char* path)
                     break;
                 }
             }
-            
+
             else
             {
                 if(strcmp(m, path) == 0)
@@ -142,18 +141,18 @@ status_t vfs_ls(char* path)
                     j++;
                     break;
                 }
-                
+
                 break;
             }
         }
         kfree(kheap, m);
     }
-    
+
     for(int i = 0; i < j; i++)
     {
         uint32_t o = 0;
         uint32_t* s = mts[i] -> dev -> fs -> ls(path, &o, mts[i] -> dev);
-        
+
         while(o > 0)
         {
             fsnode_t* fs = (fsnode_t*)s[o - 1];
@@ -162,10 +161,10 @@ status_t vfs_ls(char* path)
             kfree(kheap, tmp); kfree(kheap, fs);
             o--;
         }
-        
+
         kfree(kheap, s);
     }
-    
+
     kfree(kheap, mts);
     j = 0;
     return 0;
@@ -191,7 +190,7 @@ struct device* vfs_list_mount()
     {
         kprintf(" - Device: %s | Path: %s\n", mounts[i] -> dev -> name, mounts[i] -> mount);
     }
-    
+
     return 0;
 }
 
@@ -200,9 +199,7 @@ status_t vfs_try_mount(struct device* dev, char* path)
     if(path[0] != '/') return -EINVAL; //ALL PATHS MUST START WITH the '/' character
     for(uint32_t i = 0; i < MAX_MOUNTS; i++)
     {
-        if(strcmp(mounts[i] -> mount, path) == 0)
-            return -EINVAL;
-        if(mounts[i] == 0)
+        if(mounts[i] == 0) //Mount doesn't exist? Create one.
         {
             mountpoint_t* m = (mountpoint_t *)kmalloc(kheap, sizeof(mountpoint_t));
             m -> dev = dev;
@@ -212,9 +209,13 @@ status_t vfs_try_mount(struct device* dev, char* path)
             mount_count++;
             return 0;
         }
+
+        // If the mount exists, and the path has been mounted, break from loop
+        if(strcmp(mounts[i] -> mount, path) == 0)
+            break; //Already mounted? What the hell. TODO: Return existing mount error
     }
-    
-    return -EINVAL;
+
+    return -EINVAL; //No more mounts can be made
 }
 
 status_t vfs_remove_mount(uint32_t id)
@@ -223,5 +224,10 @@ status_t vfs_remove_mount(uint32_t id)
     if(mounts[id] == 0) return 0; //Prevent freeing non-existent ptr
     kfree(kheap, mounts[id]);
     mounts[id] = 0;
+    return 0;
+}
+
+status_t vfs_gc_init(uint32_t* meta)
+{
     return 0;
 }

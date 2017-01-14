@@ -65,6 +65,9 @@ all:
 	mv *.o $(ODIR)
 	# Execute make in the object folder (see other Makefile)
 	cd obj && make
+	# Make the initial ramdisk
+	echo Making ram disk...
+	cd grub && sh create.sh
 	# Make the GRUB iso
 	echo Setting up GRUB...
 	mkdir -p isodir/boot/grub

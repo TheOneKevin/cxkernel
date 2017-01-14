@@ -11,15 +11,28 @@
 #include "system/PANIC.h"
 #include "system/kprintf.h"
 
-uint64_t _length;
-uint64_t _addr;
-uint32_t* startheap;
-extern uint32_t end;
-KHEAPBM *kheap;
+struct _BITMAPLLIST
+{
+    struct _BITMAPLLIST* prev;
+    uint32_t* bitmap_paging;
+    struct _BITMAPLLIST* next;
+}; typedef struct _BITMAPLLIST BITMAPLLIST_t;
 
-static uint32_t* framemap  = 0;
-static uint32_t nframes    = 0;
-uint32_t framestart = 0;
+struct _PMMBLOCKM
+{
+    PMMBLOCK_t* paging;
+    PMMBLOCK_t* general;
+    PMMBLOCK_t* isadma;
+
+    BITMAPLLIST_t* pagingList;
+    BITMAPLLIST_t* generaList;
+    BITMAPLLIST_t* isadmaList;
+}; typedef struct _PMMBLOCKM PMMBLOCKM_t;
+
+PMMBLOCKM_t* pmm;
+KHEAPBM* kheap;
+
+//General purpose code below ----------------------------
 
 uint32_t pageAlign(const uint32_t addr)
 {
@@ -31,58 +44,210 @@ uint32_t pageAlign(const uint32_t addr)
     return a;
 }
 
-void initPmm()
+PMMBLOCK_t* descendList(PMMBLOCK_t* node)
 {
-    framestart = pageAlign((uint32_t)startheap + (uint32_t)kheap -> fblock -> size + 0x2000);
-    
-    nframes = (uint32_t) (_addr + _length - framestart) / 0x1000;
-    framemap = (uint32_t *) kmalloc(kheap, nframes / 8); //Every 8 bytes (32 bits) we have one entry
-    memset(framemap, 0, sizeof(framemap));
-    bprintinfo();
-    kprintf("Loc: %X ", framemap);
-    kprintf("Frame start: %X NFrames: %u\n", framestart, nframes);
+    PMMBLOCK_t* ptr = node;
+    while(ptr -> next != 0)
+        ptr = ptr -> next;
+    return ptr;
 }
 
-uint32_t allocFrame()
+BITMAPLLIST_t* descendLlist(BITMAPLLIST_t* node)
 {
-    uint32_t i = 0;
-    //First, we check which entry is free. We check this 32 bits at a time
-    while(framemap[i] == 0xFFFFFFFF)
-    {
-        i++;
-        if(i == nframes)
-        {
-            PANIC("No free frames available");
-            return -1;
-        }
-    }
-    //Then, we loop through each bit in the entry until we find one free
-    for(int n = 0; n < 32;)
-    {
-        if(((framemap[i] >> n) & 1) == 0)
-        {
-            framemap[i] |= 1 << n; //Then set it to 1
-            return (i * 8 + n) * 0x1000 + framestart; //This will return a PAGE ALIGNED address!
-        }
-        n++;
-    }
-    
-    PANIC("Something happened");
-    return -1; //If nothing works, return error
+    BITMAPLLIST_t* ptr = node;
+    while(ptr -> next != 0)
+        ptr = ptr -> next;
+    return ptr;
 }
 
-void freeFrame(uint32_t a)
+// ===================================================================================== //
+//                                    PAGING                                             //
+// ===================================================================================== //
+
+int _pmm_allocPaging()
 {
-    a -= framestart; //Get the offset from the first frame
-    if(a == 0) //In case it is the first frame we are freeing
+    PMMBLOCK_t* ptr = pmm -> paging;
+    BITMAPLLIST_t* map = pmm -> pagingList;
+    uint32_t i = 0; bool flag = false;
+    while(true) //Assume number of bitmaps must equal number of paging blocks!
     {
-        uint32_t index = (uint32_t)a;
-        framemap[index] = 0x0;
+        //Round frames upwards to nearest 32, then divide by 32 to get number of 32-bit bitmap entries
+        for(i = 0; i < (ptr -> frames & 0xFFFFFFE0) / 32 + 1; i++)
+        {
+            if(map -> bitmap_paging[i] != 0xFFFFFFFF)
+            {
+                flag = true;
+                break;
+            }
+        }
+
+        if(flag || ptr -> next == 0 || map -> next == 0) break;
+        ptr = ptr -> next;
+        map = map -> next;
     }
+
+    if(i * 32 + 32 <= ptr -> frames) //If the number of frames (bits in the bitmap) matches the number of 32-bits exactly
+    {
+        for(int j = 0; j < 32; j++)
+        {
+            bool bit = (map -> bitmap_paging[i] & (1 << (j))) != 0;
+            if(!bit) { map -> bitmap_paging[i] |= 1 << j; return (i * 32 + j) * 0x1000 + ptr -> address; } //32 is size of integer
+        }
+    }
+
+    else //If the frames end before 1 entry of 32-bits
+    {
+        for(uint32_t j = 0; j < ptr -> frames - i * 32; j++)
+        {
+            bool bit = (map -> bitmap_paging[i] & (1 << (j))) != 0;
+            if(!bit) { map -> bitmap_paging[i] |= 1 << j; return (i * 32 + j) * 0x1000 + ptr -> address; } //Get the number of frames from i and j
+        }
+    }
+
+    return -ENOMEM;
+}
+
+int _pmm_paging_unalloc(uint32_t addr)
+{
+    PMMBLOCK_t* ptr = pmm -> paging;
+    BITMAPLLIST_t* map = pmm -> pagingList;
+
+    while(ptr -> next != 0 && map -> next != 0)
+    {
+        if(addr >= ptr -> address && addr <= ptr -> address + 0x1000 * ptr -> frames)
+        {
+            uint32_t id = ((addr - ptr -> address) / 0x1000 - 1) & 0xFFFFFFE0;
+            map -> bitmap_paging[id] |= 1 << ((addr - ptr -> address) / 0x1000 - 1);
+            return 0;
+        }
+
+        ptr = ptr -> next;
+        map = map -> next;
+    }
+
+    return -EINVAL;
+}
+
+// ===================================================================================== //
+
+
+
+//Physical allocations code below ----------------------
+
+void pmm_init()
+{
+    pmm = (PMMBLOCKM_t*)kmalloc(kheap, sizeof(PMMBLOCKM_t));
+    pmm -> paging  = 0;
+    pmm -> general = 0;
+    pmm -> isadma  = 0;
+
+    pmm -> pagingList = 0;
+    pmm -> isadmaList = 0;
+    pmm -> generaList = 0;
+}
+
+void pmm_addBlock(uintptr_t address, size_t nframes, uint8_t type)
+{
+    PMMBLOCK_t* ptr = (PMMBLOCK_t*)kmalloc(kheap, sizeof(PMMBLOCK_t));
+    ptr -> prev = 0;
+    ptr -> next = 0;
+    ptr -> address = address;
+    ptr -> frames  = nframes;
+
+    if(type == 1)
+    {
+        if(pmm -> paging == 0)
+        {
+            pmm -> paging = ptr;
+            pmm -> pagingList = (BITMAPLLIST_t*)kmalloc(kheap, sizeof(BITMAPLLIST_t));
+            pmm -> pagingList -> bitmap_paging = (uint32_t*)kmalloc(kheap, ptr -> frames);
+        }
+
+        else
+        {
+            descendList(pmm -> paging) -> next = ptr;
+            ptr -> prev = descendList(pmm -> paging);
+
+            BITMAPLLIST_t* tmp = descendLlist(pmm -> pagingList);
+            tmp -> next = (BITMAPLLIST_t*)kmalloc(kheap, sizeof(BITMAPLLIST_t));
+            tmp -> next -> prev = tmp;
+            tmp -> next -> bitmap_paging = (uint32_t*)kmalloc(kheap, ptr -> frames);
+        }
+    }
+
+    else if(type == 2)
+    {
+        if(pmm -> isadma == 0)
+            pmm -> isadma = ptr;
+
+        else
+        {
+            descendList(pmm -> isadma) -> next = ptr;
+            ptr -> prev = descendList(pmm -> isadma);
+        }
+    }
+
     else
     {
-        a = a; //Divide by 4KB to get the index to declare free
-        uint32_t index = ((uint32_t)a)/0x1000;
-        framemap[index] = 0x0;
+        if(pmm -> general == 0)
+            pmm -> general = ptr;
+
+        else
+        {
+            descendList(pmm -> general) -> next = ptr;
+            ptr -> prev = descendList(pmm -> general);
+        }
     }
+}
+
+int pmm_allocFrame(uint8_t type)
+{
+    if(type == 1)
+        return _pmm_allocPaging();
+    else
+        return -EINVAL;
+}
+
+int pmm_freeFrame(uint32_t addr)
+{
+    uint8_t type = 0;
+    //Get block type
+    PMMBLOCK_t * ptr = pmm -> paging;
+    while(ptr -> next != 0)
+    {
+        if(addr >= ptr -> frames * 0x1000 && addr < (ptr -> frames + ptr -> frames) * 0x1000)
+        {
+            type = 1;
+            break;
+        }
+        ptr = ptr -> next;
+    }
+
+    ptr = pmm -> isadma;
+    while(ptr -> next != 0)
+    {
+        if(addr >= ptr -> frames * 0x1000 && addr < (ptr -> frames + ptr -> frames) * 0x1000)
+        {
+            type = 2;
+            break;
+        }
+        ptr = ptr -> next;
+    }
+
+    ptr = pmm -> general;
+    while(ptr -> next != 0)
+    {
+        if(addr >= ptr -> frames * 0x1000 && addr < (ptr -> frames + ptr -> frames) * 0x1000)
+        {
+            type = 3;
+            break;
+        }
+        ptr = ptr -> next;
+    }
+
+    if(type == 0) return -EINVAL;
+    else if(type == 1) return _pmm_paging_unalloc(pageAlign(addr));
+    else if(type == 2) return -ENIMPL;
+    else if(type == 3) return -ENIMPL;
+    else return -EINVAL;
 }

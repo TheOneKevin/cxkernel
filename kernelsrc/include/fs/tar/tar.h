@@ -26,6 +26,8 @@ struct tar_header
     char typeflag[1];
 }; typedef struct tar_header tar_header_t;
 
+
+
 struct tarPrivate
 {
     uint32_t fileCount;

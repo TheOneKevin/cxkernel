@@ -7,7 +7,7 @@
 #include "display/tdisplay.h"
 #include "display/textModeHooks.h"
 
-uint16_t *vram = (uint16_t *)0xB8000; //Pointer to the VGA frame buffer
+uint16_t *vram = (uint16_t *)0xC03FF000; //Pointer to the VGA frame buffer
 screeninfo_t screen;
 
 vHookA _scroll;

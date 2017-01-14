@@ -5,6 +5,7 @@
 #include "drivers/device.h"
 #include "fs/initrd.h"
 #include "exp_common.h"
+#include "system/time.h"
 
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -17,10 +18,18 @@ uint32_t _translateSize(const char* in)
     uint32_t size = 0;
     uint32_t j;
     uint32_t count = 1;
-    
+
     for(j = 11; j > 0; j--, count *= 8)
         size += ((in[j-1] - '0') * count);
-    
+
+    return size;
+}
+
+uint64_t _LtranslateSize(const char* in)
+{
+    uint64_t size = 0, j, count = 1;
+    for(j = 11; j > 0; j--, count *= 8)
+        size += ((in[j-1] - '0') * count);
     return size;
 }
 
@@ -32,14 +41,14 @@ uint32_t _tar_getfilecount(uint32_t address)
         tar_header_t* header = (tar_header_t*)address;
         if(header -> filename[0] == '\0')
             break;
-        
+
         uint32_t size = _translateSize(header -> size);
         address += ((size / 512) + 1) * 512;
-        
+
         if (size % 512)
             address += 512;
     }
-    
+
     return i;
 }
 
@@ -51,11 +60,11 @@ void _tar_parse(uint32_t address, tar_header_t* nodes)
         tar_header_t *header = (tar_header_t *)address;
         if (header -> filename[0] == '\0') //until we hit 0
             break;
- 
+
         uint32_t size = _translateSize(header -> size);
         nodes[i] = *header;
         address += ((size / 512) + 1) * 512;
-        
+
         if (size % 512)
             address += 512;
     }
@@ -69,7 +78,7 @@ uint32_t _tar_get_inode(tar_header_t* file, device_t* dev)
         if(strcmp(p -> nodes[i].filename, file -> filename) == 0)
             return i;
     }
-    
+
     return -ENOENT;
 }
 
@@ -77,7 +86,7 @@ tar_header_t* _tar_get_header(char* fileName, device_t* dev)
 {
     initrdpriv_t* p = dev -> private_data;
     tarpriv_t* pp = dev -> fs -> private_data;
-    
+
     uint32_t ret = p -> initrd_loc;
     for(uint32_t i = 0; i < pp -> fileCount; i++)
     {
@@ -85,13 +94,13 @@ tar_header_t* _tar_get_header(char* fileName, device_t* dev)
         {
             return &pp -> nodes[i];
         }
-        
+
         uint32_t size = _translateSize(pp -> nodes[i].size);
         ret += ((size / 512) + 1) * 512;
         if (size % 512)
             ret += 512;
     }
-    
+
     return (tar_header_t*)-1;
 }
 
@@ -99,7 +108,7 @@ status_t tar_readall(fsnode_t* file, uint32_t* buf, device_t* dev)
 {
     initrdpriv_t* ipriv = dev -> private_data;
     tarpriv_t* tpriv = dev -> fs -> private_data;
-    
+
     uint32_t ret = ipriv -> initrd_loc;
     for(uint32_t i = 0; i < tpriv -> fileCount; i++)
     {
@@ -109,13 +118,13 @@ status_t tar_readall(fsnode_t* file, uint32_t* buf, device_t* dev)
             memcpy(buf, ptr, atoio(tpriv -> nodes[i].size) * sizeof(char));
             return 0;
         }
-        
+
         uint32_t size = _translateSize(tpriv -> nodes[i].size);
         ret += ((size / 512) + 1) * 512;
         if (size % 512)
             ret += 512;
     }
-    
+
     return -1;
 }
 
@@ -156,7 +165,7 @@ fsnode_t* tar_findnode(char* name, device_t* dev)
             return rett;
         }
     }
-    
+
     return 0;
 }
 
@@ -173,15 +182,18 @@ status_t tar_stat(char* name, fstat_t* out, device_t* dev)
     out -> st_uid   = atoio(head -> uid);
     out -> st_gid   = atoio(head -> gid);
     out -> st_rdev  = 0;
-    out -> st_size  = atoio(head -> size);
-    out -> st_ctime = head -> mtime; //Both creation and modification are equal since
-    out -> st_mtime = head -> mtime; //we cannot write to the init ram fs
+    out -> st_size  = _LtranslateSize(head -> size); //Octal to decimal
+    out -> st_ctime = _LtranslateSize(head -> mtime); //Both creation and modification are equal since
+    out -> st_mtime = _LtranslateSize(head -> mtime); //we cannot write to the init ram fs
+    kfree(kheap, file);
     return 0;
 }
 
 bool tar_exists(char* name, device_t* dev)
 {
-    if(tar_findnode(name, dev) != 0) return true;
+    fsnode_t* f = tar_findnode(name, dev);
+    if(f != 0) { kfree(kheap, f); return true; }
+    kfree(kheap, f);
     return false;
 }
 
@@ -215,8 +227,9 @@ status_t tar_probe(device_t* dev)
 {
     //Initialize the tar file system
     dev -> fs = (filesystem_t*)kmalloc(kheap, sizeof(filesystem_t));
+
     dev -> fs -> name = "tar";
-    
+
     dev -> fs -> probe     = tar_probe;
     dev -> fs -> readall   = tar_readall;
     dev -> fs -> read      = tar_read;
@@ -228,8 +241,8 @@ status_t tar_probe(device_t* dev)
     dev -> fs -> findnode  = tar_findnode;
     dev -> fs -> mount     = tar_mount;
     dev -> fs -> ls        = tar_ls;
-    
+
     dev -> fs -> private_data = (tarpriv_t*)kmalloc(kheap, sizeof(tarpriv_t));
-    
+
     return 0;
 }

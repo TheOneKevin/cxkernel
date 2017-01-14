@@ -27,7 +27,7 @@ void initInitrd(uint32_t initrd_start, uint32_t initrd_end)
         initrdpriv_t* initrd_priv = (initrdpriv_t*)kmalloc(kheap, sizeof(initrdpriv_t));
         initrd_priv -> initrd_loc = initrd_start;
         initrd_priv -> initrd_end = initrd_end;
-        
+
         initrd_device -> id           = 42;
         initrd_device -> flags        = DEVICE_FLAG_NOWRITE | DEVICE_FLAG_BLOCK;
         initrd_device -> isValid      = true;
@@ -36,10 +36,9 @@ void initInitrd(uint32_t initrd_start, uint32_t initrd_end)
         initrd_device -> read         = 0;
         initrd_device -> write        = 0;
         initrd_device -> private_data = initrd_priv;
-        
+
         tar_probe(initrd_device);
         initrd_device -> fs -> mount(initrd_device);
-        
         uint32_t out = vfs_try_mount(initrd_device, "/initrd/");
         if(out == 0) { bprintok(); kprintf("Initrd successfully initialized and loaded\n"); }
         else    { bprinterr();  kprintf("Uh, oh! Something happened to the initrd\n"); }

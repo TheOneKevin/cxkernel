@@ -22,7 +22,7 @@ typedef uint32_t uid_t;
 typedef uint32_t gid_t;
 typedef uint64_t nlink_t;
 typedef uint64_t ino_t;
-typedef uint64_t time_t;
+//typedef uint64_t time_t;
 typedef size_t off_t;
 
 //Based on Linux's <sys/stat.h>
@@ -38,8 +38,8 @@ struct fsStat
     
     off_t st_size; // File size in bytes
     
-    time_t st_ctime; //Created time
-    time_t st_mtime; //Modified time
+    uint64_t st_ctime; //Created time.
+    uint64_t st_mtime; //Modified time.
     
     /*blksize_t st_blksize a filesystem-specific preferred I/O block size for
                      this object.  In some filesystem types, this may
@@ -97,6 +97,11 @@ struct fileSystem
     void *private_data; //Some filesystem specific data
     
 }; typedef struct fileSystem filesystem_t;
+
+struct fileStream
+{
+    
+}; typedef struct fileStream fstr_t;
 
 //Opens file. Returns file structure.
 fsnode_t* vfs_openfile(char* file);

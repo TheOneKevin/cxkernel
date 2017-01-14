@@ -5,27 +5,6 @@
 #include "common.h"
 #include "cpufeatset.h"
 
-void outb(uint16_t port, uint8_t value)
-{
-    asm volatile("outb %1, %0" : : "dN" (port), "a" (value));
-}
-void outw(uint16_t port, uint16_t value)
-{
-    asm volatile("outw %1, %0" : : "dN" (port), "a" (value));
-}
-uint8_t inb(uint16_t port)
-{
-    uint8_t ret;
-    asm volatile("inb %1, %0" : "=a" (ret) : "dN" (port));
-    return ret;
-}
-uint16_t inw(uint16_t port)
-{
-    uint16_t ret;
-    asm volatile("inw %1, %0" : "=a" (ret) : "dN" (port));
-    return ret;
-}
-
 //Copy n = size amount of src into dst
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size)
 {
@@ -103,25 +82,84 @@ size_t strlen(const char* str)
     return len;
 }
 
-void io_wait()
-{
-    /* Port 0x80 is used for 'checkpoints' during POST. */
-    /* The Linux kernel seems to think it is free for use :-/ */
-    asm volatile ( "outb %%al, $0x80" : : "a"(0) );
-    /* %%al instead of %0 makes no difference. Does the register need to be zeroed? */
-}
-
 void halt()
 {
     for(;;);
 }
 
-void cli()
+inline void io_wait()
+{
+    /* Port 0x80 is used for 'checkpoints' during POST. */
+    /* The Linux kernel seems to think it is free for use :-/ */
+    asm volatile ("outb %%al, $0x80" : : "a"(0));
+    /* %%al instead of %0 makes no difference. Does the register need to be zeroed? */
+}
+
+inline void cli()
 {
     asm volatile("cli");
 }
 
-void sti()
+inline void sti()
 {
     asm volatile("sti");
+}
+
+inline void outb(uint16_t port, uint8_t value)
+{
+    asm volatile("outb %1, %0" : : "dN" (port), "a" (value));
+}
+
+inline void outw(uint16_t port, uint16_t value)
+{
+    asm volatile("outw %1, %0" : : "dN" (port), "a" (value));
+}
+
+inline uint8_t inb(uint16_t port)
+{
+    uint8_t ret;
+    asm volatile("inb %1, %0" : "=a" (ret) : "dN" (port));
+    return ret;
+}
+
+inline uint16_t inw(uint16_t port)
+{
+    uint16_t ret;
+    asm volatile("inw %1, %0" : "=a" (ret) : "dN" (port));
+    return ret;
+}
+
+inline unsigned long read_cr0()
+{
+    unsigned long val;
+    asm volatile ("mov %%cr0, %0" : "=r"(val));
+    return val;
+}
+
+inline unsigned long read_cr1()
+{
+    unsigned long val;
+    asm volatile ("mov %%cr1, %0" : "=r"(val));
+    return val;
+}
+
+inline unsigned long read_cr2()
+{
+    unsigned long val;
+    asm volatile ("mov %%cr2, %0" : "=r"(val));
+    return val;
+}
+
+inline unsigned long read_cr3()
+{
+    unsigned long val;
+    asm volatile ("mov %%cr3, %0" : "=r"(val));
+    return val;
+}
+
+inline unsigned long read_cr4()
+{
+    unsigned long val;
+    asm volatile ("mov %%cr4, %0" : "=r"(val));
+    return val;
 }
