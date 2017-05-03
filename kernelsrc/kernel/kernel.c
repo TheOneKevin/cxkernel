@@ -37,7 +37,6 @@
 
 #include "system/pic.h"
 #include "system/irq.h"
-#include "system/pit.h"
 #include "system/kprintf.h"
 #include "system/terminal.h"
 #include "system/PANIC.h"
@@ -54,6 +53,8 @@
 #include "drivers/acpi.h"
 #include "drivers/cpuid.h"
 #include "drivers/vesa.h"
+#include "drivers/pit.h"
+
 #include "fs/initrd.h"
 #include "fs/vfs.h"
 
