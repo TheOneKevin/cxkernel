@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   exp_common.h
  * Author: kevin
@@ -31,4 +25,3 @@ char* convertToUnit(uint32_t);
 #endif
 
 #endif /* EXP_COMMON_H */
-

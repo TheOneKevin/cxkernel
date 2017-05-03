@@ -1,4 +1,3 @@
-
 /* 
  * File:   tar.h
  * Author: kevin
@@ -44,4 +43,3 @@ tar_header_t* _tar_get_header(char* fileName, struct device* dev);
 #endif
 
 #endif /* TAR_H */
-

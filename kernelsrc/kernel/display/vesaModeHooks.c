@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 #include "display/tdisplay.h"
 #include "display/vesaModeHooks.h"
 
@@ -48,7 +42,7 @@ uint32_t getAddrOffset(uint32_t x, uint32_t y)
     return vhscreen.width * y + x;
 }
 
-static void iscroll()    
+static void iscroll()
 {
     if(screen._y > currentfont.charY)
     {
@@ -58,13 +52,13 @@ static void iscroll()
             for(uint32_t x = 0; x <= vhscreen.width; x++)
                 setPixel(x, y, *(getAddrOffset(x, y + currentfont.characterHeight) + vcache));
         }
-        
+
         for(uint32_t y = vhscreen.height; y >= vhscreen.height - currentfont.characterHeight; y--)
         {
             for(uint32_t x = 0; x <= vhscreen.width; x++)
                 setPixel(x, y, colours[screen.background]);
         }
-        
+
         // The cursor should now be on the last line.
         screen._y = currentfont.charY;
     }
@@ -82,7 +76,7 @@ void iputcraw2(const char c, bool isKey)
             screen._y --;
             screen._x = currentfont.charX - 1;
         }
-        
+
     }
     else if(c == '\t')
     {
@@ -101,17 +95,17 @@ void iputcraw2(const char c, bool isKey)
         printChar(screen._x, screen._y, colours[screen.foreground], colours[screen.background], false, c);
         screen._x ++;
     }
-    
+
     if(screen._x > currentfont.charX - 1)
     {
         screen._x = 0; screen._y ++;
     }
-    
+
     if(!isKey)
     {
         screen._lx = screen._x; screen._ly = screen._y;
     }
-    
+
     iscroll(); //Scroll if needed
     iupdatecur();
 }

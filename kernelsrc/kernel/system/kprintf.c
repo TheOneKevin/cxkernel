@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The built-in kernel print format procedure
  */
 
 #include "system/kprintf.h"
@@ -39,7 +37,7 @@ int vprintf(const char* restrict format, va_list parameters)
             if (format[0] == '%')
 		format++;
             size_t amount = 1;
-            while (format[amount] && format[amount] != '%')   
+            while (format[amount] && format[amount] != '%')
                 amount++;
             if (maxrem < amount)
                 return -1;  // TODO: Set errno to EOVERFLOW.
@@ -51,7 +49,7 @@ int vprintf(const char* restrict format, va_list parameters)
         }
 
 	const char* format_begun_at = format++;
- 
+
 	if (*format == 'c')
         {
             format++;
@@ -106,7 +104,7 @@ int vprintf(const char* restrict format, va_list parameters)
             format += len;
 	}
     }
-    
+
     va_end(parameters);
     return written;
 }

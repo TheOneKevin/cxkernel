@@ -1,4 +1,3 @@
-
 /* 
  * File:   time.h
  * Author: kevin
@@ -20,7 +19,7 @@ struct date_time
     uint8_t  day;
     uint8_t  month;
     uint32_t year;
-    
+
     uint8_t  hour;
     uint16_t minutes;
     uint16_t seconds;
@@ -33,4 +32,3 @@ status_t __secs_to_tm(long long t, datetime_t *tm);
 #endif
 
 #endif /* TIME_H */
-

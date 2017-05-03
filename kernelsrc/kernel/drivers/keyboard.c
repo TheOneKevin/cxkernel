@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Keyboard driver handles key presses
  */
 
 #include "drivers/keyboard.h"
@@ -93,7 +91,7 @@ uint8_t scan_to_ascii(uint8_t key)
         else if(key >= FIRST_KEY_MIDDLE_ROW && key <= LAST_KEY_MIDDLE_ROW) return _middle_row[key - FIRST_KEY_MIDDLE_ROW];
         else if(key >= FIRST_KEY_BOTTOM_ROW && key <= LAST_KEY_BOTTOM_ROW) return _bottom_row[key - FIRST_KEY_BOTTOM_ROW];
     }
-    
+
     return 0;
 }
 
@@ -113,10 +111,10 @@ void keyboard_handler(regs_t *r)
         {
             if(!(screen._x <= screen._lx && screen._y == screen._ly)) { console_putck('\b'); console_putck(' '); console_putck('\b'); }
         }
-        
+
         else if(display)
             console_putck(scan_to_ascii(scancode));
-        
+
         keyH handler = keyboard_handlers[handlerInt];
         handler(scancode);
     }

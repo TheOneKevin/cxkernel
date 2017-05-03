@@ -1,6 +1,7 @@
 /*
  * Our highly experimental header with experimental stuff
  */
+ 
 #include "exp_common.h" //Experimental
 #include "memory/kheap.h"
 
@@ -53,7 +54,7 @@ uint32_t atoio(char* input)
             case '7': ret += i * 7; break;
             case '8': ret += i * 8; break;
             case '9': ret += i * 9; break;
-            
+
             default: break;
         }
     }
@@ -69,7 +70,7 @@ char* convertToUnit(uint32_t input)
         kfree(kheap, tmp); //Gettin' down and dirty with memory management
         return res;
     }
-    
+
     else if(input  >= 1048576)
     {
         char* tmp = iotoa((uint32_t)input / 1048576);
@@ -77,7 +78,7 @@ char* convertToUnit(uint32_t input)
         kfree(kheap, tmp);
         return res;
     }
-    
+
     else if(input  >= 1024)
     {
         char* tmp = iotoa((uint32_t)input / 1024);
@@ -85,7 +86,7 @@ char* convertToUnit(uint32_t input)
         kfree(kheap, tmp);
         return res;
     }
-    
+
     else
     {
         char* tmp = iotoa((uint32_t)input);

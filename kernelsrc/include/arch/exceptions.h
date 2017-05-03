@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   exceptions.h
  * Author: Kevin
@@ -25,7 +19,7 @@ typedef struct registers
     unsigned int gs, fs, es, ds;      /* pushed the segs last */
     unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
     unsigned int int_no, err_code;    /* our 'push byte #' and ecodes do this */
-    unsigned int eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
+    unsigned int eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */
 } regs_t;
 
 //Everything is reversed WHAT HAPPENED?!
@@ -48,4 +42,3 @@ void regdump(regs_t *r);
 #endif
 
 #endif /* EXCEPTIONS_H */
-

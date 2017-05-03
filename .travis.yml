@@ -3,7 +3,7 @@ before_install:
 - sudo apt-get install -y nasm xorriso
 install: ". ./setenv.sh"
 language: c
-script: cd kernelsrc && make
+script: make
 deploy:
   provider: releases
   api_key:

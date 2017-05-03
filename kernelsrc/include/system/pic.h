@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   pic.h as io.h was taken inside of netbeans and conflicting headers yada yada yada
  * Author: Kevin
@@ -34,7 +28,7 @@ extern "C" {
 #define ICW1_INTERVAL4	0x04		/* Call address interval 4 (8) */
 #define ICW1_LEVEL	0x08		/* Level triggered (edge) mode */
 #define ICW1_INIT	0x10		/* Initialization - required! */
- 
+
 #define ICW4_8086	0x01		/* 8086/88 (MCS-80/85) mode */
 #define ICW4_AUTO	0x02		/* Auto (normal) EOI */
 #define ICW4_BUF_SLAVE	0x08		/* Buffered mode/slave */
@@ -54,4 +48,3 @@ void PIC_sendEOI(unsigned char irq);
 #endif
 
 #endif /* IO_H */
-

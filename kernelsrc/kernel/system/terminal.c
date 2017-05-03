@@ -1,4 +1,5 @@
-/* This is our internal terminal application (AKA backup)
+/*
+ * This is our internal terminal application (AKA backup)
  * Usually, this wouldn't be invoked, but in the case of the actual terminal crashing
  * we can re-initialize the terminal via this one :)
 */

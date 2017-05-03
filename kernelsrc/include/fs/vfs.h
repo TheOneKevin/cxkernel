@@ -1,4 +1,3 @@
-
 /* 
  * File:   vfs.h
  * Author: kevin
@@ -35,17 +34,17 @@ struct fsStat
     uid_t   st_uid;   // User ID of the file
     gid_t   st_gid;   // Group ID of the file
     dev_t   st_rdev;  // Device ID if file is character of block special
-    
+
     off_t st_size; // File size in bytes
-    
+
     uint64_t st_ctime; //Created time.
     uint64_t st_mtime; //Modified time.
-    
+
     /*blksize_t st_blksize a filesystem-specific preferred I/O block size for
                      this object.  In some filesystem types, this may
                      vary from file to file
     blkcnt_t  st_blocks  number of blocks allocated for this object*/
-    
+
 }; typedef struct fsStat fstat_t;
 
 struct fsNode
@@ -55,7 +54,7 @@ struct fsNode
     char* name;       // File name
     ino_t inode;      // inode number
     uint32_t mountID; // Mount number which contains the file
-    
+
     bool isDir;
 }; typedef struct fsNode fsnode_t;
 
@@ -80,7 +79,7 @@ struct fsDir
 struct fileSystem
 {
     char* name; //Name of this file system we are using
-    
+
     //File system operations to be filled by the file system driver:
     status_t (*probe)    (struct device* dev); //Probe sets the device up for the filesystem, and sets the filesystem up for the device too
     status_t (*readall)  (fsnode_t* file, uint32_t* buf, struct device* dev); //Reads all the bytes from file into buffer using the driver (device)
@@ -93,14 +92,14 @@ struct fileSystem
     fsnode_t*(*findnode) (char* name, struct device*); //Find the file node associated with the file path. Will not convert local path to file system path!
     status_t (*mount)    (struct device*); //Mount this file system onto device
     uint32_t*(*ls)       (char* dir, uint32_t* out, struct device* dev); //Gets a list of pointers to file nodes in a certain directory. KFREE NEEDED!
-    
+
     void *private_data; //Some filesystem specific data
-    
+
 }; typedef struct fileSystem filesystem_t;
 
 struct fileStream
 {
-    
+
 }; typedef struct fileStream fstr_t;
 
 //Opens file. Returns file structure.

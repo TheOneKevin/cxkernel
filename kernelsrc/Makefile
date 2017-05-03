@@ -7,7 +7,8 @@ CFLAGS= -ffreestanding -O3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto
 # ODIR is going to be the directory storing all the .o files
 # It is important to make sure NONE of the source files have the same name, i.e., kernel/foo.c and kernel/foobar/foo.c
 # or even kernel/foo.c and kernel/foo.s cannot co-exist
-ODIR=obj
+ODIR=../obj
+BDIR=../bin
 
 # Here, we set out an recursive search for .c and .s files in the src folder
 SOURCES := $(wildcard *.c) $(wildcard **/*.c)
@@ -20,41 +21,40 @@ OBJ := $(addprefix $(ODIR)/,$(notdir $(SOURCES:.c=.o))) $(addprefix $(ODIR)/,$(n
 .PHONY: all
 all:
 # Here, I got lazy and used loops to loop through each directory and compile the code accordingly
-# We recurse through the subdirectories of kernel
+# We iterate through the subdirectories of kernel
 	for a in kernel/**/*.c; do \
 	    $(CC) -c $$a -o $$a.o -std=gnu99 $(CFLAGS); \
 	done
-# We recurse through the root directory of kernel
+# We iterate through the root directory of kernel
 	for b in kernel/*.c; do \
 	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
-	
-# We recurse through the root directory of mm
+
+# We iterate through the root directory of mm
 	for b in mm/*.c; do \
 	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
-	
-# We recurse through the root directory of tasking
+
+# We iterate through the root directory of tasking
 	for b in tasking/*.c; do \
 	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
-	
-# We recurse through the root directory of fs
+
+# We iterate through the root directory of fs
 	for b in fs/*.c; do \
 	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
-	
-	# We recurse through the root directory of fs
+
 	for b in fs/**/*.c; do \
-	    $(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
+		$(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
-	
+
 # We find all the asm files in the assembly folder
 	for b in kernel/assembly/*.asm; do \
 	    nasm -felf $$b -o $$b.o; \
 	done
 # We compile the multiboot header
-	$(AS) boot/start.asm -o start.o
+	$(AS) boot/start.s -o start.o
 # Move all the .o files to $(ODIR)
 	mv kernel/**/*.o $(ODIR)
 	mv kernel/*.o $(ODIR)
@@ -63,26 +63,32 @@ all:
 	mv fs/**/*.o $(ODIR)
 	mv tasking/*.o $(ODIR)
 	mv *.o $(ODIR)
-	# Execute make in the object folder (see other Makefile)
-	cd obj && make
-	# Make the initial ramdisk
+# Execute make in the object folder (see other Makefile)
+	cd ../obj && make
+# Make the initial ramdisk
 	echo Making ram disk...
-	cd grub && sh create.sh
-	# Make the GRUB iso
+	cd grub/ramfs && make
+# mv ramfs.tar grub/ramfs.tar
+# Make the GRUB iso
 	echo Setting up GRUB...
 	mkdir -p isodir/boot/grub
-	cp LiquiDOS.bin isodir/boot/LiquiDOS.bin
+	cp $(BDIR)/LiquiDOS.bin isodir/boot/LiquiDOS.bin
 	cp grub/grub.cfg isodir/boot/grub/grub.cfg
 	cp grub/background.jpg isodir/boot/background.jpg
+
 	echo Adding InitRam FS...
-	cp grub/ramfs.tar isodir/boot/ramfs.tar
+	cp grub/ramfs/ramfs.tar isodir/boot/ramfs.tar
+
 	echo Making GRUB iso...
 	grub-mkrescue -o LiquiDOS.iso isodir
-	echo Cleaning up current mess...
+	mv LiquiDOS.iso $(BDIR)/LiquiDOS.iso
 
 .PHONY: clean
 clean:
 	rm -f $(ODIR)/*.o
+	rm -f $(BDIR)/*.bin
+	rm -f $(BDIR)/*.o
+	rm -f $(BDIR)/*.iso
 	rm -f kernel/**/.o
 	rm -f kernel/*.o
 	rm -f mm/*.o
@@ -93,4 +99,5 @@ clean:
 	rm -f *.iso
 	rm -f boot/*.o
 	rm -rf isodir
+	rm -f boot/*.tar
 	echo Done!

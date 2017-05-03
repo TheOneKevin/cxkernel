@@ -1,15 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
  * File:   PANIC.h
  * Author: Kevin
  *
  * Created on September 2, 2016, 6:08 PM
  */
+ 
 #include "common.h"
 
 #ifndef PANIC_H

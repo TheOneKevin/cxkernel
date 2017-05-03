@@ -63,7 +63,7 @@ unsigned int *acpiCheckRSDPtr(unsigned int *ptr)
          bptr++;
       }
 
-      // found valid rsdpd   
+      // found valid rsdpd
       if (check == 0) {
          /*
           if (desc->Revision == 0)
@@ -187,7 +187,7 @@ int acpiEnable(void)
 //
 // bytecode of the \_S5 object
 // -----------------------------------------
-//        | (optional) |    |    |    |   
+//        | (optional) |    |    |    |
 // NameOP | \          | _  | S  | 5  | _
 // 08     | 5A         | 5F | 53 | 35 | 5F
 //
@@ -257,7 +257,7 @@ int initAcpi(void)
 
                      PM1a_CNT = facp->PM1a_CNT_BLK;
                      PM1b_CNT = facp->PM1b_CNT_BLK;
-                     
+
                      PM1_CNT_LEN = facp->PM1_CNT_LEN;
 
                      SLP_EN = 1<<13;

@@ -1,4 +1,5 @@
-/* "Welcome to Operating System development; the great frontier." - The OSDev Wiki
+/*
+ * "Welcome to Operating System development; the great frontier." - The OSDev Wiki
  * Hello, and welcome to my code. This is my home, and I will be your personal guide throughout this land full of perils and stuff.
  * You will find me like this at the top of many files, and besides many lines of code, serving as a reminder, tour guide of other
  * sorts of personal. Firstly, I would like to invite you to the kernel. This is where everything begins. Enjoy the scenery
@@ -121,7 +122,6 @@ void initVbe()
 {
     uint16_t* s;
     enablevesa(); // Call our assembly function
-    //for(;;);
     asm volatile("mov %%eax, %0" : "=r" (s)); //We know the return code info pointer is in the EAX register]
     if(*s == 1) //If the return code status is 1
     {
@@ -199,9 +199,6 @@ void kernel_main(multiboot_info_t* multi)
     //Initialize ACPI and enable it
     initAcpi();
     acpiEnable();
-    //Unmap all the ACPI stuff :)
-    //for(uint32_t i = 0; i <= KRNLBASE; i += 0x1000)
-    //    paging_unalloc(i);
 
     //Get memory information
     getMemDisplay(mbt);
