@@ -58,7 +58,7 @@ int strcmp(char *s1, char *s2)
         if (c1 != c2) return c1 < c2 ? -1 : 1;
         if (!c1) break;
     }
-    
+
     return 0;
 }
 
@@ -77,8 +77,8 @@ char *strcat(char *dest, const char *src)
 size_t strlen(const char* str)
 {
     size_t len = 0;
-    while (str[len])
-	len++;
+    while (str[len] != 0)
+	   len++;
     return len;
 }
 

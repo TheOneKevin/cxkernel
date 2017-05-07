@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   kprintf.h
  * Author: Kevin
  *

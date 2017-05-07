@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   exp_common.h
  * Author: kevin
  *
@@ -19,6 +19,7 @@ char* iotoa(uint32_t);
 // Converts a string representation of an integer into an integer
 uint32_t atoio(char*);
 char* convertToUnit(uint32_t);
+char* pad(char* in, char c, uint32_t amount, bool isLeft);
 
 #ifdef __cplusplus
 }

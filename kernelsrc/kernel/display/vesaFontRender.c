@@ -42,10 +42,10 @@ uint32_t queryHeight() { return 8; }
 
 void printChar(uint32_t x, uint32_t y, uint32_t fg, uint32_t bg, bool transparant, uint8_t c)
 {
-    for(uint8_t iy = 0; iy < 15; iy++) //Loop through each entry of the character
+    for(uint8_t iy = 0; iy < queryHeight(); iy++) //Loop through each entry of the character
     {
         uint8_t charc = consolas_11ptBitmaps[c][iy]; //iy will be the pixel set on the y axis of the character (row #)
-        for(uint8_t ix = 0; ix < 8; ix++) //Loop through each bit of that entry
+        for(uint8_t ix = 0; ix < queryWidth(); ix++) //Loop through each bit of that entry
         {
             bool bit = (charc & (1 << (ix))) != 0; //ix will be the pixel set on the x axis
             if(bit) //If it's a one, set a pixel at ix, iy
@@ -60,7 +60,7 @@ void printChar(uint32_t x, uint32_t y, uint32_t fg, uint32_t bg, bool transparan
     }
 }
 
-uint32_t queryHeight() { return 17; }
+uint32_t queryHeight() { return 15; }
 uint32_t queryWidth()  { return 8; }
 
 #endif

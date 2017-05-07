@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   pit.h
  * Author: Kevin
  *
@@ -6,6 +6,7 @@
  */
 
 #include "common.h"
+#include "system/irq.h"
 
 #ifndef PIT_H
 #define PIT_H
@@ -14,7 +15,8 @@
 extern "C" {
 #endif
 
-void init_timer(uint32_t freq);
+void init_timer(uint32_t frequency, irq_t handler);
+void pit_delay(uint32_t ms);
 
 #ifdef __cplusplus
 }

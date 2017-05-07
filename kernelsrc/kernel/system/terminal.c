@@ -9,6 +9,7 @@
 
 #include "system/terminal.h"
 #include "system/kprintf.h"
+#include "system/time.h"
 
 #include "display/tdisplay.h"
 
@@ -20,9 +21,11 @@
 #include "drivers/vesa.h"
 
 #include "localization/scanmap.h"
+
 #include "fs/initrd.h"
 #include "fs/vfs.h"
-#include "system/time.h"
+
+#include "gdb/gdb.h"
 
 #pragma GCC diagnostic ignored "-Wdiv-by-zero"
 
@@ -33,9 +36,9 @@ uint32_t j = 0;
 
 char *builtinCmds[] = {
     "help", "reboot", "shutdown", "mmap", "debug", "cpuid", "mm", "clear", "game",
-    "memtest", "testint", "vbeinfo", "ls", "echo", "open"
+    "memtest", "testint", "vbeinfo", "ls", "echo", "open", "gdb", "time"
 };
-uint32_t size = 15; //Size of array
+uint32_t size = 17; //Size of array
 
 //External variables
 screeninfo_t screen;
@@ -51,15 +54,16 @@ KHEAPBM *kheap;
 
 const char* helpMessage =
 "List of available commands======================================================\n"
-"help:   Displays this message       ls:       Lists all mount points and files\n"
-"reboot: Reboots the PC              shutdown: Warm shuts down the computer\n"
-"clear:  Clears the screen           mmap:     Displays memory map\n"
-"cpuid:  Displays CPU information    mm:       Display memory usage information\n"
-"game:   Hehe. Find out yourself     memtest:  Tests heap allocation\n"
-"echo: Echos the argument input      open: Open file from path\n"
+"help:   Displays this message         ls:       Lists all mount points and files\n"
+"reboot: Reboots the PC                shutdown: Warm shuts down the computer\n"
+"clear:  Clears the screen             mmap:     Displays memory map\n"
+"cpuid:  Displays CPU information      mm:       Display memory usage information\n"
+"game:   Hehe. Find out yourself       memtest:  Tests heap allocation\n"
+"echo [text]: Echos the text           open [file]: Open file from path\n\n"
 "testint: Tests the interrupt system by dividing by 0. Crash alert!\n"
-"vbeinfo: Gives information on current vbe screen (if applicable)\n";
-
+"vbeinfo: Gives information on current vbe screen (if applicable)\n\n"
+"gdb <timeout>: Starts GDB serial      time <-a>: Retrieves the RTC time\n"
+"Format: command [arguments] <optional arguments>";
 void help()
 {
     kprintf("%s", helpMessage);
@@ -162,10 +166,70 @@ void open(char* args)
     vfs_stat(file, stat);
     uint32_t* fsbuffer = (uint32_t*)kmalloc(kheap, stat -> st_size);
     vfs_read(args + 5, fsbuffer, Read); //"open " = 5 chars
-    console_setfg(COLOR_LIGHT_BLUE); kprintf("Contents of %s:\n", args + 5);
-    kprintf("Size: %s\n", convertToUnit(stat -> st_size)); console_setfg(COLOR_WHITE);
+    console_setfg(COLOR_LIGHT_GREEN); kprintf("Size: %s\n", convertToUnit(stat -> st_size));
+    console_setfg(COLOR_LIGHT_BLUE); kprintf("Contents of %s:\n\n", args + 5); console_setfg(COLOR_WHITE);
     kprintf("%s", fsbuffer);
     kfree(kheap, fsbuffer); kfree(kheap, stat);
+}
+
+void printTime(char* args)
+{
+    cli();
+    read_rtc();
+    sti();
+
+    char* h = iotoa(hour);
+    char* m = iotoa(minute);
+    char* s = iotoa(second);
+    char* mo = iotoa(month);
+    char* da = iotoa(day);
+
+    char* hr = pad(h, '0', 2, true);
+    kfree(kheap, h);
+    char* mi = pad(m, '0', 2, true);
+    kfree(kheap, m);
+    char* se = pad(s, '0', 2, true);
+    kfree(kheap, s);
+    char* mon = pad(mo, '0', 2, true);
+    kfree(kheap, mo);
+    char* daa = pad(da, '0', 2, true);
+    kfree(kheap, da);
+
+    if(strcmp(args + 5, "-a") == 0)
+    {
+        if((hour > 12) && (hour < 24))
+        {
+            char* foo = iotoa(hour - 12);
+            char* foobar = pad(foo, '0', 2, true);
+            kfree(kheap, foo);
+            kprintf("\n%s:%s:%s PM %s/%s/%u\nHH:MM:SS MM/DD/YYYY\n", foobar, mi, se, mon, daa, year);
+            kfree(kheap, foobar);
+        }
+        else if(hour <= 12)
+            kprintf("\n%s:%s:%s AM %s/%s/%u\nHH:MM:SS MM/DD/YYYY\n", hr, mi, se, mon, daa, year);
+        else if((hour == 24) || (hour == 0)) // I don't know which
+            kprintf("\n12:%s:%s AM %s/%s/%u\nHH:MM:SS MM/DD/YYYY\n", mi, se, mon, daa, year);
+    }
+
+    else
+        kprintf("\n%s:%s:%s %s/%s/%u\nHH:MM:SS MM/DD/YYYY\n", hr, mi, se, mon, daa, year);
+
+    cli();
+    kprintf("\nEpoch: %u\n\n", getEpoch() & 0x00000000FFFFFFFF);
+    sti();
+
+    kfree(kheap, hr);
+    kfree(kheap, mi);
+    kfree(kheap, se);
+    kfree(kheap, daa);
+    kfree(kheap, mon);
+}
+
+void startDebugger(char* args)
+{
+    if(*(args + 4) == 0) initDbg(5000);
+    else
+        initDbg(atoio(buffer + 4));
 }
 
 /* =====================================================================================================
@@ -191,6 +255,8 @@ void fetchCommand(int id)
         case 12: ls(); break;
         case 13: echo(buffer); break;
         case 14: open(buffer); break;
+        case 15: startDebugger(buffer); break;
+        case 16: printTime(buffer);  break;
         default: console_setfg(COLOR_RED); kprintf("Command not recognized!\n"); console_setfg(COLOR_WHITE); break;
     }
 }
@@ -219,7 +285,9 @@ void interpret_cmd(uint8_t scancode)
         memset(&buffer, 0, 256);
         i = 0;
 
-        kprintf("/:\\>");
+        console_setfg(COLOR_LIGHT_GREY);
+        kprintf("/:\\> ");
+        console_setfg(COLOR_WHITE);
     }
 
     else if((scancode == BCKSPACE) && (i > 0))
@@ -238,8 +306,11 @@ void init_terminal(multiboot_info_t* multi)
 {
     mbt = multi;
     //Let's register our keyboard hook now
+    //Essentially, each time a key is pressed, interpret_cmd will be called
     installKeyHandler(&interpret_cmd, 0);
     setHandlerFlag(0);
 
-    kprintf("\n/:\\>");
+    console_setfg(COLOR_LIGHT_GREY);
+    kprintf("\n/:\\> ");
+    console_setfg(COLOR_WHITE);
 }

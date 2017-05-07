@@ -3,7 +3,7 @@
 CC=i686-elf-gcc
 AS=i686-elf-as
 #LDARGS=-ffreestanding -O2 -nostdlib
-CFLAGS= -ffreestanding -O3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto
+CFLAGS= -ffreestanding -O3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -fstack-protector-strong
 # ODIR is going to be the directory storing all the .o files
 # It is important to make sure NONE of the source files have the same name, i.e., kernel/foo.c and kernel/foobar/foo.c
 # or even kernel/foo.c and kernel/foo.s cannot co-exist
@@ -49,20 +49,35 @@ all:
 		$(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
 	done
 
+# We iterate throught the root directory of gdb
+	for b in gdb/*.c; do \
+		$(CC) -c $$b -o $$b.o -std=gnu99 $(CFLAGS); \
+	done
+
+# We compile the CSPRNG (random number generator) and other security features without SSP
+	for b in security/*.c; do \
+		$(CC) -c $$b -o $$b.o -std=gnu99 -ffreestanding -O3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto; \
+	done
+
 # We find all the asm files in the assembly folder
 	for b in kernel/assembly/*.asm; do \
-	    nasm -felf $$b -o $$b.o; \
+	    nasm -felf $$b -o $$b.o -w-number-overflow; \
 	done
+
 # We compile the multiboot header
 	$(AS) boot/start.s -o start.o
+
 # Move all the .o files to $(ODIR)
 	mv kernel/**/*.o $(ODIR)
 	mv kernel/*.o $(ODIR)
 	mv mm/*.o $(ODIR)
 	mv fs/*.o $(ODIR)
 	mv fs/**/*.o $(ODIR)
+	mv gdb/*.o $(ODIR)
 	mv tasking/*.o $(ODIR)
+	mv Security/*.o $(ODIR)
 	mv *.o $(ODIR)
+
 # Execute make in the object folder (see other Makefile)
 	cd ../obj && make
 # Make the initial ramdisk
@@ -100,4 +115,5 @@ clean:
 	rm -f boot/*.o
 	rm -rf isodir
 	rm -f boot/*.tar
+	rm -f gdb/*.o
 	echo Done!

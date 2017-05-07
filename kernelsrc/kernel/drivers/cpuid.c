@@ -197,10 +197,12 @@ void cpu_detect()
 
     if(largestFuncX >= CPUID_INTELBRANDSTRINGEND)
     {
-        char name[48];
+        char name[49];
+        //Retrieve the CPU vendor name from the registers
         cpuid(CPUID_INTELBRANDSTRING, (uint32_t *)(name), (uint32_t *)(name + 4), (uint32_t *)(name + 8), (uint32_t *)(name + 12));
         cpuid(CPUID_INTELBRANDSTRINGMORE, (uint32_t *)(name + 16), (uint32_t *)(name + 20), (uint32_t *)(name + 24), (uint32_t *)(name + 28));
         cpuid(CPUID_INTELBRANDSTRINGEND, (uint32_t *)(name + 32), (uint32_t *)(name + 36), (uint32_t *)(name + 40), (uint32_t *)(name + 44));
+        name[48] = 0; //Terminate string with null terminator
         const char *p = name;
         while(*p == ' ')
             ++p; //We don't want spaces in our name

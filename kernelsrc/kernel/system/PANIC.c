@@ -10,7 +10,7 @@
 void panic(const char *message)
 {
     // We encountered a massive problem and have to stop.
-    kprintf("Debug buffer: %X", (uint32_t)debugBuffer);
+    kprintf("Debug buffer: %X\n", (uint32_t)debugBuffer);
     asm volatile("cli"); // Disable interrupts.
     console_write("*****"); console_write(message); console_write("*****\n"); //TODO: Stack trace
     console_write("Kernel panic can be fixed (usually) by a restart. CPU is going to halt now...");

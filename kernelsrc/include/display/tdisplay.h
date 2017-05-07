@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   tdisplay.h
  * Author: Kevin
  *
@@ -74,8 +74,10 @@ void console_write(const char *c);
 void console_writeline(const char *c);
 //Writes a hexadecimal onto the screen
 void console_write_hex(uint32_t n);
-//Writes a decimal onto the screen
+//Writes an unsigned integer onto the screen
 void console_write_dec(uint32_t n);
+//Writes a signed integer
+void console_write_int(int n);
 //Prints a string centered on screen
 void console_print_center(const char *c);
 //Print OK message

@@ -26,6 +26,13 @@ extern "C" {
 #define INRDBASE 0xC1000000
 #define FRAMEBSE 0xFF800000
 
+#define COM1 0x3F8
+#define COM2 0x2F8
+#define COM3 0x3E8
+#define COM4 0x2E8
+
+extern void delay(uint32_t ms);
+
 //Copy n = size amount of src into dst
 void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size);
 //Set n = size amount of value at buf

@@ -49,11 +49,11 @@ void irq_handler(regs_t *regs) // We need to call regs as a reference or it won'
 void install_handler(uint8_t irq, irq_t handler)
 {
     interrupt_handlers[irq] = handler; // Register the handler pointer
-    bprintok(); kprintf("Installed handler: %u\n", (uint32_t) irq);
+    //bprintok(); kprintf("Installed handler: %u\n", (uint32_t) irq);
 }
 
 void uninstall_handler(uint8_t irq)
 {
     interrupt_handlers[irq] = 0; // Clear the handler pointer
-    bprintok(); kprintf("Uninstalled handler: %u\n", (uint32_t) irq);
+    //bprintok(); kprintf("Uninstalled handler: %u\n", (uint32_t) irq);
 }

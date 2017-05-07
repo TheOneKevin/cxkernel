@@ -56,6 +56,7 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
+        cli
         xchg %bx, %bx
         # We first need to retrieve the physical address of the page table
         movl $(_kernel_pt - 0xC0000000), %edi
@@ -172,8 +173,9 @@ _start:
 	# stack (as it grows downwards on x86 systems). This is necessarily done
 	# in assembly as languages such as C cannot function without a stack.
 	mov $stack_top, %esp
-        addl $0xC0000000, %ebx
-        push %ebx
+    addl $0xC0000000, %ebx
+    push %ebx
+
 	# This is a good place to initialize crucial processor state before the
 	# high-level kernel is entered. It's best to minimize the early
 	# environment where crucial features are offline. Note that the
@@ -182,6 +184,9 @@ _start:
 	# yet. The GDT should be loaded here. Paging should be enabled here.
 	# C++ features such as global constructors and exceptions will require
 	# runtime support to work as well.
+    # Here, we initialize the Stack Smash Protector with the CS-PRNG (ISAAC)
+    # AKA. Crypograpahically Secure Pseudo Random Number Generator
+    call before_main
 
 	# Enter the high-level kernel. The ABI requires the stack is 16-byte
 	# aligned at the time of the call instruction (which afterwards pushes
