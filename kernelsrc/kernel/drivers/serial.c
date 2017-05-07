@@ -33,7 +33,7 @@ bool serialRecieved(uint16_t port)
 
 char readSerial(uint16_t port)
 {
-    if(timeout > 0)
+    if(timeout >= 0)
     {
         int _time = 0;
         while((!serialRecieved(port)) && (_time <= timeout))
@@ -63,7 +63,7 @@ bool isTransmitEmpty(uint16_t port)
 
 void writeSerial(uint16_t port, char a)
 {
-    if(timeout > 0)
+    if(timeout >= 0)
     {
         int _time = 0;
         while((!isTransmitEmpty(port)) && (_time <= timeout))

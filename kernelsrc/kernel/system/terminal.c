@@ -227,9 +227,9 @@ void printTime(char* args)
 
 void startDebugger(char* args)
 {
-    if(*(args + 4) == 0) initDbg(5000);
+    if(atoio(args + 4) == 0) initDbg(5000);
     else
-        initDbg(atoio(buffer + 4));
+        initDbg(atoio(args + 4));
 }
 
 /* =====================================================================================================

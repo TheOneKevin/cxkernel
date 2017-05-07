@@ -59,7 +59,7 @@ char* pad (char* in, char c, uint32_t amount, bool isLeft)
     {
         char* ret = (char*)kmalloc (kheap, (strlen (in) + diff) * sizeof(char));
         for (uint32_t i = 0; i < diff; i++)
-            ret [i + strlen(in)] = c;
+            ret [i + strlen (in)] = c;
         memcpy (ret, in, strlen (in));
         return ret;
     }
@@ -67,36 +67,13 @@ char* pad (char* in, char c, uint32_t amount, bool isLeft)
 
 uint32_t atoio (char* input)
 {
-    uint32_t ret = 0;
-
-    for (uint32_t i = 0; i < strlen (input); i++)
+    uint32_t c, n;
+    n = 0;
+    for (c = 0; input [c] != '\0'; c++)
     {
-        switch (input [i])
-        {
-        case '0': ret += i * 0; break;
-
-        case '1': ret += i * 1; break;
-
-        case '2': ret += i * 2; break;
-
-        case '3': ret += i * 3; break;
-
-        case '4': ret += i * 4; break;
-
-        case '5': ret += i * 5; break;
-
-        case '6': ret += i * 6; break;
-
-        case '7': ret += i * 7; break;
-
-        case '8': ret += i * 8; break;
-
-        case '9': ret += i * 9; break;
-
-        default: break;
-        }
+        n = n * 10 + input [c] - '0';
     }
-    return ret;
+    return n;
 }
 
 char* convertToUnit (uint32_t input)

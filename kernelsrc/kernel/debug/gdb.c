@@ -6,8 +6,10 @@
 extern uint32_t _gdb_internal_timeout;
 void initDbg(uint32_t t)
 {
+    kprintf("GDB will hang if COM ports are disabled in an emulator!\n");
     kprintf("Initiatlizing the GNU Debugger on COM1 port...\n");
     _gdb_internal_timeout = t;
+    kprintf("Timeouts set to %u ms\n", t);
     init_serial(COM1, 9600, UART_DATA_BITS_8, UART_STOP_BIT_1, UART_PARITY_NONE);
     set_debug_traps();
 
