@@ -75,7 +75,7 @@ all:
 	mv fs/**/*.o $(ODIR)
 	mv gdb/*.o $(ODIR)
 	mv tasking/*.o $(ODIR)
-	mv Security/*.o $(ODIR)
+	mv security/*.o $(ODIR)
 	mv *.o $(ODIR)
 
 # Execute make in the object folder (see other Makefile)
