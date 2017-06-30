@@ -11,6 +11,6 @@ deploy:
   file: bin/LiquiDOS.iso
   skip_cleanup: true
   on:
-    repo: TheCool1James/LiquiDOS
+    repo: TheCool1Kevin/LiquiDOS
     tags: false
     overwrite: true
