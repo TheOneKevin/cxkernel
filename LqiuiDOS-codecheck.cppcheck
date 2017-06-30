@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+    <includedir>
+        <dir name="kernelsrc/include/"/>
+    </includedir>
+    <paths>
+        <dir name="kernelsrc"/>
+    </paths>
+</project>

@@ -1,11 +1,11 @@
-/* 
+/*
  * File:   keyboard.h
  * Author: Kevin
  *
  * Created on August 26, 2016, 9:05 AM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
@@ -16,7 +16,8 @@ extern "C" {
 
 void register_keyboard();
 void noDisplay(bool yesno);
-void flush_cache();
+void keyboard_flush_cache();
+char keyboard_getc();
 
 uint8_t scan_to_ascii(uint8_t key);
 

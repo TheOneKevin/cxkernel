@@ -4,7 +4,7 @@
  *
  * Created on August 24, 2016, 5:36 PM
  */
-#include "common.h"
+#include "system.h"
 
 #ifndef TDISPLAY_H
 #define TDISPLAY_H
@@ -37,14 +37,13 @@ enum text_color
 struct screenInfo
 {
     uint8_t _x; uint8_t _y; //Our current cursor positions
-    uint8_t _lx; uint8_t _ly; //Lock x, lock y
     // The screen colours
     enum text_color background;
     enum text_color foreground;
 }; typedef struct screenInfo screeninfo_t;
 
 typedef void (*vHookA) (); //This is our putC hook!
-typedef void (*vHookB) (const char c, bool isKey); //This is our putC hook!
+typedef void (*vHookB) (const char c); //This is our putC hook!
 typedef void (*vHookC) (enum text_color bg); //This is our putC hook!
 
 extern screeninfo_t screen;

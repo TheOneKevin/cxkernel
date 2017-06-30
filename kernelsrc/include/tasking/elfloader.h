@@ -5,7 +5,7 @@
  * Created on May 6, 2017, 2:24 PM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef ELFLOADER_H
 #define ELFLOADER_H

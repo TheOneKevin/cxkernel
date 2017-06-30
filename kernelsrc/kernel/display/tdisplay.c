@@ -49,17 +49,12 @@ void console_clear ()
 
 void console_putc (const char c)
 {
-    _putc (c, false);
+    _putc (c);
     //Write our entire boot sequence into RAM
     if (debugPtr < 4096 && doBootLog)
     {
         debugBuffer [debugPtr] = c; debugPtr++;
-    }                                                                           //Failsafe!
-}
-
-void console_putck (const char c)
-{
-    _putc (c, true);
+    }
 }
 
 void console_write (const char *c)

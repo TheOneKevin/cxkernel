@@ -33,3 +33,9 @@
 *.su
 kernelsrc/nbproject/
 .git/
+bin/*.bin
+bin/*.iso
+
+# Patches
+patches/*
+!patches/*.*

@@ -5,7 +5,7 @@
  * Created on May 3, 2017, 7:28 AM
  */
 
-#include "common.h"
+#include "system.h"
 
  #ifndef SERIAL_H
  #define SERIAL_H

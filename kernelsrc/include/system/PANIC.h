@@ -4,8 +4,8 @@
  *
  * Created on September 2, 2016, 6:08 PM
  */
- 
-#include "common.h"
+
+#include "system.h"
 
 #ifndef PANIC_H
 #define PANIC_H

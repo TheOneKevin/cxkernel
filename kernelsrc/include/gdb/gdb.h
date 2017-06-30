@@ -5,7 +5,7 @@
  * Created on May 3, 2017, 5:30 PM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef GDB_H
 #define GDB_H

@@ -64,7 +64,7 @@ static void iscroll()
     }
 }
 
-void iputcraw2(const char c, bool isKey)
+void iputcraw2(const char c)
 {
     //Detect which key is pressed, and then take appropriate action
     if(c == '\b')
@@ -99,11 +99,6 @@ void iputcraw2(const char c, bool isKey)
     if(screen._x > currentfont.charX - 1)
     {
         screen._x = 0; screen._y ++;
-    }
-
-    if(!isKey)
-    {
-        screen._lx = screen._x; screen._ly = screen._y;
     }
 
     iscroll(); //Scroll if needed

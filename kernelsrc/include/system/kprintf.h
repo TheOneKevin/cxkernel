@@ -5,7 +5,7 @@
  * Created on September 3, 2016, 10:57 PM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef KPRINTF_H
 #define KPRINTF_H

@@ -1,11 +1,11 @@
-/* 
+/*
  * File:   kheap.h
  * Author: Kevin Dai, based off of kheap.c
  *
  * Created on August 29, 2016, 11:36 AM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef KHEAP_H
 #define KHEAP_H
@@ -22,7 +22,7 @@ typedef struct _KHEAPBLOCKBM
     size_t			bsize;
     uint32_t                    lfb;
 } KHEAPBLOCKBM;
- 
+
 typedef struct _KHEAPBM {
     KHEAPBLOCKBM    *fblock;
 } KHEAPBM;
@@ -41,4 +41,3 @@ extern KHEAPBM* kheap; //Kernel heap
 #endif
 
 #endif /* KHEAP_H */
-

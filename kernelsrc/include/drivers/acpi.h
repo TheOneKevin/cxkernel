@@ -5,7 +5,7 @@
  * Created on September 2, 2016, 5:09 PM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef ACPI_H
 #define ACPI_H

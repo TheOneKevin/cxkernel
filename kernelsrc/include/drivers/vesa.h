@@ -5,7 +5,7 @@
  * Created on October 2, 2016, 6:45 PM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef VESA_H
 #define VESA_H

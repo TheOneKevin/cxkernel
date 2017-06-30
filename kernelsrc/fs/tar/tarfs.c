@@ -1,17 +1,17 @@
-#include "fs/vfs.h"
-#include "fs/tar/tar.h"
 #include "memory/kheap.h"
+#include "fs/vfs.h"
+#include "lib/exp_system.h"
+#include "fs/tar/tar.h"
+#include "drivers/initrd.h"
 #include "system/kprintf.h"
-#include "drivers/device.h"
-#include "fs/initrd.h"
-#include "exp_common.h"
-#include "system/time.h"
 
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-KHEAPBM* kheap;
-mountpoint_t** mounts;
+struct fsOps* tarops = NULL;
+struct fOps* fileops = NULL;
+
+/* ========================= Internal Operations ========================= */
 
 uint32_t _translateSize(const char* in)
 {
@@ -19,8 +19,8 @@ uint32_t _translateSize(const char* in)
     uint32_t j;
     uint32_t count = 1;
 
-    for(j = 11; j > 0; j--, count *= 8)
-        size += ((in[j-1] - '0') * count);
+    for (j = 11; j > 0; j--, count *= 8)
+        size += ((in[j - 1] - '0') * count);
 
     return size;
 }
@@ -28,221 +28,228 @@ uint32_t _translateSize(const char* in)
 uint64_t _LtranslateSize(const char* in)
 {
     uint64_t size = 0, j, count = 1;
-    for(j = 11; j > 0; j--, count *= 8)
-        size += ((in[j-1] - '0') * count);
+    for (j = 11; j > 0; j--, count *= 8)
+        size += ((in[j - 1] - '0') * count);
     return size;
 }
 
-uint32_t _tar_getfilecount(uint32_t address)
+uint32_t _tar_getfilecount(filesystem_t* fs)
 {
     uint32_t i;
-    for(i = 0; ; i++)
+    tar_header_t* header = (tar_header_t *) kmalloc(kheap, sizeof(tar_header_t));
+    fs -> dev -> pos = 0; //Careful!
+    for (i = 0;; i++)  //We loop through each header
     {
-        tar_header_t* header = (tar_header_t*)address;
-        if(header -> filename[0] == '\0')
+        fs -> dev -> read(fs -> dev, header, sizeof(tar_header_t));
+        if (header -> filename[0] == '\0')
             break;
 
         uint32_t size = _translateSize(header -> size);
-        address += ((size / 512) + 1) * 512;
+        fs -> dev -> pos += ((size / 512) + 1) * 512;
 
         if (size % 512)
-            address += 512;
+            fs -> dev -> pos += 512;
     }
 
+    kfree(kheap, header);
     return i;
 }
 
-void _tar_parse(uint32_t address, tar_header_t* nodes)
+void _tar_parse(filesystem_t* fs)
 {
-    uint32_t i;
-    for (i = 0; ; i++) //We loop through each header
+    tar_header_t* header = (tar_header_t *) kmalloc(kheap, sizeof(tar_header_t));
+    tarpriv_t* priv = (tarpriv_t *) fs -> private_data;
+    fs -> dev -> pos = 0;
+    for (uint32_t i = 0;; i++)
     {
-        tar_header_t *header = (tar_header_t *)address;
-        if (header -> filename[0] == '\0') //until we hit 0
+        fs -> dev -> read(fs -> dev, header, sizeof(tar_header_t));
+        if (header -> filename[0] == '\0')
             break;
 
         uint32_t size = _translateSize(header -> size);
-        nodes[i] = *header;
-        address += ((size / 512) + 1) * 512;
+        priv -> nodes[i] = *header;
+        fs -> dev -> pos += ((size / 512) + 1) * 512;
 
         if (size % 512)
-            address += 512;
+            fs -> dev -> pos += 512;
     }
+
+    kfree(kheap, header);
 }
 
-uint32_t _tar_get_inode(tar_header_t* file, device_t* dev)
+int _tar_get_inode(char* file, filesystem_t* fs)
 {
-    tarpriv_t* p = dev -> fs -> private_data;
-    for(uint32_t i = 0; i < p -> fileCount; i++)
+    if (!fs)
+        return -EINVAL;
+    tarpriv_t* p = fs -> private_data;
+    for (uint32_t i = 0; i < p -> fileCount; i++)
     {
-        if(strcmp(p -> nodes[i].filename, file -> filename) == 0)
+        if (strcmp(p -> nodes[i] . filename, file) == 0)
             return i;
     }
 
     return -ENOENT;
 }
 
-tar_header_t* _tar_get_header(char* fileName, device_t* dev)
+tar_header_t* _tar_get_header(int inode, filesystem_t* fs)
 {
-    initrdpriv_t* p = dev -> private_data;
-    tarpriv_t* pp = dev -> fs -> private_data;
+    if (!fs)
+        return NULL;
+    tarpriv_t* pp = fs -> private_data;
+    return &pp -> nodes[inode];
+}
 
-    uint32_t ret = p -> initrd_loc;
-    for(uint32_t i = 0; i < pp -> fileCount; i++)
+/* ========================= File Operations ========================= */
+
+size_t tarfs_read(fsnode_t* file, void* buffer, size_t offset, size_t length)
+{
+    uint32_t ret = 0;
+    tarpriv_t* tpriv = (tarpriv_t *) file -> fs -> private_data;
+    for (uint32_t i = 0; i < file -> inode; i++)
     {
-        if(strcmp(pp -> nodes[i].filename, fileName) == 0)
-        {
-            return &pp -> nodes[i];
-        }
-
-        uint32_t size = _translateSize(pp -> nodes[i].size);
+        uint32_t size = _translateSize(tpriv -> nodes[i] . size);
         ret += ((size / 512) + 1) * 512;
         if (size % 512)
             ret += 512;
     }
 
-    return (tar_header_t*)-1;
+    file -> fs -> dev -> pos = ret + 512 + offset;
+    file -> fs -> dev -> read(file -> fs -> dev, buffer, length);
+
+    return atoio(tpriv -> nodes[file -> inode] . size) * sizeof(char);
 }
 
-status_t tar_readall(fsnode_t* file, uint32_t* buf, device_t* dev)
+size_t tarfs_write(fsnode_t* file, void* buffer, size_t offset, size_t length)
 {
-    initrdpriv_t* ipriv = dev -> private_data;
-    tarpriv_t* tpriv = dev -> fs -> private_data;
-
-    uint32_t ret = ipriv -> initrd_loc;
-    for(uint32_t i = 0; i < tpriv -> fileCount; i++)
-    {
-        if(strcmp(tpriv -> nodes[i].filename, file -> locaPath) == 0)
-        {
-            uint32_t* ptr = (uint32_t*)(ret + 512); //Copy contents into buffer
-            memcpy(buf, ptr, atoio(tpriv -> nodes[i].size) * sizeof(char));
-            return 0;
-        }
-
-        uint32_t size = _translateSize(tpriv -> nodes[i].size);
-        ret += ((size / 512) + 1) * 512;
-        if (size % 512)
-            ret += 512;
-    }
-
-    return -1;
+    return 0; // We cannot write to the tarfs (readonly filesystem)
 }
 
-status_t tar_read(fsnode_t* file, uint32_t* buf, uint32_t len, device_t* dev)
+status_t tarfs_close(fsnode_t* file)
 {
-    return tar_readall(file, buf, dev);
-}
-
-bool tar_isdir(fsnode_t* a1)
-{
-    if(strcmp(a1 -> locaPath, "/") == 0) return true;
-    return false;
-}
-
-status_t tar_write(fsnode_t* a1, uint32_t* a2, uint32_t a3, device_t* a4)
-{
-    return -EWRITE;
-}
-
-status_t tar_touch(char* a1, device_t* a2)
-{
-    return -EWRITE;
-}
-
-fsnode_t* tar_findnode(char* name, device_t* dev)
-{
-    tarpriv_t* priv = dev -> fs -> private_data;
-    for(uint32_t i = 0; i < priv -> fileCount; i++)
-    {
-        if(strcmp(priv -> nodes[i].filename, name) == 0)
-        {
-            fsnode_t* rett = (fsnode_t*)kmalloc(kheap, sizeof(fsnode_t));
-            rett -> locaPath = name;
-            rett -> name     = priv -> nodes[i].filename;
-            rett -> inode    = i;
-            rett -> mountID  = dev -> mountId;
-            rett -> isDir    = false;
-            return rett;
-        }
-    }
-
-    return 0;
-}
-
-status_t tar_stat(char* name, fstat_t* out, device_t* dev)
-{
-    if(!name || !out || !dev) return -EINVAL;
-    fsnode_t* file = tar_findnode(name, dev);
-    if(file == 0) return -ENOENT;
-    tar_header_t* head = _tar_get_header(name, dev);
-    out -> st_dev   = dev  -> id;
-    out -> st_ino   = file -> inode;
-    out -> st_mode  = atoio(head -> mode);
-    out -> st_nlink = 1;
-    out -> st_uid   = atoio(head -> uid);
-    out -> st_gid   = atoio(head -> gid);
-    out -> st_rdev  = 0;
-    out -> st_size  = _LtranslateSize(head -> size); //Octal to decimal
-    out -> st_ctime = _LtranslateSize(head -> mtime); //Both creation and modification are equal since
-    out -> st_mtime = _LtranslateSize(head -> mtime); //we cannot write to the init ram fs
+    kfree(kheap, file -> name);
+    kfree(kheap, file -> file_stats);
     kfree(kheap, file);
     return 0;
 }
 
-bool tar_exists(char* name, device_t* dev)
+dirent_t* tarfs_readdir(fsnode_t* file, uint32_t idx)
 {
-    fsnode_t* f = tar_findnode(name, dev);
-    if(f != 0) { kfree(kheap, f); return true; }
-    kfree(kheap, f);
-    return false;
+    return NULL;
 }
 
-status_t tar_mount(device_t* dev)
+fsnode_t* tarfs_finddir(fsnode_t* parent, char* name)
 {
-    if(!dev) return -EINVAL;
-    tarpriv_t* priv = dev -> fs -> private_data;
-    initrdpriv_t* priv1 = dev -> private_data;
-    priv -> fileCount = _tar_getfilecount(priv1 -> initrd_loc); //Get amount of files
-    tar_header_t* nodes = (tar_header_t*)kmalloc(kheap, sizeof(tar_header_t) * priv -> fileCount);
-    priv -> nodes = nodes;
-    _tar_parse(priv1 -> initrd_loc, priv -> nodes); //Add all nodes
+    return NULL;
+}
+
+status_t tarfs_stat(fsnode_t* file, fstat_t* out)
+{
+    if (!file || !out)
+        return -EINVAL;
+    tar_header_t* head = _tar_get_header(file -> inode, file -> fs);
+    out -> st_dev = 0;   // Wut?
+    out -> st_ino = file -> inode;
+    out -> st_mode = atoio(head -> mode);
+    out -> st_nlink = 1;
+    out -> st_uid = atoio(head -> uid);
+    out -> st_gid = atoio(head -> gid);
+    out -> st_rdev = 0;
+    out -> st_size = _LtranslateSize(head -> size);   //Octal to decimal
+    out -> st_ctime = _LtranslateSize(head -> mtime); //Both creation and modification are equal since
+    out -> st_mtime = _LtranslateSize(head -> mtime); //we cannot write to the init ram fs
     return 0;
 }
 
+/* ========================= Filesystem Operations ========================= */
 
-uint32_t* tar_ls(char* dir, uint32_t* out, struct device* dev)
+fsnode_t* tarfs_touch(char* path, fsnode_t* mount)
 {
-    tarpriv_t* priv = dev -> fs -> private_data;
-    uint32_t* ret = (uint32_t*) kmalloc(kheap, sizeof(uint32_t) * priv -> fileCount);
-    uint32_t i = 0;
-    for(i = 0; i < priv -> fileCount; i++)
+    return 0; //Readonly file system
+}
+
+fsnode_t* tarfs_open(char* path, fsnode_t* mount)
+{
+    fsnode_t* ret = NULL;
+    tarpriv_t* tpriv = mount -> fs -> private_data;
+
+    for (uint32_t i = 0; i < tpriv -> fileCount; i++)
     {
-        ret[i] = (uint32_t)tar_findnode(priv -> nodes[i].filename, dev);
+        if (strcmp(tpriv -> nodes[i] . filename, path + 1) == 0)  //path + 1 to ignore the prepended '/'
+        {
+            ret = (fsnode_t *) kmalloc(kheap, sizeof(fsnode_t));
+            ret -> name = strdup(path); // The only thing we need to free
+            ret -> fs = mount -> fs;    // All files should have a pointer to the filesystem of the mount
+            ret -> inode = i;
+            ret -> length = atoio(tpriv -> nodes[i] . size) * sizeof(char);
+            ret -> file_ops = fileops;
+            ret -> file_stats = (fstat_t *) kmalloc(kheap, sizeof(fstat_t));
+            tarfs_stat(ret, ret -> file_stats);
+            return ret;
+        }
     }
-    *out = i;
+
     return ret;
 }
 
-status_t tar_probe(device_t* dev)
+bool tarfs_exists(char* path, fsnode_t* mount)
 {
-    //Initialize the tar file system
-    dev -> fs = (filesystem_t*)kmalloc(kheap, sizeof(filesystem_t));
+    tarpriv_t* tpriv = mount -> fs -> private_data;
+    for (uint32_t i = 0; i < tpriv -> fileCount; i++)
+    {
+        if (strcmp(tpriv -> nodes[i] . filename, path + 1) == 0)  //path + 1 to ignore the prepended '/'
+            return true;
+    }
 
-    dev -> fs -> name = "tar";
+    return false;
+}
 
-    dev -> fs -> probe     = tar_probe;
-    dev -> fs -> readall   = tar_readall;
-    dev -> fs -> read      = tar_read;
-    dev -> fs -> isdir     = tar_isdir;
-    dev -> fs -> touch     = tar_touch;
-    dev -> fs -> write     = tar_write;
-    dev -> fs -> stat      = tar_stat;
-    dev -> fs -> exists    = tar_exists;
-    dev -> fs -> findnode  = tar_findnode;
-    dev -> fs -> mount     = tar_mount;
-    dev -> fs -> ls        = tar_ls;
+void tarfs_init()
+{
+    if (!tarops)
+    {
+        tarops = (struct fsOps*) kmalloc(kheap, sizeof(struct fsOps));
+        tarops  -> exists = tarfs_exists;
+        tarops  -> open = tarfs_open;
+        tarops  -> touch = tarfs_touch;
+    }
 
-    dev -> fs -> private_data = (tarpriv_t*)kmalloc(kheap, sizeof(tarpriv_t));
+    if (!fileops)
+    {
+        fileops = (struct fOps*)  kmalloc(kheap, sizeof(struct fOps));
+        fileops -> close = tarfs_close;
+        fileops -> finddir = tarfs_finddir;
+        fileops -> read = tarfs_read;
+        fileops -> readdir = tarfs_readdir;
+        fileops -> write = tarfs_write;
+    }
+}
 
-    return 0;
+fsnode_t* tarfs_mount(device_t* dev)
+{
+    filesystem_t* fs = (filesystem_t *) kmalloc(kheap, sizeof(filesystem_t));
+    tarpriv_t* priv = (tarpriv_t *) kmalloc(kheap, sizeof(tarpriv_t));
+    fsnode_t* mount = (fsnode_t *) kmalloc(kheap, sizeof(fsnode_t));
+
+    fs -> dev = dev;
+    fs -> fs_ops = tarops;
+    fs -> name = TAR_NAME;
+    fs -> private_data = priv;
+    fs -> mount = mount;
+
+    priv -> nodes = (tar_header_t *) kmalloc(kheap, _tar_getfilecount(fs) * sizeof(tar_header_t));
+    priv -> fileCount = _tar_getfilecount(fs);
+    _tar_parse(fs);
+
+    mount -> name = TAR_NAME;
+    mount -> file_ops = fileops;
+    mount -> fs = fs;
+    mount -> flags = FS_MOUNTPOINT | FS_DIRECTORY;
+
+    return mount;
+}
+
+void tarfs_unmount(filesystem_t* fs, device_t* dev)
+{
+    kfree(kheap, ((tarpriv_t *) fs -> private_data) -> nodes);
+    kfree(kheap, fs -> private_data);
 }

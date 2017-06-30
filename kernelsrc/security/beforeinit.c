@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 extern multiboot_info_t* mbt;
-uint32_t __stack_chk_guard;
+//uint32_t __stack_chk_guard;
 void before_main(multiboot_info_t* multi)
 {
     asm volatile("cli");
@@ -39,5 +39,5 @@ void before_main(multiboot_info_t* multi)
     }
 
     randinit (&ctx, TRUE); // Intialize the ISAAC CS-PRNG with the seed that we have generated
-    __stack_chk_guard = rand(&ctx);
+    //__stack_chk_guard = rand(&ctx);
 }

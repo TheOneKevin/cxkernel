@@ -1,0 +1,36 @@
+diff -Nur newlib/config.sub newlib-patched/config.sub
+--- newlib/config.sub	2017-06-29 22:01:12.003638700 -0400
++++ newlib-patched/config.sub	2017-06-30 09:04:22.824093400 -0400
+@@ -142,7 +142,7 @@
+ 	-sun*os*)
+ 		# Prevent following clause from handling this invalid input.
+ 		;;
+-	-dec* | -mips* | -sequent* | -encore* | -pc532* | -sgi* | -sony* | \
++	-liquidos* | -dec* | -mips* | -sequent* | -encore* | -pc532* | -sgi* | -sony* | \
+ 	-att* | -7300* | -3300* | -delta* | -motorola* | -sun[234]* | \
+ 	-unicom* | -ibm* | -next | -hp | -isi* | -apollo | -altos* | \
+ 	-convergent* | -ncr* | -news | -32* | -3600* | -3100* | -hitachi* |\
+diff -Nur newlib/newlib/configure.host newlib-patched/newlib/configure.host
+--- newlib/newlib/configure.host	2017-06-29 22:01:14.665218700 -0400
++++ newlib-patched/newlib/configure.host	2017-06-30 09:05:51.335575500 -0400
+@@ -453,6 +453,9 @@
+   h8500-*-elf*)
+ 	sys_dir=h8500hms
+ 	;;
++  i[3-7]86-*-liquidos*)
++	sys_dir=liquidos
++	;;
+   i[34567]86-*-rdos*)
+ 	sys_dir=rdos
+ 	newlib_cflags="${newlib_cflags} -DMISSING_SYSCALL_NAMES"
+diff -Nur newlib/newlib/libc/sys/configure.in newlib-patched/newlib/libc/sys/configure.in
+--- newlib/newlib/libc/sys/configure.in	2017-06-29 22:01:20.669214600 -0400
++++ newlib-patched/newlib/libc/sys/configure.in	2017-06-30 09:06:34.679018500 -0400
+@@ -30,6 +30,7 @@
+ 	h8300hms) AC_CONFIG_SUBDIRS(h8300hms) ;;
+ 	h8500hms) AC_CONFIG_SUBDIRS(h8500hms) ;;
+ 	linux) AC_CONFIG_SUBDIRS(linux) ;;
++	liquidos) AC_CONFIG_SUBDIRS(liquidos) ;;
+ 	m88kbug) AC_CONFIG_SUBDIRS(m88kbug) ;;
+ 	mmixware) AC_CONFIG_SUBDIRS(mmixware) ;;
+ 	netware) AC_CONFIG_SUBDIRS(netware) ;;

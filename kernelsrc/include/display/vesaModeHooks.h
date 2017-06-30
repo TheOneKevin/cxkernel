@@ -1,11 +1,11 @@
-/* 
+/*
  * File:   vesaModeHooks.h
  * Author: Kevin
  *
  * Created on October 15, 2016, 7:35 PM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef VESAMODEHOOKS_H
 #define VESAMODEHOOKS_H

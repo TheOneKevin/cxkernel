@@ -1,10 +1,12 @@
-/* 
+/*
  * File:   tar.h
  * Author: kevin
  *
  * Created on December 17, 2016, 8:58 AM
  */
-#include "common.h"
+
+#include "system.h"
+#include "fs/fs.h"
 
 #ifndef TAR_H
 #define TAR_H
@@ -12,6 +14,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define TAR_NAME "tarfs"
 
 struct tar_header
 {
@@ -25,18 +29,16 @@ struct tar_header
     char typeflag[1];
 }; typedef struct tar_header tar_header_t;
 
-
-
 struct tarPrivate
 {
     uint32_t fileCount;
     tar_header_t* nodes;
 }; typedef struct tarPrivate tarpriv_t;
 
-status_t tar_probe(struct device* dev);
-uint32_t _translateSize(const char* in);
-uint32_t _tar_getfilecount(uint32_t address);
-tar_header_t* _tar_get_header(char* fileName, struct device* dev);
+void tarfs_init();
+fsnode_t* tarfs_mount(device_t*);
+void tarfs_unmount(filesystem_t*, device_t*);
+
 
 #ifdef __cplusplus
 }

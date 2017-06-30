@@ -5,8 +5,8 @@
  * Created on December 20, 2016, 6:49 AM
  */
 
-#include <stddef.h>
-#include <stdint.h>
+ #include <stddef.h>
+ #include <stdint.h>
 
 #ifndef TIME_H
 #define TIME_H

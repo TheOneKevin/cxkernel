@@ -89,11 +89,11 @@
 *
 ****************************************************************************/
 
-#include "common.h"
+#include "system.h"
 #include "drivers/serial.h"
 #include "system/kprintf.h"
 #include "display/tdisplay.h"
-#include "arch/idt.h"
+#include "arch/x86/idt.h"
 #include "gdb/gdb.h"
 
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"

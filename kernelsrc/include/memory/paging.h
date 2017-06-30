@@ -5,7 +5,7 @@
  * Created on September 20, 2016, 6:04 AM
  */
 
-#include "common.h"
+#include "system.h"
 
 #ifndef PAGING_H
 #define PAGING_H

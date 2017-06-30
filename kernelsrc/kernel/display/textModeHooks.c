@@ -79,7 +79,7 @@ void iconsclear1(enum text_color bg)
     iupdatecur();
 }
 
-void iputcraw1(const char c, bool isKey)
+void iputcraw1(const char c)
 {
     //Let's get the entry we're going to write to RAM first
     uint8_t attrib = get_attrib();
@@ -118,10 +118,7 @@ void iputcraw1(const char c, bool isKey)
     {
         screen._x = 0; screen._y++;
     }
-    if(!isKey)
-    {
-        screen._lx = screen._x; screen._ly = screen._y; //Make sure keyboard cannot backspace printed text
-    }
+
     // Scroll if needed, then move the cursor by one
     iscroll();
     iupdatecur();

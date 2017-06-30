@@ -16,7 +16,7 @@
 #include "system/PANIC.h"
 #include "system/kprintf.h"
 
-#include "arch/exceptions.h"
+#include "arch/x86/exceptions.h"
 
 #include "display/tdisplay.h"
 #include "drivers/vesa.h"

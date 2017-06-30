@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   scanmap.h
  * Author: Kevin
  *
@@ -37,9 +37,32 @@ enum EN_SCANCODES
 
     SCH = 0x2B, // Special character (*_forward)
 
-    LSHIFT = 0x2A, RSHIFT = 0x36, //The modifiers (shifts)
-    SPACE = 0x39, ENTER = 0x1C,
-    BCKSPACE = 0x0E, CAPS = 0x3A
+    //Special Modifiers
+    KEY_LSHIFT   = 0x2A,
+    KEY_RSHIFT   = 0x36,
+    KEY_LCTRL    = 0x1D,
+    KEY_RCTRL    = 0x1D,
+    KEY_LALT     = 0x38,
+    KEY_RALT     = 0x38,
+    KEY_SPACE    = 0x39,
+    KEY_ENTER    = 0x1C,
+    KEY_BCKSPACE = 0x0E,
+    KEY_CAPS     = 0x3A,
+    KEY_TAB      = 0x0F,
+    KEY_SCROLL   = 0x46,
+    KEY_NUM      = 0x45,
+
+    KEY_UP       = 0x48,
+    KEY_DOWN     = 0x50,
+    KEY_LEFT     = 0x4B,
+    KEY_RIGHT    = 0x4D,
+
+    KEY_DELETE   = 0x53,
+    KEY_HOME     = 0x47,
+    KEY_END      = 0x4F,
+    KEY_INSERT   = 0x52,
+    KEY_PAGEUP   = 0x49,
+    KEY_PAGEDOWN = 0x51
 };
 
 #ifdef __cplusplus
