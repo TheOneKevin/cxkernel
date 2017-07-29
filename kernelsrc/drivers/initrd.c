@@ -32,9 +32,9 @@ device_t* initInitrdDevice(uint32_t initrd_start, uint32_t initrd_end)
     }
     else
     {
-        device_t* initrd_device = (device_t*) kmalloc(kheap, sizeof(device_t));
-        initrd_device = (device_t*)kmalloc(kheap, sizeof(device_t));
-        initrdpriv_t* initrd_priv = (initrdpriv_t*)kmalloc(kheap, sizeof(initrdpriv_t));
+        device_t* initrd_device = (device_t*) kmalloc(sizeof(device_t));
+        initrd_device = (device_t*)kmalloc(sizeof(device_t));
+        initrdpriv_t* initrd_priv = (initrdpriv_t*)kmalloc(sizeof(initrdpriv_t));
         initrd_priv -> initrd_loc = initrd_start;
         initrd_priv -> initrd_end = initrd_end;
 

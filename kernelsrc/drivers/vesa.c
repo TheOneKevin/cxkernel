@@ -13,7 +13,7 @@ void setVScreen(uint16_t width, uint16_t height, uint16_t mode, uint16_t pitch, 
     vhscreen.bpp = bpp;
     vhscreen.framebuffer = videoptr;
 
-    vcache = (uint32_t *)kmalloc(kheap, sizeof(uint64_t) * width * height);
+    vcache = (uint32_t *)kmalloc(sizeof(uint64_t) * width * height);
 }
 
 uint32_t getPixelAddr(uint32_t x, uint32_t y)

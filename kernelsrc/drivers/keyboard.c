@@ -222,7 +222,7 @@ void register_keyboard()
 {
     install_handler(IRQ1, &keyboard_handler);
     keyboard_set_leds(false, false, false);
-    keyCache = (uint8_t*)kmalloc(kheap, 256 * sizeof(char));
+    keyCache = (uint8_t*)kmalloc(256 * sizeof(char));
     keyboard_flush_cache();
     bprintok(); console_writeline("Registered keyboard handler");
 }

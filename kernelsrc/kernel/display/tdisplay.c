@@ -92,7 +92,7 @@ void console_write_hex (uint32_t n)
         if (tmp >= 0xA)
         {
             noZeroes = 0;
-            console_putc (tmp - 0xA + 'a');
+            console_putc (tmp - 0xA + 'A');
         }
         else
         {
@@ -104,7 +104,7 @@ void console_write_hex (uint32_t n)
     tmp = n & 0xF;
     if (tmp >= 0xA)
     {
-        console_putc (tmp - 0xA + 'a');
+        console_putc (tmp - 0xA + 'A');
     }
     else
     {

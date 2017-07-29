@@ -12,7 +12,7 @@ vfsnode_t* fs_root = NULL; // MUST be a mountpoint
 void vfs_init()
 {
     fs_tree = tree_create();
-    fs_root = (vfsnode_t *) kmalloc(kheap, sizeof(vfsnode_t));
+    fs_root = (vfsnode_t *) kmalloc(sizeof(vfsnode_t));
     fs_root -> name = "/\0";
     fs_root -> path = "/\0";
     fs_tree -> root = tree_node_create(fs_root);
@@ -94,7 +94,7 @@ status_t vfs_try_mount(fsnode_t* aMount, char* path)
             {
                 // We did not find the directory, now making it.
                 kprintf("    -> Node not found. Making: %s\n", token);
-                vfsnode_t* mountp = (vfsnode_t *) kmalloc(kheap, sizeof(vfsnode_t));
+                vfsnode_t* mountp = (vfsnode_t *) kmalloc(sizeof(vfsnode_t));
                 mountp -> name = strdup(token);
                 mountp -> path = 0;
                 mountp -> refcount = 1;
@@ -122,7 +122,7 @@ status_t vfs_try_mount(fsnode_t* aMount, char* path)
         }
     }
 
-    kfree(kheap, p);
+    kfree(p);
     return 0;
 }
 
@@ -154,7 +154,7 @@ status_t vfs_remove_mount(char* path)
 
     if (p[1] == 0)  // We are not allowed to unmount the root node.
     {
-        kfree(kheap, p);
+        kfree(p);
         return -1;
     }
     else
@@ -179,7 +179,7 @@ status_t vfs_remove_mount(char* path)
 
             if (!found) // We did not find the directory so there is an error.
             {
-                kfree(kheap, p);
+                kfree(p);
                 return -1;
             }
 
@@ -187,14 +187,14 @@ status_t vfs_remove_mount(char* path)
         }
 
         vfsnode_t* mountp = (vfsnode_t *) node -> data;
-        kfree(kheap, mountp -> path);
+        kfree(mountp -> path);
         if (mountp -> file)
-            kfree(kheap, mountp -> file);
+            kfree(mountp -> file);
         else
             kprintf("    -> There is no mount!\n");
     }
 
-    kfree(kheap, p);
+    kfree(p);
     return 0;
 }
 
@@ -212,7 +212,7 @@ vfsnode_t* vfs_get_mount(char* path)
     p[pathl] = 0;
     if (p[1] == 0)
     {
-        kfree(kheap, p);
+        kfree(p);
         return fs_root;
     }
     else
@@ -235,10 +235,10 @@ vfsnode_t* vfs_get_mount(char* path)
             }
             token = token + strlen(token) + 1;
         }
-        kfree(kheap, p);
+        kfree(p);
         return ret;
     }
-    kfree(kheap, p);
+    kfree(p);
     return fs_root;
 }
 

@@ -10,13 +10,13 @@ char* iotoa (uint32_t n)
 {
     if (n == 0)
     {
-        char* c2 = (char*)kmalloc (kheap, 32 * sizeof(char));
+        char* c2 = (char*)kmalloc(32 * sizeof(char));
         *c2 = (char)'0';
         return c2;
     }
 
     int acc = n;
-    char* c = (char*)kmalloc (kheap, 32);
+    char* c = (char*)kmalloc(32);
     int i = 0;
     while (acc > 0)
     {
@@ -26,14 +26,14 @@ char* iotoa (uint32_t n)
     }
     c [i] = 0;
 
-    char* c2 = (char*)kmalloc (kheap, 32 * sizeof(char));
+    char* c2 = (char*)kmalloc(32 * sizeof(char));
     c2 [i--] = 0;
     int j = 0;
     while (i >= 0)
     {
         c2 [i--] = c [j++];
     }
-    kfree (kheap, c);
+    kfree(c);
     return c2;
 }
 
@@ -41,7 +41,7 @@ char* pad (char* in, char c, uint32_t amount, bool isLeft)
 {
     if (strlen (in) >= amount)
     {
-        char* ret = (char*)kmalloc (kheap, strlen (in) * sizeof(char));
+        char* ret = (char*)kmalloc(strlen (in) * sizeof(char));
         memcpy (ret, in, strlen (in));
         return ret;
     }
@@ -49,7 +49,7 @@ char* pad (char* in, char c, uint32_t amount, bool isLeft)
     uint32_t diff = amount - strlen (in);
     if (isLeft)
     {
-        char* ret = (char*)kmalloc (kheap, (strlen (in) + diff) * sizeof(char));
+        char* ret = (char*)kmalloc((strlen (in) + diff) * sizeof(char));
         for (uint32_t i = 0; i < diff; i++)
             ret [i] = c;
         memcpy (ret + diff, in, strlen (in));
@@ -57,7 +57,7 @@ char* pad (char* in, char c, uint32_t amount, bool isLeft)
     }
     else
     {
-        char* ret = (char*)kmalloc (kheap, (strlen (in) + diff) * sizeof(char));
+        char* ret = (char*)kmalloc((strlen (in) + diff) * sizeof(char));
         for (uint32_t i = 0; i < diff; i++)
             ret [i + strlen (in)] = c;
         memcpy (ret, in, strlen (in));
@@ -82,7 +82,7 @@ char* convertToUnit (uint32_t input)
     {
         char* tmp = iotoa ((uint32_t)input / 1073741824);
         char* res = strcat (tmp, " GB");
-        kfree (kheap, tmp); //Gettin' down and dirty with memory management
+        kfree(tmp); //Gettin' down and dirty with memory management
         return res;
     }
 
@@ -90,7 +90,7 @@ char* convertToUnit (uint32_t input)
     {
         char* tmp = iotoa ((uint32_t)input / 1048576);
         char* res = strcat (tmp, " MB");
-        kfree (kheap, tmp);
+        kfree(tmp);
         return res;
     }
 
@@ -98,7 +98,7 @@ char* convertToUnit (uint32_t input)
     {
         char* tmp = iotoa ((uint32_t)input / 1024);
         char* res = strcat (tmp, " KB");
-        kfree (kheap, tmp);
+        kfree(tmp);
         return res;
     }
 
@@ -106,14 +106,14 @@ char* convertToUnit (uint32_t input)
     {
         char* tmp = iotoa ((uint32_t)input);
         char* res = strcat (tmp, " B");
-        kfree (kheap, tmp);
+        kfree(tmp);
         return res;
     }
 }
 
 char* strdup(const char* in)
 {
-    char* ret = kmalloc(kheap, sizeof(char) * strlen(in) + 1);
+    char* ret = kmalloc(sizeof(char) * strlen(in) + 1);
     strcpy(ret, in);
     return ret;
 }

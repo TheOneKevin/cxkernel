@@ -112,10 +112,10 @@ void memtest ()
 {
     kprintf ("This is where we test whether our heap is working or not: \n");
     kprintf ("This should output \"0xBADBEEF\" on the first line and do nothing on the second \n");
-    uint32_t *p = (uint32_t*)kmalloc (kheap, sizeof(uint32_t));
+    uint32_t *p = (uint32_t*)kmalloc(sizeof(uint32_t));
     *p = 0xBADBEEF; kprintf ("%X\n", *p);
-    kfree (kheap, p);
-    char* undef = 0; kfree (kheap, undef); //This should (not) throw error (anymore)
+    kfree(p);
+    char* undef = 0; kfree(undef); //This should (not) throw error (anymore)
 }
 
 void divByZero ()
@@ -163,15 +163,15 @@ void printTime (char* args)
     char* da = iotoa (day);
 
     char* hr = pad (h, '0', 2, true);
-    kfree (kheap, h);
+    kfree(h);
     char* mi = pad (m, '0', 2, true);
-    kfree (kheap, m);
+    kfree(m);
     char* se = pad (s, '0', 2, true);
-    kfree (kheap, s);
+    kfree(s);
     char* mon = pad (mo, '0', 2, true);
-    kfree (kheap, mo);
+    kfree(mo);
     char* daa = pad (da, '0', 2, true);
-    kfree (kheap, da);
+    kfree(da);
 
     if (strcmp (args + 5, "-a") == 0)
     {
@@ -179,9 +179,9 @@ void printTime (char* args)
         {
             char* foo = iotoa (hour - 12);
             char* foobar = pad (foo, '0', 2, true);
-            kfree (kheap, foo);
+            kfree(foo);
             kprintf ("%s:%s:%s PM %s/%s/%u\nHH:MM:SS    MM/DD/YYYY\n", foobar, mi, se, mon, daa, year);
-            kfree (kheap, foobar);
+            kfree(foobar);
         }
         else if (hour <= 12)
             kprintf ("%s:%s:%s AM %s/%s/%u\nHH:MM:SS    MM/DD/YYYY\n", hr, mi, se, mon, daa, year);
@@ -196,11 +196,11 @@ void printTime (char* args)
     kprintf ("\nEpoch: %u\n", getEpoch () & 0x00000000FFFFFFFF);
     sti ();
 
-    kfree (kheap, hr);
-    kfree (kheap, mi);
-    kfree (kheap, se);
-    kfree (kheap, daa);
-    kfree (kheap, mon);
+    kfree(hr);
+    kfree(mi);
+    kfree(se);
+    kfree(daa);
+    kfree(mon);
 }
 
 void startDebugger (char* args)
@@ -243,7 +243,7 @@ void fetchCommand (int id, char* buffer)
 void init_terminal (multiboot_info_t* multi)
 {
     mbt = multi;
-    char*    text = (char*) kmalloc(kheap, 1024 * sizeof(char));
+    char*    text = (char*) kmalloc(1024 * sizeof(char));
     uint16_t idx = 0;
     memset(text, 0, 1024 * sizeof(char));
 

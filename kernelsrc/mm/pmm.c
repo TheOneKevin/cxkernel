@@ -134,7 +134,7 @@ int _pmm_paging_unalloc(uint32_t addr)
 
 void pmm_init()
 {
-    pmm = (PMMBLOCKM_t*)kmalloc(kheap, sizeof(PMMBLOCKM_t));
+    pmm = (PMMBLOCKM_t*)kmalloc(sizeof(PMMBLOCKM_t));
     pmm -> paging  = 0;
     pmm -> general = 0;
     pmm -> isadma  = 0;
@@ -146,7 +146,7 @@ void pmm_init()
 
 void pmm_addBlock(uintptr_t address, size_t nframes, uint8_t type)
 {
-    PMMBLOCK_t* ptr = (PMMBLOCK_t*)kmalloc(kheap, sizeof(PMMBLOCK_t));
+    PMMBLOCK_t* ptr = (PMMBLOCK_t*)kmalloc(sizeof(PMMBLOCK_t));
     ptr -> prev = 0;
     ptr -> next = 0;
     ptr -> address = address;
@@ -157,8 +157,8 @@ void pmm_addBlock(uintptr_t address, size_t nframes, uint8_t type)
         if(pmm -> paging == 0)
         {
             pmm -> paging = ptr;
-            pmm -> pagingList = (BITMAPLLIST_t*)kmalloc(kheap, sizeof(BITMAPLLIST_t));
-            pmm -> pagingList -> bitmap_paging = (uint32_t*)kmalloc(kheap, ptr -> frames);
+            pmm -> pagingList = (BITMAPLLIST_t*)kmalloc(sizeof(BITMAPLLIST_t));
+            pmm -> pagingList -> bitmap_paging = (uint32_t*)kmalloc(ptr -> frames);
         }
 
         else
@@ -167,9 +167,9 @@ void pmm_addBlock(uintptr_t address, size_t nframes, uint8_t type)
             ptr -> prev = descendList(pmm -> paging);
 
             BITMAPLLIST_t* tmp = descendLlist(pmm -> pagingList);
-            tmp -> next = (BITMAPLLIST_t*)kmalloc(kheap, sizeof(BITMAPLLIST_t));
+            tmp -> next = (BITMAPLLIST_t*)kmalloc(sizeof(BITMAPLLIST_t));
             tmp -> next -> prev = tmp;
-            tmp -> next -> bitmap_paging = (uint32_t*)kmalloc(kheap, ptr -> frames);
+            tmp -> next -> bitmap_paging = (uint32_t*)kmalloc(ptr -> frames);
         }
     }
 

@@ -1,7 +1,7 @@
 #include "tasking/elfloader.h"
 #include "system/kprintf.h"
 
-bool elf_check_header(ELF32_Header* head)
+bool elf_check_header(elf32_header_t* head)
 {
     if(!head) return false;
     if(head -> e_ident[EI_MAG0] != ELFMAG0)
@@ -27,7 +27,7 @@ bool elf_check_header(ELF32_Header* head)
     return true;
 }
 
-bool elf_check_supported(ELF32_Header *head)
+bool elf_check_supported(elf32_header_t *head)
 {
     if(!elf_check_header(head))
     {
@@ -56,8 +56,53 @@ bool elf_check_supported(ELF32_Header *head)
     }
     if(head -> e_type != ELF_REL && head -> e_type != ELF_EXEC)
     {
-        kprintf("Unsupported ELF File type.\n");
+        kprintf("Unsupported ELF File type: %X.\n", head -> e_type);
         return false;
     }
     return true;
+}
+
+void *elf_load_file(void *file)
+{
+    elf32_header_t *hdr = (elf32_header_t *)file;
+
+    if(!elf_check_supported(hdr))
+    {
+        kprintf("ELF File cannot be loaded.\n");
+        return NULL;
+    }
+
+    switch(hdr -> e_type)
+    {
+        case ELF_EXEC:
+            kprintf("Loaded elf executable file at %X with %u sections @ %X\n", hdr -> e_entry, hdr -> e_shnum, hdr -> e_shoff);
+            elf32_sheader_t* shstr = (elf32_sheader_t *) (hdr -> e_shoff + (uintptr_t) file + hdr -> e_shstrndx * 0x28);
+
+            for(uint32_t i = 0; i < hdr -> e_shnum; i ++)
+            {
+                elf32_sheader_t* shdr = (elf32_sheader_t *) (hdr -> e_shoff + (uintptr_t) file + i * 0x28);
+
+                if(((char *)(shstr -> sh_offset + (uintptr_t) file + shdr -> sh_name))[0] == 0)
+                    kprintf("[.null %X] ", shdr -> sh_offset);
+                else
+                    kprintf("[%s %X]", (void *)(shstr -> sh_offset + (uintptr_t) file + shdr -> sh_name), shdr -> sh_offset);
+            }
+
+            kprintf("\n");
+
+            elf32_sheader_t* shdr1 = (elf32_sheader_t *) (hdr -> e_shoff + (uintptr_t) file + 1 * 0x28);
+            void (*foo)(void) = (uintptr_t) file + shdr1 -> sh_offset;
+            foo();
+
+            return NULL;
+        case ELF_REL:
+            kprintf("Loaded elf relocatable file.\n");
+            return NULL;
+        case ELF_NONE:
+            kprintf("Loaded elf other file.\n");
+            return NULL;
+    }
+
+    kprintf("ELF File cannot be loaded.\n");
+    return NULL;
 }

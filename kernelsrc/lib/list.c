@@ -5,7 +5,7 @@
 
 list_t* list_create()
 {
-    list_t * out = kmalloc(kheap, sizeof(list_t));
+    list_t * out = kmalloc(sizeof(list_t));
     out -> head = NULL;
     out -> tail = NULL;
     out -> length = 0;
@@ -18,7 +18,7 @@ void list_destroy(list_t* list)
     while (n)
     {
         list_node_t* s = n -> next;
-        kfree(kheap, n);
+        kfree(n);
         n = s;
     }
 }
@@ -56,7 +56,7 @@ void list_merge(list_t* target, list_t* source)
 
     target -> length += source -> length;
 
-    kfree(kheap, source);
+    kfree(source);
 }
 
 void list_remove(list_t* list, size_t index)
@@ -81,7 +81,7 @@ int list_get_index(list_t* list, void* value)
 
 list_node_t* list_create_node(void* item)
 {
-    list_node_t* ret = kmalloc(kheap, sizeof(list_node_t));
+    list_node_t* ret = kmalloc(sizeof(list_node_t));
     ret -> prev = NULL;
     ret -> next = NULL;
     ret -> data = item;

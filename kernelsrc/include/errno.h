@@ -22,6 +22,10 @@ typedef int status_t;
 #define ENOFRM 6 // No free frames left
 #define ENIMPL 7 // Not implemented yet
 
+#define ELF_RELOC_ERR 8
+#define ET_EXEC       9
+#define ET_REL        10
+
 #ifdef __cplusplus
 }
 #endif

@@ -31,6 +31,11 @@ pagingf:
     push 14
     jmp pagingf_common_stub
 
+[GLOBAL syscallf]
+syscallf:
+    cli
+    jmp syscall_stub
+
 ISR_NOERRCODE 0
 ISR_NOERRCODE 1
 ISR_NOERRCODE 2
@@ -134,6 +139,12 @@ pagingf_common_stub:
     pop ds
     popa
     add esp, 8     ; Cleans up the pushed error code and pushed ISR number
+    iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
+
+[EXTERN syscall_handler]
+
+syscall_stub:
+    call syscall_handler
     iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
 
 ; in irq.c

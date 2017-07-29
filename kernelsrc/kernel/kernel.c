@@ -25,7 +25,7 @@
 #define CPU_EXCEP       0 // Test CPU exceptions
 
 #if GRUB_2
-#include "multiboot2.h"
+ #include "multiboot2.h"
 #endif
 #include "multiboot.h"
 
@@ -69,8 +69,10 @@
 //Memory information
 uint64_t _length;
 uint64_t _addr;
-KHEAPBM *         kheap;
+
+KHEAPBM* kheap;
 KHEAPBM tkh;
+
 extern uint32_t _kernel_end;
 //Our switch to real mode function
 bool doBootLog;
@@ -85,23 +87,21 @@ uint32_t*         startheap;
 uint32_t initrd_location;
 uint32_t initrd_end;
 
-#if VESA
-    extern uint8_t enablevesa();
-#endif
+extern uint8_t enablevesa();
 
 void getMemDisplay(multiboot_info_t* mbt)
 {
-#if DEBUGMSG
+    #if DEBUGMSG
         kprintf("Memory map address: %X \n", mbt -> mem_upper);
-#endif
+    #endif
     multiboot_memory_map_t *mmap = (multiboot_memory_map_t *) (mbt -> mmap_addr + KRNLBASE);
 
     while ((uint32_t) mmap < mbt -> mmap_addr + mbt -> mmap_length + KRNLBASE)
     {
         mmap = (multiboot_memory_map_t *) ((unsigned int) mmap + mmap -> size + sizeof(unsigned int));
-#if DEBUGMSG
+        #if DEBUGMSG
             kprintf(" Entry length: %X Entry address %X (%X) \n", (uint32_t) mmap -> len, (uint32_t) mmap -> addr, (uint32_t) mmap -> type);
-#endif
+        #endif
         if ((mmap -> len >= _length) && (mmap -> type == 0x1))              //We want the largest chunk of free space
         {
             _length = mmap -> len; _addr = mmap -> addr + KRNLBASE;         //Then store it in these variables
@@ -127,9 +127,9 @@ void getMemDisplay(multiboot_info_t* mbt)
     if (_length + EPSILON <= 1024 * 1024 * 16 || _length - EPSILON <= 1024 * 1024 * 16)
     {
         bprinterr(); kprintf("Not enough RAM! Need at least 16 MB of RAM!\n");
-#if SAVAGEMODE
+        #if SAVAGEMODE
             PANIC("More RAM needed!");
-#endif
+        #endif
     }
     else if (_length + EPSILON > 1024 * 1024 * 128 || _length - EPSILON > 1024 * 1024 * 128)
     {
@@ -170,7 +170,7 @@ void PreInit()
     kheap = &tkh;
     //Initialize our kernel heap
     k_heapBMInit(kheap);
-    k_heapBMAddBlock(kheap, (uintptr_t) 0xFFC00000, 0x400000, 16);      //3 MiB not 4 for a good reason
+    k_heapBMAddBlock(kheap, (uintptr_t) 0xFFC00000, 0x400000 - 1, 16);      //4 MiB
 
     #if VESA
         // We need to clear off an area for the VESA tables to sit in
@@ -213,7 +213,7 @@ void Init()
 void PostInit()
 {
     bprintok(); console_write("OS ready!\n");
-    doBootLog = false;        //End of boot sequence
+    doBootLog = false;        // End of boot sequence
     asm volatile ("sti");     // Enable interrupts
 
     //Enable our backup terminal if real terminal doesn't exist
@@ -245,10 +245,20 @@ void FilesystemInit()
 
     vfs_try_mount(tarfs, "/");
     fsnode_t* file = vfs_open("/Kudzu.txt");
-    char*     data = kmalloc(kheap, file -> file_stats -> st_size);
+    char*     data = kmalloc(file -> file_stats -> st_size);
     vfs_read(file, data, 0, file -> file_stats -> st_size);
     vfs_close(file);
-    kfree(kheap, data);
+    kfree(data);
+
+    initSyscalls();
+    
+    kprintf("Attempting to load hw.elf... ");
+    fsnode_t* file1 = vfs_open("/hw.elf");
+    void* data1 = kmalloc(file1 -> file_stats -> st_size);
+    vfs_read(file1, data1, 0, file1 -> file_stats -> st_size);
+    elf_load_file(data1);
+    vfs_close(file1);
+    kfree(data1);
 
     //initDevFS();
 }
@@ -285,34 +295,34 @@ void kernel_main()
 
 void testInt()
 {
-#if TEST_NOPAGE
+    #if TEST_NOPAGE
         // Test page fault :)
         uint32_t* _ptr = (uint32_t *) 0xFFF;  //Should cause a nonexistant fault
-#endif
+    #endif
 
-#if TEST_NOPAGE2
+    #if TEST_NOPAGE2
         uint32_t* _ptr = (uint32_t *) 0xA0000000;  //Should cause a protection fault
-#endif
+    #endif
 
-#if TEST_NOPAGE || TEST_NOPAGE2
+    #if TEST_NOPAGE || TEST_NOPAGE2
         uint32_t foo = *_ptr;
         console_write_dec(foo);
-#endif
+    #endif
 
-#if CPU_EXCEP
+    #if CPU_EXCEP
         console_write_dec(3 / 0);  //Test if interrupts work
-#endif
+    #endif
 
-#if TEST_HEAP
+    #if TEST_HEAP
         char* ptr;
-        ptr = (char *) kmalloc(kheap, 4);
+        ptr = (char *) kmalloc(4);
         *ptr = 4;
         //kprintf("%X\n%X", ptr, *ptr); //Should display 0x4 on the second line
         k_heapBMFree(kheap, ptr);
 
         //If there's a nonexistent pointer
-        char* _ppap = 0; kfree(kheap, _ppap);
-#endif
+        char* _ppap = 0; kfree(_ppap);
+    #endif
 }
 
 //Test SSP

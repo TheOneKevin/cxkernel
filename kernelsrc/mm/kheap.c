@@ -5,12 +5,12 @@
 #include "memory/kheap.h"
 #include "system/kprintf.h"
 #include "display/tdisplay.h"
- 
+
 void k_heapBMInit(KHEAPBM *heap)
 {
     heap->fblock = 0;
 }
- 
+
 int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, size_t size, size_t bsize)
 {
     KHEAPBLOCKBM    *b;
@@ -31,25 +31,25 @@ int k_heapBMAddBlock(KHEAPBM *heap, uintptr_t addr, size_t size, size_t bsize)
     // Clear bitmap
     for (x = 0; x < bcnt; ++x)
         bm[x] = 0;
- 
+
     // Reserve room for bitmap
     bcnt = (bcnt / bsize) * bsize < bcnt ? bcnt / bsize + 1 : bcnt / bsize;
     for (x = 0; x < bcnt; ++x)
         bm[x] = 5;
-    
+
     b->lfb = bcnt - 1;
     b->used = bcnt;
-    
+
     return 1;
 }
- 
+
 static uint8_t k_heapBMGetNID(uint8_t a, uint8_t b)
 {
     uint8_t c;
     for (c = a + 1; c == b || c == 0; ++c);
     return c;
 }
- 
+
 void *k_heapBMAlloc(KHEAPBM *heap, size_t size)
 {
     KHEAPBLOCKBM    *b;
@@ -65,10 +65,10 @@ void *k_heapBMAlloc(KHEAPBM *heap, size_t size)
         // Check if block has enough room
         if (b->size - (b->used * b->bsize) >= size)
         {
-            bcnt = b->size / b->bsize;		
+            bcnt = b->size / b->bsize;
             bneed = (size / b->bsize) * b->bsize < size ? size / b->bsize + 1 : size / b->bsize;
             bm = (uint8_t*)&b[1];
-            
+
             for (x = (b->lfb + 1 >= bcnt ? 0 : b->lfb + 1); x != b->lfb; ++x)
             {
                 // Just wrap around
@@ -98,13 +98,13 @@ void *k_heapBMAlloc(KHEAPBM *heap, size_t size)
             } //End for
         } //End if
     } //End for
-    
+
     return 0;
 }
- 
+
 int k_heapBMFree(KHEAPBM *heap, void *ptr)
 {
-    KHEAPBLOCKBM    *b;	
+    KHEAPBLOCKBM    *b;
     uintptr_t       ptroff;
     uint32_t        bi, x;
     uint8_t         *bm;
@@ -127,30 +127,30 @@ int k_heapBMFree(KHEAPBM *heap, void *ptr)
             max = b->size / b->bsize;
             for (x = bi; bm[x] == id && x < max; ++x)
                 bm[x] = 0;
-            
+
             // Update free block count
             b->used -= x - bi;
             return 1;
         }
     }
-    
+
     return 0;
 }
 
-void *kmalloc(KHEAPBM *heap, size_t size)
+void *kmalloc(size_t size)
 {
-    return k_heapBMAlloc(heap, size);
+    return k_heapBMAlloc(kheap, size);
 }
 
-void kfree(KHEAPBM *heap, void *ptr)
+void kfree(void *ptr)
 {
-    if(ptr > (void *)heap -> fblock && ptr <= (void *)((heap -> fblock) + (uint32_t) (heap -> fblock -> size)))
+    if(ptr > (void *)kheap -> fblock && ptr <= (void *)((kheap -> fblock) + (uint32_t) (kheap -> fblock -> size)))
     {
-        int ret = k_heapBMFree(heap, ptr);
+        int ret = k_heapBMFree(kheap, ptr);
         if(ret == 0)
             kprintf("Cannot free block!"); // TODO: This error needs to be raised or reported somehow
     }
-    
+
     else
     {
         //bprinterr();

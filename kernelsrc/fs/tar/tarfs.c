@@ -36,7 +36,7 @@ uint64_t _LtranslateSize(const char* in)
 uint32_t _tar_getfilecount(filesystem_t* fs)
 {
     uint32_t i;
-    tar_header_t* header = (tar_header_t *) kmalloc(kheap, sizeof(tar_header_t));
+    tar_header_t* header = (tar_header_t *) kmalloc(sizeof(tar_header_t));
     fs -> dev -> pos = 0; //Careful!
     for (i = 0;; i++)  //We loop through each header
     {
@@ -51,13 +51,13 @@ uint32_t _tar_getfilecount(filesystem_t* fs)
             fs -> dev -> pos += 512;
     }
 
-    kfree(kheap, header);
+    kfree(header);
     return i;
 }
 
 void _tar_parse(filesystem_t* fs)
 {
-    tar_header_t* header = (tar_header_t *) kmalloc(kheap, sizeof(tar_header_t));
+    tar_header_t* header = (tar_header_t *) kmalloc(sizeof(tar_header_t));
     tarpriv_t* priv = (tarpriv_t *) fs -> private_data;
     fs -> dev -> pos = 0;
     for (uint32_t i = 0;; i++)
@@ -74,7 +74,7 @@ void _tar_parse(filesystem_t* fs)
             fs -> dev -> pos += 512;
     }
 
-    kfree(kheap, header);
+    kfree(header);
 }
 
 int _tar_get_inode(char* file, filesystem_t* fs)
@@ -126,9 +126,9 @@ size_t tarfs_write(fsnode_t* file, void* buffer, size_t offset, size_t length)
 
 status_t tarfs_close(fsnode_t* file)
 {
-    kfree(kheap, file -> name);
-    kfree(kheap, file -> file_stats);
-    kfree(kheap, file);
+    kfree(file -> name);
+    kfree(file -> file_stats);
+    kfree(file);
     return 0;
 }
 
@@ -176,13 +176,13 @@ fsnode_t* tarfs_open(char* path, fsnode_t* mount)
     {
         if (strcmp(tpriv -> nodes[i] . filename, path + 1) == 0)  //path + 1 to ignore the prepended '/'
         {
-            ret = (fsnode_t *) kmalloc(kheap, sizeof(fsnode_t));
+            ret = (fsnode_t *) kmalloc(sizeof(fsnode_t));
             ret -> name = strdup(path); // The only thing we need to free
             ret -> fs = mount -> fs;    // All files should have a pointer to the filesystem of the mount
             ret -> inode = i;
             ret -> length = atoio(tpriv -> nodes[i] . size) * sizeof(char);
             ret -> file_ops = fileops;
-            ret -> file_stats = (fstat_t *) kmalloc(kheap, sizeof(fstat_t));
+            ret -> file_stats = (fstat_t *) kmalloc(sizeof(fstat_t));
             tarfs_stat(ret, ret -> file_stats);
             return ret;
         }
@@ -207,7 +207,7 @@ void tarfs_init()
 {
     if (!tarops)
     {
-        tarops = (struct fsOps*) kmalloc(kheap, sizeof(struct fsOps));
+        tarops = (struct fsOps*) kmalloc(sizeof(struct fsOps));
         tarops  -> exists = tarfs_exists;
         tarops  -> open = tarfs_open;
         tarops  -> touch = tarfs_touch;
@@ -215,7 +215,7 @@ void tarfs_init()
 
     if (!fileops)
     {
-        fileops = (struct fOps*)  kmalloc(kheap, sizeof(struct fOps));
+        fileops = (struct fOps*)  kmalloc(sizeof(struct fOps));
         fileops -> close = tarfs_close;
         fileops -> finddir = tarfs_finddir;
         fileops -> read = tarfs_read;
@@ -226,9 +226,9 @@ void tarfs_init()
 
 fsnode_t* tarfs_mount(device_t* dev)
 {
-    filesystem_t* fs = (filesystem_t *) kmalloc(kheap, sizeof(filesystem_t));
-    tarpriv_t* priv = (tarpriv_t *) kmalloc(kheap, sizeof(tarpriv_t));
-    fsnode_t* mount = (fsnode_t *) kmalloc(kheap, sizeof(fsnode_t));
+    filesystem_t* fs = (filesystem_t *) kmalloc(sizeof(filesystem_t));
+    tarpriv_t* priv = (tarpriv_t *) kmalloc(sizeof(tarpriv_t));
+    fsnode_t* mount = (fsnode_t *) kmalloc(sizeof(fsnode_t));
 
     fs -> dev = dev;
     fs -> fs_ops = tarops;
@@ -236,7 +236,7 @@ fsnode_t* tarfs_mount(device_t* dev)
     fs -> private_data = priv;
     fs -> mount = mount;
 
-    priv -> nodes = (tar_header_t *) kmalloc(kheap, _tar_getfilecount(fs) * sizeof(tar_header_t));
+    priv -> nodes = (tar_header_t *) kmalloc(_tar_getfilecount(fs) * sizeof(tar_header_t));
     priv -> fileCount = _tar_getfilecount(fs);
     _tar_parse(fs);
 
@@ -250,6 +250,6 @@ fsnode_t* tarfs_mount(device_t* dev)
 
 void tarfs_unmount(filesystem_t* fs, device_t* dev)
 {
-    kfree(kheap, ((tarpriv_t *) fs -> private_data) -> nodes);
-    kfree(kheap, fs -> private_data);
+    kfree(((tarpriv_t *) fs -> private_data) -> nodes);
+    kfree(fs -> private_data);
 }

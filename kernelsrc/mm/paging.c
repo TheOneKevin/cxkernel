@@ -193,6 +193,7 @@ void paging_init()
     memset(page_directory, 0, 1024); //Clear the page directory
     //Make the first page directory point to the kernel page table
     page_directory[0] = ((uint32_t)kpt - CONSTFRAME()) | 0x3;
+    
     //We map all the memory from 0 to the start of the frames (kernel + kernel heap)
     for(uint32_t i = 0; i <= pgalgnup((uint32_t)&_kernel_end - KRNLBASE); i += 0x1000)
         paging_map_virtual_to_phys(i + KRNLBASE, i, 0b011);
@@ -207,7 +208,7 @@ void paging_init()
     for(uint32_t i = 0; i <= 0x400000; i += 0x1000)
         paging_map_virtual_to_phys(i + INRDBASE, (uint32_t)&_kernel_end - KRNLBASE + 0x1000 + i, 0b011);
 
-    paging_map_virtual_to_phys(0xC03FF000, 0x000B8000, 0b011);
+    paging_map_virtual_to_phys(0xC03FF000, 0x000B8000, 0b011); // VGA
 
     if(vhscreen.enabled == true)
     {
