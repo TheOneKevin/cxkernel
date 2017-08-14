@@ -1,0 +1,26 @@
+TARGET_FOLDER=@PLATFORM_ID@
+
+.PHONY: all
+all:
+	@echo "\n\033[1;36m[Building C and C++ sources]\033[0m"
+	@cd kernelsrc && make --no-print-directory
+	@cd obj && make --no-print-directory
+ifeq ($(TARGET_FOLDER),i386)
+	@cd grub && make --no-print-directory
+endif
+	@echo "\033[1;32m-------------- Done! --------------\033[0m"
+	@echo "\033[1;36mBuild is done. Go give yourself a pat on the back.\033[0m"
+
+.PHONY: cleanall
+cleanall:
+	@cd kernelsrc && make clean --no-print-
+	@echo "\033[1;36m[Removing autohell generated objects]\033[0m"
+	@rm -rf kernelsrc/Makefile grub/Makefile obj/Makefile config.status config.log
+	@echo "\033[1;36m[Commiting suicide]\033[0m"
+	@rm -rf Makefile
+	
+.PHONY: clean
+clean:
+	@cd kernelsrc && make clean --no-print-
+	@echo "\033[1;36m[Removing autohell generated objects]\033[0m"
+	@rm -rf config.status config.log

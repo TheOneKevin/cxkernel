@@ -1,0 +1,28 @@
+# @Author: Kevin Dai
+# @Date:   13-Aug-2017 08:00:35 PM
+# @Email:  kevindai02@outlook.com
+# @Project: Eurus OS
+# @Filename: .gitlab-ci.yml
+# @Last modified by:   Kevin Dai
+# @Last modified time: 13-Aug-2017 08:18:46 PM
+
+before_script:
+  - sudo apt-get update
+  - ./configure
+cache:
+  paths:
+  - ~/.bashrc
+  - ~/barebones-toolchain/
+stages:
+  - build
+
+buildproj:
+  stage: build
+  script:
+  - ./configure --target=i686 && make
+  artifacts:
+    paths:
+    - bin/*.bin
+    - bin/*.iso
+    name: "EurusOS_${CI_COMMIT_REF_NAME}"
+    when: on_success
