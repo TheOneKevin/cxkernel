@@ -1,8 +1,8 @@
 sudo: required
 before_install:
 - chmod +x configure
-- sudo apt-get install -y nasm xorriso
-install: ./configure
+- ./configure
+- export PATH=$PATH:~/barebones-toolchain/x86_64/bin
 language: c
 script: ./configure && make
 deploy:
