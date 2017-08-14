@@ -1,5 +1,6 @@
 sudo: required
 before_install:
+- chmod +x configure
 - sudo apt-get install -y nasm xorriso
 install: ./configure
 language: c
