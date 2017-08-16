@@ -3,6 +3,7 @@ before_install:
 - chmod +x configure
 - ./configure
 - export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin
+- mkdir bin
 language: c
 script: ./configure && make
 deploy:
