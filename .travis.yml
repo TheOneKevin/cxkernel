@@ -1,4 +1,7 @@
 sudo: required
+branches:
+  only:
+    - master
 before_install:
 - export RELEASETYPE=ILIKECHEESE
 - chmod +x configure
@@ -14,5 +17,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: TheCool1Kevin/LiquiDOS
-    condition: $RELEASETYPE=RELEASE
+    condition: "$RELEASETYPE=RELEASE"
     overwrite: true
