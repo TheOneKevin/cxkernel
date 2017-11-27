@@ -6,7 +6,7 @@
  * Created on 2017-08-31T16:30:36-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T20:49:23-05:00
+ * @ Last modified time: 2017-11-26T21:46:07-05:00
 */
 
 #include "panic.h"
@@ -67,7 +67,7 @@ void bootmm_init_memory_regions(void)
     {
         if(mmap -> type == MULTIBOOT_MEMORY_AVAILABLE)
             for(unsigned int i = ARCH_PAGE_ALIGN(mmap -> addr) / ARCH_PAGE_SIZE; i < ARCH_PAGE_ALIGN_DOWN(mmap -> addr + mmap -> len) / ARCH_PAGE_SIZE - 1; i++)
-                bitmap_setbit(g_pmm_buddy_map -> bitmap, i);
+                bitmap_clrbit(g_pmm_buddy_map -> bitmap, i);
     }
 
     // Allocate from the first highest free address first
