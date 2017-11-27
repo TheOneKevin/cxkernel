@@ -1,5 +1,6 @@
 sudo: required
 before_install:
+- export RELEASETYPE=ILIKECHEESE
 - chmod +x configure
 - ./configure
 - export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin
@@ -13,5 +14,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: TheCool1Kevin/LiquiDOS
-    tags: false
+    condition: $RELEASETYPE=RELEASE
     overwrite: true
