@@ -6,12 +6,12 @@
  * Created on 30-Jul-2017 08:13:38 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 30-Jul-2017 08:14:05 PM
+ * @ Last modified time: 2017-08-28T15:34:44-04:00
 */
 
 #pragma once
 
-#include "system.h"
+#include "common.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,5 +23,3 @@ void drawBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, enum vga_color c1, 
 #ifdef __cplusplus
 }
 #endif
-
-// C++ code goes here

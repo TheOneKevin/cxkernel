@@ -10,7 +10,7 @@ deploy:
   provider: releases
   api_key:
     secure: V/pw1Mh9v4L8eed1ewNjvV+iQNYwAxDxJ/ZpHiOT32kFk0xEPScW7XajZP6aY4R8GEQ+1+kYDTnGCUWcecaoSiwXGRK90lizMqmyXd4I03tggFF0/KLiGVGqdRq0+5/Aa3JnRhVBVCUMXM/39l9T0DAohyzCNhTVJySw6heiw4croZUyP6P9u/czBgECMIwSnnjNemKH6ROOe60tJZaS5Sju+Q3/JobuMrUULv4DRNhGfrJHYanOZ+9HhNLh9UYPzPG8UZTj8DTPcU5aYLE4p8h923MBhAWzpMYs6Wi9sz/IArDSFSn4LeE4uV5/NypA8BdCvX9yN8uAaidqFmNX0zJDx/x/4f8am5Fh/mX0y0yT7Y/48ZeixB/L9KZkz2b9LvpR/bJZJUMFFC5ivsjz+v0FjEQIxVQaL+15xQbjKCCShmXFtWvuLtfwIBq9aRDtbxxwbBLPBRBvxAxOItIOa4jUtDD36e/gcJEkNX6rsShGd0eV02hvNVBpYHEc5hpmOtwErIk8RDUqEpUO8B4CJMr+nKuAG0hPndsDLnVbnbnycQLyyNZZHMOTsReElQzw6IJaE+tdAuU9SdeCL0ZtsdCXwbFJzEaHAYBt3ZT/hKrmJ5bLsWcVm9bg1wWaOyANUgbEeWmQn1Zcu5W1IZh0hGhUyDewajI4weqC/fjnYcs=
-  file: bin/LiquiDOS.iso
+  File:   bin/LiquiDOS.iso
   skip_cleanup: true
   on:
     repo: TheCool1Kevin/LiquiDOS

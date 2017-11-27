@@ -1,0 +1,403 @@
+lib/string.c: In function ‘strlen’:
+lib/string.c:75:21: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     for(ptr = str; ((uint32_t) ptr & (sizeof(uint32_t) - 1)) != 0; ptr++)
+                     ^
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:198 liballoc_dump() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:220 liballoc_dump() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:251 allocate_new_page() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:267 allocate_new_page() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:300 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:316 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:321 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:328 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:339 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:367 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:375 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:423 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:457 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:501 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:541 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:559 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:574 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:580 malloc() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:600 free() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:626 free() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:652 free() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:701 free() warn: inconsistent indenting
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/mm/malloc.c:755 realloc() warn: inconsistent indenting
+mm/malloc.c: In function ‘liballoc_alloc’:
+mm/malloc.c:35:29: warning: unused parameter ‘s’ [-Wunused-parameter]
+ void* liballoc_alloc(size_t s)
+                             ^
+mm/malloc.c: In function ‘liballoc_free’:
+mm/malloc.c:53:25: warning: unused parameter ‘ptr’ [-Wunused-parameter]
+ int liballoc_free(void* ptr, size_t s)
+                         ^
+mm/malloc.c:53:37: warning: unused parameter ‘s’ [-Wunused-parameter]
+ int liballoc_free(void* ptr, size_t s)
+                                     ^
+mm/malloc.c: In function ‘liballoc_init’:
+mm/malloc.c:58:38: warning: unused parameter ‘s’ [-Wunused-parameter]
+ void liballoc_init(void* ptr, size_t s)
+                                      ^
+mm/page_alloc.c: In function ‘__get_free_page’:
+mm/page_alloc.c:16:39: warning: unused parameter ‘flags’ [-Wunused-parameter]
+ struct page* __get_free_page(uint32_t flags)
+                                       ^
+mm/page_alloc.c: In function ‘__alloc_pages’:
+mm/page_alloc.c:21:37: warning: unused parameter ‘flags’ [-Wunused-parameter]
+ struct page* __alloc_pages(uint32_t flags, size_t len)
+                                     ^
+mm/page_alloc.c:21:51: warning: unused parameter ‘len’ [-Wunused-parameter]
+ struct page* __alloc_pages(uint32_t flags, size_t len)
+                                                   ^
+mm/page_alloc.c: At top level:
+mm/page_alloc.c:31:18: warning: ‘data’ defined but not used [-Wunused-variable]
+ static pg_data_t data;
+                  ^
+mm/page_alloc.c: In function ‘__get_free_page’:
+mm/page_alloc.c:19:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+mm/page_alloc.c: In function ‘__alloc_pages’:
+mm/page_alloc.c:24:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+tasking/symbol_table.c: In function ‘load_symbol_table’:
+tasking/symbol_table.c:26:40: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         symbol_table_desc -> symbols = (elf_sym_t *) (symbol_table -> sh_addr);
+                                        ^
+tasking/symbol_table.c:27:50: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         symbol_table_desc -> string_table_addr = (char *) (string_table -> sh_addr);
+                                                  ^
+arch/x86/acpi/bootacpi.c: In function ‘getRDSP’:
+arch/x86/acpi/bootacpi.c:93:57: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     for(addr = (uint32_t *) (0xE0000 + ARCH_VIRT_BASE); (uint32_t) addr < 0x100000 + ARCH_VIRT_BASE; addr += 0x10 / sizeof(addr))
+                                                         ^
+arch/x86/acpi/bootacpi.c:104:16: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     for(addr = (uint32_t *) (EBDA + ARCH_VIRT_BASE); (uint32_t) addr < EBDA + 1024; addr += 0x10 / sizeof(addr))
+                ^
+arch/x86/acpi/bootacpi.c:104:54: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     for(addr = (uint32_t *) (EBDA + ARCH_VIRT_BASE); (uint32_t) addr < EBDA + 1024; addr += 0x10 / sizeof(addr))
+                                                      ^
+arch/x86/acpi/bootacpi.c: In function ‘findTable’:
+arch/x86/acpi/bootacpi.c:144:41: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         struct ACPI_SDT_Header* table = (struct ACPI_SDT_Header *) mapACPItable(*(&RSDT -> pointers + i), sizeof(struct ACPI_SDT_Header));
+                                         ^
+arch/x86/acpi/bootacpi.c:147:21: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+             table = (struct ACPI_SDT_Header *) mapACPItable(*(&RSDT -> pointers + i), table -> length);
+                     ^
+arch/x86/acpi/bootacpi.c: In function ‘getCPUInfo’:
+arch/x86/acpi/bootacpi.c:179:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     uint32_t addr = ((uint32_t) table) + sizeof(ACPI_MADT_t);
+                      ^
+arch/x86/acpi/bootacpi.c:180:18: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     while(addr < (uint32_t) table + table -> head.length)
+                  ^
+arch/x86/acpi/bootacpi.c:182:47: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         struct MADT_proc_lapic_struct* head = (struct MADT_proc_lapic_struct *) addr;
+                                               ^
+arch/x86/acpi/bootacpi.c: In function ‘initTmpBootACPI’:
+arch/x86/acpi/bootacpi.c:207:55: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     page_dir[ARCH_PAGE_NUMBER(ARCH_VIRT_BASE) - 1] = ((uint32_t) kernel_pt - ARCH_VIRT_BASE) + 0x3;
+                                                       ^
+arch/x86/acpi/bootacpi.c:210:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     struct ACPI_SDT_Header* _RSDT = (struct ACPI_SDT_Header*) mapACPItable(currRSDP -> rsdtAddr, sizeof(struct ACPI_SDT_Header));
+                                     ^
+arch/x86/acpi/bootacpi.c:211:13: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     _RSDT = (struct ACPI_SDT_Header*) mapACPItable(currRSDP -> rsdtAddr, _RSDT -> length);
+             ^
+arch/x86/acpi/bootacpi.c: Assembler messages:
+arch/x86/acpi/bootacpi.c:126: Error: unsupported instruction `mov'
+arch/x86/acpi/bootacpi.c:127: Error: unsupported instruction `mov'
+arch/x86/cpu/llio.c: Assembler messages:
+arch/x86/cpu/llio.c:49: Error: unsupported instruction `mov'
+arch/x86/cpu/llio.c:56: Error: unsupported instruction `mov'
+arch/x86/cpu/llio.c:63: Error: unsupported instruction `mov'
+arch/x86/cpu/llio.c:70: Error: unsupported instruction `mov'
+arch/x86/cpu/llio.c:77: Error: unsupported instruction `mov'
+arch/x86/descriptors/gdt.c: In function ‘install_gdt’:
+arch/x86/descriptors/gdt.c:22:20: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     gdt_ptr.base = (uint32_t) &gdt_entries;
+                    ^
+arch/x86/descriptors/gdt.c:34:14: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     load_gdt((uint32_t) &gdt_ptr);
+              ^
+arch/x86/descriptors/idt.c: In function ‘install_idt’:
+arch/x86/descriptors/idt.c:23:20: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_ptr.base = (uint32_t) &idt_entries;
+                    ^
+arch/x86/descriptors/idt.c:27:14: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     load_idt((uint32_t) &idt_ptr);
+              ^
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/init.c:160 arch_late_init() warn: inconsistent indenting
+arch/x86/init.c: In function ‘arch_early_init’:
+arch/x86/init.c:86:39: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         g_krnl_sym_table -> symbols = (elf_sym_t *) (mb_elf_get_section_header(".symtab") -> sh_addr + ARCH_VIRT_BASE);
+                                       ^
+arch/x86/init.c:87:49: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         g_krnl_sym_table -> string_table_addr = (char *) (mb_elf_get_section_header(".strtab") -> sh_addr + ARCH_VIRT_BASE);
+                                                 ^
+In file included from arch/x86/init.c:14:0:
+include/arch/x86/arch_common.h:28:50: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     for(__TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) (__GGMBT__ -> mmap_addr + ARCH_VIRT_BASE); \
+                                                  ^
+arch/x86/init.c:92:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+include/arch/x86/arch_common.h:29:5: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     (unsigned int) (var) < __GGMBT__ -> mmap_addr + __GGMBT__ -> mmap_length + ARCH_VIRT_BASE;          \
+     ^
+arch/x86/init.c:92:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+include/arch/x86/arch_common.h:30:39: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))    \
+                                       ^
+arch/x86/init.c:92:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+arch/x86/init.c:99:31: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     multiboot_module_t* mod = (multiboot_module_t *) (mbt.mods_addr + ARCH_VIRT_BASE);
+                               ^
+/home/vagrant/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/interrupts/exceptions.c:105 isr_handler() info: ignoring unreachable code.
+arch/x86/interrupts/exceptions.c: In function ‘install_isr’:
+arch/x86/interrupts/exceptions.c:60:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(0,  (unsigned int) isr0, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:61:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(1,  (unsigned int) isr1, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:62:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(2,  (unsigned int) isr2, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:63:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(3,  (unsigned int) isr3, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:64:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(4,  (unsigned int) isr4, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:65:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(5,  (unsigned int) isr5, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:66:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(6,  (unsigned int) isr6, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:67:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(7,  (unsigned int) isr7, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:68:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(8,  (unsigned int) isr8, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:69:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(9,  (unsigned int) isr9, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:70:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(10, (unsigned int) isr10, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:71:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(11, (unsigned int) isr11, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:72:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(12, (unsigned int) isr12, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:73:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(13, (unsigned int) isr13, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:74:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(14, (unsigned int) isr14, 0x08, 0x8E); // Page fault
+                      ^
+arch/x86/interrupts/exceptions.c:75:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(15, (unsigned int) isr15, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:76:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(16, (unsigned int) isr16, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:77:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(17, (unsigned int) isr17, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:78:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(18, (unsigned int) isr18, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:79:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(19, (unsigned int) isr19, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:80:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(20, (unsigned int) isr20, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:81:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(21, (unsigned int) isr21, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:82:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(22, (unsigned int) isr22, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:83:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(23, (unsigned int) isr23, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:84:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(24, (unsigned int) isr24, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:85:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(25, (unsigned int) isr25, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:86:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(26, (unsigned int) isr26, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:87:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(27, (unsigned int) isr27, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:88:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(28, (unsigned int) isr28, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:89:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(29, (unsigned int) isr29, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:90:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(30, (unsigned int) isr30, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/exceptions.c:91:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(31, (unsigned int) isr31, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:35:15: warning: non-ANSI function declaration of function 'init_irq'
+arch/x86/interrupts/interrupts.c: In function ‘init_irq’:
+arch/x86/interrupts/interrupts.c:37:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(32, (unsigned int) irq0, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:38:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(33, (unsigned int) irq1, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:39:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(34, (unsigned int) irq2, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:40:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(35, (unsigned int) irq3, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:41:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(36, (unsigned int) irq4, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:42:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(37, (unsigned int) irq5, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:43:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(38, (unsigned int) irq6, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:44:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(39, (unsigned int) irq7, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:45:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(40, (unsigned int) irq8, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:46:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(41, (unsigned int) irq9, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:47:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(42, (unsigned int) irq10, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:48:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(43, (unsigned int) irq11, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:49:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(44, (unsigned int) irq12, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:50:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(45, (unsigned int) irq13, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:51:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(46, (unsigned int) irq14, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/interrupts.c:52:22: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(47, (unsigned int) irq15, 0x08, 0x8E);
+                      ^
+arch/x86/interrupts/syscalls.c: In function ‘syscalls_register’:
+arch/x86/interrupts/syscalls.c:26:39: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     idt_set_gate(ARCH_SYSCALL_INT_NO, (unsigned) syscall_asm_stub, 0x08, 0x8E);
+                                       ^
+arch/x86/misc/multiboot_utils.c: In function ‘mb_elf_get_section_header’:
+arch/x86/misc/multiboot_utils.c:31:22: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         char* name = (char *) (shstr -> sh_addr + ARCH_VIRT_BASE + shdr -> sh_name);
+                      ^
+arch/x86/misc/multiboot_utils.c: In function ‘mb_elf_print_sections’:
+arch/x86/misc/multiboot_utils.c:53:13: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         if(((char *) (shstr -> sh_addr + ARCH_VIRT_BASE + shdr -> sh_name))[0] == 0)
+             ^
+arch/x86/misc/multiboot_utils.c:56:43: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+             fprintf(STREAM_LOG, "[%s]\n", (void *) (shstr -> sh_addr + ARCH_VIRT_BASE + shdr -> sh_name));
+                                           ^
+arch/x86/misc/stack_trace.c: In function ‘CallStackTrace’:
+arch/x86/misc/stack_trace.c:19:21: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     uint32_t* ebp = (uint32_t *) aEBP;
+                     ^
+arch/x86/misc/stack_trace.c:24:11: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     while((uint32_t) ebp < ARCH_STACK_TOP && (uint32_t) ebp > ARCH_STACK_TOP - ARCH_PAGE_SIZE)
+           ^
+arch/x86/misc/stack_trace.c:24:46: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     while((uint32_t) ebp < ARCH_STACK_TOP && (uint32_t) ebp > ARCH_STACK_TOP - ARCH_PAGE_SIZE)
+                                              ^
+arch/x86/misc/stack_trace.c:32:15: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+         ebp = (uint32_t *) (ebp[0]);
+               ^
+In file included from arch/x86/mm/bootmm.c:16:0:
+arch/x86/mm/bootmm.c: In function ‘bootmm_init_memory_regions’:
+include/arch/x86/arch_common.h:28:50: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     for(__TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) (__GGMBT__ -> mmap_addr + ARCH_VIRT_BASE); \
+                                                  ^
+arch/x86/mm/bootmm.c:34:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+include/arch/x86/arch_common.h:29:5: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     (unsigned int) (var) < __GGMBT__ -> mmap_addr + __GGMBT__ -> mmap_length + ARCH_VIRT_BASE;          \
+     ^
+arch/x86/mm/bootmm.c:34:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+include/arch/x86/arch_common.h:30:39: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))    \
+                                       ^
+arch/x86/mm/bootmm.c:34:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+arch/x86/mm/bootmm.c:54:30: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     kprintf("%X %X\n", _ptr, (unsigned int) g_pmm_buddy_map -> bitmap);
+                              ^
+arch/x86/mm/bootmm.c:28:42: warning: unused parameter ‘max_mem’ [-Wunused-parameter]
+ void bootmm_init_memory_regions(uint64_t max_mem)
+                                          ^
+arch/x86/mm/bootmm.c: In function ‘alloc_page’:
+arch/x86/mm/bootmm.c:26:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+In file included from arch/x86/mm/meminit.c:19:0:
+arch/x86/mm/meminit.c: In function ‘arch_pmeminit’:
+include/arch/x86/arch_common.h:28:50: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     for(__TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) (__GGMBT__ -> mmap_addr + ARCH_VIRT_BASE); \
+                                                  ^
+arch/x86/mm/meminit.c:32:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+include/arch/x86/arch_common.h:29:5: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     (unsigned int) (var) < __GGMBT__ -> mmap_addr + __GGMBT__ -> mmap_length + ARCH_VIRT_BASE;          \
+     ^
+arch/x86/mm/meminit.c:32:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+include/arch/x86/arch_common.h:30:39: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))    \
+                                       ^
+arch/x86/mm/meminit.c:32:5: note: in expansion of macro ‘ARCH_FOREACH_MMAP’
+     ARCH_FOREACH_MMAP(mmap)
+     ^
+arch/x86/mm/meminit.c:45:73: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+         page_dir[ARCH_GET_PD_NUMBER(ARCH_PAGE_ALIGN(g_mod_end)) + 1] = ((uint32_t) kernel_pt - ARCH_VIRT_BASE) + 0x3;
+                                                                         ^
+arch/x86/mm/meminit.c:47:69: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+         page_dir[ARCH_GET_PD_NUMBER(ARCH_PAGE_ALIGN(g_mod_end))] = ((uint32_t) kernel_pt - ARCH_VIRT_BASE) + 0x3;
+                                                                     ^
+arch/x86/mm/meminit.c:53:28: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     pmm_buddy_map.bitmap = (unsigned int *) ARCH_PAGE_ALIGN(g_mod_end);
+                            ^
+arch/x86/mm/paging.c:22:13: warning: ‘_init_paging_pae’ defined but not used [-Wunused-function]
+ static void _init_paging_pae(void)
+             ^
+../tests/kernel/inittests.c:15:26: warning: non-ANSI function declaration of function '__initKernelTests__'
+../tests/kernel/kprintf-test.c:29:23: warning: non-ANSI function declaration of function '__test_kprintf__'
+../tests/kernel/malloc-test.c:17:23: warning: non-ANSI function declaration of function '__test_malloc___'

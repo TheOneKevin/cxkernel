@@ -1,12 +1,12 @@
 /*
- * Filename: vsprintf.c
- * Author:   Kevin Dai
- * Email:    kevindai02@outlook.com
+ * File:   vsprintf.c
+ * Author: Kevin Dai
+ * Email:  kevindai02@outlook.com
  *
  * Created on 02-Aug-2017 04:22:57 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 10-Aug-2017 03:20:54 PM
+ * @ Last modified time: 2017-11-26T11:44:56-05:00
 */
 
 #include "lib/printk.h"
@@ -14,9 +14,6 @@
 
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
-
-const char* __b1 = "0123456789ABCDEF";
-const char* __b2 = "0123456789abcdef";
 
 #define SIGNED   0b1       // Is signed
 #define ZEROPAD  0b10      // Pad with zeros instead of spaces
@@ -29,7 +26,7 @@ const char* __b2 = "0123456789abcdef";
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 
 // Reads a number from the format string
-int parse_num(const char** c)
+static int parse_num(const char** c)
 {
     int num = 0;
     while (is_digit(**c))
@@ -37,16 +34,16 @@ int parse_num(const char** c)
     return num;
 }
 
-int f(void (*g)(char, char*), char c, char* buf) { g(c, buf); return 1; }
+static int f(void (*g)(char, char**), char c, char** buf) { g(c, buf); return 1; }
 
-int num(void (*g)(char, char*), char* _buf, long long num, uint8_t base, uint8_t flags, int width, int percision)
+static int num(void (*g)(char, char**), char** _buf, long long num, char base, uint8_t flags, int width, int percision)
 {
     char str[23]; memset(str, 0, 23); // 22 digits of uint64_t in oct + 1 EOL
     char* base_str = flags & SMALL ? "0123456789abcdef" : "0123456789ABCDEF";
     int written = 0;
     char sign = 0;
     int w = 0, p = percision == -1 ? 0 : percision;
-    uint64_t divide = (num < 0) && (flags & SIGNED) ? -num : (uint64_t) num;
+    unsigned long long divide = (num < 0) && (flags & SIGNED) ? -num : (unsigned long long) num;
     // Base conversion
     for(int i = 0; divide > 0; i++)
     {
@@ -82,10 +79,9 @@ int num(void (*g)(char, char*), char* _buf, long long num, uint8_t base, uint8_t
     return written;
 }
 
-int vsprintf(void (*g)(char, char*), char* buf, const char* fmt, va_list args)
+int ssprintf(void (*g)(char, char**), char* buf, const char* fmt, va_list args)
 {
     int written = 0;
-
     uint8_t flags;
     int width;
     int percision;
@@ -94,7 +90,7 @@ int vsprintf(void (*g)(char, char*), char* buf, const char* fmt, va_list args)
     while(*fmt != '\0')
     {
         long long val = 0;
-        uint8_t base = 0;
+        char base = 0;
 
         if(*fmt == '%')
         {
@@ -156,18 +152,18 @@ repeat:
                     int w = (width - strlen(str) > 0) ? width - strlen(str) : 0;
                     if(!(flags & LEFT)) // Deal with padding before the text
                         while(w-- > 0)
-                            written += f(g, ' ', buf);
-                    for(int i = 0; str[i] != '\0'; i++) written += f(g, str[i], buf); // Print the text
+                            written += f(g, ' ', &buf);
+                    for(int i = 0; str[i] != '\0'; i++) written += f(g, str[i], &buf); // Print the text
                     while(w-- > 0) // Deal with padding after the text
-                        written += f(g, ' ', buf);
+                        written += f(g, ' ', &buf);
                     break;
                 case 'c':
                     if(!(flags & LEFT)) // Deal with padding before the character (do you see a trend?)
                         while(--width > 0)
-                            written += f(g, ' ', buf);
-                    written += f(g, (uint8_t) va_arg(args, int), buf); // Print
+                            written += f(g, ' ', &buf);
+                    written += f(g, (uint8_t) va_arg(args, int), &buf); // Print
                     while(--width > 0) // I'm just a comment don't mind me
-                        written += f(g, ' ', buf);
+                        written += f(g, ' ', &buf);
                     break;
                 case 'x': flags |= SMALL;
                 case 'X':
@@ -177,9 +173,9 @@ repeat:
                 case 'u':
                     base = base == 0 ? 10 : base;
                     if(length == 'l')       val = va_arg(args, uint64_t);
-                    else if(length == 'h')  val = (uint8_t) va_arg(args, uint32_t);
+                    else if(length == 'h')  val = (unsigned short) va_arg(args, uint32_t);
                     else val = va_arg(args, uint32_t);
-                    written += num(g, buf, val, base, flags, width, percision);
+                    written += num(g, &buf, val, base, flags, width, percision);
                     break;
                 case 'p':
                     if (width == -1)
@@ -187,37 +183,37 @@ repeat:
                         width = 8;
                         flags |= ZEROPAD;
                     }
-                    written += num(g, buf, (uint64_t) va_arg(args, void *), 16, flags, width, percision);
+                    written += num(g, &buf, (unsigned long long) va_arg(args, void *), 16, flags, width, percision);
                     break;
                 case 'i':
                 case 'd': flags |= SIGNED;
                     if(length == 'l')       val = va_arg(args, long long);
                     else if(length == 'h')  val = (short) va_arg(args, long);
                     else val = va_arg(args, long);
-                    written += num(g, buf, val, 10, flags, width, percision);
+                    written += num(g, &buf, val, 10, flags, width, percision);
                     break;
                 case 'n': ;
                     int* foo = va_arg(args, int*); // Get the pointer
                     *foo = written; // Store the amount of characters written in an integer pointed to by a pointer
                     break;
-                case '%': written += f(g, '%', buf); break;
+                case '%': written += f(g, '%', &buf); break;
                 default: return -1;
             }
             fmt++;
         }
         else
         {
-            written += f(g, *fmt, buf);
+            written += f(g, *fmt, &buf);
             fmt++;
         }
     }
     return written;
 }
 
-void __swrite_sbuf__(char c, char* buf)
+static void __swrite_sbuf__(char c, char** buf)
 {
-    *buf = c;
-    buf++;
+    **buf = c;
+    *buf += 1;
 }
 
 /**
@@ -232,7 +228,14 @@ int sprintf(char* buf, const char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
-    int ret = vsprintf(__swrite_sbuf__, buf, fmt, args);
+    int ret = vsprintf(buf, fmt, args);
     va_end(args);
+    return ret;
+}
+
+int vsprintf(char* buf, const char* fmt, va_list args)
+{
+    char* modbuf = buf;
+    int ret = ssprintf(__swrite_sbuf__, modbuf, fmt, args);
     return ret;
 }
