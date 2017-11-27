@@ -1,16 +1,16 @@
 /*
- * File:   string.c
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
+ * Filename: string.c
+ * Author:   Kevin Dai
+ * Email:    kevindai02@outlook.com
  *
  * Created on 29-Jul-2017 05:09:51 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-08-29T22:07:57-04:00
+ * @ Last modified time: 11-Aug-2017 09:50:31 PM
 */
 
 #include "lib/string.h"
-#include "mm/malloc.h"
+#include "sys/malloc.h"
 
 int memcmp(const void* buf1, const void* buf2, size_t len)
 {
@@ -25,7 +25,7 @@ int memcmp(const void* buf1, const void* buf2, size_t len)
 
 void* memcpy(void* dest, const void* src, size_t len)
 {
-#if ARCH_TYPE == PLATFORM_x86
+#if ARCH_TYPE == PLATFORM_i386
     asm volatile ("rep movsd" : : "D" (dest), "S" (src), "c" (len / 4) : "memory");
     asm volatile ("rep movsb" : : "D" (dest + (len / 4) * 4), "S" (src + (len / 4) * 4), "c" (len - (len / 4) * 4) : "memory");
     return dest;
@@ -34,7 +34,7 @@ void* memcpy(void* dest, const void* src, size_t len)
 
 void* memset(void* str, int c, size_t len)
 {
-#if ARCH_TYPE == PLATFORM_x86
+#if ARCH_TYPE == PLATFORM_i386
     asm volatile ("rep stosl" : : "a" (c), "D" (str), "c" (len / 4) : "memory");
     asm volatile ("rep stosb" : : "a" (c), "D" (str + (len / 4) * 4), "c" (len - (len / 4) * 4) : "memory");
     return str;
@@ -68,7 +68,7 @@ int strcmp(const char* str1, const char* str2)
 
 size_t strlen(const char* str)
 {
-#if ARCH_TYPE == PLATFORM_x86
+#if ARCH_TYPE == PLATFORM_i386
     const char* ptr;
     const uint32_t* dword_ptr;
     uint32_t himagic = 0x80808080L, lomagic = 0x01010101L;

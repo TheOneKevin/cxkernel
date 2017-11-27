@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="902561045">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\core\console.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="console_init" lineNumber="16"/>
+    <functiondecl functionName="console_emit" lineNumber="21"/>
+    <functiondecl functionName="console_puts" lineNumber="26"/>
+    <functiondecl functionName="console_getc" lineNumber="31"/>
+    <functioncall functionName="arch_get_console"/>
+    <functioncall functionName="c"/>
+    <functioncall functionName="char"/>
+    <functioncall functionName="getc"/>
+    <functioncall functionName="putc"/>
+    <functioncall functionName="while"/>
+  </FileInfo>
+</analyzerinfo>

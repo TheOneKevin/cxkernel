@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="347622219">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\misc\stack_trace.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="CallStackTrace" lineNumber="17"/>
+    <functioncall functionName="aBOOL"/>
+    <functioncall functionName="aEBP"/>
+    <functioncall functionName="ebp"/>
+    <functioncall functionName="eip"/>
+    <functioncall functionName="g_krnl_sym_table"/>
+    <functioncall functionName="get_symbol_addr"/>
+    <functioncall functionName="get_symbol_name"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="kprintf"/>
+    <functioncall functionName="sym_addr"/>
+    <functioncall functionName="uint32_t"/>
+    <functioncall functionName="while"/>
+  </FileInfo>
+</analyzerinfo>

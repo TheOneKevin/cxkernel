@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2954247488">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\lib\panic_assert.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="__panic__" lineNumber="16"/>
+    <functiondecl functionName="__assert__" lineNumber="21"/>
+    <functioncall functionName="condition"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="fprintf"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="msg"/>
+    <functioncall functionName="s"/>
+  </FileInfo>
+</analyzerinfo>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="967633584">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\misc\vga.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="vga_entry_color" lineNumber="23"/>
+    <functiondecl functionName="vga_entry" lineNumber="28"/>
+    <functiondecl functionName="move_cursor" lineNumber="33"/>
+    <functiondecl functionName="terminal_scroll" lineNumber="42"/>
+    <functiondecl functionName="terminal_clear" lineNumber="66"/>
+    <functiondecl functionName="terminal_putc" lineNumber="82"/>
+    <functioncall functionName="NULL"/>
+    <functioncall functionName="VGA_COLOR_BLACK"/>
+    <functioncall functionName="VGA_COLOR_WHITE"/>
+    <functioncall functionName="_x"/>
+    <functioncall functionName="bg"/>
+    <functioncall functionName="blank"/>
+    <functioncall functionName="c"/>
+    <functioncall functionName="char"/>
+    <functioncall functionName="entry"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="i"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="long"/>
+    <functioncall functionName="move_cursor"/>
+    <functioncall functionName="outb"/>
+    <functioncall functionName="position"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="terminal_clear"/>
+    <functioncall functionName="terminal_putc"/>
+    <functioncall functionName="terminal_scroll"/>
+    <functioncall functionName="uint16_t"/>
+    <functioncall functionName="vga_entry"/>
+    <functioncall functionName="vga_entry_color"/>
+  </FileInfo>
+</analyzerinfo>

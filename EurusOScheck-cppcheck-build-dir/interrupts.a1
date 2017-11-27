@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="1315267420">
+  <FileInfo check="Bounds checking">
+    <ArraySize array="interrupt_handlers" size="128"/>
+  </FileInfo>
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\interrupts\interrupts.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="init_irq" lineNumber="35"/>
+    <functiondecl functionName="irq_handler" lineNumber="55"/>
+    <functiondecl functionName="install_irqhandler" lineNumber="67"/>
+    <functiondecl functionName="uninstall_irqhandler" lineNumber="72"/>
+    <functioncall functionName="PIC_sendEOI"/>
+    <functioncall functionName="handler"/>
+    <functioncall functionName="idt_set_gate"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="int_no"/>
+    <functioncall functionName="irq"/>
+    <functioncall functionName="irq0"/>
+    <functioncall functionName="irq1"/>
+    <functioncall functionName="irq10"/>
+    <functioncall functionName="irq11"/>
+    <functioncall functionName="irq12"/>
+    <functioncall functionName="irq13"/>
+    <functioncall functionName="irq14"/>
+    <functioncall functionName="irq15"/>
+    <functioncall functionName="irq2"/>
+    <functioncall functionName="irq3"/>
+    <functioncall functionName="irq4"/>
+    <functioncall functionName="irq5"/>
+    <functioncall functionName="irq6"/>
+    <functioncall functionName="irq7"/>
+    <functioncall functionName="irq8"/>
+    <functioncall functionName="irq9"/>
+    <functioncall functionName="long"/>
+    <functioncall functionName="regs"/>
+  </FileInfo>
+</analyzerinfo>

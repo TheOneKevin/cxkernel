@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="1853100527">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\core\printk.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="_stream_log" lineNumber="25"/>
+    <functiondecl functionName="_stream_out" lineNumber="32"/>
+    <functiondecl functionName="_stream_err" lineNumber="39"/>
+    <functiondecl functionName="fflush" lineNumber="44"/>
+    <functiondecl functionName="init_early_handles" lineNumber="72"/>
+    <functiondecl functionName="kprintf" lineNumber="85"/>
+    <functiondecl functionName="f" lineNumber="94"/>
+    <functiondecl functionName="fprintf" lineNumber="109"/>
+    <functioncall functionName="__stream_err"/>
+    <functioncall functionName="__stream_log"/>
+    <functioncall functionName="__stream_out"/>
+    <functioncall functionName="_stream_err"/>
+    <functioncall functionName="_stream_log"/>
+    <functioncall functionName="_stream_out"/>
+    <functioncall functionName="args"/>
+    <functioncall functionName="break"/>
+    <functioncall functionName="c"/>
+    <functioncall functionName="char"/>
+    <functioncall functionName="console_emit"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="f"/>
+    <functioncall functionName="fd"/>
+    <functioncall functionName="fflush"/>
+    <functioncall functionName="file"/>
+    <functioncall functionName="format"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="os_log"/>
+    <functioncall functionName="ssprintf"/>
+    <functioncall functionName="switch"/>
+    <functioncall functionName="va_end"/>
+    <functioncall functionName="va_start"/>
+    <functioncall functionName="while"/>
+  </FileInfo>
+</analyzerinfo>

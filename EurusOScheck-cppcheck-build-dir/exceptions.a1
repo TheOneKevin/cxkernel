@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="625724314">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\interrupts\exceptions.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="install_isr" lineNumber="58"/>
+    <functiondecl functionName="isr_handler" lineNumber="94"/>
+    <functioncall functionName="CallStackTrace"/>
+    <functioncall functionName="PIC_acknowledge"/>
+    <functioncall functionName="cs"/>
+    <functioncall functionName="ds"/>
+    <functioncall functionName="eax"/>
+    <functioncall functionName="ebp"/>
+    <functioncall functionName="ebx"/>
+    <functioncall functionName="ecx"/>
+    <functioncall functionName="edi"/>
+    <functioncall functionName="edx"/>
+    <functioncall functionName="eflags"/>
+    <functioncall functionName="eip"/>
+    <functioncall functionName="err_code"/>
+    <functioncall functionName="es"/>
+    <functioncall functionName="esi"/>
+    <functioncall functionName="esp"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="fprintf"/>
+    <functioncall functionName="fs"/>
+    <functioncall functionName="gs"/>
+    <functioncall functionName="idt_set_gate"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="int_no"/>
+    <functioncall functionName="isr0"/>
+    <functioncall functionName="isr1"/>
+    <functioncall functionName="isr10"/>
+    <functioncall functionName="isr11"/>
+    <functioncall functionName="isr12"/>
+    <functioncall functionName="isr13"/>
+    <functioncall functionName="isr14"/>
+    <functioncall functionName="isr15"/>
+    <functioncall functionName="isr16"/>
+    <functioncall functionName="isr17"/>
+    <functioncall functionName="isr18"/>
+    <functioncall functionName="isr19"/>
+    <functioncall functionName="isr2"/>
+    <functioncall functionName="isr20"/>
+    <functioncall functionName="isr21"/>
+    <functioncall functionName="isr22"/>
+    <functioncall functionName="isr23"/>
+    <functioncall functionName="isr24"/>
+    <functioncall functionName="isr25"/>
+    <functioncall functionName="isr26"/>
+    <functioncall functionName="isr27"/>
+    <functioncall functionName="isr28"/>
+    <functioncall functionName="isr29"/>
+    <functioncall functionName="isr3"/>
+    <functioncall functionName="isr30"/>
+    <functioncall functionName="isr31"/>
+    <functioncall functionName="isr4"/>
+    <functioncall functionName="isr5"/>
+    <functioncall functionName="isr6"/>
+    <functioncall functionName="isr7"/>
+    <functioncall functionName="isr8"/>
+    <functioncall functionName="isr9"/>
+    <functioncall functionName="read_cr0"/>
+    <functioncall functionName="read_cr2"/>
+    <functioncall functionName="read_cr3"/>
+    <functioncall functionName="read_cr4"/>
+    <functioncall functionName="ss"/>
+    <functioncall functionName="useresp"/>
+  </FileInfo>
+</analyzerinfo>

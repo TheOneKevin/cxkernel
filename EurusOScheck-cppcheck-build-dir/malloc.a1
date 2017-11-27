@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="3438920184">
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned long long&apos;." verbose="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned long long&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="199"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned long long&apos;." verbose="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned long long&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="200"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;signed long long&apos;." verbose="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;signed long long&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="201"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;signed long long&apos;." verbose="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;signed long long&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="202"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;signed long long&apos;." verbose="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;signed long long&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="203"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="208"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." verbose="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="208"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 3) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." verbose="%i in format string (no. 3) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="208"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_minor *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_minor *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="212"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." verbose="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="212"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." verbose="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="251"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="267"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." verbose="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="267"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 3) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." verbose="%i in format string (no. 3) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="267"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 4) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." verbose="%i in format string (no. 4) requires &apos;int&apos; but the argument type is &apos;unsigned int&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="267"/>
+        </error>
+        <error id="wrongPrintfScanfArgNum" severity="warning" msg="fprintf format string requires 0 parameters but 1 is given." verbose="fprintf format string requires 0 parameters but 1 is given." cwe="685">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="321"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="328"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned long&apos;." verbose="%i in format string (no. 2) requires &apos;int&apos; but the argument type is &apos;unsigned long&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="334"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;liballoc_major *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="370"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="420"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="454"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="498"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="537"/>
+        </error>
+        <error id="invalidPrintfArgType_sint" severity="warning" msg="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned long&apos;." verbose="%i in format string (no. 1) requires &apos;int&apos; but the argument type is &apos;unsigned long&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="584"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="634"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="641"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 2) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 2) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="652"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="763"/>
+        </error>
+        <error id="invalidPrintfArgType_int" severity="warning" msg="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." verbose="%x in format string (no. 1) requires &apos;unsigned int&apos; but the argument type is &apos;void *&apos;." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="770"/>
+        </error>
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;diff&apos; can be reduced." verbose="The scope of the variable &apos;diff&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="280"/>
+        </error>
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\mm\malloc.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="liballoc_lock" lineNumber="17"/>
+    <functiondecl functionName="liballoc_unlock" lineNumber="23"/>
+    <functiondecl functionName="liballoc_alloc" lineNumber="35"/>
+    <functiondecl functionName="liballoc_free" lineNumber="53"/>
+    <functiondecl functionName="liballoc_init" lineNumber="58"/>
+    <functiondecl functionName="liballoc_memset" lineNumber="158"/>
+    <functiondecl functionName="liballoc_memcpy" lineNumber="165"/>
+    <functiondecl functionName="liballoc_dump" lineNumber="191"/>
+    <functiondecl functionName="allocate_new_page" lineNumber="226"/>
+    <functiondecl functionName="malloc" lineNumber="275"/>
+    <functiondecl functionName="free" lineNumber="591"/>
+    <functiondecl functionName="calloc" lineNumber="708"/>
+    <functiondecl functionName="realloc" lineNumber="718"/>
+    <functioncall functionName="NULL"/>
+    <functioncall functionName="__builtin_return_address"/>
+    <functioncall functionName="__init"/>
+    <functioncall functionName="allocate_new_page"/>
+    <functioncall functionName="block"/>
+    <functioncall functionName="break"/>
+    <functioncall functionName="c"/>
+    <functioncall functionName="char"/>
+    <functioncall functionName="continue"/>
+    <functioncall functionName="diff"/>
+    <functioncall functionName="false"/>
+    <functioncall functionName="fflush"/>
+    <functioncall functionName="first"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="fprintf"/>
+    <functioncall functionName="free"/>
+    <functioncall functionName="i"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="l_allocated"/>
+    <functioncall functionName="l_bestBet"/>
+    <functioncall functionName="l_errorCount"/>
+    <functioncall functionName="l_inuse"/>
+    <functioncall functionName="l_memRoot"/>
+    <functioncall functionName="l_pageCount"/>
+    <functioncall functionName="l_pageSize"/>
+    <functioncall functionName="l_possibleOverruns"/>
+    <functioncall functionName="l_warningCount"/>
+    <functioncall functionName="ldest"/>
+    <functioncall functionName="liballoc_alloc"/>
+    <functioncall functionName="liballoc_dump"/>
+    <functioncall functionName="liballoc_free"/>
+    <functioncall functionName="liballoc_lock"/>
+    <functioncall functionName="liballoc_memcpy"/>
+    <functioncall functionName="liballoc_memset"/>
+    <functioncall functionName="liballoc_unlock"/>
+    <functioncall functionName="long"/>
+    <functioncall functionName="lsrc"/>
+    <functioncall functionName="maj"/>
+    <functioncall functionName="malloc"/>
+    <functioncall functionName="min"/>
+    <functioncall functionName="new_min"/>
+    <functioncall functionName="next"/>
+    <functioncall functionName="p"/>
+    <functioncall functionName="pages"/>
+    <functioncall functionName="prev"/>
+    <functioncall functionName="ptr"/>
+    <functioncall functionName="real_size"/>
+    <functioncall functionName="req_size"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="s"/>
+    <functioncall functionName="s1"/>
+    <functioncall functionName="s2"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="st"/>
+    <functioncall functionName="usage"/>
+    <functioncall functionName="while"/>
+  </FileInfo>
+</analyzerinfo>

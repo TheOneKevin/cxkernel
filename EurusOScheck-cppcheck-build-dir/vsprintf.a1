@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="945059342">
+        <error id="clarifyCalculation" severity="style" msg="Clarify calculation precedence for &apos;&amp;&apos; and &apos;?&apos;." verbose="Suspicious calculation. Please use parentheses to clarify the code. The code &apos;&apos;a&amp;b?c:d&apos;&apos; should be written as either &apos;&apos;(a&amp;b)?c:d&apos;&apos; or &apos;&apos;a&amp;(b?c:d)&apos;&apos;." cwe="783">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\core\vsprintf.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\core\vsprintf.c" line="42"/>
+        </error>
+        <error id="clarifyCalculation" severity="style" msg="Clarify calculation precedence for &apos;&amp;&apos; and &apos;?&apos;." verbose="Suspicious calculation. Please use parentheses to clarify the code. The code &apos;&apos;a&amp;b?c:d&apos;&apos; should be written as either &apos;&apos;(a&amp;b)?c:d&apos;&apos; or &apos;&apos;a&amp;(b?c:d)&apos;&apos;." cwe="783">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\core\vsprintf.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\core\vsprintf.c" line="69"/>
+        </error>
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\core\vsprintf.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="parse_num" lineNumber="29"/>
+    <functiondecl functionName="f" lineNumber="37"/>
+    <functiondecl functionName="num" lineNumber="39"/>
+    <functiondecl functionName="ssprintf" lineNumber="82"/>
+    <functiondecl functionName="__swrite_sbuf__" lineNumber="213"/>
+    <functiondecl functionName="sprintf" lineNumber="227"/>
+    <functiondecl functionName="vsprintf" lineNumber="236"/>
+    <functioncall functionName="__swrite_sbuf__"/>
+    <functioncall functionName="_buf"/>
+    <functioncall functionName="args"/>
+    <functioncall functionName="base"/>
+    <functioncall functionName="break"/>
+    <functioncall functionName="buf"/>
+    <functioncall functionName="c"/>
+    <functioncall functionName="default"/>
+    <functioncall functionName="f"/>
+    <functioncall functionName="flags"/>
+    <functioncall functionName="fmt"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="g"/>
+    <functioncall functionName="i"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="long"/>
+    <functioncall functionName="memset"/>
+    <functioncall functionName="modbuf"/>
+    <functioncall functionName="num"/>
+    <functioncall functionName="parse_num"/>
+    <functioncall functionName="percision"/>
+    <functioncall functionName="repeat"/>
+    <functioncall functionName="short"/>
+    <functioncall functionName="sign"/>
+    <functioncall functionName="ssprintf"/>
+    <functioncall functionName="str"/>
+    <functioncall functionName="strlen"/>
+    <functioncall functionName="switch"/>
+    <functioncall functionName="uint32_t"/>
+    <functioncall functionName="uint64_t"/>
+    <functioncall functionName="uint8_t"/>
+    <functioncall functionName="va_arg"/>
+    <functioncall functionName="va_end"/>
+    <functioncall functionName="va_start"/>
+    <functioncall functionName="val"/>
+    <functioncall functionName="vsprintf"/>
+    <functioncall functionName="w"/>
+    <functioncall functionName="while"/>
+    <functioncall functionName="width"/>
+    <functioncall functionName="written"/>
+  </FileInfo>
+</analyzerinfo>

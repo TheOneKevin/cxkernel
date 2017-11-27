@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="1039836537">
+  <FileInfo check="Bounds checking">
+    <ArraySize array="gdt_entries" size="5"/>
+  </FileInfo>
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\descriptors\gdt.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="install_gdt" lineNumber="18"/>
+    <functiondecl functionName="gdt_set_gate" lineNumber="38"/>
+    <functioncall functionName="access"/>
+    <functioncall functionName="gdt_entries"/>
+    <functioncall functionName="gdt_ptr"/>
+    <functioncall functionName="gdt_set_gate"/>
+    <functioncall functionName="idx"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="load_gdt"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="uint32_t"/>
+    <functioncall functionName="uint8_t"/>
+  </FileInfo>
+</analyzerinfo>

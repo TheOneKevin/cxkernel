@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+    <builddir>EurusOScheck-cppcheck-build-dir</builddir>
+    <analyze-all-vs-configs>true</analyze-all-vs-configs>
+    <includedir>
+        <dir name="kernelsrc/include/"/>
+    </includedir>
+    <paths>
+        <dir name="kernelsrc"/>
+    </paths>
+</project>

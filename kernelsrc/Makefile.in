@@ -1,12 +1,3 @@
-# @Author: Kevin Dai
-# @Date:   2017-07-29T14:29:31-04:00
-# @Email:  kevindai02@outlook.com
-# @Filename: Makefile.in
-# @Last modified by:   Kevin Dai
-# @Last modified time: 2017-11-22T22:07:24-05:00
-
-
-
 CC=@PLATFORM_PREFIX@gcc
 AS=@PLATFORM_PREFIX@as
 
@@ -20,36 +11,34 @@ BDIR=../bin/
 
 SOURCES := $(shell find -name '*.c' -not -path "*arch/*")
 SOURCES := $(SOURCES:./%=%)
+SOURCES += $(shell find "core/arch/"$(TARGET_FOLDER) -name '*.c')
 SOURCES += $(shell find "arch/"$(TARGET_FOLDER) -name '*.c')
 
 ASOURCES := $(shell find -name '*.s' -not -path "*arch/*")
 ASOURCES := $(ASOURCES:./%=%)
+ASOURCES += $(shell find "core/arch/"$(TARGET_FOLDER) -name '*.s')
 ASOURCES += $(shell find "arch/"$(TARGET_FOLDER) -name '*.s')
 
 NSOURCES := $(shell find -name '*.asm' -not -path "*arch/*")
 NSOURCES := $(NSOURCES:./%=%)
+NSOURCES += $(shell find "core/arch/"$(TARGET_FOLDER) -name '*.asm')
 NSOURCES += $(shell find "arch/"$(TARGET_FOLDER) -name '*.asm')
 
-TSOURCES := $(shell find "../tests/kernel" -name '*.c')
+TSOURCES := $(shell find "../tests" -name '*.c')
 TSOURCES := $(TSOURCES:./%=%)
 
 .PHONY: all
 all:
 	@echo "\n\033[1;36m[Building C and C++ sources]\033[0m"
 	@$(foreach src0,$(SOURCES), echo "\033[1;32mBuilding [$(src0)] \033[0m"; $(CC) -c $(src0) -o $(ODIR)$(notdir $(src0:%.c=%.o)) $(CFLAGS);)
-
+	
 	@echo "\n\033[1;36m[Building assembly sources]\033[0m"
 	@$(foreach src1,$(ASOURCES), echo "\033[1;32mBuilding [$(src1)] \033[0m"; $(AS) $(src1) -o $(ODIR)$(notdir $(src1:%.s=%.o)) $(AFLAGS);)
+ifeq ($(TARGET_FOLDER),i386)
 	@$(foreach src2,$(NSOURCES), echo "\033[1;32mBuilding [$(src2)] \033[0m"; nasm -felf $(src2) -o $(ODIR)$(notdir $(src2:%.asm=%.o)) -w-number-overflow;)
+endif
 	@echo "\n\033[1;36m[Building unit tests]\033[0m"
 	@$(foreach src3,$(TSOURCES), echo "\033[1;32mBuilding [$(src3)] \033[0m"; $(CC) -c $(src3) -o $(ODIR)$(notdir $(src3:%.c=%.o)) $(CFLAGS);)
-
-.PHONY: noecho
-noecho:
-	@$(foreach src0,$(SOURCES), $(CC) -c $(src0) -o $(ODIR)$(notdir $(src0:%.c=%.o)) $(CFLAGS);)
-	@$(foreach src1,$(ASOURCES), $(AS) $(src1) -o $(ODIR)$(notdir $(src1:%.s=%.o)) $(AFLAGS);)
-	@$(foreach src2,$(NSOURCES), nasm -felf $(src2) -o $(ODIR)$(notdir $(src2:%.asm=%.o)) -w-number-overflow;)
-	@$(foreach src3,$(TSOURCES), $(CC) -c $(src3) -o $(ODIR)$(notdir $(src3:%.c=%.o)) $(CFLAGS);)
 
 .PHONY: clean
 clean:

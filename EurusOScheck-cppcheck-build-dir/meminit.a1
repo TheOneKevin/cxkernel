@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="209539751">
+  <FileInfo check="Bounds checking">
+    <ArraySize array="g_paging_PDPT" size="4"/>
+  </FileInfo>
+        <error id="memsetValueOutOfRange" severity="warning" msg="The 2nd memset() argument &apos;4294967295U&apos; doesn&apos;t fit into an &apos;unsigned char&apos;." verbose="The 2nd memset() argument &apos;4294967295U&apos; doesn&apos;t fit into an &apos;unsigned char&apos;. The 2nd parameter is passed as an &apos;int&apos;, but the function fills the block of memory using the &apos;unsigned char&apos; conversion of this value." cwe="686">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\mm\meminit.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\mm\meminit.c" line="54"/>
+        </error>
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\mm\meminit.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="arch_pmeminit" lineNumber="28"/>
+    <functioncall functionName="NULL"/>
+    <functioncall functionName="__list_add"/>
+    <functioncall functionName="__list_del"/>
+    <functioncall functionName="__panic__"/>
+    <functioncall functionName="_kernel_dir"/>
+    <functioncall functionName="_kernel_table3"/>
+    <functioncall functionName="bitmap"/>
+    <functioncall functionName="bootmm_init_memory_regions"/>
+    <functioncall functionName="entry"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="fprintf"/>
+    <functioncall functionName="head"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="kernel_pt"/>
+    <functioncall functionName="kprintf"/>
+    <functioncall functionName="len"/>
+    <functioncall functionName="length"/>
+    <functioncall functionName="list"/>
+    <functioncall functionName="long"/>
+    <functioncall functionName="max_mem"/>
+    <functioncall functionName="memset"/>
+    <functioncall functionName="mmap"/>
+    <functioncall functionName="next"/>
+    <functioncall functionName="pmm_buddy_map"/>
+    <functioncall functionName="prev"/>
+    <functioncall functionName="size"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="uint32_t"/>
+    <functioncall functionName="while"/>
+  </FileInfo>
+</analyzerinfo>

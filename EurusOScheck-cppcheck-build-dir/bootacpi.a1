@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2858002280">
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;bptr&apos; can be reduced." verbose="The scope of the variable &apos;bptr&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\acpi\bootacpi.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\acpi\bootacpi.c" line="46"/>
+        </error>
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;check&apos; can be reduced." verbose="The scope of the variable &apos;check&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398">
+            <location file0="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\acpi\bootacpi.c" file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\acpi\bootacpi.c" line="47"/>
+        </error>
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\acpi\bootacpi.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="doSDTChecksum" lineNumber="30"/>
+    <functiondecl functionName="checkValidRSDP" lineNumber="42"/>
+    <functiondecl functionName="getRDSP" lineNumber="87"/>
+    <functiondecl functionName="mapACPItable" lineNumber="114"/>
+    <functiondecl functionName="fixACPImmap" lineNumber="134"/>
+    <functiondecl functionName="findTable" lineNumber="139"/>
+    <functiondecl functionName="getNUMADomains" lineNumber="156"/>
+    <functiondecl functionName="getCPUInfo" lineNumber="169"/>
+    <functiondecl functionName="acpiHasAPIC" lineNumber="189"/>
+    <functiondecl functionName="initTmpBootACPI" lineNumber="194"/>
+    <functiondecl functionName="deinitTmpBootACPI" lineNumber="223"/>
+    <functioncall functionName="NULL"/>
+    <functioncall functionName="_RSDT"/>
+    <functioncall functionName="_acpi_mmap_idx"/>
+    <functioncall functionName="_acpi_mmap_idx_fix"/>
+    <functioncall functionName="_kernel_dir"/>
+    <functioncall functionName="_kernel_table3"/>
+    <functioncall functionName="addr"/>
+    <functioncall functionName="apic_id"/>
+    <functioncall functionName="asm"/>
+    <functioncall functionName="checkValidRSDP"/>
+    <functioncall functionName="controller_address"/>
+    <functioncall functionName="doSDTChecksum"/>
+    <functioncall functionName="findTable"/>
+    <functioncall functionName="fixACPImmap"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="fprintf"/>
+    <functioncall functionName="getRDSP"/>
+    <functioncall functionName="head"/>
+    <functioncall functionName="header"/>
+    <functioncall functionName="i"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="kernel_pt"/>
+    <functioncall functionName="kprintf"/>
+    <functioncall functionName="len"/>
+    <functioncall functionName="length"/>
+    <functioncall functionName="long"/>
+    <functioncall functionName="mapACPItable"/>
+    <functioncall functionName="memcmp"/>
+    <functioncall functionName="memset"/>
+    <functioncall functionName="name"/>
+    <functioncall functionName="pointers"/>
+    <functioncall functionName="proc_id"/>
+    <functioncall functionName="ptr"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="rsdtAddr"/>
+    <functioncall functionName="sig"/>
+    <functioncall functionName="signature"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="table"/>
+    <functioncall functionName="uint32_t"/>
+    <functioncall functionName="while"/>
+    <functioncall functionName="xptr"/>
+  </FileInfo>
+</analyzerinfo>

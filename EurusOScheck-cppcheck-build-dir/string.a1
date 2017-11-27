@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="2903999667">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\lib\string.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="memcmp" lineNumber="15"/>
+    <functiondecl functionName="memcpy" lineNumber="26"/>
+    <functiondecl functionName="memset" lineNumber="35"/>
+    <functiondecl functionName="strcat" lineNumber="44"/>
+    <functiondecl functionName="strcpy" lineNumber="50"/>
+    <functiondecl functionName="strdup" lineNumber="55"/>
+    <functiondecl functionName="strcmp" lineNumber="62"/>
+    <functiondecl functionName="strlen" lineNumber="69"/>
+    <functioncall functionName="asm"/>
+    <functioncall functionName="buf1"/>
+    <functioncall functionName="buf2"/>
+    <functioncall functionName="dest"/>
+    <functioncall functionName="for"/>
+    <functioncall functionName="if"/>
+    <functioncall functionName="int"/>
+    <functioncall functionName="lomagic"/>
+    <functioncall functionName="long"/>
+    <functioncall functionName="malloc"/>
+    <functioncall functionName="memcpy"/>
+    <functioncall functionName="ptr"/>
+    <functioncall functionName="ret"/>
+    <functioncall functionName="return"/>
+    <functioncall functionName="sizeof"/>
+    <functioncall functionName="src"/>
+    <functioncall functionName="str"/>
+    <functioncall functionName="str2"/>
+    <functioncall functionName="strcpy"/>
+    <functioncall functionName="strlen"/>
+    <functioncall functionName="true"/>
+    <functioncall functionName="uint32_t"/>
+    <functioncall functionName="while"/>
+  </FileInfo>
+</analyzerinfo>

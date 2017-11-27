@@ -1,0 +1,19 @@
+BDIR=../bin/
+
+.PHONY: all
+all:
+	@echo "\033[1;36mMaking initrd...\033[0m\n"
+	@cd ramfs && make --no-print-directory
+
+	@echo "\033[1;62mConfiguring GRUB...\033[0m"
+	@mkdir -p ../isodir/boot/grub
+
+	@echo "    -> \033[1;36mCopying files...\033[0m"
+	@cp $(BDIR)LiquiDOS.bin ../isodir/boot/LiquiDOS.bin
+	@cp grub.cfg ../isodir/boot/grub/grub.cfg
+	@cp background.jpg ../isodir/boot/background.jpg
+	@cp ramfs/ramfs.tar ../isodir/boot/ramfs.tar
+
+	@echo "    -> \033[1;36mBuilding ISO...\033[0m"
+	@grub-mkrescue -o LiquiDOS.iso ../isodir
+	@mv LiquiDOS.iso $(BDIR)/LiquiDOS.iso

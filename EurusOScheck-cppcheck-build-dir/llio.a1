@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<analyzerinfo checksum="1523403131">
+        <error id="purgedConfiguration" severity="information" msg="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one." verbose="The configuration &apos;CONFIG_UNDERSCORE_SYMBOL_PREFIX&apos; was not checked because its code equals another one.">
+            <location file="C:\Users\Kevin\Documents\GitHub\Vagrant\EurusOS\kernelsrc\arch\x86\cpu\llio.c" line="0"/>
+        </error>
+  <FileInfo check="CheckUnusedFunctions">
+    <functiondecl functionName="io_wait" lineNumber="14"/>
+    <functiondecl functionName="outb" lineNumber="22"/>
+    <functiondecl functionName="outw" lineNumber="27"/>
+    <functiondecl functionName="inb" lineNumber="32"/>
+    <functiondecl functionName="inw" lineNumber="39"/>
+    <functiondecl functionName="read_cr0" lineNumber="46"/>
+    <functiondecl functionName="read_cr1" lineNumber="53"/>
+    <functiondecl functionName="read_cr2" lineNumber="60"/>
+    <functiondecl functionName="read_cr3" lineNumber="67"/>
+    <functiondecl functionName="read_cr4" lineNumber="74"/>
+    <functioncall functionName="asm"/>
+  </FileInfo>
+</analyzerinfo>
