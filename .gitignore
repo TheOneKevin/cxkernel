@@ -59,4 +59,3 @@ config.log
 config.status
 EurusOScheck.cppcheck
 EurusOScheck-cppcheck-build-dir/
-.gitlab-ci.yml

@@ -4,22 +4,25 @@
 # @Project: Eurus OS
 # @File:   .gitlab-ci.yml
 # @Last modified by:   Kevin Dai
-# @Last modified time: 13-Aug-2017 08:18:46 PM
+# @Last modified time: 2017-11-27T15:37:51-05:00
 
 before_script:
+  - apt-get update && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
   - sudo apt-get update
-  - ./configure
-cache:
-  paths:
-  - ~/.bashrc
-  - ~/barebones-toolchain/
+  - cd /builds/lonelywanderer/LiquiDOS
+  - chmod +x configure
+  - sh ./configure
+  - export PATH=$PATH:/root/barebones-toolchain/cross/x86_64/bin
+  - sudo apt-get install grub-common --yes
+
 stages:
   - build
 
 buildproj:
   stage: build
   script:
-  - ./configure --target=i686 && make
+  - ./configure --target=i686
+  - make
   artifacts:
     paths:
     - bin/*.bin
