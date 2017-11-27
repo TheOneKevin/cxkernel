@@ -18,4 +18,5 @@ deploy:
   on:
     repo: TheCool1Kevin/LiquiDOS
     condition: "$RELEASETYPE=RELEASE"
+    tags: false
     overwrite: true
