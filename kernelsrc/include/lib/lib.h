@@ -6,19 +6,19 @@
  * Created on 31-Jul-2017 04:11:28 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 01-Aug-2017 02:34:18 PM
+ * @ Last modified time: 2017-11-26T11:22:40-05:00
 */
 
 #pragma once
 
-#include "system.h"
+#include "common.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 int strtol(char a[]);
-char* convbase(long num, uint8_t base, bool small, bool isSigned);
+char* convbase(long num, char base, bool small, bool isSigned);
 
 #ifdef __cplusplus
 }

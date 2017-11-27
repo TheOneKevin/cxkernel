@@ -50,5 +50,13 @@ nbdist/
 
 # Autohell
 autom4te.cache/
+Makefile
 
 .tags
+.project
+.cproject
+config.log
+config.status
+EurusOScheck.cppcheck
+EurusOScheck-cppcheck-build-dir/
+.gitlab-ci.yml

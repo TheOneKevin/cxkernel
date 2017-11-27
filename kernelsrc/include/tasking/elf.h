@@ -3,15 +3,15 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 12-Aug-2017 11:25:03 PM
+ * Created on 12-Aug-2017 11:25 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 13-Aug-2017 02:56:56 PM
+ * @ Last modified time: 2017-08-23T19:10:44-04:00
 */
 
 #pragma once
 
-#include "system.h"
+#include "common.h"
 
 #ifdef __cplusplus
     extern "C" {

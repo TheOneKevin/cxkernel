@@ -1,13 +1,13 @@
 /*
- * Filename: lib.c
- * Author:   Kevin Dai
- * Email:   kevindai02@outlook.com
+ * File:   lib.c
+ * Author: Kevin Dai
+ * Email:  kevindai02@outlook.com
  *
  * Created on 31-Jul-2017 04:08:39 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 13-Aug-2017 03:38:44 PM
- */
+ * @ Last modified time: 2017-11-26T11:22:04-05:00
+*/
 
 // Sort of low cohesion library where random shit belongs
 
@@ -40,7 +40,7 @@ int strtol(char a[])
     return n;
 }
 
-char* convbase(long num, uint8_t base, bool small, bool isSigned)
+char* convbase(long num, char base, bool small, bool isSigned)
 {
     char ret[23]; memset(ret, 0, 23); // 22 for 64 bit octal, +1 for EOL
     if(isSigned)
@@ -57,7 +57,7 @@ char* convbase(long num, uint8_t base, bool small, bool isSigned)
     }
     else
     {
-        uint64_t divres = (unsigned) num; // Absolute value
+        unsigned long divres = (unsigned long) num; // Absolute value
         for(int i = 0; divres > 0; i++) // Do base conversion
         {
             if(small)
@@ -68,8 +68,8 @@ char* convbase(long num, uint8_t base, bool small, bool isSigned)
         }
     }
 
-    uint8_t i = 0;
-    uint8_t j = strlen(ret) - 1;
+    unsigned char i = 0;
+    unsigned char j = strlen(ret) - 1;
 
     // Reverse the string
     while (i < j)
