@@ -6,7 +6,7 @@
  * Created on 29-Jul-2017 10:50:27 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:39:52-05:00
+ * @ Last modified time: 2018-03-19T14:31:26-04:00
 */
 
 #include "arch/x86/llio.h"
@@ -50,13 +50,6 @@ inline uint32_t read_cr0(void)
     return val;
 }
 
-inline uint32_t read_cr1(void)
-{
-    uint32_t val;
-    asm volatile ("mov %%cr1, %0" : "=r" (val));
-    return val;
-}
-
 inline uint32_t read_cr2(void)
 {
     uint32_t val;
@@ -76,4 +69,24 @@ inline uint32_t read_cr4(void)
     uint32_t val;
     asm volatile ("mov %%cr4, %0" : "=r" (val));
     return val;
+}
+
+inline void write_cr0(uint32_t val)
+{
+    asm volatile("mov %0, %%cr0" : : "r" (val));
+}
+
+inline void write_cr2(uint32_t val)
+{
+    asm volatile("mov %0, %%cr2" : : "r" (val));
+}
+
+inline void write_cr3(uint32_t val)
+{
+    asm volatile("mov %0, %%cr3" : : "r" (val));
+}
+
+inline void write_cr4(uint32_t val)
+{
+    asm volatile("mov %0, %%cr4" : : "r" (val));
 }

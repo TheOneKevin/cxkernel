@@ -6,7 +6,7 @@
  * Created on 2017-09-23T14:29:22-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:38:35-05:00
+ * @ Last modified time: 2018-03-18T09:55:15-04:00
 */
 
 #pragma once
@@ -18,11 +18,11 @@
 extern "C" {
 #endif
 
-void initTmpBootACPI(void);
+void initTmpBootACPI(void) NO_OPTIMIZE;
 void deinitTmpBootACPI(void);
-void getNUMADomains(void);
-void getCPUInfo(void);
-bool acpiHasAPIC(void);
+void getNUMADomains(void) NO_OPTIMIZE;
+void getCPUInfo(void) NO_OPTIMIZE;
+bool acpiHasAPIC(void) NO_OPTIMIZE;
 
 #ifdef __cplusplus
 }

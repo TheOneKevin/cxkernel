@@ -6,7 +6,7 @@
  * Created on 29-Jul-2017 05:22:49 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:48:11-05:00
+ * @ Last modified time: 2018-02-26T14:06:41-05:00
 */
 
 #include "arch/x86/llio.h"
@@ -43,7 +43,7 @@ static void terminal_scroll(void)
 {
     // We only want to calculate this once
     uint16_t blank = vga_entry(' ');
-    uint16_t* terminal_buffer = (uint16_t *) (ARCH_VIRT_BASE + VGA_FRAMEBUFFER); // We need to cast this.
+    uint16_t* terminal_buffer = (uint16_t *) ARCH_VIRT_PHYS(VGA_FRAMEBUFFER); // We need to cast this.
     // Row 25 is the end, this means we need to scroll up
     if (_y >= VGA_HEIGHT)
     {
@@ -68,7 +68,7 @@ static void terminal_clear(uint8_t bg)
     // We only want to calculate this once
     uint16_t entry = vga_entry(' ');
     bg_color = bg;
-    uint16_t* terminal_buffer = (uint16_t *) (ARCH_VIRT_BASE + VGA_FRAMEBUFFER); // Cast the void pointer
+    uint16_t* terminal_buffer = (uint16_t *) ARCH_VIRT_PHYS(VGA_FRAMEBUFFER); // Cast the void pointer
 
     for (int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++)
         terminal_buffer[i] = entry;
@@ -83,7 +83,7 @@ static void terminal_putc(const char c)
 {
     // Let's get the entry we're going to write to VRAM first
     uint16_t entry = vga_entry(c);
-    uint16_t* terminal_buffer = (uint16_t *) (ARCH_VIRT_BASE + VGA_FRAMEBUFFER);
+    uint16_t* terminal_buffer = (uint16_t *) ARCH_VIRT_PHYS(VGA_FRAMEBUFFER);
     // Backspace by decreasing the cursor x
     if (c == '\b' && _x)
         _x--;

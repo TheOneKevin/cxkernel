@@ -6,7 +6,7 @@
  * Created on 04-Aug-2017 04:37:25 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T16:37:20-05:00
+ * @ Last modified time: 2018-03-18T15:57:55-04:00
 */
 
 #include "bitmap.h"
@@ -17,7 +17,7 @@
 #include "mm/mmtypes.h"
 #include "arch/x86/paging.h"
 #include "arch/x86/arch_common.h"
-#include "arch/x86/interface/meminit.h"
+#include "arch/x86/meminit.h"
 #include "arch/x86/bootmm.h"
 
 extern uint32_t _kernel_dir;
@@ -37,23 +37,15 @@ void arch_pmeminit(void)
     // Find the length in terms of pages
     max_mem /= ARCH_PAGE_SIZE;
 
-    // Prepare mappings
-    uint32_t* kernel_pt = &_kernel_table3;
-    memset(kernel_pt, 0, sizeof(uint32_t) * 1024);
-    uint32_t* page_dir = &_kernel_dir;
-    if(page_dir[ARCH_GET_PD_NUMBER(ARCH_PAGE_ALIGN(g_mod_end))] != 0 && ARCH_GET_PD_NUMBER(ARCH_PAGE_ALIGN(g_mod_end)) + 1 < 1024)
-        page_dir[ARCH_GET_PD_NUMBER(ARCH_PAGE_ALIGN(g_mod_end)) + 1] = ((uint32_t) kernel_pt - ARCH_VIRT_BASE) + 0x3;
-    else if(page_dir[ARCH_GET_PD_NUMBER(ARCH_PAGE_ALIGN(g_mod_end))] == 0)
-        page_dir[ARCH_GET_PD_NUMBER(ARCH_PAGE_ALIGN(g_mod_end))] = ((uint32_t) kernel_pt - ARCH_VIRT_BASE) + 0x3;
-    else
-        PANIC("pmman failed to initialize.");
-
     // Initialize and zero out the buddy bitmap
-    pmm_buddy_map.length = (max_mem / (sizeof(unsigned int) * 8));
+    pmm_buddy_map.length = (max_mem / (sizeof(unsigned int) * 8)) + 1; // Plus one in case integer div truncates number
     pmm_buddy_map.bitmap = (unsigned int *) ARCH_PAGE_ALIGN(g_mod_end);
-    memset(pmm_buddy_map.bitmap, 0xFFFFFFFF, pmm_buddy_map.length * sizeof(unsigned int));
+    memset(pmm_buddy_map.bitmap, 0xFFFFFFFF, pmm_buddy_map.length * sizeof(unsigned int)); // # of bits in bitmap / 8
     kprintf("pmman: %X entries, %X pages indexed\n", pmm_buddy_map.length, max_mem);
     g_pmm_buddy_map = &pmm_buddy_map;
 
+    // Initialize the physical memory manager
     bootmm_init_memory_regions();
+    // Map and initialize the page tables
+    init_paging();
 }

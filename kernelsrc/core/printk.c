@@ -6,7 +6,7 @@
  * Created on 31-Jul-2017 02:10:59 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:26:00-05:00
+ * @ Last modified time: 2018-03-18T12:36:35-04:00
 */
 
 // Have fun maintaining the code!
@@ -36,7 +36,7 @@ static void _stream_out(char c, char** buf)
         fflush(STREAM_OUT);
 }
 
-static void _stream_err(char c, char** d)
+static void _stream_err(char c, char** unused)
 {
     console_emit(c);
 }
@@ -95,7 +95,7 @@ static inline void f(const char* format, ...)
 {
     va_list args;
     va_start(args, format);
-    ssprintf(__stream_err, 0, format, args);
+    ssprintf(__stream_log, 0, format, args);
     va_end(args);
 }
 
@@ -116,7 +116,7 @@ int fprintf(char file, const char* format, ...)
         // TODO: Implement actual real streams for these
         case STREAM_OUT: ret = ssprintf(__stream_out, 0, format, args); break;
         case STREAM_LOG: ret = ssprintf(__stream_log, 0, format, args); break;
-        case STREAM_ERR: f("[ERR] "); ret = ssprintf(__stream_err, 0, format, args) + 5; break;
+        case STREAM_ERR: ret = ssprintf(__stream_err, 0, format, args); break;
         default:         ret = ssprintf(__stream_out, 0, format, args); break;
     }
     va_end(args);

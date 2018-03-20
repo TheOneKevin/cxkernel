@@ -6,7 +6,7 @@
  * Created on 30-Jul-2017 04:39:09 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:44:49-05:00
+ * @ Last modified time: 2018-03-19T14:16:38-04:00
 */
 
 #include "lib/printk.h"
@@ -18,7 +18,7 @@
 #include "arch/x86/stack_trace.h"
 
 // Firstly, let's set up all our error messages
-static char *exception_messages[] =
+static char* exception_messages[] =
 {
     "Division By Zero",
     "Debug",
@@ -52,6 +52,18 @@ static char *exception_messages[] =
     "Reserved",
     "Reserved",
     "Reserved"
+};
+
+static char* page_fault_messages[] =
+{
+    "Supervisory process tried to read a non-present page entry",
+    "Supervisory process tried to read a page and caused a protection fault",
+    "Supervisory process tried to write to a non-present page entry",
+    "Supervisory process tried to write a page and caused a protection fault",
+    "User process tried to read a non-present page entry",
+    "User process tried to read a page and caused a protection fault",
+    "User process tried to write to a non-present page entry",
+    "User process tried to write a page and caused a protection fault"
 };
 
 // Here, we add the entries of our ISR to the IDT
@@ -93,14 +105,24 @@ void install_isr(void)
 
 void isr_handler(regs_t* r) // Our exception handler called from the assembly file
 {
-    fprintf(STREAM_ERR, " KERNEL EXCEPTION 0x%02X\n %s\n", r -> int_no, exception_messages[r -> int_no]);
+    fprintf(STREAM_ERR, " === KERNEL EXCEPTION 0x%02X ===\n %s\n", r -> int_no, exception_messages[r -> int_no]);
+
+    if(r -> int_no == 14) // Page fault
+    {
+        // The error code gives us details of what happened.
+        fprintf(STREAM_ERR, " %s\n", page_fault_messages[r -> err_code]);
+        fprintf(STREAM_ERR, " at: 0x%08X\n", read_cr2());
+    }
+
     CallStackTrace(r -> ebp, false);
-    fprintf(STREAM_ERR, "Regdump:\n");
+
+    fprintf(STREAM_ERR, " === Regdump ===\n");
     fprintf(STREAM_ERR, "eax: 0x%08X ebx: 0x%08X ecx: 0x%08X edx: 0x%08X err: 0x%08X\n", r -> eax, r -> ebx, r -> ecx, r -> edx, r -> err_code);
     fprintf(STREAM_ERR, "edi: 0x%08X esi: 0x%08X esp: 0x%08X ebp: 0x%08X int: 0x%08X\n", r -> edi, r -> esi, r -> esp, r -> ebp, r -> int_no);
-    fprintf(STREAM_ERR, "gs: 0x%08X fs: 0x%08X es: 0x%08X ds: 0x%08X cs: 0x%08X\n", r -> gs, r -> fs, r -> es, r -> ds, r -> cs);
+    fprintf(STREAM_ERR, "gs:  0x%08X fs:  0x%08X es:  0x%08X ds:  0x%08X cs:  0x%08X\n", r -> gs, r -> fs, r -> es, r -> ds, r -> cs);
+    fprintf(STREAM_ERR, "cr0: 0x%08X cr2: 0x%08X cr3: 0x%08X cr4: 0x%08X\n\n", read_cr0(), read_cr2(), read_cr3(), read_cr4());
     fprintf(STREAM_ERR, "eflags: 0x%08X eip: 0x%08X useresp: 0x%08X ss: 0x%08X\n", r -> eflags, r -> eip, r -> useresp, r -> ss);
-    fprintf(STREAM_ERR, "cr0: 0x%08X cr2: 0x%08X cr3: 0x%08X cr4: 0x%08X\n", read_cr0(), read_cr2(), read_cr3(), read_cr4());
+    
     for(;;);
     PIC_acknowledge();
 }

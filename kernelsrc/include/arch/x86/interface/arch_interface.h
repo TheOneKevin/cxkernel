@@ -13,7 +13,7 @@
 
 #include "common.h"
 #include "core/console.h"
-#include "arch/x86/interface/meminit.h"
+#include "arch/x86/meminit.h"
 
 #ifdef __cplusplus
 extern "C" {

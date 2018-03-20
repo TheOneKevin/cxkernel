@@ -6,14 +6,15 @@
  * Created on 29-Jul-2017 12:17:34 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:43:47-05:00
+ * @ Last modified time: 2018-03-19T18:31:34-04:00
 */
 
 #include "arch/x86/multiboot.h"
 
+#include "arch/arch_interface.h"
+
 #include "arch/x86/arch_common.h"
 #include "arch/x86/multiboot_utils.h"
-#include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/gdt.h"
 #include "arch/x86/syscalls.h"
 #include "arch/x86/exceptions.h"
@@ -71,24 +72,25 @@ void arch_early_init(uint32_t magic, void* ptr)
     fprintf(STREAM_OUT, "Checking multiboot integrity... ");
     fflush(STREAM_OUT);
     // Multiboot sanity check
-    ASSERT(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Magic number is invalid.");
-    ASSERT(CHECK_FLAG(mbt.flags, 0), "No memory information provided. Kernel cannot continue.");
-    ASSERT(CHECK_FLAG(mbt.flags, 3) && mbt.mods_addr != 0 && mbt.mods_count > 0, "No module(s) loaded. Check GRUB config file.");
-    ASSERT(!((CHECK_FLAG(mbt.flags, 4) && CHECK_FLAG(mbt.flags, 5))), "Flags 4 and 5 are mutually exclusive.");
-    ASSERT(CHECK_FLAG(mbt.flags, 6), "Memory map not loaded. Kernel cannot continue execution.");
-
+    ASSERT_HARD(magic == MULTIBOOT_BOOTLOADER_MAGIC, "Magic number is invalid.");
+    ASSERT_HARD(CHECK_FLAG(mbt.flags, 0), "No memory information provided. Kernel cannot continue.");
+    ASSERT_HARD(CHECK_FLAG(mbt.flags, 3) && mbt.mods_addr != 0 && mbt.mods_count > 0, "No module(s) loaded. Check GRUB config file.");
+    ASSERT_HARD(!((CHECK_FLAG(mbt.flags, 4) && CHECK_FLAG(mbt.flags, 5))), "Flags 4 and 5 are mutually exclusive.");
+    ASSERT_HARD(CHECK_FLAG(mbt.flags, 6), "Memory map not loaded. Kernel cannot continue execution.");
+    fprintf(STREAM_OUT, "Done!\n");
+    
     // Collect basic information regarding kernel symbol sections, memory map and module locations
     if(mb_elf_get_section_header(".symtab") != 0 && mb_elf_get_section_header(".strtab") != 0)
     {
         g_krnl_sym_table = &_sym_table;
         g_krnl_sym_table -> present = true;
         g_krnl_sym_table -> num_sym = mb_elf_get_section_header(".symtab") -> sh_size / sizeof(elf_sym_t);
-        g_krnl_sym_table -> symbols = (elf_sym_t *) (mb_elf_get_section_header(".symtab") -> sh_addr + ARCH_VIRT_BASE);
-        g_krnl_sym_table -> string_table_addr = (char *) (mb_elf_get_section_header(".strtab") -> sh_addr + ARCH_VIRT_BASE);
+        g_krnl_sym_table -> symbols = (elf_sym_t *) ARCH_VIRT_PHYS(mb_elf_get_section_header(".symtab") -> sh_addr);
+        g_krnl_sym_table -> string_table_addr = (char *) ARCH_VIRT_PHYS(mb_elf_get_section_header(".strtab") -> sh_addr);
     }
     else
         PANIC("Kernel elf image is invalid!");
-    fprintf(STREAM_OUT, "Done!\n");
+    fprintf(STREAM_OUT, "Collected symbol data.\n");
     ARCH_FOREACH_MMAP(mmap)
     {
         if(mmap -> addr == 0x100000 && !(mmap -> type == MULTIBOOT_MEMORY_AVAILABLE && mmap -> len > 0x4000000))
@@ -96,12 +98,12 @@ void arch_early_init(uint32_t magic, void* ptr)
         fprintf(STREAM_LOG, "  Entry address: 0x%016lX Entry length: 0x%016lX (0x%02X)\n", (uint64_t) mmap -> addr, (uint64_t) mmap -> len, (uint64_t) mmap -> type);
     }
 
-    multiboot_module_t* mod = (multiboot_module_t *) (mbt.mods_addr + ARCH_VIRT_BASE);
+    multiboot_module_t* mod = (multiboot_module_t *) ARCH_VIRT_PHYS(mbt.mods_addr);
     fprintf(STREAM_OUT, "%d module(s) loaded.\n", mbt.mods_count);
     for (uint32_t i = 0; i < mbt.mods_count; i++, mod++)
-        fprintf(STREAM_LOG, "[%02d] Module location: From 0x%08X to 0x%08X\n", i + 1, mod -> mod_start + ARCH_VIRT_BASE, mod -> mod_end + ARCH_VIRT_BASE);
+        fprintf(STREAM_LOG, "[%02d] Module location: From 0x%08X to 0x%08X\n", i + 1, ARCH_VIRT_PHYS(mod -> mod_start), ARCH_VIRT_PHYS(mod -> mod_end));
     mod--;
-    g_mod_end = mod -> mod_end + ARCH_VIRT_BASE;
+    g_mod_end = ARCH_VIRT_PHYS(mod -> mod_end);
 
     // Install interrupt handlers
     install_gdt();
@@ -155,7 +157,7 @@ void arch_late_init(void)
 {
     syscalls_register();
     deinitTmpBootACPI();
-    
+
     #if KERNEL_SELF_TEST == 1
         fprintf(STREAM_OUT, "Initiating kernel integrity self tests...");
         fflush(STREAM_OUT);

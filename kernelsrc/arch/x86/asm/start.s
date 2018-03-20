@@ -5,7 +5,7 @@
 .set MAGIC,    0x1BADB002       /* 'magic number' lets bootloader find the header */
 .set CHECKSUM, -(MAGIC + FLAGS) /* checksum of above, to prove we are multiboot */
 
-// Map our kernel to the higher half
+/* Map our kernel to the higher half */
 .set VIRTUAL_BASE, 0xE0000000
 .set KRNL_PAGE_NUMBER, (VIRTUAL_BASE >> 22)
 .set ARCH_PAGE_SIZE, 0x1000
@@ -42,12 +42,21 @@
 .global stack_top
 .global stack_bottom
 stack_bottom:
-.skip 0x1000 # 4 KB
+.skip ARCH_PAGE_SIZE # 4 KB
 stack_top:
 
 /* Paging tables and directories for higher half kernel */
 /* Statically allocated for temporary usage */
 .section .bss, "aw", @nobits
+_perserve_magic:
+    .skip 4
+_perserve_struct:
+    .skip 4
+
+.align 0x20
+_kernel_pdpt:
+    .skip 32
+
 .align ARCH_PAGE_SIZE
 _kernel_dir:
     .skip ARCH_PAGE_SIZE
@@ -57,9 +66,24 @@ _kernel_table2: /* For the stack */
     .skip ARCH_PAGE_SIZE
 _kernel_table3: /* For ACPI */
     .skip ARCH_PAGE_SIZE
+_kernel_table4: /* NULL */
+    .skip ARCH_PAGE_SIZE
+_kernel_table5: /* NULL */
+    .skip ARCH_PAGE_SIZE
+_kernel_table6: /* NULL */
+    .skip ARCH_PAGE_SIZE
+_kernel_table7: /* NULL */
+    .skip ARCH_PAGE_SIZE
 
 .global _kernel_dir
+.global _kernel_table1
+.global _kernel_table2
 .global _kernel_table3
+.global _kernel_table4
+.global _kernel_table5
+.global _kernel_table6
+.global _kernel_table7
+.global _kernel_pdpt
 
 /*
  * The linker script specifies _start as the entry point to the kernel and the
@@ -72,7 +96,13 @@ _kernel_table3: /* For ACPI */
 .type _start, @function
 
 _start:
+    /* Oh how I hate GAS */
     cli
+
+    /* Save the GRUB registers */
+    movl %eax, _perserve_magic - VIRTUAL_BASE
+    movl %ebx, _perserve_struct - VIRTUAL_BASE
+
     movl $(_kernel_table1 - VIRTUAL_BASE), %edi
     movl $0, %esi
     movl $1024, %ecx
@@ -83,8 +113,8 @@ _start:
     addl $ARCH_PAGE_SIZE, %esi  /* Increment our pointer to the current mapped address */
     addl $4, %edi               /* Increment our pointer to the current entry in the table */
     loop 1b
-    movl $(_kernel_table2 - VIRTUAL_BASE), %edi
 3:
+    movl $(_kernel_table2 - VIRTUAL_BASE), %edi
     movl $(stack_bottom - VIRTUAL_BASE), %edx
     orl $0x3, %edx
     movl $(_kernel_table2 - VIRTUAL_BASE + 4 * 1023), %edi
@@ -93,22 +123,18 @@ _start:
     movl $(_kernel_table1 - VIRTUAL_BASE + 0x3), _kernel_dir - VIRTUAL_BASE + 0
     /* Map the kernel to virt base */
     movl $(_kernel_table1 - VIRTUAL_BASE + 0x3), _kernel_dir - VIRTUAL_BASE + KRNL_PAGE_NUMBER * 4
-    /* Map the stack to 0xFFFFFFFF */
-    movl $(_kernel_table2 - VIRTUAL_BASE + 0x3), _kernel_dir - VIRTUAL_BASE + 1023 * 4
+    /* Map the stack to 0xFF800000 */
+    movl $(_kernel_table2 - VIRTUAL_BASE + 0x3), _kernel_dir - VIRTUAL_BASE + 0xFF4
     /* Move the address of the PD to CR3 */
     movl $(_kernel_dir - VIRTUAL_BASE), %ecx
     movl %ecx, %cr3
     movl %cr0, %ecx
-    orl  $0x80010000, %ecx
+    orl  $0x80010001, %ecx
     movl %ecx, %cr0 /* Enable paging! */
 
     lea 4f, %ecx
     jmp *%ecx
 4:
-    movl $0, _kernel_dir + 0
-    mov %cr3, %ecx
-    mov %ecx, %cr3
-
     /*
      * The bootloader has loaded us into 32-bit protected mode on a x86
      * machine. Interrupts are disabled. Paging is disabled. The processor
@@ -125,7 +151,7 @@ _start:
      * in assembly as languages such as C cannot function without a stack.
     */
 
-    mov $0xFFFFFFFF, %esp
+    mov $0xFF800000, %esp
 
     /*
      * This is a good place to initialize crucial processor state before the
@@ -145,7 +171,14 @@ _start:
      * preserved and the call is well defined.
     */
 
+    /* Restore variables */
+    movl _perserve_magic, %eax
+    movl _perserve_struct, %ebx
+
+    /* Do some shit */
     addl $VIRTUAL_BASE, %ebx
+
+    /* Push parameters */
     pushl %ebx
     pushl %eax
 

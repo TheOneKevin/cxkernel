@@ -6,7 +6,7 @@
  * Created on 2017-09-23T14:03:00-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:38:20-05:00
+ * @ Last modified time: 2018-03-18T09:55:31-04:00
 */
 
 #include "lib/printk.h"
@@ -90,7 +90,7 @@ static ACPI_RSDP_t* getRDSP(void)
     ACPI_RSDP_t* rsdp;
 
     // Search under the 1 MB mark
-    for(addr = (uint32_t *) (0xE0000 + ARCH_VIRT_BASE); (uint32_t) addr < 0x100000 + ARCH_VIRT_BASE; addr += 0x10 / sizeof(addr))
+    for(addr = (uint32_t *) ARCH_VIRT_PHYS(0xE0000); (uint32_t) addr < ARCH_VIRT_PHYS(0x100000); addr += 0x10 / sizeof(addr))
     {
         rsdp = checkValidRSDP(addr);
         if(rsdp != NULL)
@@ -101,7 +101,7 @@ static ACPI_RSDP_t* getRDSP(void)
     EBDA = EBDA * 0x10 & 0xFFFFF;
 
     // Loop through the EBDA
-    for(addr = (uint32_t *) (EBDA + ARCH_VIRT_BASE); (uint32_t) addr < EBDA + 1024; addr += 0x10 / sizeof(addr))
+    for(addr = (uint32_t *) ARCH_VIRT_PHYS(EBDA); (uint32_t) addr < EBDA + 1024; addr += 0x10 / sizeof(addr))
     {
         rsdp = checkValidRSDP(addr);
         if(rsdp != NULL)
@@ -111,7 +111,7 @@ static ACPI_RSDP_t* getRDSP(void)
     return NULL;
 }
 
-static uint32_t NO_OPTIMIZE mapACPItable(uint32_t addr, size_t len)
+NO_OPTIMIZE static uint32_t mapACPItable(uint32_t addr, size_t len)
 {
     uint32_t i = _acpi_mmap_idx_fix;
     for(uint32_t p = ARCH_PAGE_ALIGN(addr); p <= ARCH_PAGE_ALIGN(addr + len); p += ARCH_PAGE_SIZE)
@@ -136,7 +136,7 @@ static void fixACPImmap(void)
     _acpi_mmap_idx_fix = _acpi_mmap_idx;
 }
 
-static struct ACPI_SDT_Header* NO_OPTIMIZE findTable(char* name)
+NO_OPTIMIZE static struct ACPI_SDT_Header* findTable(char* name)
 {
     int entries = (RSDT -> head.length - sizeof(RSDT -> head)) / sizeof(RSDT -> pointers);
     for(int i = 0; i < entries; i++)
@@ -153,7 +153,7 @@ static struct ACPI_SDT_Header* NO_OPTIMIZE findTable(char* name)
     return NULL;
 }
 
-void NO_OPTIMIZE getNUMADomains(void)
+NO_OPTIMIZE void getNUMADomains(void)
 {
     ACPI_SRAT_t* SRAT = (ACPI_SRAT_t *) findTable("SRAT");
     fixACPImmap();
@@ -166,7 +166,7 @@ void NO_OPTIMIZE getNUMADomains(void)
     kprintf("Found\n");
 }
 
-void NO_OPTIMIZE getCPUInfo(void)
+NO_OPTIMIZE void getCPUInfo(void)
 {
     ACPI_MADT_t* table = (ACPI_MADT_t *) findTable("APIC");
     fixACPImmap();
@@ -186,12 +186,12 @@ void NO_OPTIMIZE getCPUInfo(void)
     }
 }
 
-bool NO_OPTIMIZE acpiHasAPIC(void)
+NO_OPTIMIZE bool acpiHasAPIC(void)
 {
     return findTable("APIC") != NULL;
 }
 
-void NO_OPTIMIZE initTmpBootACPI(void)
+NO_OPTIMIZE void initTmpBootACPI(void)
 {
     currRSDP = getRDSP();
     if(currRSDP == NULL)

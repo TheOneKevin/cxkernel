@@ -6,7 +6,7 @@
  * Created on 09-Aug-2017 02:10:45 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:39:32-05:00
+ * @ Last modified time: 2018-03-16T10:12:50-04:00
 */
 
 #include "arch/x86/arch_common.h"
@@ -16,7 +16,7 @@
 // Issue a CPUID command
 static inline void cpuid(uint32_t code, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx)
 {
-    asm volatile ("cpuid" : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx) : "0" (code));
+    asm volatile ("cpuid" : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx) : "a" (code));
 }
 
 static inline int cpuid_string(int code, int where[4])

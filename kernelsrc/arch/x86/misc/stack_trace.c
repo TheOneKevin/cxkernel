@@ -6,7 +6,7 @@
  * Created on 13-Aug-2017 03:29:09 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-10-11T15:58:42-04:00
+ * @ Last modified time: 2018-03-18T12:39:46-04:00
 */
 
 #include "lib/printk.h"
@@ -20,7 +20,7 @@ void CallStackTrace(uint32_t aEBP, bool aBOOL)
     if(aBOOL)
         ebp = &aEBP - 2;
     int i = 0;
-    kprintf("StackTrace: %X\n", ebp);
+    kprintf("StackTrace (ebp): 0x%X\n", ebp);
     while((uint32_t) ebp < ARCH_STACK_TOP && (uint32_t) ebp > ARCH_STACK_TOP - ARCH_PAGE_SIZE)
     {
         uint32_t eip = ebp[1];
