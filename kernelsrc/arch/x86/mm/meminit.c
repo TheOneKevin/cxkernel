@@ -6,8 +6,10 @@
  * Created on 04-Aug-2017 04:37:25 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-18T15:57:55-04:00
+ * @ Last modified time: 2018-03-27T22:35:36-04:00
 */
+
+#define __MODULE__ "PMMAN"
 
 #include "bitmap.h"
 #include "arch/x86/multiboot.h"
@@ -41,7 +43,7 @@ void arch_pmeminit(void)
     pmm_buddy_map.length = (max_mem / (sizeof(unsigned int) * 8)) + 1; // Plus one in case integer div truncates number
     pmm_buddy_map.bitmap = (unsigned int *) ARCH_PAGE_ALIGN(g_mod_end);
     memset(pmm_buddy_map.bitmap, 0xFFFFFFFF, pmm_buddy_map.length * sizeof(unsigned int)); // # of bits in bitmap / 8
-    kprintf("pmman: %X entries, %X pages indexed\n", pmm_buddy_map.length, max_mem);
+    OS_PRN("%X entries, %X pages indexed\n", pmm_buddy_map.length, max_mem);
     g_pmm_buddy_map = &pmm_buddy_map;
 
     // Initialize the physical memory manager

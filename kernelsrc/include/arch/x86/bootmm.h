@@ -6,7 +6,7 @@
  * Created on 2017-10-02T16:46:55-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-12-06T10:32:38-05:00
+ * @ Last modified time: 2018-03-23T22:35:43-04:00
 */
 
 #pragma once
@@ -20,7 +20,7 @@ extern "C" {
 
 void bootmm_init_memory_regions(void);
 void bootmm_free_page(phys_t address);
-void* bootmm_alloc_page(void);
+phys_t bootmm_alloc_page(void);
 
 #ifdef __cplusplus
 }

@@ -6,7 +6,7 @@
  * Created on 2017-10-09T20:16:25-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-18T22:07:57-04:00
+ * @ Last modified time: 2018-03-27T15:59:06-04:00
 */
 
 #pragma once
@@ -41,6 +41,8 @@
 #define ARCH_PAE_GET_PDPT_IDX(a) ((a) >> 30 & 0x01FF)
 #define ARCH_PAE_GET_PD_IDX(a)   ((a) >> 21 & 0x01FF)
 #define ARCH_PAE_GET_PT_IDX(a)   ((a) >> 12 & 0x01FF)
+
+#define PDP_PR 1 << 0
 
 #define PDE_PR  1 << 0
 #define PDE_RW  1 << 1

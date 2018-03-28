@@ -53,12 +53,8 @@ _perserve_magic:
 _perserve_struct:
     .skip 4
 
-.align 0x20
-_kernel_pdpt:
-    .skip 32
-
 .align ARCH_PAGE_SIZE
-_kernel_dir:
+_kernel_dir1:
     .skip ARCH_PAGE_SIZE
 _kernel_table1: /* For the kernel */
     .skip ARCH_PAGE_SIZE
@@ -75,7 +71,17 @@ _kernel_table6: /* NULL */
 _kernel_table7: /* NULL */
     .skip ARCH_PAGE_SIZE
 
-.global _kernel_dir
+_kernel_dir2: /* For PAE 1 */
+    .skip ARCH_PAGE_SIZE
+_kernel_dir3: /* For PAE 1 */
+    .skip ARCH_PAGE_SIZE
+_kernel_dir4: /* For PAE 1 */
+    .skip ARCH_PAGE_SIZE
+
+.global _kernel_dir1
+.global _kernel_dir2
+.global _kernel_dir3
+.global _kernel_dir4
 .global _kernel_table1
 .global _kernel_table2
 .global _kernel_table3
@@ -83,7 +89,6 @@ _kernel_table7: /* NULL */
 .global _kernel_table5
 .global _kernel_table6
 .global _kernel_table7
-.global _kernel_pdpt
 
 /*
  * The linker script specifies _start as the entry point to the kernel and the
@@ -120,13 +125,13 @@ _start:
     movl $(_kernel_table2 - VIRTUAL_BASE + 4 * 1023), %edi
     movl %edx, (%edi)
     /* Identity map the kernel table 1 */
-    movl $(_kernel_table1 - VIRTUAL_BASE + 0x3), _kernel_dir - VIRTUAL_BASE + 0
+    movl $(_kernel_table1 - VIRTUAL_BASE + 0x3), _kernel_dir1 - VIRTUAL_BASE + 0
     /* Map the kernel to virt base */
-    movl $(_kernel_table1 - VIRTUAL_BASE + 0x3), _kernel_dir - VIRTUAL_BASE + KRNL_PAGE_NUMBER * 4
+    movl $(_kernel_table1 - VIRTUAL_BASE + 0x3), _kernel_dir1 - VIRTUAL_BASE + KRNL_PAGE_NUMBER * 4
     /* Map the stack to 0xFF800000 */
-    movl $(_kernel_table2 - VIRTUAL_BASE + 0x3), _kernel_dir - VIRTUAL_BASE + 0xFF4
+    movl $(_kernel_table2 - VIRTUAL_BASE + 0x3), _kernel_dir1 - VIRTUAL_BASE + 0xFF4
     /* Move the address of the PD to CR3 */
-    movl $(_kernel_dir - VIRTUAL_BASE), %ecx
+    movl $(_kernel_dir1 - VIRTUAL_BASE), %ecx
     movl %ecx, %cr3
     movl %cr0, %ecx
     orl  $0x80010001, %ecx

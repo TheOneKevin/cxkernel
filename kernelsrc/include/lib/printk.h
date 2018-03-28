@@ -6,7 +6,7 @@
  * Created on 31-Jul-2017 02:10:34 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:25:00-05:00
+ * @ Last modified time: 2018-03-27T16:05:09-04:00
 */
 
 #pragma once
@@ -16,6 +16,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define OS_LOG(fmt, ...) fprintf(STREAM_LOG, "["__MODULE__"] " fmt, ## __VA_ARGS__)
+#define OS_ERR(fmt, ...) fprintf(STREAM_ERR, "["__MODULE__"] " fmt, ## __VA_ARGS__)
+#define OS_PRN(fmt, ...) fprintf(STREAM_OUT, "["__MODULE__"] " fmt, ## __VA_ARGS__)
 
 void fflush(int stream);
 void init_early_handles(void);

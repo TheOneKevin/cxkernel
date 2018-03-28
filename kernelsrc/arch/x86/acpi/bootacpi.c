@@ -6,7 +6,7 @@
  * Created on 2017-09-23T14:03:00-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-18T09:55:31-04:00
+ * @ Last modified time: 2018-03-27T14:04:30-04:00
 */
 
 #include "lib/printk.h"
@@ -16,7 +16,7 @@
 #include "arch/x86/acpi.h"
 #include "arch/x86/acpitypes.h"
 
-extern uint32_t _kernel_dir;
+extern uint32_t _kernel_dir1;
 extern uint32_t _kernel_table3;
 
 // Pointers to tables
@@ -203,7 +203,7 @@ NO_OPTIMIZE void initTmpBootACPI(void)
     // Prepare the ACPI page table and page dir
     uint32_t* kernel_pt = &_kernel_table3;
     memset(kernel_pt, 0, sizeof(uint32_t) * 1024);
-    uint32_t* page_dir = &_kernel_dir;
+    uint32_t* page_dir = &_kernel_dir1;
     page_dir[ARCH_PAGE_NUMBER(ARCH_VIRT_BASE) - 1] = ((uint32_t) kernel_pt - ARCH_VIRT_BASE) + 0x3;
 
     // First map the header of the RSDT, then map the entire table using the length from the header
@@ -224,6 +224,6 @@ void deinitTmpBootACPI(void)
 {
     currRSDP = NULL;
     // Disable the table
-    uint32_t* page_dir = &_kernel_dir;
+    uint32_t* page_dir = &_kernel_dir1;
     page_dir[ARCH_PAGE_NUMBER(ARCH_VIRT_BASE) - 1] = 0;
 }

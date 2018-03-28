@@ -5,10 +5,13 @@
  * Created on 2017-08-04T17:50:29-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:34:14-05:00
+ * @ Last modified time: 2018-03-27T16:06:19-04:00
 */
 
+#define __MODULE__ "LIBALLOC"
+
 #include "mm/malloc.h"
+#include "lib/printk.h"
 
 // ************************* libAlloc compatibility layer ************************* //
 static void* __start;
@@ -195,21 +198,21 @@ static void* liballoc_memcpy(void* s1, const void* s2, size_t n)
             struct liballoc_minor *min = NULL;
         #endif
 
-        fprintf(STREAM_LOG, "liballoc: ------ Memory data ---------------\n");
-        fprintf(STREAM_LOG, "liballoc: System memory allocated: %i bytes\n", l_allocated);
-        fprintf(STREAM_LOG, "liballoc: Memory in used (malloc'ed): %i bytes\n", l_inuse);
-        fprintf(STREAM_LOG, "liballoc: Warning count: %i\n", l_warningCount);
-        fprintf(STREAM_LOG, "liballoc: Error count: %i\n", l_errorCount);
-        fprintf(STREAM_LOG, "liballoc: Possible overruns: %i\n", l_possibleOverruns);
+        OS_LOG("------ Memory data ---------------\n");
+        OS_LOG("System memory allocated: %i bytes\n", l_allocated);
+        OS_LOG("Memory in used (malloc'ed): %i bytes\n", l_inuse);
+        OS_LOG("Warning count: %i\n", l_warningCount);
+        OS_LOG("Error count: %i\n", l_errorCount);
+        OS_LOG("Possible overruns: %i\n", l_possibleOverruns);
 
         #ifdef LIBALLOC_DEBUG
             while (maj != NULL)
             {
-                fprintf(STREAM_LOG, "liballoc: %x: total = %i, used = %i\n", maj, maj -> size, maj -> usage);
+                OS_LOG("%x: total = %i, used = %i\n", maj, maj -> size, maj -> usage);
                 min = maj -> first;
                 while (min != NULL)
                 {
-                    fprintf(STREAM_LOG, "liballoc:    %x: %i bytes\n", min, min -> size);
+                    OS_LOG("   %x: %i bytes\n", min, min -> size);
                     min = min -> next;
                 }
 
@@ -248,7 +251,7 @@ static struct liballoc_major *allocate_new_page(unsigned int size)
     {
         l_warningCount += 1;
         #if defined LIBALLOC_DEBUG || defined LIBALLOC_INFO
-            fprintf(STREAM_LOG, "liballoc: WARNING: liballoc_alloc(%i) return NULL\n", st);
+            OS_LOG("WARNING: liballoc_alloc(%i) return NULL\n", st);
             FLUSH();
         #endif
         return NULL; // uh oh, we ran out of memory.
@@ -264,8 +267,8 @@ static struct liballoc_major *allocate_new_page(unsigned int size)
     l_allocated += maj -> size;
 
     #ifdef LIBALLOC_DEBUG
-        fprintf(STREAM_LOG, "liballoc: Resource allocated %x, %i pages (%i B) for %i size\n", maj, st, maj -> size, size);
-        fprintf(STREAM_LOG, "liballoc: Total memory usage = %i KB\n", (int) ((l_allocated / (1024))));
+        OS_LOG("Resource allocated %x, %i pages (%i B) for %i size\n", maj, st, maj -> size, size);
+        OS_LOG("Total memory usage = %i KB\n", (int) ((l_allocated / (1024))));
         FLUSH();
     #endif
 
@@ -297,7 +300,7 @@ void *PREFIX(malloc)(size_t req_size)
     {
         l_warningCount += 1;
         #if defined LIBALLOC_DEBUG || defined LIBALLOC_INFO
-            fprintf(STREAM_LOG, "liballoc: WARNING: alloc( 0 ) called from %x\n", __builtin_return_address(0));
+            OS_LOG("WARNING: alloc( 0 ) called from %x\n", __builtin_return_address(0));
             FLUSH();
         #endif
         liballoc_unlock();
@@ -307,7 +310,7 @@ void *PREFIX(malloc)(size_t req_size)
     if (l_memRoot == NULL)
     {
         #if defined LIBALLOC_DEBUG || defined LIBALLOC_INFO
-            fprintf(STREAM_OUT, "liballoc: initialization of liballoc " VERSION "\n");
+            OS_PRN("initialization of liballoc " VERSION "\n");
             // atexit(liballoc_dump);
             FLUSH();
         #endif
@@ -325,13 +328,13 @@ void *PREFIX(malloc)(size_t req_size)
         }
 
         #ifdef LIBALLOC_DEBUG
-            fprintf(STREAM_LOG, "liballoc: set up first memory major %x\n", l_memRoot);
+            OS_LOG("set up first memory major %x\n", l_memRoot);
             FLUSH();
         #endif
     }
 
     #ifdef LIBALLOC_DEBUG
-        fprintf(STREAM_LOG, "liballoc: %x malloc(%i): ", __builtin_return_address(0), size);
+        OS_LOG("%x malloc(%i): ", __builtin_return_address(0), size);
         FLUSH();
     #endif
 
@@ -581,7 +584,7 @@ void *PREFIX(malloc)(size_t req_size)
         FLUSH();
     #endif
     #if defined LIBALLOC_DEBUG || defined LIBALLOC_INFO
-        fprintf(STREAM_LOG, "liballoc: WARNING: malloc(%i) returning NULL\n", size);
+        OS_LOG("WARNING: malloc(%i) returning NULL\n", size);
         liballoc_dump();
         FLUSH();
     #endif
@@ -597,7 +600,7 @@ void PREFIX(free)(void *ptr)
     {
         l_warningCount += 1;
         #if defined LIBALLOC_DEBUG || defined LIBALLOC_INFO
-            fprintf(STREAM_LOG, "liballoc: WARNING: free(NULL) called from %x\n", __builtin_return_address(0));
+            OS_LOG("WARNING: free(NULL) called from %x\n", __builtin_return_address(0));
             FLUSH();
         #endif
         return;
@@ -649,7 +652,7 @@ void PREFIX(free)(void *ptr)
     }
 
     #ifdef LIBALLOC_DEBUG
-        fprintf(STREAM_LOG, "liballoc: %x free(%x): ", __builtin_return_address(0),
+        OS_LOG("%x free(%x): ", __builtin_return_address(0),
         ptr);
         FLUSH();
     #endif

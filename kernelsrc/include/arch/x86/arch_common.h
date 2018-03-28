@@ -6,7 +6,7 @@
  * Created on 04-Aug-2017 07:46:54 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-19T19:54:53-04:00
+ * @ Last modified time: 2018-03-26T13:53:21-04:00
 */
 
 #pragma once
@@ -25,7 +25,7 @@
 #define ARCH_PAGE_ALIGN(addr) (((addr) + ARCH_PAGE_SIZE - 1) & ARCH_PAGE_MASK)
 #define ARCH_PAGE_ALIGN_DOWN(n) (ARCH_PAGE_ALIGN(n) == n ? ARCH_PAGE_ALIGN(n) : ARCH_PAGE_ALIGN(n) - ARCH_PAGE_SIZE)
 #define ARCH_PAGE_NUMBER(addr) ((addr) >> 22)
-#define BOCHS_MAGIC_BREAK() kprintf("[BOCHS BREAK] line: %d at %s\n", __LINE__, __FILE__); asm volatile("xchg %bx, %bx");
+#define BOCHS_MAGIC_BREAK() { kprintf("[BOCHS BREAK] line: %d at %s\n", __LINE__, __FILE__); asm volatile("xchg %bx, %bx"); }
 #define ARCH_FOREACH_MMAP(var)                                                                              \
     for(__9042352479_TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) (__GGMBT__ -> mmap_addr + ARCH_VIRT_BASE); \
     (unsigned int) (var) < __GGMBT__ -> mmap_addr + __GGMBT__ -> mmap_length + ARCH_VIRT_BASE;              \
