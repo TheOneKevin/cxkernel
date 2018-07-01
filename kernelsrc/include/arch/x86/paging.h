@@ -6,12 +6,13 @@
  * Created on 2017-10-09T20:16:25-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-27T15:59:06-04:00
+ * @ Last modified time: 2018-04-01T17:56:11-04:00
 */
 
 #pragma once
 
 #include "common.h"
+#include "arch/arch_paging.h"
 #include "arch/x86/arch_common.h"
 
 /*
@@ -58,9 +59,6 @@
 extern "C" {
 #endif
 
-uint64_t g_paging_PDPT[4] ALIGNED(0x20);
-
-void (*map_page)(virt_t, phys_t, uint16_t);
 void init_paging(void);
 
 #ifdef __cplusplus

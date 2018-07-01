@@ -6,12 +6,12 @@
  * Created on 2017-08-30T21:20:55-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-08-30T22:22:01-04:00
+ * @ Last modified time: 2018-03-28T14:32:32-04:00
 */
 
 #pragma once
 
-#include "config.h"
+#include "common.h"
 
 typedef struct { volatile int counter; } atomic_t;
 

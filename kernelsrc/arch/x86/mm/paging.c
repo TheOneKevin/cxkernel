@@ -6,17 +6,20 @@
  * Created on 03-Aug-2017 08:26:00 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-27T20:21:27-04:00
+ * @ Last modified time: 2018-05-23T13:41:36-04:00
 */
 
-#define __MODULE__ "PAGING"
+#define __MODULE__ "PGING"
+
+#include "arch/x86/global.h"
 
 #include "lib/printk.h"
 #include "lib/string.h"
+#include "mm/page_alloc.h"
+
 #include "arch/x86/cpu.h"
 #include "arch/x86/llio.h"
 #include "arch/x86/paging.h"
-#include "arch/x86/bootmm.h"
 #include "arch/x86/arch_common.h"
 
 extern uint32_t _kernel_dir1;
@@ -53,6 +56,10 @@ static inline void __tlb_flush_single(uint32_t addr)
    asm volatile("invlpg (%0)" ::"r" (addr) : "memory");
 }
 
+/* ============================================================================= */
+/*                          NON PAE MODE CODE                                    */
+/* ============================================================================= */
+
 /**
  * Maps an entire page table in to the page table place thing
  * @param virt Virtual address the page table maps
@@ -61,30 +68,20 @@ static inline void __tlb_flush_single(uint32_t addr)
 static inline void __map_pde(uint32_t virt, uint32_t phys)
 {
     (&_kernel_table3)[ARCH_GET_PD_IDX(virt)] = phys | (PTE_PR | PTE_RW);
-    __tlb_flush_single(MEM_MAP.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * ARCH_GET_PD_IDX(virt));
+    __tlb_flush_single(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * ARCH_GET_PD_IDX(virt));
 }
 
-/**
- * Maps an entire page table in to the page table place thing
- * @param virt Virtual address the page table maps
- * @param phys Physical address of page table
- */
-static inline void __map_pde_pae(uint32_t virt, uint64_t phys)
+static int __map_page(virt_t virt, phys_t phys, uint16_t flags)
 {
-    (PAE_PTRS[ARCH_PAE_GET_PDPT_IDX(virt)])[ARCH_PAE_GET_PD_IDX(virt)] = phys | (PTE_PR | PTE_RW);
-    __tlb_flush_single(MEM_MAP.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * (ARCH_PAE_GET_PDPT_IDX(virt) * 512 + ARCH_PAE_GET_PD_IDX(virt)));
-}
 
-static void __map_page(virt_t virt, phys_t phys, uint16_t flags)
-{
     int pdid = ARCH_GET_PD_IDX(virt);
     int ptid = ARCH_GET_PT_IDX(virt);
     uint32_t* page_dir = &_kernel_dir1;
-    uint32_t* page_tab = (uint32_t *)(MEM_MAP.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * pdid);
+    uint32_t* page_tab = (uint32_t *)(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * pdid);
 
     if(page_dir[pdid] == 0)
     {
-        uint32_t addr = (uint32_t) bootmm_alloc_page();
+        uint32_t addr = (uint32_t) pmm_alloc_page();
         __map_pde(virt, addr);
         memset(page_tab, 0, sizeof(uint32_t) * 1024);
         page_dir[pdid] = addr | (PDE_RW | PDE_PR);
@@ -94,18 +91,86 @@ static void __map_page(virt_t virt, phys_t phys, uint16_t flags)
     page_tab[ptid] = ((uint32_t) phys) | (flags & 0xFFF) | PTE_PR;
 
     __tlb_flush_single(virt & ARCH_PAGE_MASK);
+    return 0;
 }
 
-static void __map_page_pae(virt_t virt, phys_t phys, uint16_t flags)
+static phys_t __get_phys(ON_ERR(err), virt_t virt)
+{
+    int pdid = ARCH_GET_PD_IDX(virt);
+    int ptid = ARCH_GET_PD_IDX(virt);
+    uint32_t* page_tab = (uint32_t *)(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * pdid);
+    if((&_kernel_dir1)[pdid] == 0) // Address doesn't exist
+    {
+        SET_ERR(err, -EFAULT);
+        return 0;
+    }
+
+    return page_tab[ptid] & ARCH_PAGE_MASK;
+}
+
+static virt_t __get_virt(ON_ERR(err), phys_t addr)
+{
+    SET_ERR(err, -ENOSYS);
+    return addr;
+}
+
+static void __init_paging(void)
+{
+    OS_PRN("%-66s", "Enabling x86 paging...");
+
+    g_memory_map.KRN_PAGE_TABLES_BEGIN = 0xFFC00000;
+
+    uint32_t* page_dir = &_kernel_dir1;
+    uint32_t* page_tab = &_kernel_table3;
+
+    // Remove identity map
+    page_dir[0] = 0;
+
+    // Map the page tables to their respective virtual addresses
+    memset(page_tab, 0, 1024 * sizeof(uint32_t));
+    page_tab[ARCH_GET_PD_IDX(ARCH_VIRT_BASE)] = ((uint32_t)(&_kernel_table1) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
+    page_tab[ARCH_GET_PD_IDX(0xFF7FF000)] = ((uint32_t)(&_kernel_table2) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
+    page_tab[1023] = ((uint32_t)(&_kernel_table3) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
+
+    // Add it as an entry to the page directory
+    page_dir[ARCH_GET_PD_IDX(g_memory_map.KRN_PAGE_TABLES_BEGIN)] = ((uint32_t)(&_kernel_table3) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
+
+    // Flush the entire TLB
+    __tlb_flush_all();
+
+    // Assign the relevant function pointer
+    arch_map_page = &__map_page;
+    arch_get_virt = &__get_virt;
+    arch_get_phys = &__get_phys;
+
+    fprintf(STREAM_OUT, "DONE!\n");
+}
+
+/* ============================================================================= */
+/*                              PAE MODE CODE                                    */
+/* ============================================================================= */
+
+/**
+ * Maps an entire page table in to the page table place thing
+ * @param virt Virtual address the page table maps
+ * @param phys Physical address of page table
+ */
+static inline void __map_pde_pae(uint32_t virt, uint64_t phys)
+{
+    (PAE_PTRS[ARCH_PAE_GET_PDPT_IDX(virt)])[ARCH_PAE_GET_PD_IDX(virt)] = phys | (PTE_PR | PTE_RW);
+    __tlb_flush_single(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * (ARCH_PAE_GET_PDPT_IDX(virt) * 512 + ARCH_PAE_GET_PD_IDX(virt)));
+}
+
+static int __map_page_pae(virt_t virt, phys_t phys, uint16_t flags)
 {
     int pdpt = ARCH_PAE_GET_PDPT_IDX(virt);
     int pdid = ARCH_PAE_GET_PD_IDX(virt);
     int ptid = ARCH_PAE_GET_PT_IDX(virt);
-    uint64_t* page_dir = (uint64_t *)(((uint32_t) g_paging_PDPT[pdpt] & 0xFFFFF000UL) + ARCH_VIRT_BASE);
-    uint64_t* page_tab = (uint64_t *)(MEM_MAP.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * (pdpt * 512 + pdid));
+    uint64_t* page_dir = (uint64_t *)(((uint32_t) g_paging_PDPT[pdpt] & ARCH_PAGE_MASK) + ARCH_VIRT_BASE);
+    uint64_t* page_tab = (uint64_t *)(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * (pdpt * 512 + pdid));
     if(page_dir[pdid] == 0)
     {
-        uint64_t addr = bootmm_alloc_page();
+        uint64_t addr = pmm_alloc_page();
         __map_pde_pae(virt, addr);
         memset(page_tab, 0, sizeof(uint64_t) * 512);
         page_dir[pdid] = addr | (PDE_RW | PDE_PR);
@@ -113,15 +178,39 @@ static void __map_page_pae(virt_t virt, phys_t phys, uint16_t flags)
 
     //TODO: Page align
     page_tab[ptid] = (uint64_t)(((uint64_t) phys) | ((uint64_t) flags & 0xFFF) | PTE_PR);
-    __tlb_flush_single(virt);
+    __tlb_flush_single(virt & ARCH_PAGE_MASK);
+    return 0;
+}
+
+static virt_t __get_virt_pae(ON_ERR(err), phys_t addr)
+{
+    SET_ERR(err, -ENOSYS);
+    return addr;
+}
+
+static phys_t __get_phys_pae(ON_ERR(err), virt_t virt)
+{
+    int pdpt = ARCH_PAE_GET_PDPT_IDX(virt);
+    int pdid = ARCH_PAE_GET_PD_IDX(virt);
+    int ptid = ARCH_PAE_GET_PT_IDX(virt);
+    uint64_t* page_dir = (uint64_t *)(((uint32_t) g_paging_PDPT[pdpt] & ARCH_PAGE_MASK) + ARCH_VIRT_BASE);
+    uint64_t* page_tab = (uint64_t *)(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * (pdpt * 512 + pdid));
+    if(page_dir[pdid] == 0)  // Address doesn't exist
+    {
+        SET_ERR(err, -EFAULT);
+        return 0;
+    }
+
+    return page_tab[ptid] & ARCH_PAGE_MASK_LL;
 }
 
 static void __init_paging_pae(void)
 {
+    OS_PRN("%-66s", "Enabling PAE mode paging...");
+
     memset(g_paging_PDPT, 0, 4 * sizeof(uint64_t));
 
-    MEM_MAP.KRN_PAGE_TABLES_BEGIN = 0xFF800000;
-    MEM_MAP.KRN_PAGE_TABLES_END = 0xFFFFFFFF;
+    g_memory_map.KRN_PAGE_TABLES_BEGIN = 0xFF800000;
 
     // Kernel mappings
     uint64_t* page_dir1 = (uint64_t *)(&_kernel_table3);
@@ -205,39 +294,16 @@ static void __init_paging_pae(void)
     __tlb_flush_all();
 
     // Assign the relevant function pointer
-    map_page = &__map_page_pae;
+    arch_map_page = &__map_page_pae;
+    arch_get_virt = &__get_virt_pae;
+    arch_get_phys = &__get_phys_pae;
 
-    OS_PRN("Enabled PAE Paging!\n");
+    fprintf(STREAM_OUT, "DONE!\n");
 }
 
-static void __init_paging(void)
-{
-    MEM_MAP.KRN_PAGE_TABLES_BEGIN = 0xFFC00000;
-    MEM_MAP.KRN_PAGE_TABLES_END = 0xFFFFFFFF;
-
-    uint32_t* page_dir = &_kernel_dir1;
-    uint32_t* page_tab = &_kernel_table3;
-
-    // Remove identity map
-    page_dir[0] = 0;
-
-    // Map the page tables to their respective virtual addresses
-    memset(page_tab, 0, 1024 * sizeof(uint32_t));
-    page_tab[ARCH_GET_PD_IDX(ARCH_VIRT_BASE)] = ((uint32_t)(&_kernel_table1) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
-    page_tab[ARCH_GET_PD_IDX(0xFF7FF000)] = ((uint32_t)(&_kernel_table2) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
-    page_tab[1023] = ((uint32_t)(&_kernel_table3) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
-
-    // Add it as an entry to the page directory
-    page_dir[ARCH_GET_PD_IDX(MEM_MAP.KRN_PAGE_TABLES_BEGIN)] = ((uint32_t)(&_kernel_table3) - ARCH_VIRT_BASE) | (PTE_PR | PTE_RW);
-
-    // Flush the entire TLB
-    __tlb_flush_all();
-
-    // Assign the relevant function pointer
-    map_page = &__map_page;
-
-    OS_PRN("Enabled x86 Paging!\n");
-}
+/* ============================================================================= */
+/*                               INIT CODE                                       */
+/* ============================================================================= */
 
 void init_paging(void)
 {

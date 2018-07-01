@@ -11,6 +11,9 @@ target_prefix=""
 gcc_flags=""
 as_flags=""
 ld_flags=""
+n_flags=""
+
+AC_ARG_ENABLE([debug], AS_HELP_STRING([--enable-debug], [Enable debugging support]))
 
 AC_DEFUN(GET_TOOLCHAIN, [
 AC_MSG_NOTICE([Downloading toolchain...])
@@ -47,10 +50,18 @@ if [test x"${ELFGCC0}" == x"found"] && [test x"${ELFGCC1}" == x"found"] && [test
 	AC_MSG_NOTICE([Found i686-elf toolchain])
 	target_prefix="i686-elf-"
 	gcc_flags="-ffreestanding -O3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -std=gnu99 -fno-omit-frame-pointer"
-	as_flags=""
 	ld_flags="-lgcc -nostdlib -ffreestanding"
-    rm -rf kernelsrc/include/autoconf.h
+	rm -rf kernelsrc/include/autoconf.h
 	echo -e "#pragma once\n#define ARCH_TYPE "${ARCH_TYPE}"\n#define TARGET_FOLDER" ${TARGET_PLATFORM_FOLDER} > kernelsrc/include/autoconf.h
+	
+	AS_IF([test "x$enable_debug" != "xno"], [
+		AC_MSG_NOTICE([Enabled debug features!])
+		echo -e "\n#define DEBUG\n" >> kernelsrc/include/autoconf.h
+		gcc_flags="-ffreestanding -Og -g -g3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -std=gnu99 -fno-omit-frame-pointer"
+		ld_flags="-lgcc -nostdlib -ffreestanding -g"
+		n_flags="-g"
+		a_flags="-g"
+	])
 else
 	AC_MSG_NOTICE([Did not find the i686-elf toolchain])
 	GET_TOOLCHAIN
@@ -99,6 +110,7 @@ AC_SUBST(PLATFORM_PREFIX, ["$target_prefix"])
 AC_SUBST(PLATFORM_FLAGS, ["$gcc_flags"])
 AC_SUBST(PLATFORM_SFLAGS, ["$as_flags"])
 AC_SUBST(PLATFORM_AFLAGS, ["$ld_flags"])
+AC_SUBST(PLATFORM_NFLAGS, ["$n_flags"])
 AC_SUBST(PLATFORM_ID, ["$TARGET_PLATFORM_FOLDER"])
 
 AC_CONFIG_FILES([Makefile kernelsrc/Makefile obj/Makefile grub/Makefile])

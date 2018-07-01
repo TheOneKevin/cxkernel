@@ -6,7 +6,7 @@
  * Created on 29-Jul-2017 05:08:00 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-12T15:47:02-05:00
+ * @ Last modified time: 2018-04-01T20:31:00-04:00
 */
 
 #pragma once
@@ -20,8 +20,7 @@
 #include "export.h"
 #include "compiler_flags.h"
 #include "utils.h"
-
-#define KERNEL_SELF_TEST 1
+#include "errno.h"
 
 #define STREAM_OUT 0
 #define STREAM_ERR 1

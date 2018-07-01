@@ -5,73 +5,25 @@
  * Created on 2017-08-04T17:50:29-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-27T16:06:19-04:00
+ * @ Last modified time: 2018-05-26T20:46:40-04:00
 */
 
 #define __MODULE__ "LIBALLOC"
 
-#include "mm/malloc.h"
+#include "bitmap.h"
+#include "mm/liballoc.h"
+#include "mm/paging.h"
 #include "lib/printk.h"
+#include "arch/arch_types.h"
+#include "arch/arch_interface.h"
 
-// ************************* libAlloc compatibility layer ************************* //
-static void* __start;
-static bool __init = false;
-// Acquires a lock (spinlock or mutex or hybrid). Returns 0 on sucess.
-int liballoc_lock(void)
-{
-    return 0;
-}
-
-// Acquires a lock (spinlock or mutex or hybrid). Returns 0 on sucess.
-int liballoc_unlock(void)
-{
-    return 0;
-}
-
-/** This is the hook into the local system which allocates pages. It
- * accepts an integer parameter which is the number of pages
- * required. The page size was set up in the liballoc_init function.
- *
- * @return NULL if the pages were not allocated.
- * @return A pointer to the allocated memory.
- */
-void* liballoc_alloc(size_t s)
-{
-    if (!__init)
-    {
-        return __start;
-    }
-
-    return NULL;
-}
-
-/** This frees previously allocated memory. The void* parameter passed
- * to the function is the exact same value returned from a previous
- * liballoc_alloc call.
- *
- * The integer value is the number of pages to free.
- *
- * @return 0 if the memory was successfully freed.
- */
-int liballoc_free(void* ptr, size_t s)
-{
-    return 0;
-}
-
-void liballoc_init(void* ptr, size_t s)
-{
-    __start = ptr;
-}
-
-// *************************************************************************** //
-
-#define PREFIX(func) func
+#define PREFIX(func) k##func
 
 // Durand's Amazing Super Duper Memory functions.
 // based on this paper https://www.usenix.org/legacy/event/usenix01/bonwick.html
 
 #define VERSION    "1.1"
-#define ALIGNMENT  16ul // 4ul                 ///< This is the byte alignment that memory must be allocated on. IMPORTANT for GTK and other stuff.
+#define ALIGNMENT  16ul // 4ul               ///< This is the byte alignment that memory must be allocated on. IMPORTANT for GTK and other stuff.
 #define ALIGN_TYPE char ///unsigned char[16] /// unsigned short
 #define ALIGN_INFO sizeof(ALIGN_TYPE) * 16   ///< Alignment information is stored right before the pointer. This is the number of bytes of information stored there.
 
@@ -155,6 +107,74 @@ static unsigned long long l_inuse = 0;          ///< Running total of used memor
 static long long l_warningCount = 0;            ///< Number of warnings encountered
 static long long l_errorCount = 0;              ///< Number of actual errors
 static long long l_possibleOverruns = 0;        ///< Number of possible overruns
+
+// ***********************  LIBALLOC Compatibility Layer  *************************** //
+
+static phys_t (*__alloc_page)(void);
+static void (*__free_page)(phys_t);
+
+static int ksbrk(int inc)
+{
+    if(g_memory_map.KRN_BRK >= g_memory_map.KRN_STACK_BEGIN)
+        return -1;
+    g_memory_map.KRN_BRK += inc * l_pageSize;
+    return 0;
+}
+
+// Acquires a lock (spinlock or mutex or hybrid). Returns 0 on sucess.
+static int liballoc_lock(void)
+{
+    return 0;
+}
+
+// Acquires a lock (spinlock or mutex or hybrid). Returns 0 on sucess.
+static int liballoc_unlock(void)
+{
+    return 0;
+}
+
+/**
+ * This is the hook into the local system which allocates pages. It
+ * accepts an integer parameter which is the number of pages
+ * required. The page size was set up in the liballoc_init function.
+ *
+ * @return NULL if the pages were not allocated.
+ * @return A pointer to the allocated memory.
+ */
+ void* liballoc_alloc(size_t s)
+{
+    void* ret = (void *) g_memory_map.KRN_BRK;
+    for(size_t i = 0 ; i < s; i++) {
+        phys_t p = __alloc_page();
+        map_single_page(g_memory_map.KRN_BRK, p, 0x2);
+        ksbrk(1);
+    }
+    return ret;
+}
+
+/**
+ * This frees previously allocated memory. The void* parameter passed
+ * to the function is the exact same value returned from a previous
+ * liballoc_alloc call.
+ *
+ * The integer value is the number of pages to free.
+ *
+ * @return 0 if the memory was successfully freed.
+ */
+static int liballoc_free(void* ptr, size_t s)
+{
+    for(size_t i = 0; i < s; i++)
+        __free_page((phys_t) (uint32_t) ptr + i * l_pageSize);
+    return 0;
+}
+
+void liballoc_init(uint32_t page_size, uint32_t page_count, phys_t (*func_alloc_page)(void), void (*func_free_page)(phys_t))
+{
+    l_pageSize = page_size;
+    l_pageCount = page_count;
+    __alloc_page = func_alloc_page;
+    __free_page = func_free_page;
+}
 
 // *******************************   HELPER FUNCTIONS  ******************************* //
 

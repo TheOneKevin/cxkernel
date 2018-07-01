@@ -6,7 +6,7 @@
  * Created on 2017-09-10T19:24:49-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-09-20T21:09:22-04:00
+ * @ Last modified time: 2018-03-29T21:15:58-04:00
 */
 
 /* BLURB: This file implements two types of linked lists: circularly linked and regular. Circlularly linked
@@ -37,7 +37,7 @@ typedef struct list_head
 // Terminates the list's last entry by referencing it to NULL
 #define INIT_LIST_HEAD(ptr) do { (ptr) -> next = (NULL); (ptr) -> prev = (ptr); } while(0);
 // Makes new structure of a list head
-#define NEW_LIST_HEAD(ptr) { (NULL), (NULL) }
+#define NEW_LIST_HEAD() { (NULL), (NULL) }
 
 /**
  * Iterates through each list_head of a circularly linked list
@@ -102,8 +102,8 @@ static inline void __list_del(list_head_t* prev, list_head_t* next)
  */
 static inline void __list_add(list_head_t* list, list_head_t* prev, list_head_t* next)
 {
-    prev -> next = list;
-    next -> prev = list;
+    if(prev != NULL) prev -> next = list;
+    if(next != NULL) next -> prev = list;
     list -> next = next;
     list -> prev = prev;
 }

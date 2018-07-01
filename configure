@@ -584,6 +584,7 @@ PACKAGE_URL=''
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 PLATFORM_ID
+PLATFORM_NFLAGS
 PLATFORM_AFLAGS
 PLATFORM_SFLAGS
 PLATFORM_FLAGS
@@ -615,6 +616,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -637,6 +639,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_debug
 '
       ac_precious_vars='build_alias
 host_alias
@@ -679,6 +682,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -931,6 +935,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1068,7 +1081,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1221,6 +1234,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1245,6 +1259,12 @@ if test -n "$ac_init_help"; then
      short | recursive ) echo "Configuration of myconfig 1.0:";;
    esac
   cat <<\_ACEOF
+
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-debug          Enable debugging support
 
 Report bugs to the package provider.
 _ACEOF
@@ -1689,6 +1709,13 @@ target_prefix=""
 gcc_flags=""
 as_flags=""
 ld_flags=""
+n_flags=""
+
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then :
+  enableval=$enable_debug;
+fi
+
 
 
 
@@ -2331,10 +2358,21 @@ if test x"${ELFGCC0}" == x"found" && test x"${ELFGCC1}" == x"found" && test x"${
 $as_echo "$as_me: Found i686-elf toolchain" >&6;}
 	target_prefix="i686-elf-"
 	gcc_flags="-ffreestanding -O3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -std=gnu99 -fno-omit-frame-pointer"
-	as_flags=""
 	ld_flags="-lgcc -nostdlib -ffreestanding"
-    rm -rf kernelsrc/include/autoconf.h
+	rm -rf kernelsrc/include/autoconf.h
 	echo -e "#pragma once\n#define ARCH_TYPE "${ARCH_TYPE}"\n#define TARGET_FOLDER" ${TARGET_PLATFORM_FOLDER} > kernelsrc/include/autoconf.h
+
+	if test "x$enable_debug" != "xno"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: Enabled debug features!" >&5
+$as_echo "$as_me: Enabled debug features!" >&6;}
+		echo -e "\n#define DEBUG\n" >> kernelsrc/include/autoconf.h
+		gcc_flags="-ffreestanding -Og -g -g3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -std=gnu99 -fno-omit-frame-pointer"
+		ld_flags="-lgcc -nostdlib -ffreestanding -g"
+		n_flags="-g"
+		a_flags="-g"
+
+fi
 else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Did not find the i686-elf toolchain" >&5
 $as_echo "$as_me: Did not find the i686-elf toolchain" >&6;}
@@ -2637,10 +2675,21 @@ if test x"${ELFGCC0}" == x"found" && test x"${ELFGCC1}" == x"found" && test x"${
 $as_echo "$as_me: Found i686-elf toolchain" >&6;}
 	target_prefix="i686-elf-"
 	gcc_flags="-ffreestanding -O3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -std=gnu99 -fno-omit-frame-pointer"
-	as_flags=""
 	ld_flags="-lgcc -nostdlib -ffreestanding"
-    rm -rf kernelsrc/include/autoconf.h
+	rm -rf kernelsrc/include/autoconf.h
 	echo -e "#pragma once\n#define ARCH_TYPE "${ARCH_TYPE}"\n#define TARGET_FOLDER" ${TARGET_PLATFORM_FOLDER} > kernelsrc/include/autoconf.h
+
+	if test "x$enable_debug" != "xno"; then :
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: Enabled debug features!" >&5
+$as_echo "$as_me: Enabled debug features!" >&6;}
+		echo -e "\n#define DEBUG\n" >> kernelsrc/include/autoconf.h
+		gcc_flags="-ffreestanding -Og -g -g3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -std=gnu99 -fno-omit-frame-pointer"
+		ld_flags="-lgcc -nostdlib -ffreestanding -g"
+		n_flags="-g"
+		a_flags="-g"
+
+fi
 else
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Did not find the i686-elf toolchain" >&5
 $as_echo "$as_me: Did not find the i686-elf toolchain" >&6;}
@@ -2664,6 +2713,8 @@ PLATFORM_FLAGS="$gcc_flags"
 PLATFORM_SFLAGS="$as_flags"
 
 PLATFORM_AFLAGS="$ld_flags"
+
+PLATFORM_NFLAGS="$n_flags"
 
 PLATFORM_ID="$TARGET_PLATFORM_FOLDER"
 

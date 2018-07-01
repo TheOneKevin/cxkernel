@@ -1,5 +1,8 @@
 # LiquiDOS  
-&nbsp; [![](https://img.shields.io/badge/Built%20with-%E2%9D%A4-red.svg)]() &nbsp; [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://opensource.org/) &nbsp; [![MIT Licence](https://img.shields.io/npm/l/express.svg)](https://opensource.org/licenses/mit-license.php) &nbsp; [![Build Status](https://travis-ci.org/TheCool1Kevin/LiquiDOS.svg?branch=master)](https://travis-ci.org/TheCool1Kevin/LiquiDOS)
+&nbsp; [![](https://img.shields.io/badge/Built%20with-%E2%9D%A4-red.svg)]() &nbsp;
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/) &nbsp;
+[![MIT Licence](https://img.shields.io/npm/l/express.svg)](https://opensource.org/licenses/mit-license.php) &nbsp;
+[![Build Status](https://travis-ci.org/TheCool1Kevin/LiquiDOS.svg?branch=master)](https://travis-ci.org/TheCool1Kevin/LiquiDOS)
 
 ---
 

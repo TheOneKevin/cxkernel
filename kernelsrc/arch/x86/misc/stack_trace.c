@@ -6,11 +6,12 @@
  * Created on 13-Aug-2017 03:29:09 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-18T12:39:46-04:00
+ * @ Last modified time: 2018-03-28T14:27:55-04:00
 */
 
 #include "lib/printk.h"
 
+#include "arch/x86/global.h"
 #include "arch/x86/arch_common.h"
 #include "arch/x86/stack_trace.h"
 

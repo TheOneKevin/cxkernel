@@ -6,10 +6,10 @@
  * Created on 04-Aug-2017 04:37:25 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-27T22:35:36-04:00
+ * @ Last modified time: 2018-05-23T13:53:26-04:00
 */
 
-#define __MODULE__ "PMMAN"
+#define __MODULE__ "_PMAN"
 
 #include "bitmap.h"
 #include "arch/x86/multiboot.h"
@@ -17,10 +17,13 @@
 #include "lib/printk.h"
 #include "lib/string.h"
 #include "mm/mmtypes.h"
+#include "mm/sbrk.h"
+
 #include "arch/x86/paging.h"
 #include "arch/x86/arch_common.h"
 #include "arch/x86/meminit.h"
 #include "arch/x86/bootmm.h"
+#include "arch/x86/global.h"
 
 extern uint32_t _kernel_dir;
 extern uint32_t _kernel_table3;
@@ -41,13 +44,17 @@ void arch_pmeminit(void)
 
     // Initialize and zero out the buddy bitmap
     pmm_buddy_map.length = (max_mem / (sizeof(unsigned int) * 8)) + 1; // Plus one in case integer div truncates number
-    pmm_buddy_map.bitmap = (unsigned int *) ARCH_PAGE_ALIGN(g_mod_end);
+    pmm_buddy_map.bitmap = (unsigned int *) (uint32_t) ARCH_PAGE_ALIGN(g_memory_map.MOD_END);
     memset(pmm_buddy_map.bitmap, 0xFFFFFFFF, pmm_buddy_map.length * sizeof(unsigned int)); // # of bits in bitmap / 8
     OS_PRN("%X entries, %X pages indexed\n", pmm_buddy_map.length, max_mem);
     g_pmm_buddy_map = &pmm_buddy_map;
 
     // Initialize the physical memory manager
     bootmm_init_memory_regions();
+
     // Map and initialize the page tables
     init_paging();
+
+    // Initialize the mmap structs
+    bootmm_init_memory_structs((int) max_mem);
 }

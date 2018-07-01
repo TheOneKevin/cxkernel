@@ -6,8 +6,10 @@
  * Created on 13-Aug-2017 07:26:38 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:45:53-05:00
+ * @ Last modified time: 2018-03-28T08:04:56-04:00
 */
+
+#define __MODULE__ "SYSCL"
 
 #include "lib/printk.h"
 
@@ -18,13 +20,12 @@
 
 extern void syscall_asm_stub();
 
-void
-syscalls_register(void)
+void syscalls_register(void)
 {
-    fprintf(STREAM_OUT, "Registering syscalls... ");
+    OS_PRN("%-66s", "Registering syscalls...");
     fflush(STREAM_OUT);
     idt_set_gate(ARCH_SYSCALL_INT_NO, (unsigned) syscall_asm_stub, 0x08, 0x8E);
-    fprintf(STREAM_OUT, "Done!\n");
+    fprintf(STREAM_OUT, "DONE!\n");
 }
 
 void syscall_handler(void)

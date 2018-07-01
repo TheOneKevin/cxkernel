@@ -6,8 +6,10 @@
  * Created on 2017-09-23T14:03:00-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-27T14:04:30-04:00
+ * @ Last modified time: 2018-03-28T14:26:54-04:00
 */
+
+#define __MODULE__ "_ACPI"
 
 #include "lib/printk.h"
 #include "lib/string.h"
@@ -61,7 +63,7 @@ static ACPI_RSDP_t* checkValidRSDP(uint32_t* ptr)
         {
             if(rsdp -> rev == 2)
             {
-                kprintf("Detected ACPI Rev 2.x\n");
+                OS_PRN("Detected ACPI Rev 2.x\n");
                 // Check the checksum for the extended table
                 ACPI_RSDP20_t* xptr = (ACPI_RSDP20_t *) ptr;
                 bptr = (uint8_t *) (& (xptr -> len));
@@ -76,7 +78,7 @@ static ACPI_RSDP_t* checkValidRSDP(uint32_t* ptr)
             }
             else if(rsdp -> rev == 0)
             {
-                kprintf("Detected ACPI Rev 1.x\n");
+                OS_PRN("Detected ACPI Rev 1.x\n");
                 return rsdp;
             }
         }
@@ -159,11 +161,11 @@ NO_OPTIMIZE void getNUMADomains(void)
     fixACPImmap();
     if(SRAT == NULL)
     {
-        kprintf("[ACPI] No SRAT found. Assuming single NUMA domain.\n");
+        OS_PRN("[ACPI] No SRAT found. Assuming single NUMA domain.\n");
         return;
     }
 
-    kprintf("Found\n");
+    OS_PRN("Found\n");
 }
 
 NO_OPTIMIZE void getCPUInfo(void)
@@ -172,7 +174,7 @@ NO_OPTIMIZE void getCPUInfo(void)
     fixACPImmap();
     if(table == NULL)
     {
-        kprintf("[ACPI] No MADT found. APIC unsupported.\n");
+        OS_PRN("[ACPI] No MADT found. APIC unsupported.\n");
         return;
     }
 
@@ -181,7 +183,7 @@ NO_OPTIMIZE void getCPUInfo(void)
     {
         struct MADT_proc_lapic_struct* head = (struct MADT_proc_lapic_struct *) addr;
         if(head -> type == 0)
-            kprintf("CPU %X %X %X found.\n", head -> proc_id, head -> apic_id, table -> controller_address);
+            OS_PRN("CPU %X %X %X found.\n", head -> proc_id, head -> apic_id, table -> controller_address);
         addr += head -> length;
     }
 }
@@ -196,7 +198,7 @@ NO_OPTIMIZE void initTmpBootACPI(void)
     currRSDP = getRDSP();
     if(currRSDP == NULL)
     {
-        fprintf(STREAM_ERR, "%s\n", "[ACPI boot] Cannot find RSDP!\n");
+        OS_ERR("%s\n", "[ACPI boot] Cannot find RSDP!\n");
         return;
     }
 
@@ -213,7 +215,7 @@ NO_OPTIMIZE void initTmpBootACPI(void)
     fixACPImmap();
     if(!doSDTChecksum(_RSDT) && memcmp(_RSDT -> signature, "RSDT", 4) != 0)
     {
-        fprintf(STREAM_ERR, "%s\n", "[ACPI boot] Invalid RSDT!\n");
+        OS_ERR("%s\n", "[ACPI boot] Invalid RSDT!\n");
         return;
     }
 

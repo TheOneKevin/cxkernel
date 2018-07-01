@@ -6,58 +6,25 @@
  * Created on 2017-08-31T16:30:36-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-27T22:36:05-04:00
+ * @ Last modified time: 2018-05-23T13:41:43-04:00
 */
 
-#define __MODULE__ "BOOTMM"
+#define __MODULE__ "_MMAN"
 
+#include "list.h"
 #include "panic.h"
 #include "bitmap.h"
 #include "assert.h"
 #include "lib/printk.h"
+#include "mm/page_alloc.h"
+
+#include "arch/x86/global.h"
 #include "arch/x86/cpu.h"
 #include "arch/x86/bootmm.h"
+#include "arch/x86/paging.h"
 #include "arch/x86/arch_common.h"
 
-static phys_t _ptr;
-static phys_t _ctr;
-
-// If we run out of room, we search the bitmap again to find
-// a single free page frame.
-static bool updatePtr(void)
-{
-    for(size_t i = g_pmm_buddy_map -> length; i > 0; i--)
-    {
-        if(g_pmm_buddy_map -> bitmap[i - 1] != 0xFFFFFFFF)
-        {
-            for(_ptr = 32; _ptr > 0; _ptr--)
-                if(!bitmap_tstbit(g_pmm_buddy_map -> bitmap, _ptr - 1 + (i - 1) * sizeof(unsigned int) * 8))
-                    break;
-            _ptr += (i - 1) * sizeof(unsigned int) * 8;
-            return true;
-        }
-    }
-
-    PANIC("No memory left on init!\n");
-    return false;
-}
-
-phys_t bootmm_alloc_page(void)
-{
-    phys_t foo = 0;
-    if(bitmap_tstbit(g_pmm_buddy_map -> bitmap, _ptr)) // If it is not a free page, find one
-        updatePtr();
-    foo = _ptr;
-    if(_ptr > 0) _ptr--;
-    bitmap_setbit(g_pmm_buddy_map -> bitmap, foo);
-    //OS_PRN("Allocated 1 page at 0x%X\n", foo * ARCH_PAGE_SIZE);
-    return foo * ARCH_PAGE_SIZE;
-}
-
-void bootmm_free_page(phys_t address)
-{
-    bitmap_clrbit(g_pmm_buddy_map -> bitmap, ARCH_PAGE_ALIGN_DOWN(address) / ARCH_PAGE_SIZE);
-}
+#include "arch/atomic.h"
 
 void bootmm_init_memory_regions(void)
 {
@@ -79,10 +46,57 @@ void bootmm_init_memory_regions(void)
 
     // Mark the kernel and modules as not free
     // The kernel's end is really the end of the bitmap
-    for(int i = 0x100; i <= ARCH_PAGE_ALIGN((uint32_t) g_pmm_buddy_map -> bitmap + g_pmm_buddy_map -> length * sizeof(unsigned int) - ARCH_VIRT_BASE) / ARCH_PAGE_SIZE; i++)
+    for(unsigned int i = 0x100; i <= ARCH_PAGE_ALIGN((uint32_t) g_pmm_buddy_map -> bitmap + g_pmm_buddy_map -> length * sizeof(unsigned int) - ARCH_VIRT_BASE) / ARCH_PAGE_SIZE; i++)
         bitmap_setbit(g_pmm_buddy_map -> bitmap, i);
 
     // Allocate from the first highest free address first
-    updatePtr();
+    pmm_update_all();
     //kprintf("%X %X\n", g_mod_end, _ptr * ARCH_PAGE_SIZE);
+}
+
+void bootmm_init_memory_structs(int max_pages)
+{
+    //kprintf("%d\n", sizeof(mem_map_t));
+    OS_PRN("%-66s", "Building mmap structs...");
+    g_mmap = (mem_map_t *)(0x100000); // mmap array will start at 1MiB and grow upwards
+    int num_entries = (max_pages * sizeof(mem_map_t)) / (ARCH_PAGE_SIZE) + 1;
+    //kprintf("%X\n", num_entries);
+
+    for(unsigned int i = 0; i < (unsigned) num_entries; i ++)
+    {
+        phys_t addr = pmm_alloc_page();
+        arch_map_page(0x100000 + i * ARCH_PAGE_SIZE, addr, PTE_RW);
+    }
+    ARCH_FOREACH_MMAP(mmap)
+    {
+        if(mmap -> type != MULTIBOOT_MEMORY_BADRAM)
+        {
+            list_head_t* prev = NULL;
+            mem_map_t* e_prev = NULL;
+            for(uint32_t i = ARCH_PAGE_ALIGN(mmap -> addr) / ARCH_PAGE_SIZE; i < ARCH_PAGE_ALIGN(mmap -> addr + mmap -> len) / ARCH_PAGE_SIZE - 1; i++)
+            {
+                g_mmap[i] = (mem_map_t) {
+                    .list      = (list_head_t) NEW_LIST_HEAD(),
+                    .ref_count = (atomic_t) ATOMIC_INIT(0),
+                    .idx       = i,
+                    .flags     = mmap -> type,
+                    .priv      = 0UL,
+                    .virt      = NULL
+                };
+
+                g_mmap[i].list.prev = prev;
+                g_mmap[i].list.next = NULL;
+                if(e_prev != NULL) e_prev -> list.next = &(g_mmap[i].list);
+                e_prev = &(g_mmap[i]);
+                prev = &(g_mmap[i].list);
+            }
+        }
+    }
+
+    for(int i = 0; i <= max_pages; i++)
+    {
+
+    }
+
+    fprintf(STREAM_OUT, "DONE!\n");
 }

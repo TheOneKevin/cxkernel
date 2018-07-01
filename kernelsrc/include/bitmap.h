@@ -5,8 +5,8 @@
  *
  * Created on 2017-10-06T09:54:34-04:00
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-22T15:53:15-05:00
+ * Last modified by:   Kevin Dai
+ * Last modified time: 2018-07-01T13:59:57-04:00
 */
 
 #pragma once
@@ -15,7 +15,7 @@
 
 typedef struct bitmap
 {
-    size_t length;
+    size_t length; // Array size of bitmap, not total bit count
     unsigned int* bitmap;
 } bitmap_t;
 

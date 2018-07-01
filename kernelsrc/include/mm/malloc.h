@@ -11,23 +11,4 @@
 
 #pragma once
 
-#include "common.h"
-
-#define PREFIX(func) func
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void liballoc_init(void*, size_t);
-
-void    *PREFIX(malloc)(size_t);
-void    *PREFIX(realloc)(void *, size_t);
-void    *PREFIX(calloc)(size_t, size_t);
-void     PREFIX(free)(void *);
-
-#ifdef __cplusplus
-}
-#endif
-
-#undef PREFIX
+#include "mm/dlmalloc.h"

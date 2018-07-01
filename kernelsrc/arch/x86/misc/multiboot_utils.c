@@ -6,19 +6,21 @@
  * Created on 12-Aug-2017 11:19:39 PM
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-19T18:31:19-04:00
+ * @ Last modified time: 2018-03-28T14:25:40-04:00
 */
 
-#include "arch/x86/multiboot.h"
 #include "assert.h"
 #include "lib/printk.h"
 #include "lib/string.h"
 #include "tasking/elf.h"
+
+#include "arch/x86/global.h"
+#include "arch/x86/multiboot.h"
 #include "arch/x86/arch_common.h"
 
 elf_sheader_t* mb_elf_get_section_header(char* sname)
 {
-    multiboot_info_t* mbt = __GGMBT__;
+    multiboot_info_t* mbt = g_mbt_struct;
 
     multiboot_elf_section_header_table_t *multiboot_elf_sec = &(mbt -> u.elf_sec);
     uint32_t addr  = ARCH_VIRT_PHYS(multiboot_elf_sec -> addr);
@@ -39,7 +41,7 @@ elf_sheader_t* mb_elf_get_section_header(char* sname)
 
 void mb_elf_print_sections(void)
 {
-    multiboot_info_t* mbt = __GGMBT__;
+    multiboot_info_t* mbt = g_mbt_struct;
 
     multiboot_elf_section_header_table_t *multiboot_elf_sec = &(mbt -> u.elf_sec);
     uint32_t addr  = ARCH_VIRT_PHYS(multiboot_elf_sec -> addr);

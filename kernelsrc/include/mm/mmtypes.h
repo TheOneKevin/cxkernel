@@ -3,24 +3,24 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 2017-08-30T19:46:57-04:00
+ * Created on 2018-04-01T15:17:20-04:00
  *
  * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T11:03:05-05:00
+ * @ Last modified time: 2018-05-23T13:41:59-04:00
 */
 
 #pragma once
 
-#include "list.h"
 #include "common.h"
+#include "list.h"
+#include "bitmap.h"
 #include "arch/atomic.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define MAX_NR_ORDER 10
+#define MAX_NR_ZONES 3
 
-// 32 bytes, can fit 128 per page (4096 bytes)
-typedef struct page
+// 32 bytes, can fit 128 per page (4096 bytes in a page, so 128 * 32 = 4096)
+typedef struct frame
 {
     list_head_t list;
     atomic_t ref_count;
@@ -30,11 +30,16 @@ typedef struct page
     void* virt;
 } mem_map_t;
 
-typedef struct
+struct free_list
 {
-    list_head_t free_list;
-} free_area_t;
+    list_head_t list;
+    bitmap_t* map;
+};
 
-#ifdef __cplusplus
-}
-#endif
+typedef struct buddy_ctx
+{
+    unsigned int order_bit;
+    unsigned int order_max;
+    struct free_list *free_area;  // One free area per order
+    struct frame     *frames;                   // Pointer to g_mmap
+} buddy_ctx_t;

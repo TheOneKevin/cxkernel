@@ -1,0 +1,68 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Project",
+            "type": "shell",
+            "windows": {
+                "command": "ubuntu -c 'export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin && cd /mnt/c/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/ && make clean; make'",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": ["relative", "${workspaceFolder}/kernelsrc"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "Make Clean",
+            "type": "shell",
+            "windows": {
+                "command": "ubuntu -c 'export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin && cd /mnt/c/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/ && make clean'",
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": ["relative", "${workspaceFolder}/kernelsrc"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "Configure Project (nodebug)",
+            "type": "shell",
+            "windows": {
+                "command": "ubuntu -c 'export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin && cd /mnt/c/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/ && make clean; ./configure --disable-debug'",
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": ["relative", "${workspaceFolder}/kernelsrc"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        }
+    ]
+}
