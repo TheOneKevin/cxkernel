@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 2017-10-02T16:35:17-04:00
+ * @date Created on 2017-10-02T16:35:17-04:00
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:40:25-05:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2017-11-26T12:40:25-05:00
 */
 
 #include "lib/string.h"

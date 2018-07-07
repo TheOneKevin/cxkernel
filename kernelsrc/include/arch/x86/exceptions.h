@@ -1,13 +1,12 @@
-/*
- * File:   exceptions.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 30-Jul-2017 04:37:24 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:44:56-05:00
-*/
+/**
+ * @file   exceptions.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-06T16:39:34-04:00
+ */
 
 #pragma once
 
@@ -33,7 +32,7 @@ extern void isr10();
 extern void isr11();
 extern void isr12();
 extern void isr13();
-extern void isr14(); //Page fault
+extern void isr14(); //! Page fault
 extern void isr15();
 extern void isr16();
 extern void isr17();

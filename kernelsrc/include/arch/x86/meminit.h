@@ -1,13 +1,12 @@
-/*
- * File:   meminit.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-08-25T20:00:54-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T14:34:33-04:00
-*/
+/**
+ * @file   meminit.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:39:11-04:00
+ */
 
 #pragma once
 

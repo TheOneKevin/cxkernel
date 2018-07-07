@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 31-Jul-2017 02:10:59 PM
+ * @date Created on 31-Jul-2017 02:10:59 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-04-01T21:12:35-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-04-01T21:12:35-04:00
 */
 
 // Have fun maintaining the code!
@@ -76,12 +76,6 @@ void init_early_handles(void)
     __stream_err = _stream_err;
 }
 
-/**
- * Prints a formatted string to the screen
- * @param  format  Format string
- * @param  VARARGS Arguments for format
- * @return         Length of string written
- */
 int kprintf(const char* format, ...)
 {
     va_list args;
@@ -99,13 +93,6 @@ static inline void f(const char* format, ...)
     va_end(args);
 }
 
-/**
- * Writes a formatted string to a kernel output stream
- * @param  file    Stream ID. See #define in system header.
- * @param  format  Format string
- * @param  VARARGS Arguments for format
- * @return         Length of string written
- */
 int fprintf(char file, const char* format, ...)
 {
     va_list args;

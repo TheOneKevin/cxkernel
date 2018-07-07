@@ -1,13 +1,12 @@
-/*
- * File:   gdt.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 30-Jul-2017 04:29:50 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:40:21-05:00
-*/
+/**
+ * @file   gdt.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-06T16:47:04-04:00
+ */
 
 #pragma once
 
@@ -19,12 +18,12 @@ extern "C" {
 
 struct gdt_entry
 {
-   uint16_t limit_low;           // The lower 16 bits of the limit.
-   uint16_t base_low;            // The lower 16 bits of the base.
-   uint8_t  base_middle;         // The next 8 bits of the base.
-   uint8_t  access;              // Access flags, determine what ring this segment can be used in.
-   uint8_t  granularity;
-   uint8_t  base_high;           // The last 8 bits of the base.
+   uint16_t limit_low;           //!< The lower 16 bits of the limit.
+   uint16_t base_low;            //!< The lower 16 bits of the base.
+   uint8_t  base_middle;         //!< The next 8 bits of the base.
+   uint8_t  access;              //!< Access byte, usually to determine what ring this segment can be used in
+   uint8_t  granularity;         //!< Flags (Gr, Sz, 0, 0), see Intel Developers Manual
+   uint8_t  base_high;           //!< The last 8 bits of the base.
 } PACKED;
 typedef struct gdt_entry gdt_entry_t;
 

@@ -1,13 +1,12 @@
-/*
- * File:   bitmap.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-10-06T09:54:34-04:00
- *
- * Last modified by:   Kevin Dai
- * Last modified time: 2018-07-01T13:59:57-04:00
-*/
+/**
+ * @file   bitmap.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-06T15:29:28-04:00
+ */
 
 #pragma once
 
@@ -15,8 +14,8 @@
 
 typedef struct bitmap
 {
-    size_t length; // Array size of bitmap, not total bit count
-    unsigned int* bitmap;
+    size_t length;        //!< Array size of bitmap, not total bit count
+    unsigned int* bitmap; //!< Bitmap array
 } bitmap_t;
 
 /**

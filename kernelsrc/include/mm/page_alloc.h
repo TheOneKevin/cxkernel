@@ -1,13 +1,12 @@
-/*
- * File:   page_alloc.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-08-30T16:36:48-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-04-01T15:27:30-04:00
-*/
+/**
+ * @file   page_alloc.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:44:44-04:00
+ */
 
 #pragma once
 

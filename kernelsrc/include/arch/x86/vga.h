@@ -1,13 +1,12 @@
-/*
- * File:   vga.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 29-Jul-2017 05:22:40 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-08-26T14:32:36-04:00
-*/
+/**
+ * @file   vga.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:42:58-04:00
+ */
 
 #pragma once
 

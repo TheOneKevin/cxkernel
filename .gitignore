@@ -59,3 +59,4 @@ config.log
 config.status
 EurusOScheck.cppcheck
 EurusOScheck-cppcheck-build-dir/
+docs/kernel/*

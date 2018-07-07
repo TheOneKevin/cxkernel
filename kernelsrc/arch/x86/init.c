@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 29-Jul-2017 12:17:34 PM
+ * @date Created on 29-Jul-2017 12:17:34 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T14:25:51-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-03-28T14:25:51-04:00
 */
 
 #define __MODULE__ "INIT"
@@ -27,7 +27,6 @@
 #include "arch/x86/serial.h"
 #include "arch/x86/acpi.h"
 #include "arch/x86/apic.h"
-#include "arch/x86/bootmm.h"
 
 #include "lib/lib.h"
 #include "panic.h"
@@ -133,35 +132,9 @@ void arch_early_init(uint32_t magic, void* ptr)
     deinitTmpBootACPI();
 }
 
-#include "list.h"
-
-typedef struct
-{
-    list_head_t list;
-    int id;
-} myStruct;
-
 void arch_init(void)
 {
-    myStruct* List = (myStruct *) malloc(sizeof(myStruct));
-    List -> id = 0;
-    INIT_LIST_HEAD(&(List -> list));
-    list_head_t* ptr = &(List -> list);
-    for(int i = 0; i < 5; i++)
-    {
-        myStruct* entry = (myStruct *) malloc(sizeof(myStruct));
-        list_add(&(entry -> list), ptr);
-        INIT_LIST_HEAD(&(entry -> list));
-        entry -> id = i + 1;
-        ptr = &(entry -> list);
-    }
-
-    myStruct* ent = NULL;
-    iforeach_list_entry(ent IN list OF List)
-    {
-        kprintf("%d\n", ent -> id);
-    }
-    malloc_stats();
+    
 }
 
 void arch_late_init(void)

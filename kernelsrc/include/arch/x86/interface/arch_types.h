@@ -1,13 +1,12 @@
-/*
- * File:   arch_types.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-12-06T10:23:34-05:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T14:33:03-04:00
-*/
+/**
+ * @file
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Wednesday, December 6th 2017, 10:23:34 am
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T22:29:56-04:00
+ */
 
 #pragma once
 
@@ -31,3 +30,8 @@ struct MEMORY_MAP
 
     phys_t MOD_END;
 };
+
+typedef struct PT_REGS
+{
+
+} arch_t;

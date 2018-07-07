@@ -3,14 +3,13 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 09-Aug-2017 02:10:45 PM
+ * @date Created on 09-Aug-2017 02:10:45 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-16T10:12:50-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-03-16T10:12:50-04:00
 */
 
 #include "arch/x86/arch_common.h"
-#include "arch/x86/cpufeatset.h"
 #include "arch/x86/cpu.h"
 
 // Issue a CPUID command
@@ -25,10 +24,6 @@ static inline int cpuid_string(int code, int where[4])
     return (int) where[0];
 }
 
-/**
- * Fetches the CPU vendor string i.e., GenuineIntel
- * @return Pointer to read-only vendor string
- */
 const char* cpu_vend_string(void)
 {
     static char vendor[16] = "            ";
@@ -36,12 +31,6 @@ const char* cpu_vend_string(void)
     return vendor;
 }
 
-/**
- * Checks if a feature flag has been set.
- * @param  feat The feature flag to be checked
- * @param  reg  The register the flag is in (CPU_FEATSET_REGS_ECX or CPU_FEATSET_REGS_EDX)
- * @return      True if flag is set, and false if not set.
- */
 bool cpu_check_feat(enum CPU_FEATSET feat, enum CPU_FEATSET_REGS reg)
 {
     uint32_t r0, r1, ecx, edx;

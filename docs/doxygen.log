@@ -1,0 +1,537 @@
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/bitmap.h:42: warning: documentation for unknown define bitmap_tstbit found.
+
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:25: warning: Compound krnl_sym is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:106: warning: Compound SRAT_proc_lapic2_struct is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:238: warning: Compound multiboot_mmap_entry is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:143: warning: Compound multiboot_elf_section_header_table is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1493: warning: Compound malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:49: warning: Compound RSDT is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:71: warning: Compound elf_sym_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:38: warning: Compound region is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:61: warning: Compound MADT is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/symbol_table.h:21: warning: Compound symbol_table_desc_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:21: warning: Compound console_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_types.h:18: warning: Compound MEMORY_MAP is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:55: warning: Compound registers is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:91: warning: Compound SRAT_mem_struct is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1284: warning: Compound malloc_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:39: warning: Compound elf_header_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:25: warning: Compound list_head is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/atomic.h:15: warning: Compound atomic_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/dummy/interface/atomic.h:15: warning: Compound atomic_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:252: warning: Compound multiboot_mod_list is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:79: warning: Compound SRAT_proc_lapic_struct is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:267: warning: Compound multiboot_apm_info is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:57: warning: Compound elf_sheader_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/task.h:15: warning: Compound task is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:38: warning: Compound idt_entry is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/core/kernel.c:22: warning: Compound myStruct is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:35: warning: Compound ACPI_SDT_Header is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1679: warning: Compound malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:16: warning: Compound RSDPDescriptor is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:25: warning: Compound RSDPDescriptor20 is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:23: warning: Compound mapping is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1715: warning: Compound malloc_params is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:152: warning: Compound multiboot_info is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:231: warning: Compound multiboot_color is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/gdt.h:31: warning: Compound gdt_ptr is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:48: warning: Compound idt_ptr is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:55: warning: Compound SRAT is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:70: warning: Compound MADT_proc_lapic_struct is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:133: warning: Compound multiboot_aout_symbol_table is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:107: warning: Compound multiboot_header is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/gdt.h:20: warning: Compound gdt_entry is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/bitmap.h:16: warning: Compound bitmap is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1569: warning: Compound malloc_segment is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:358: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:138: warning: Member STACKSIZE (macro definition) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:183: warning: Member BREAKPOINT_ASM() (macro definition) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:257: warning: Member CALL_HOOK() (macro definition) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:115: warning: Member regnames (enumeration) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:427: warning: Member _returnFromException() (function) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:432: warning: Member hex(char ch) (function) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:444: warning: Member getpacket(void) (function) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:505: warning: Member putpacket(unsigned char *buffer) (function) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:529: warning: Member debug_error(char *format, char *parm) (function) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:540: warning: Member set_mem_err(void) (function) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:615: warning: Member hexToInt(char **ptr, int *intValue) (function) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:139: warning: Member remcomStack[STACKSIZE/sizeof(int)] (variable) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/arch/x86/gdb/i386-stub.c:140: warning: Member stackPtr (variable) of file i386-stub.c is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/dummy/interface/arch_interface.h:20: warning: Member arch_get_console(void) (function) of file dummy/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/dummy/interface/arch_interface.h:22: warning: Member arch_init(void) (function) of file dummy/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/dummy/interface/arch_interface.h:23: warning: Member arch_late_init(void) (function) of file dummy/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/dummy/interface/arch_interface.h:24: warning: Member arch_pmeminit(void) (function) of file dummy/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:18: warning: Member ARCH_VIRT_BASE (macro definition) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:19: warning: Member ARCH_SYSCALL_INT_NO (macro definition) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:20: warning: Member ARCH_STACK_TOP (macro definition) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:30: warning: Member arch_get_console(void) (function) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:32: warning: Member arch_init(void) (function) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:33: warning: Member arch_late_init(void) (function) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:34: warning: Member arch_pmeminit(void) (function) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:26: warning: Member g_memory_map (variable) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_interface.h:28: warning: Member g_pmm_buddy_map (variable) of file x86/interface/arch_interface.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:17: warning: Member ARCH_PAGE_MASK (macro definition) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:18: warning: Member ARCH_PAGE_MASK_LL (macro definition) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:19: warning: Member ARCH_PAGE_ALIGN(addr) (macro definition) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:20: warning: Member ARCH_PAGE_ALIGN_DOWN(n) (macro definition) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:21: warning: Member ARCH_PAGE_SIZE (macro definition) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:27: warning: Member arch_map_page)(virt_t, phys_t, uint16_t) (variable) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:28: warning: Member arch_get_virt)(phys_t) (variable) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_paging.h:29: warning: Member arch_get_phys)(virt_t) (variable) of file x86/interface/arch_paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/dummy/interface/arch_types.h:21: warning: Member phys_t (typedef) of file dummy/interface/arch_types.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_types.h:15: warning: Member virt_t (typedef) of file x86/interface/arch_types.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_types.h:16: warning: Member phys_t (typedef) of file x86/interface/arch_types.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/arch_types.h:37: warning: Member arch_t (typedef) of file x86/interface/arch_types.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/dummy/interface/atomic.h:16: warning: Member ATOMIC_INIT(i) (macro definition) of file dummy/interface/atomic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/atomic.h:17: warning: Member ATOMIC_INIT(i) (macro definition) of file x86/interface/atomic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interface/debug.h:24: warning: Member BREAKPOINT() (macro definition) of file x86/interface/debug.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:22: warning: Member ACPI_RSDP_t (typedef) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:32: warning: Member ACPI_RSDP20_t (typedef) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:52: warning: Member ACPI_RSDT_t (typedef) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:58: warning: Member ACPI_SRAT_t (typedef) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:65: warning: Member ACPI_MADT_t (typedef) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:121: warning: Member initTmpBootACPI(void) NO_OPTIMIZE (function) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:122: warning: Member deinitTmpBootACPI(void) (function) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:123: warning: Member getNUMADomains(void) NO_OPTIMIZE (function) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:124: warning: Member getCPUInfo(void) NO_OPTIMIZE (function) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:125: warning: Member acpiHasAPIC(void) NO_OPTIMIZE (function) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/acpi.h:46: warning: Member PACKED (variable) of file acpi.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:18: warning: Member LAPIC_REG_ID (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:19: warning: Member LAPIC_REG_VER (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:20: warning: Member LAPIC_REG_TPR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:21: warning: Member LAPIC_REG_APR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:22: warning: Member LAPIC_REG_PPR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:23: warning: Member LAPIC_REG_EOI (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:24: warning: Member LAPIC_REG_RRD (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:25: warning: Member LAPIC_REG_LDR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:26: warning: Member LAPIC_REG_DFR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:27: warning: Member LAPIC_REG_SIVR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:28: warning: Member LAPIC_REG_ISR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:29: warning: Member LAPIC_REG_TMR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:30: warning: Member LAPIC_REG_IRR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:31: warning: Member LAPIC_REG_ESR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:32: warning: Member LAPIC_REG_LVT_CMCIR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:33: warning: Member LAPIC_REG_ICR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:34: warning: Member LAPIC_REG_LVT_TIMER (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:35: warning: Member LAPIC_REG_LVT_THERM (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:36: warning: Member LAPIC_REG_LVT_PRFMC (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:37: warning: Member LAPIC_REG_LVT_LINT0 (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:38: warning: Member LAPIC_REG_LVT_LINT1 (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:39: warning: Member LAPIC_REG_LVT_ERROR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:40: warning: Member LAPIC_REG_LVT_INITC (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:41: warning: Member LAPIC_REG_LVT_CURRC (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:42: warning: Member LAPIC_REG_DCR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:47: warning: Member LAPIC_ICR_MASK_FIXED (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:48: warning: Member LAPIC_ICR_MASK_LPR (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:49: warning: Member LAPIC_ICR_MASK_SMI (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:50: warning: Member LAPIC_ICR_MASK_NMI (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:51: warning: Member LAPIC_ICR_MASK_INIT (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:52: warning: Member LAPIC_ICR_MASK_STARTUP (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:54: warning: Member LAPIC_ICR_MASK_PHYSICAL (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:55: warning: Member LAPIC_ICR_MASK_LOGICAL (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:57: warning: Member LAPIC_ICR_MASK_IDLE (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:58: warning: Member LAPIC_ICR_MASK_SENDPEND (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:60: warning: Member LAPIC_ICR_MASK_DEASSERT (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:61: warning: Member LAPIC_ICR_MASK_ASSERT (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:63: warning: Member LAPIC_ICR_MASK_EDGE (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:64: warning: Member LAPIC_ICR_MASK_LEVEL (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:66: warning: Member LAPIC_ICR_MASK_NOSHORT (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:67: warning: Member LAPIC_ICR_MASK_SELF (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:68: warning: Member LAPIC_ICR_MASK_ALLINCL (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:69: warning: Member LAPIC_ICR_MASK_ALLEXCL (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:71: warning: Member LAPIC_ICR_SHIFT_DEST (macro definition) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/apic.h:77: warning: Member enable_APIC(void) (function) of file apic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/arch_common.h:22: warning: Member __9042352479_TMP1__(TYPE, v) (macro definition) of file arch_common.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/arch_common.h:23: warning: Member BOCHS_MAGIC_BREAK() (macro definition) of file arch_common.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/arch_common.h:24: warning: Member ARCH_FOREACH_MMAP(var) (macro definition) of file arch_common.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/arch_common.h:28: warning: Member ARCH_VIRT_PHYS(addr) (macro definition) of file arch_common.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/archconf.h:13: warning: Member PAE_ENABLE (macro definition) of file archconf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/archconf.h:14: warning: Member SELF_TEST (macro definition) of file archconf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/archconf.h:17: warning: Member ARCH_PAE_ENABLE (macro definition) of file archconf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:17: warning: Member CPUID_VENDOR_AMD (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:18: warning: Member CPUID_VENDOR_INTEL (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:20: warning: Member CPUID_VENDOR_AMD_K5 (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:21: warning: Member CPUID_VENDOR_CENTAUR (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:22: warning: Member CPUID_VENDOR_CYRIX (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:23: warning: Member CPUID_VENDOR_TRANSMETA1 (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:24: warning: Member CPUID_VENDOR_TRANSMETA2 (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:25: warning: Member CPUID_VENDOR_NATSEMICON (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:26: warning: Member CPUID_VENDOR_NEXGEN (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:27: warning: Member CPUID_VENDOR_RISE (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:28: warning: Member CPUID_VENDOR_SIS (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:29: warning: Member CPUID_VENDOR_UMC (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:30: warning: Member CPUID_VENDOR_VIA (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:31: warning: Member CPUID_VENDOR_VORTEX (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:33: warning: Member CPUID_VENDOR_KVM (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:34: warning: Member CPUID_VENDOR_MSHYPERV (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:35: warning: Member CPUID_VENDOR_PARALLELS (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:36: warning: Member CPUID_VENDOR_VMWARE (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:37: warning: Member CPUID_VENDOR_XENVMM (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:40: warning: Member CPUID_CMD_VENDOR (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:41: warning: Member CPUID_CMD_FEAT (macro definition) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:46: warning: Member CPU_FEATSET (enumeration) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:115: warning: Member CPU_XFEATSET (enumeration) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/cpu.h:177: warning: Member CPU_FEATSET_REGS (enumeration) of file cpu.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:19: warning: Member install_isr(void) (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:21: warning: Member isr0() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:22: warning: Member isr1() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:23: warning: Member isr2() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:24: warning: Member isr3() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:25: warning: Member isr4() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:26: warning: Member isr5() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:27: warning: Member isr6() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:28: warning: Member isr7() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:29: warning: Member isr8() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:30: warning: Member isr9() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:31: warning: Member isr10() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:32: warning: Member isr11() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:33: warning: Member isr12() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:34: warning: Member isr13() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:35: warning: Member isr14() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:36: warning: Member isr15() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:37: warning: Member isr16() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:38: warning: Member isr17() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:39: warning: Member isr18() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:40: warning: Member isr19() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:41: warning: Member isr20() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:42: warning: Member isr21() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:43: warning: Member isr22() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:44: warning: Member isr23() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:45: warning: Member isr24() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:46: warning: Member isr25() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:47: warning: Member isr26() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:48: warning: Member isr27() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:49: warning: Member isr28() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:50: warning: Member isr29() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:51: warning: Member isr30() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/exceptions.h:52: warning: Member isr31() (function) of file exceptions.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/gdt.h:52: warning: Member gdt_entry_t (typedef) of file gdt.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/gdt.h:52: warning: Member gdt_ptr_t (typedef) of file gdt.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/gdt.h:37: warning: Member install_gdt(void) (function) of file gdt.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/gdt.h:38: warning: Member gdt_set_gate(int, uint32_t, uint32_t, uint8_t, uint8_t) (function) of file gdt.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/gdt.h:27: warning: Member PACKED (variable) of file gdt.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/global.h:24: warning: Member ALIGNED(0x20) (function) of file global.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/global.h:25: warning: Member g_mbt_struct (variable) of file global.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/global.h:26: warning: Member g_krnl_sym_table (variable) of file global.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:16: warning: Member IRQ0 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:17: warning: Member IRQ1 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:18: warning: Member IRQ2 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:19: warning: Member IRQ3 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:20: warning: Member IRQ4 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:21: warning: Member IRQ5 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:22: warning: Member IRQ6 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:23: warning: Member IRQ7 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:24: warning: Member IRQ8 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:25: warning: Member IRQ9 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:26: warning: Member IRQ10 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:27: warning: Member IRQ11 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:28: warning: Member IRQ12 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:29: warning: Member IRQ13 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:30: warning: Member IRQ14 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:31: warning: Member IRQ15 (macro definition) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:19: warning: Member idt_entry_t (typedef) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:19: warning: Member idt_ptr_t (typedef) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:60: warning: Member regs_t (typedef) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:62: warning: Member irq_t)(regs_t *r) (typedef) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:64: warning: Member install_idt(void) (function) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:65: warning: Member idt_set_gate(int idx, uint32_t base, uint16_t sel, uint8_t flags) (function) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:67: warning: Member install_irqhandler(int irq, irq_t handler) (function) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:68: warning: Member uninstall_irqhandler(int irq) (function) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/interrupts.h:44: warning: Member PACKED (variable) of file interrupts.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:19: warning: Member io_wait(void) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:21: warning: Member inb(uint16_t port) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:22: warning: Member outb(uint16_t port, uint8_t value) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:24: warning: Member inw(uint16_t port) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:25: warning: Member outw(uint16_t port, uint16_t value) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:27: warning: Member read_cr0(void) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:28: warning: Member read_cr2(void) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:29: warning: Member read_cr3(void) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:30: warning: Member read_cr4(void) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:32: warning: Member write_cr0(uint32_t) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:33: warning: Member write_cr2(uint32_t) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:34: warning: Member write_cr3(uint32_t) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/llio.h:35: warning: Member write_cr4(uint32_t) (function) of file llio.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/meminit.h:19: warning: Member arch_pmeminit(void) (function) of file meminit.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:34: warning: Member MULTIBOOT_HEADER_ALIGN (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:37: warning: Member MULTIBOOT_HEADER_MAGIC (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:40: warning: Member MULTIBOOT_BOOTLOADER_MAGIC (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:43: warning: Member MULTIBOOT_MOD_ALIGN (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:46: warning: Member MULTIBOOT_INFO_ALIGN (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:51: warning: Member MULTIBOOT_ARCH_PAGE_ALIGN (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:54: warning: Member MULTIBOOT_MEMORY_INFO (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:57: warning: Member MULTIBOOT_VIDEO_MODE (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:60: warning: Member MULTIBOOT_AOUT_KLUDGE (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:65: warning: Member MULTIBOOT_INFO_MEMORY (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:67: warning: Member MULTIBOOT_INFO_BOOTDEV (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:69: warning: Member MULTIBOOT_INFO_CMDLINE (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:71: warning: Member MULTIBOOT_INFO_MODS (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:76: warning: Member MULTIBOOT_INFO_AOUT_SYMS (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:78: warning: Member MULTIBOOT_INFO_ELF_SHDR (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:81: warning: Member MULTIBOOT_INFO_MEM_MAP (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:84: warning: Member MULTIBOOT_INFO_DRIVE_INFO (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:87: warning: Member MULTIBOOT_INFO_CONFIG_TABLE (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:90: warning: Member MULTIBOOT_INFO_BOOT_LOADER_NAME (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:93: warning: Member MULTIBOOT_INFO_APM_TABLE (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:96: warning: Member MULTIBOOT_INFO_VBE_INFO (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:97: warning: Member MULTIBOOT_INFO_FRAMEBUFFER_INFO (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:206: warning: Member MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:207: warning: Member MULTIBOOT_FRAMEBUFFER_TYPE_RGB (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:208: warning: Member MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:242: warning: Member MULTIBOOT_MEMORY_AVAILABLE (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:243: warning: Member MULTIBOOT_MEMORY_RESERVED (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:244: warning: Member MULTIBOOT_MEMORY_ACPI_RECLAIMABLE (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:245: warning: Member MULTIBOOT_MEMORY_NVS (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:246: warning: Member MULTIBOOT_MEMORY_BADRAM (macro definition) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:101: warning: Member multiboot_uint8_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:102: warning: Member multiboot_uint16_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:103: warning: Member multiboot_uint32_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:104: warning: Member multiboot_uint64_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:104: warning: Member multiboot_aout_symbol_table_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:104: warning: Member multiboot_elf_section_header_table_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:104: warning: Member multiboot_info_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:104: warning: Member multiboot_memory_map_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:104: warning: Member multiboot_module_t (typedef) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot.h:248: warning: Member PACKED (variable) of file multiboot.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot_utils.h:20: warning: Member mb_elf_get_section_header(char *sname) (function) of file multiboot_utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/multiboot_utils.h:21: warning: Member mb_elf_print_sections(void) (function) of file multiboot_utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:38: warning: Member ARCH_GET_PD_IDX(a) (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:39: warning: Member ARCH_GET_PT_IDX(a) (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:41: warning: Member ARCH_PAE_GET_PDPT_IDX(a) (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:42: warning: Member ARCH_PAE_GET_PD_IDX(a) (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:43: warning: Member ARCH_PAE_GET_PT_IDX(a) (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:45: warning: Member PDP_PR (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:47: warning: Member PDE_PR (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:48: warning: Member PDE_RW (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:49: warning: Member PDE_US (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:50: warning: Member PDE_PWT (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:51: warning: Member PDE_PCD (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:53: warning: Member PTE_PR (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:54: warning: Member PTE_RW (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:55: warning: Member PTE_GL (macro definition) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/paging.h:61: warning: Member init_paging(void) (function) of file arch/x86/paging.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:19: warning: Member PIC1 (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:20: warning: Member PIC2 (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:21: warning: Member PIC1_COMMAND (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:22: warning: Member PIC1_DATA (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:23: warning: Member PIC2_COMMAND (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:24: warning: Member PIC2_DATA (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:26: warning: Member PIC_EOI (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:28: warning: Member ICW1_ICW4 (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:29: warning: Member ICW1_SINGLE (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:30: warning: Member ICW1_INTERVAL4 (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:31: warning: Member ICW1_LEVEL (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:32: warning: Member ICW1_INIT (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:34: warning: Member ICW4_8086 (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:35: warning: Member ICW4_AUTO (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:36: warning: Member ICW4_BUF_SLAVE (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:37: warning: Member ICW4_BUF_MASTER (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:38: warning: Member ICW4_SFNM (macro definition) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:42: warning: Member PIC_remap(int offset1, int offset2) (function) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:44: warning: Member PIC_autoremap(void) (function) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:46: warning: Member PIC_sendEOI(uint8_t irq) (function) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/pic.h:48: warning: Member PIC_acknowledge(void) (function) of file pic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:15: warning: Member COM1 (macro definition) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:16: warning: Member COM2 (macro definition) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:17: warning: Member COM3 (macro definition) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:18: warning: Member COM4 (macro definition) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:24: warning: Member init_serial(uint16_t) (function) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:25: warning: Member serial_received(uint16_t) (function) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:26: warning: Member read_serial(uint16_t) (function) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:27: warning: Member is_transmit_empty(uint16_t) (function) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:28: warning: Member write_serial(uint16_t, char) (function) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/serial.h:29: warning: Member init_serial_console(void) (function) of file serial.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/stack_trace.h:19: warning: Member CallStackTrace(uint32_t aEBP, bool aBOOL) (function) of file stack_trace.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/syscalls.h:19: warning: Member syscalls_register(void) (function) of file syscalls.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/vga.h:16: warning: Member VGA_WIDTH (macro definition) of file vga.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/vga.h:17: warning: Member VGA_HEIGHT (macro definition) of file vga.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/vga.h:18: warning: Member VGA_FRAMEBUFFER (macro definition) of file vga.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/vga.h:25: warning: Member vga_color (enumeration) of file vga.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/arch/x86/vga.h:44: warning: Member terminal_initialize(console_t *cons) (function) of file vga.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/assert.h:22: warning: Member ASSERT(c, s) (macro definition) of file assert.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/assert.h:23: warning: Member ASSERT_HARD(c, s) (macro definition) of file assert.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/assert.h:19: warning: Member __assert__(bool condition, char *s, char *msg, int l, char *f) (function) of file assert.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/assert.h:20: warning: Member __assert_hard__(bool condition, char *s, char *msg, int l, char *f) (function) of file assert.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/bitmap.h:19: warning: Member bitmap_t (typedef) of file bitmap.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/common.h:24: warning: Member STREAM_OUT (macro definition) of file common.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/common.h:25: warning: Member STREAM_ERR (macro definition) of file common.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/common.h:26: warning: Member STREAM_LOG (macro definition) of file common.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/compiler_flags.h:13: warning: Member NO_OPTIMIZE (macro definition) of file compiler_flags.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/compiler_flags.h:14: warning: Member OPTIMIZE(x) (macro definition) of file compiler_flags.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/compiler_flags.h:15: warning: Member PACKED (macro definition) of file compiler_flags.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/compiler_flags.h:16: warning: Member NOINLINE (macro definition) of file compiler_flags.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/compiler_flags.h:17: warning: Member ALIGNED(x) (macro definition) of file compiler_flags.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:27: warning: Member console_init(void) (function) of file console.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:28: warning: Member console_emit(char) (function) of file console.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:29: warning: Member console_puts(char *) (function) of file console.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:30: warning: Member console_getc(void) (function) of file console.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:17: warning: Member __OS_SYMBOL(x) (macro definition) of file export.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:18: warning: Member __OS_SYMBOL_STR(x) (macro definition) of file export.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:21: warning: Member OS_SYMBOL(x) (macro definition) of file export.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:22: warning: Member OS_SYMBOL_STR(x) (macro definition) of file export.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:30: warning: Member __EXPORT_SYMBOL(sym, sec) (macro definition) of file export.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:39: warning: Member EXPORT_SYMBOL(sym) (macro definition) of file export.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/export.h:40: warning: Member EXPORT_SYMBOL_GPL(sym) (macro definition) of file export.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/lib/lib.h:21: warning: Member strtol(char a[]) (function) of file lib.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/lib/lib.h:22: warning: Member convbase(long num, char base, bool small, bool isSigned) (function) of file lib.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/lib/printk.h:26: warning: Member fflush(int stream) (function) of file printk.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/lib/printk.h:37: warning: explicit link request to 'define' could not be resolved
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/lib/tui/BasicDrawUtils.h:19: warning: Member drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, enum vga_color c) (function) of file BasicDrawUtils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/lib/tui/BasicDrawUtils.h:20: warning: Member drawBox(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, enum vga_color c1, enum vga_color c2) (function) of file BasicDrawUtils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:30: warning: Member LIST_ENTRY(ptr, type, member) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:32: warning: Member INIT_CLIST_HEAD(ptr) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:34: warning: Member NEW_CLIST_HEAD(ptr) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:36: warning: Member INIT_LIST_HEAD(ptr) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:38: warning: Member NEW_LIST_HEAD() (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:76: warning: Member foreach_list_safe(c, n, head) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:80: warning: Member iforeach_list_entry(x) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:81: warning: Member iforeach_list(x) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:82: warning: Member iforeach_clist_entry(x) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:83: warning: Member iforeach_clist(x) (macro definition) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/list.h:27: warning: Member list_head_t (typedef) of file list.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/log.h:19: warning: Member os_log(char *c) (function) of file log.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:16: warning: Member ABORT (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:17: warning: Member ABORT_ON_ASSERT_FAILURE (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:18: warning: Member DL_DEBUG (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:20: warning: Member LACKS_FCNTL_H (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:21: warning: Member LACKS_TIME_H (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:22: warning: Member LACKS_UNISTD_H (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:23: warning: Member LACKS_SYS_PARAM_H (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:24: warning: Member LACKS_SYS_MMAN_H (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:25: warning: Member LACKS_STDLIB_H (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:27: warning: Member NO_MALLOC_STATS (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:28: warning: Member MALLOC_FAILURE_ACTION (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:30: warning: Member HAVE_MMAP (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:31: warning: Member HAVE_MORECORE (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:33: warning: Member USE_LOCKS (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:34: warning: Member USE_SPIN_LOCKS (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:36: warning: Member malloc_getpagesize (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:44: warning: Member DLMALLOC_EXPORT (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:99: warning: Member MAX_SIZE_T (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:122: warning: Member ONLY_MSPACES (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:128: warning: Member MSPACES (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:132: warning: Member MALLOC_ALIGNMENT (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:135: warning: Member FOOTERS (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:144: warning: Member PROCEED_ON_ERROR (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:148: warning: Member INSECURE (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:151: warning: Member MALLOC_INSPECT_ALL (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:157: warning: Member MMAP_CLEARS (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:164: warning: Member HAVE_MREMAP (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:180: warning: Member MORECORE_DEFAULT (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:182: warning: Member MORECORE_CONTIGUOUS (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:187: warning: Member DEFAULT_GRANULARITY (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:194: warning: Member DEFAULT_TRIM_THRESHOLD (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:203: warning: Member DEFAULT_MMAP_THRESHOLD (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:210: warning: Member MAX_RELEASE_CHECK_RATE (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:214: warning: Member USE_BUILTIN_FFS (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:217: warning: Member USE_DEV_RANDOM (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:220: warning: Member NO_MALLINFO (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:229: warning: Member NO_SEGMENT_TRAVERSAL (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:240: warning: Member M_GRANULARITY (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:241: warning: Member M_MMAP_THRESHOLD (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:266: warning: Member STRUCT_MALLINFO_DECLARED (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:322: warning: Member FORCEINLINE (macro definition) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:358: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:476: warning: Member dlvalloc(size_t) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:500: warning: Member dlmallopt(int, int) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:511: warning: Member dlmalloc_footprint(void) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:524: warning: Member dlmalloc_max_footprint(void) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:535: warning: Member dlmalloc_footprint_limit() (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:549: warning: Member dlmalloc_set_footprint_limit(size_t bytes) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:608: warning: Member dlmallinfo(void) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:660: warning: Member dlindependent_calloc(size_t, size_t, void **) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:718: warning: Member dlindependent_comalloc(size_t, size_t *, void **) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:729: warning: Member dlbulk_free(void **, size_t n_elements) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:736: warning: Member dlpvalloc(size_t) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:759: warning: Member dlmalloc_trim(size_t) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:780: warning: Member dlmalloc_stats(void) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:796: warning: Member dlmalloc_usable_size(void *) (function) of file malloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:252: warning: explicit link request to 'include' could not be resolved
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:253: warning: explicit link request to 'define' could not be resolved
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:378: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:358: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:364: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:457: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:459: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:460: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/malloc.h:400: warning: Found unknown command `\r'
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:32: warning: Member VMR_FLAG_READ (macro definition) of file mmtypes.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:33: warning: Member VMR_FLAG_WRITE (macro definition) of file mmtypes.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:34: warning: Member VMR_FLAG_EXEC (macro definition) of file mmtypes.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:35: warning: Member VMR_FLAG_LOCK (macro definition) of file mmtypes.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:288: warning: Member mapping_t (typedef) of file mmtypes.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/mmtypes.h:288: warning: Member region_t (typedef) of file mmtypes.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/page_alloc.h:16: warning: Member PALLOC_GET_IDX(index, order) (macro definition) of file page_alloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/page_alloc.h:22: warning: Member pmm_init(void) (function) of file page_alloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/page_alloc.h:23: warning: Member pmm_update_all(void) (function) of file page_alloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/page_alloc.h:24: warning: Member pmm_alloc_page(void) (function) of file page_alloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/page_alloc.h:25: warning: Member pmm_free_page(phys_t) (function) of file page_alloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/page_alloc.h:26: warning: Member pmm_free_page_mult(phys_t) (function) of file page_alloc.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/mm/sbrk.h:28: warning: Member sbrk_init(void) (function) of file sbrk.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/panic.h:21: warning: Member PANIC(s) (macro definition) of file panic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/panic.h:19: warning: Member __panic__(char *f, int l) (function) of file panic.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/platforms.h:13: warning: Member PLATFORM_x86 (macro definition) of file platforms.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/platforms.h:14: warning: Member PLATFORM_RASPI (macro definition) of file platforms.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:25: warning: Member ELF_NIDENT (macro definition) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:19: warning: Member ELF_HALF_t (typedef) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:20: warning: Member ELF_OFF_t (typedef) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:21: warning: Member ELF_ADDR_t (typedef) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:22: warning: Member ELF_WORD_t (typedef) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:23: warning: Member ELF_SWORD_t (typedef) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:81: warning: Member ELF_Ident (enumeration) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/elf.h:95: warning: Member ELF_Types (enumeration) of file elf.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/symbol_table.h:28: warning: Member load_symbol_table(elf_sheader_t *symbol_table, elf_sheader_t *string_table, symbol_table_desc_t *symbol_table_desc) (function) of file symbol_table.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/symbol_table.h:29: warning: Member get_symbol_name(unsigned long address, symbol_table_desc_t *symbol_table_desc) (function) of file symbol_table.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/symbol_table.h:30: warning: Member get_symbol_addr(unsigned long address, symbol_table_desc_t *symbol_table_desc) (function) of file symbol_table.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/tasking/task.h:18: warning: Member task_t (typedef) of file task.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/utils.h:15: warning: Member NEST(x) (macro definition) of file utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/utils.h:16: warning: Member IN (macro definition) of file utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/utils.h:17: warning: Member OF (macro definition) of file utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/utils.h:19: warning: Member CHECK_FLAG(flags, bit) (macro definition) of file utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/utils.h:20: warning: Member STRINGIFY_HIDDEN(x) (macro definition) of file utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/utils.h:21: warning: Member STRINGIFY(x) (macro definition) of file utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/utils.h:23: warning: Member container_of(ptr, type, member) (macro definition) of file utils.h is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:22: warning: Member getc)(void) (variable) of class console_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:23: warning: Member putc)(const char c) (variable) of class console_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/include/core/console.h:24: warning: Member clear)(uint8_t bg) (variable) of class console_t is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1285: warning: Member prev_foot (variable) of class malloc_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1286: warning: Member head (variable) of class malloc_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1287: warning: Member fd (variable) of class malloc_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1288: warning: Member bk (variable) of class malloc_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1716: warning: Member magic (variable) of class malloc_params is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1717: warning: Member page_size (variable) of class malloc_params is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1718: warning: Member granularity (variable) of class malloc_params is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1719: warning: Member mmap_threshold (variable) of class malloc_params is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1720: warning: Member trim_threshold (variable) of class malloc_params is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1721: warning: Member default_mflags (variable) of class malloc_params is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1570: warning: Member base (variable) of class malloc_segment is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1571: warning: Member size (variable) of class malloc_segment is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1572: warning: Member next (variable) of class malloc_segment is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1573: warning: Member sflags (variable) of class malloc_segment is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1680: warning: Member smallmap (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1681: warning: Member treemap (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1682: warning: Member dvsize (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1683: warning: Member topsize (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1684: warning: Member least_addr (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1685: warning: Member dv (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1686: warning: Member top (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1687: warning: Member trim_check (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1688: warning: Member release_checks (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1689: warning: Member magic (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1690: warning: Member smallbins[(NSMALLBINS+1) *2] (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1691: warning: Member treebins[NTREEBINS] (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1692: warning: Member footprint (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1693: warning: Member max_footprint (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1694: warning: Member footprint_limit (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1695: warning: Member mflags (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1699: warning: Member seg (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1700: warning: Member extp (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1701: warning: Member exts (variable) of class malloc_state is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1495: warning: Member prev_foot (variable) of class malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1496: warning: Member head (variable) of class malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1497: warning: Member fd (variable) of class malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1498: warning: Member bk (variable) of class malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1500: warning: Member child[2] (variable) of class malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1501: warning: Member parent (variable) of class malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/mm/dlmalloc.c:1502: warning: Member index (variable) of class malloc_tree_chunk is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/core/kernel.c:23: warning: Member list (variable) of class myStruct is not documented.
+C:/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/kernelsrc/core/kernel.c:24: warning: Member id (variable) of class myStruct is not documented.

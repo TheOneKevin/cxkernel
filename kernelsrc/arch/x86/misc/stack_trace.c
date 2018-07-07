@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 13-Aug-2017 03:29:09 PM
+ * @date Created on 13-Aug-2017 03:29:09 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T14:27:55-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-03-28T14:27:55-04:00
 */
 
 #include "lib/printk.h"

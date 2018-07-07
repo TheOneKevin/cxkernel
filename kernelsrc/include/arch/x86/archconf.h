@@ -1,13 +1,12 @@
-/*
- * File:   archconf.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2018-03-19T14:10:51-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T07:56:18-04:00
-*/
+/**
+ * @file   archconf.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Monday, March 19th 2018, 2:10:51 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:38:33-04:00
+ */
 
 #pragma once
 

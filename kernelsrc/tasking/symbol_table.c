@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 12-Aug-2017 10:22:22 PM
+ * @date Created on 12-Aug-2017 10:22:22 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T11:18:06-05:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2017-11-26T11:18:06-05:00
 */
 
 #include "tasking/symbol_table.h"

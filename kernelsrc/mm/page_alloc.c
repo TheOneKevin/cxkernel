@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 2017-08-30T14:37:09-04:00
+ * @date Created on 2017-08-30T14:37:09-04:00
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-04-01T20:32:07-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-04-01T20:32:07-04:00
 */
 
 #include "panic.h"

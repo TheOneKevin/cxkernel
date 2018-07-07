@@ -1,13 +1,12 @@
-/*
- * File:   common.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 29-Jul-2017 05:08:00 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-04-01T20:31:00-04:00
-*/
+/**
+ * @file   common.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-06T19:08:53-04:00
+ */
 
 #pragma once
 
@@ -22,9 +21,9 @@
 #include "utils.h"
 #include "errno.h"
 
-#define STREAM_OUT 0
-#define STREAM_ERR 1
-#define STREAM_LOG 2
+#define STREAM_OUT 0 //!< Same as stdout
+#define STREAM_ERR 1 //!< Same as stderr
+#define STREAM_LOG 2 //!< Not an std stream
 
 #ifdef __cplusplus
 extern "C" {

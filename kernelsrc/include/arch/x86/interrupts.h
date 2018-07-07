@@ -1,13 +1,12 @@
-/*
- * File:   interrupts.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 30-Jul-2017 04:32:35 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:40:31-05:00
-*/
+/**
+ * @file   interrupts.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-06T16:46:54-04:00
+ */
 
 #pragma once
 
@@ -37,11 +36,11 @@ extern "C" {
 
 struct idt_entry
 {
-    uint16_t base_lo;             // The lower 16 bits of the address to jump to when this interrupt fires.
-    uint16_t sel;                 // Kernel segment selector.
-    uint8_t  always0;             // This must always be zero.
-    uint8_t  flags;               // More flags. See documentation.
-    uint16_t base_hi;             // The upper 16 bits of the address to jump to.
+    uint16_t base_lo;             //!< The lower 16 bits of the address to jump to when this interrupt fires.
+    uint16_t sel;                 //!< Kernel segment selector.
+    uint8_t  always0;             //!< This must always be zero.
+    uint8_t  flags;               //!< More flags. See Intel developers manual.
+    uint16_t base_hi;             //!< The upper 16 bits of the address to jump to.
 } PACKED;
 typedef struct idt_entry idt_entry_t;
 

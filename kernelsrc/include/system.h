@@ -1,13 +1,12 @@
-/*
- * File:   system.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-09-13T17:23:56-04:00
- *
- * Last modified by:   Kevin Dai
- * Last modified time: 2018-05-27T10:18:42-04:00
-*/
+/**
+ * @file   system.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:47:18-04:00
+ */
 
 #pragma once
 

@@ -1,13 +1,12 @@
-/*
+/**
  * File:   BasicDrawUtils.c
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 30-Jul-2017 08:12:18 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-02-26T14:02:41-05:00
-*/
+ * Author: Kevin Dai <kevindai02@outlook.com>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:35:19-04:00
+ */
 
 #include "arch/x86/vga.h"
 #include "arch/x86/arch_common.h"

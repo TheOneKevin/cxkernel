@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 2017-09-23T14:03:00-04:00
+ * @date Created on 2017-09-23T14:03:00-04:00
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T14:26:54-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-03-28T14:26:54-04:00
 */
 
 #define __MODULE__ "_ACPI"
@@ -16,7 +16,6 @@
 
 #include "arch/x86/arch_common.h"
 #include "arch/x86/acpi.h"
-#include "arch/x86/acpitypes.h"
 
 extern uint32_t _kernel_dir1;
 extern uint32_t _kernel_table3;

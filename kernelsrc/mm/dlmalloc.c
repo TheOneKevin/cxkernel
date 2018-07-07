@@ -525,7 +525,7 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=pure"
 
-#include "mm/dlmalloc.h"
+#include "mm/malloc.h"
 
 /*------------------------------ internal #includes ---------------------- */
 

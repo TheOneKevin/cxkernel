@@ -1,13 +1,12 @@
-/*
- * File:   pic.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 30-Jul-2017 05:19:00 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:44:37-05:00
-*/
+/**
+ * @file   pic.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:42:39-04:00
+ */
 
 #pragma once
 

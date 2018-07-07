@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 02-Aug-2017 04:22:57 PM
+ * @date Created on 02-Aug-2017 04:22:57 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T11:44:56-05:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2017-11-26T11:44:56-05:00
 */
 
 #include "lib/printk.h"
@@ -215,14 +215,6 @@ static void __swrite_sbuf__(char c, char** buf)
     **buf = c;
     *buf += 1;
 }
-
-/**
- * Formats a string
- * @param  buf     The buffer to contain the formatted string
- * @param  fmt     The string containing the formats
- * @param  VARARGS The arguments for the formats
- * @return         The number of characters written
- */
 
 int sprintf(char* buf, const char* fmt, ...)
 {

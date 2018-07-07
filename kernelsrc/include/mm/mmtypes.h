@@ -1,13 +1,12 @@
-/*
- * File:   mmtypes.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2018-04-01T15:17:20-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-05-23T13:41:59-04:00
-*/
+/**
+ * @file   mmtypes.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, April 1st 2018, 3:17:20 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:44:40-04:00
+ */
 
 #pragma once
 
@@ -15,31 +14,35 @@
 #include "list.h"
 #include "bitmap.h"
 #include "arch/atomic.h"
+#include "arch/arch_types.h"
 
-#define MAX_NR_ORDER 10
-#define MAX_NR_ZONES 3
+typedef struct mapping mapping_t;
+typedef struct region region_t;
 
-// 32 bytes, can fit 128 per page (4096 bytes in a page, so 128 * 32 = 4096)
-typedef struct frame
+struct mapping
 {
-    list_head_t list;
-    atomic_t ref_count;
-    unsigned long idx;
-    uint32_t flags;
-    uint64_t priv;
-    void* virt;
-} mem_map_t;
+    struct list_head list;
 
-struct free_list
-{
-    list_head_t list;
-    bitmap_t* map;
+    virt_t start;
+    size_t size;
+    virt_t offset;
+
 };
 
-typedef struct buddy_ctx
+#define VMR_FLAG_READ  (1 << 0)
+#define VMR_FLAG_WRITE (1 << 1)
+#define VMR_FLAG_EXEC  (1 << 2)
+#define VMR_FLAG_LOCK  (1 << 3)
+
+struct region
 {
-    unsigned int order_bit;
-    unsigned int order_max;
-    struct free_list *free_area;  // One free area per order
-    struct frame     *frames;                   // Pointer to g_mmap
-} buddy_ctx_t;
+    struct list_head list;
+
+    unsigned long size;
+    unsigned long flags;
+    unsigned long swap_id;
+    atomic_t ref;
+
+    uintptr_t* pages;
+    region_t* parent;
+};

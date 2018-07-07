@@ -1,51 +1,35 @@
 {
     "files.associations": {
-        "arch_interface.h": "c",
-        "malloc.h": "c",
-        "bitmap.h": "c",
-        "string.h": "c",
-        "printk.h": "c",
-        "interrupts.h": "c",
-        "debug.h": "c",
-        "list.h": "c",
-        "common.h": "c",
-        "stdint.h": "c",
-        "stddef.h": "c",
-        "global.h": "c",
-        "arch_common.h": "c",
-        "arch_types.h": "c",
-        "archconf.h": "c",
-        "multiboot.h": "c",
-        "multiboot_utils.h": "c",
-        "zones.h": "c",
-        "limits.h": "c",
-        "mmtypes.h": "c",
-        "bootmm.h": "c",
-        "console.h": "c",
-        "cpu.h": "c",
-        "llio.h": "c",
-        "paging.h": "c",
-        "arch_paging.h": "c",
-        "dlmalloc.h": "c",
-        "stdio.h": "c",
-        "assert.h": "c",
-        "errno.h": "c",
-        "mman.h": "c",
-        "liballoc.h": "c",
-        "sbrk.h": "c",
-        "page_alloc.h": "c"
+        "*.h": "cpp"
     },
     
     "psi-header.changes-tracking": {
 		"isActive": true,
-		"modAuthor": "Last modified by:   ",
-		"modDate": "Last modified time: ",
+		"modAuthor": "@date Last modified by:   ",
+		"modDate": "@date Last modified time: ",
 		"modDateFormat": "YYYY-MM-DDTHH:mm:ssZ",
 		"autoHeader": "manualSave"
     },
     
     "psi-header.config": {},
-    "psi-header.lang-config": [],
+    "psi-header.lang-config": [
+        {
+			"language": "c",
+			"begin": "/**",
+			"prefix": " * ",
+			"end": " */",
+			"blankLinesAfter": 0,
+			"forceToTop": false
+        },
+        {
+			"language": "cpp",
+			"begin": "/**",
+			"prefix": " * ",
+			"end": " */",
+			"blankLinesAfter": 0,
+			"forceToTop": false
+		},
+    ],
     "psi-header.license-text": [],
 
     "psi-header.variables": [
@@ -54,16 +38,35 @@
     ],
 
     "psi-header.templates": [{
-        "language": "*",
+        "language": "cpp",
+        "template": [
+            "@file   <<filename>>",
+            "@author <<author>> \\<<<authoremail>>\\>",
+            "",
+            "@date Created on <<filecreated('dddd, MMMM Do YYYY, h:mm:ss a')>>",
+            "",
+            "@date Last modified by:   ",
+            "@date Last modified time: "
+        ]
+    },
+    {
+        "language": "c",
         "template": [
             "File:   <<filename>>",
             "Author: <<author>>",
             "Email:  <<authoremail>>",
             "",
-            "Created on <<filecreated('dddd, MMMM Do YYYY, h:mm:ss a')>>",
+            "@date Created on <<filecreated('dddd, MMMM Do YYYY, h:mm:ss a')>>",
             "",
-            "Last modified by:   ",
-            "Last modified time: "
+            "@date Last modified by:   ",
+            "@date Last modified time: "
         ]
-    }],
+    }
+],
+"doxdocgen.generic.order": [
+    "empty",
+    "tparam",
+    "param",
+    "return"
+],
 }

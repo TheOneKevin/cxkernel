@@ -1,12 +1,12 @@
-/*
+/**
  * File:   i386-extern.c
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  * 
- * Created on Sunday, May 27th 2018, 9:21:35 am
+ * @date Created on Sunday, May 27th 2018, 9:21:35 am
  * 
- * Last modified by:   Kevin Dai
- * Last modified time: 2018-06-04T20:29:46-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:27:00-04:00
  */
 
 #include "arch/x86/serial.h"

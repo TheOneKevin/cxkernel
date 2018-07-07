@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 12-Aug-2017 11:19:39 PM
+ * @date Created on 12-Aug-2017 11:19:39 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T14:25:40-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-03-28T14:25:40-04:00
 */
 
 #include "assert.h"

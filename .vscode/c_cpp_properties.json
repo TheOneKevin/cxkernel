@@ -11,7 +11,7 @@
             },
             "includePath": [
                 "${workspaceFolder}/kernelsrc/include/",
-                "C:/cygwin64/lib/gcc/x86_64-pc-cygwin/7.3.0/include"
+                "C:/cygwin64/lib/gcc/x86_64-pc-cygwin/7.3.0/include/"
             ],
             "defines": [
                 "_DEBUG",

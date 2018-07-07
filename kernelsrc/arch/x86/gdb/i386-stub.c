@@ -7,33 +7,28 @@
    TO THIS SOFTWARE INCLUDING BUT NOT LIMITED TO THE WARRANTIES
    OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 ****************************************************************************/
-/****************************************************************************
- *  Header: remcom.c,v 1.34 91/03/09 12:29:49 glenne Exp $
+/**
+ *  @file
+ *  @date    Revision: 1.34
+ *  @date    Date: 91/03/09 12:29:49
+ *  @author  Lake Stevens Instrument Division
+ *  @brief   Low level support for gdb debugger.
+ *  @warning Only works on target hardware
+ *  @author  Glenn Engel
+ *  @version Header: remcom.c,v 1.34 91/03/09 12:29:49 glenne Exp
+ *  @attention Experimental
  *
- *  Module name: remcom.c $
- *  Revision: 1.34 $
- *  Date: 91/03/09 12:29:49 $
- *  Contributor:     Lake Stevens Instrument Division$
  *
- *  Description:     low level support for gdb debugger. $
- *
- *  Considerations:  only works on target hardware $
- *
- *  Written by:      Glenn Engel $
- *  ModuleState:     Experimental $
- *
- *  NOTES:           See Below $
- *
- *  Modified for 386 by Jim Kingdon, Cygnus Support.
- *
+ *  @note Modified for i386 by Jim Kingdon, Cygnus Support.
+ *  @details
  *  To enable debugger support, two things need to happen.  One, a
- *  call to set_debug_traps() is necessary in order to allow any breakpoints
+ *  call to @ref initialize_debugger() is necessary in order to allow any breakpoints
  *  or error conditions to be properly intercepted and reported to gdb.
  *  Two, a breakpoint needs to be generated to begin communication.  This
- *  is most easily accomplished by a call to breakpoint().  Breakpoint()
+ *  is most easily accomplished by a call to @ref breakpoint(). @ref breakpoint()
  *  simulates a breakpoint by executing a trap #1.
  *
- *  The external function exceptionHandler() is
+ *  The external function @ref exceptionHandler() is
  *  used to attach a specific handler to a specific 386 vector number.
  *  It should use the same privilege level it runs at.  It should
  *  install it as an interrupt gate so that interrupts are masked
@@ -46,43 +41,43 @@
  *************
  *
  *    The following gdb commands are supported:
- *
- * command          function                               Return value
- *
- *    g             return the value of the CPU registers  hex data or ENN
- *    G             set the value of the CPU registers     OK or ENN
- *
- *    mAA..AA,LLLL  Read LLLL bytes at address AA..AA      hex data or ENN
- *    MAA..AA,LLLL: Write LLLL bytes at address AA.AA      OK or ENN
- *
- *    c             Resume at current address              SNN   ( signal NN)
- *    cAA..AA       Continue at address AA..AA             SNN
- *
- *    s             Step one instruction                   SNN
- *    sAA..AA       Step one instruction from AA..AA       SNN
- *
- *    k             kill
- *
- *    ?             What was the last sigval ?             SNN   (signal NN)
- *
+ * | Command      | Description                           | Return value      |
+ * |--------------|---------------------------------------|-------------------|
+ * | g            | return the value of the CPU registers | hex data or ENN   |
+ * | G            | set the value of the CPU registers    | OK or ENN         |
+ * |                                                                          |
+ * | mAA..AA,LLLL | Read LLLL bytes at address AA..AA     | hex data or ENN   |
+ * | MAA..AA,LLLL | Write LLLL bytes at address AA.AA     | OK or ENN         |
+ * |                                                                          |
+ * | c            | Resume at current address             | SNN   (signal NN) |
+ * | cAA..AA      | Continue at address AA..AA            | SNN               |
+ * |                                                                          |
+ * | s            | Step one instruction                  | SNN               |
+ * | sAA..AA      | Step one instruction from AA..AA      | SNN               |
+ * |                                                                          |
+ * | k            | kill                                  | n/a               |
+ * |                                                                          |
+ * | ?            | What was the last sigval ?            | SNN   (signal NN) |
+ * 
  * All commands and responses are sent with a packet which includes a
  * checksum.  A packet consists of
- *
- * $<packet info>#<checksum>.
+ * @verbatim 
+   $<packet info>#<checksum>. @endverbatim
  *
  * where
- * <packet info> :: <characters representing the command or response>
- * <checksum>    :: < two hex digits computed as modulo 256 sum of <packetinfo>>
+ * @verbatim
+   <packet info> :: < characters representing the command or response >
+   <checksum>    :: < two hex digits computed as modulo 256 sum of <packetinfo> > @endverbatim 
  *
  * When a packet is received, it is first acknowledged with either '+' or '-'.
  * '+' indicates a successful transfer.  '-' indicates a failed transfer.
  *
  * Example:
+ * @verbatim
+   Host:                  Reply:
+   $m0,10#2a              +$00010203040506070809101112131415#42 @endverbatim
  *
- * Host:                  Reply:
- * $m0,10#2a               +$00010203040506070809101112131415#42
- *
- ****************************************************************************/
+ */
 
 #include "common.h"     // stdbool etc.
 #include "lib/string.h" // memset, strcpy
@@ -94,25 +89,26 @@
  * external low-level support routines
  */
 
-// Custom defined
+//! Custom defined
 extern void initGdbSerial();
 
-extern void putDebugChar();     /* write a single character      */
-extern int getDebugChar();      /* read and return a single char */
-extern void exceptionHandler(); /* assign an exception handler   */
+extern void putDebugChar();     //!< write a single character      
+extern int getDebugChar();      //!< read and return a single char 
+extern void exceptionHandler(); //!< assign an exception handler   
 
 /************************************************************************/
 
-/* BUFMAX defines the maximum number of characters in inbound/outbound buffers*/
-/* at least NUMREGBYTES*2 are needed for register packets */
+/** BUFMAX defines the maximum number of characters in inbound/outbound buffers
+ * at least NUMREGBYTES*2 are needed for register packets
+ */
 #define BUFMAX 400
-static char initialized; /* boolean flag. != 0 means we've been initialized */
+static char initialized; /** boolean flag. != 0 means we've been initialized */
 bool remote_debug = true;
-/*  debug >  0 prints ill-formed commands in valid packets & checksum errors */
+/**  debug >  0 prints ill-formed commands in valid packets & checksum errors */
 static const char hexchars[] = "0123456789abcdef";
-/* Number of registers.  */
+/** Number of registers.  */
 #define NUMREGS 16
-/* Number of bytes of registers.  */
+/** Number of bytes of registers.  */
 #define NUMREGBYTES (NUMREGS * 4)
 
 enum regnames
@@ -125,8 +121,8 @@ enum regnames
     EBP,
     ESI,
     EDI,
-    PC /* also known as eip */,
-    PS /* also known as eflags */,
+    PC /** also known as eip */,
+    PS /** also known as eflags */,
     CS,
     SS,
     DS,
@@ -135,7 +131,7 @@ enum regnames
     GS
 };
 
-/*
+/**
  * these should not be static cuz they can be used outside this module
  */
 int registers[NUMREGS];
@@ -149,11 +145,14 @@ static char remcomOutBuffer[BUFMAX];
 
 /***************************  ASSEMBLY CODE MACROS *************************/
 /*                                  									   */
-extern void return_to_prog();
-/* Restore the program's registers (including the stack pointer, which
-   means we get the right stack and don't have to worry about popping our
-   return address and any stack frames and so on) and return.  */
 
+/**
+ * Restore the program's registers (including the stack pointer, which
+ * means we get the right stack and don't have to worry about popping our
+ * return address and any stack frames and so on) and return.
+ */
+extern void return_to_prog();
+//!@cond
 asm(".text");
 asm(".globl return_to_prog");
 asm("return_to_prog:");
@@ -179,13 +178,17 @@ asm("        movl registers, %eax");
 // use iret to restore pc and flags together so
 // that trace flag works right.
 asm("        iret");
+//!@endcond
 
 #define BREAKPOINT_ASM() asm("   int $3");
-/* Put the error code here just in case the user cares.  */
+/** Put the error code here just in case the user cares.  */
 int gdb_i386errcode;
-/* Likewise, the vector number here (since GDB only gets the signal
-   number through the usual means, and that's not very specific).  */
+/** 
+ * Likewise, the vector number here (since GDB only gets the signal
+ * number through the usual means, and that's not very specific).
+ */
 int gdb_i386vector = -1;
+//!@cond
 /* GDB stores segment registers in 32-bit words (that's just the way
    m-i386v.h is written).  So zero the appropriate areas in registers.  */
 #define SAVEregisters1()            \
@@ -249,9 +252,11 @@ asm("     pushl %eax"); // eip
 asm("     movl $0, %eax");
 asm("     movl %eax, mem_fault_routine");
 asm("iret");
+//!@endcond
 
 #define CALL_HOOK() asm("call _remcomHandler");
 
+//!@cond
 /* This function is called when a i386 exception occurs.  It saves
  * all the cpu regs in the registers array, munges the stack a bit,
  * and invokes an exception handler (remcom_handler).
@@ -417,6 +422,7 @@ asm("       popl %eax");           /* get the exception number   */
 asm("		movl stackPtr, %esp"); /* move to remcom stack area  */
 asm("		pushl %eax");          /* push exception onto stack  */
 asm("		call  handle_exception"); /* this never returns */
+//!@endcond
 
 void _returnFromException()
 {
@@ -536,9 +542,12 @@ void set_mem_err(void)
     mem_err = 1;
 }
 
-/* These are separate functions so that they are so short and sweet
+/**
+ * These are separate functions so that they are so short and sweet
  * that the compiler won't save any registers (if there is a fault
  * to mem_fault, they won't get restored, so there better not be any saved).
+ * 
+ * @{
  */
 int get_char(char *addr)
 {
@@ -548,8 +557,10 @@ void set_char(char *addr, int val)
 {
     *addr = val;
 }
+//!@}
 
-/* convert the memory pointed to by mem into hex, placing result in buf
+/**
+ * Convert the memory pointed to by mem into hex, placing result in buf
  * return a pointer to the last char put in buf (null)
  * If MAY_FAULT is non-zero, then we should set mem_err in response to
  * a fault; if zero treat a fault like any other fault in the stub.
@@ -574,8 +585,10 @@ char *mem2hex(char *mem, char *buf, int count, bool may_fault)
     return (buf);
 }
 
-/* convert the hex array pointed to by buf into binary to be placed in mem */
-/* return a pointer to the character AFTER the last byte written */
+/**
+ * Convert the hex array pointed to by buf into binary to be placed in mem
+ * return a pointer to the character AFTER the last byte written
+ */
 char *hex2mem(char *buf, char *mem, int count, bool may_fault)
 {
     int i;
@@ -619,7 +632,7 @@ int hexToInt(char **ptr, int *intValue)
     return (numChars);
 }
 
-/* 
+/**
  * This function takes the 386 exception vector and attempts to
  * translate this number into a unix compatible signal value 
  */
@@ -679,7 +692,7 @@ int computeSignal(int exceptionVector)
     return (sigval);
 }
 
-/*
+/**
  * This function does all command procesing for interfacing to gdb.
  */
 void handle_exception(int exceptionVector)
@@ -828,7 +841,7 @@ void handle_exception(int exceptionVector)
     }
 }
 
-/* 
+/**
  * This function is used to set up exception handlers for tracing and
  * breakpoints
  */
@@ -855,7 +868,7 @@ void initialize_debugger(void)
     breakpoint();
 }
 
-/*
+/**
  * This function will generate a breakpoint exception.  It is used at the
  * beginning of a program to sync up with a debugger and can be used
  * otherwise as a quick means to stop program execution and "break" into

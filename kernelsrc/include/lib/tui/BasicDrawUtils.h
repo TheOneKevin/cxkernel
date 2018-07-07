@@ -1,13 +1,12 @@
-/*
- * File:   BasicDrawUtils.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 30-Jul-2017 08:13:38 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-08-28T15:34:44-04:00
-*/
+/**
+ * @file   BasicDrawUtils.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:44:13-04:00
+ */
 
 #pragma once
 

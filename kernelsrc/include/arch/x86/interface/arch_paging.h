@@ -1,13 +1,12 @@
-/*
- * File:   arch_paging.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2018-04-01T17:54:52-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-04-01T20:22:35-04:00
-*/
+/**
+ * @file
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, April 1st 2018, 5:54:52 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T22:29:51-04:00
+ */
 
 #pragma once
 
@@ -26,8 +25,8 @@ extern "C" {
 #endif
 
 int (*arch_map_page)(virt_t, phys_t, uint16_t);
-virt_t (*arch_get_virt)(ON_ERR(), phys_t);
-phys_t (*arch_get_phys)(ON_ERR(), virt_t);
+virt_t (*arch_get_virt)(phys_t);
+phys_t (*arch_get_phys)(virt_t);
 
 #ifdef __cplusplus
 }

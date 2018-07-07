@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 03-Aug-2017 08:26:00 PM
+ * @date Created on 03-Aug-2017 08:26:00 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-05-23T13:41:36-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-05-23T13:41:36-04:00
 */
 
 #define __MODULE__ "PGING"
@@ -88,29 +88,29 @@ static int __map_page(virt_t virt, phys_t phys, uint16_t flags)
     }
 
     //TODO: Page align
-    page_tab[ptid] = ((uint32_t) phys) | (flags & 0xFFF) | PTE_PR;
+    page_tab[ptid] = ((uint32_t) phys) | (flags & 0xFFF);
 
     __tlb_flush_single(virt & ARCH_PAGE_MASK);
     return 0;
 }
 
-static phys_t __get_phys(ON_ERR(err), virt_t virt)
+static phys_t __get_phys(virt_t virt)
 {
     int pdid = ARCH_GET_PD_IDX(virt);
     int ptid = ARCH_GET_PD_IDX(virt);
     uint32_t* page_tab = (uint32_t *)(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * pdid);
     if((&_kernel_dir1)[pdid] == 0) // Address doesn't exist
     {
-        SET_ERR(err, -EFAULT);
+        errno = EFAULT;
         return 0;
     }
 
     return page_tab[ptid] & ARCH_PAGE_MASK;
 }
 
-static virt_t __get_virt(ON_ERR(err), phys_t addr)
+static virt_t __get_virt(phys_t addr)
 {
-    SET_ERR(err, -ENOSYS);
+    errno = ENOSYS;
     return addr;
 }
 
@@ -177,18 +177,18 @@ static int __map_page_pae(virt_t virt, phys_t phys, uint16_t flags)
     }
 
     //TODO: Page align
-    page_tab[ptid] = (uint64_t)(((uint64_t) phys) | ((uint64_t) flags & 0xFFF) | PTE_PR);
+    page_tab[ptid] = (uint64_t)(((uint64_t) phys) | ((uint64_t) flags & 0xFFF));
     __tlb_flush_single(virt & ARCH_PAGE_MASK);
     return 0;
 }
 
-static virt_t __get_virt_pae(ON_ERR(err), phys_t addr)
+static virt_t __get_virt_pae(phys_t addr)
 {
-    SET_ERR(err, -ENOSYS);
+    errno = ENOSYS;
     return addr;
 }
 
-static phys_t __get_phys_pae(ON_ERR(err), virt_t virt)
+static phys_t __get_phys_pae(virt_t virt)
 {
     int pdpt = ARCH_PAE_GET_PDPT_IDX(virt);
     int pdid = ARCH_PAE_GET_PD_IDX(virt);
@@ -197,7 +197,7 @@ static phys_t __get_phys_pae(ON_ERR(err), virt_t virt)
     uint64_t* page_tab = (uint64_t *)(g_memory_map.KRN_PAGE_TABLES_BEGIN + ARCH_PAGE_SIZE * (pdpt * 512 + pdid));
     if(page_dir[pdid] == 0)  // Address doesn't exist
     {
-        SET_ERR(err, -EFAULT);
+        errno = EFAULT;
         return 0;
     }
 

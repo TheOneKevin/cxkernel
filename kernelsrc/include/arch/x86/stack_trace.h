@@ -1,13 +1,12 @@
-/*
- * File:   stack_trace.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 13-Aug-2017 03:30:35 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-08-23T19:12:54-04:00
-*/
+/**
+ * @file   stack_trace.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:42:50-04:00
+ */
 
 #pragma once
 

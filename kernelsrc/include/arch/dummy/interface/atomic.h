@@ -1,13 +1,12 @@
-/*
- * File:   atomic.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2018-03-28T14:32:10-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T14:33:53-04:00
-*/
+/**
+ * @file
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Wednesday, March 28th 2018, 2:32:10 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T22:29:43-04:00
+ */
 
 #pragma once
 

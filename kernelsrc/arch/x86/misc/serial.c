@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 2017-08-27T13:34:28-04:00
+ * @date Created on 2017-08-27T13:34:28-04:00
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:48:24-05:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2017-11-26T12:48:24-05:00
 */
 
 #include "arch/x86/llio.h"

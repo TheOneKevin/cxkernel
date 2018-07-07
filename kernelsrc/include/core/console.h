@@ -1,13 +1,12 @@
-/*
- * File:   console.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-08-25T16:52:30-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-18T13:45:05-04:00
-*/
+/**
+ * @file   console.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:44:07-04:00
+ */
 
 #pragma once
 

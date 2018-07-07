@@ -1,13 +1,12 @@
-/*
- * File:   paging.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-10-09T20:16:25-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-04-01T17:56:11-04:00
-*/
+/**
+ * @file
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-06T07:46:31-04:00
+ */
 
 #pragma once
 

@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 30-Jul-2017 05:17:59 PM
+ * @date Created on 30-Jul-2017 05:17:59 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T12:44:29-05:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2017-11-26T12:44:29-05:00
  */
 
 #include "arch/x86/pic.h"

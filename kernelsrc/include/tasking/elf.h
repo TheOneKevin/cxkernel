@@ -1,13 +1,12 @@
-/*
- * File:   elf.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 12-Aug-2017 11:25 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-08-23T19:10:44-04:00
-*/
+/**
+ * @file   elf.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:45:33-04:00
+ */
 
 #pragma once
 
@@ -24,16 +23,16 @@ typedef uint32_t ELF_WORD_t;
 typedef uint32_t ELF_SWORD_t;
 
 #define ELF_NIDENT     0xF
-#define ELFMAG0        0x7F // e_ident[EI_MAG0]
-#define ELFMAG1        'E'  // e_ident[EI_MAG1]
-#define ELFMAG2        'L'  // e_ident[EI_MAG2]
-#define ELFMAG3        'F'  // e_ident[EI_MAG3]
+#define ELFMAG0        0x7F //!< e_ident[EI_MAG0]
+#define ELFMAG1        'E'  //!< e_ident[EI_MAG1]
+#define ELFMAG2        'L'  //!< e_ident[EI_MAG2]
+#define ELFMAG3        'F'  //!< e_ident[EI_MAG3]
 
-#define ELFDATA2LSB    (1)  // Little Endian
-#define ELFCLASS32     (1)  // 32-bit Architecture
+#define ELFDATA2LSB    (1)  //!< Little Endian
+#define ELFCLASS32     (1)  //!< 32-bit Architecture
 
-#define EM_386         (3)  // x86 Machine Type
-#define EV_CURRENT     (1)  // ELF Current Version
+#define EM_386         (3)  //!< x86 Machine Type
+#define EV_CURRENT     (1)  //!< ELF Current Version
 
 // Here are all our data structures
 typedef struct
@@ -80,23 +79,23 @@ typedef struct
 
 enum ELF_Ident
 {
-    EI_MAG0         = 0, // 0x7F
-    EI_MAG1         = 1, // 'E'
-    EI_MAG2         = 2, // 'L'
-    EI_MAG3         = 3, // 'F'
-    EI_CLASS        = 4, // Architecture (32/64)
-    EI_DATA         = 5, // Byte Order
-    EI_VERSION      = 6, // ELF Version
-    EI_OSABI        = 7, // OS Specific
-    EI_ABIVERSION   = 8, // OS Specific
-    EI_PAD          = 9  // Padding
+    EI_MAG0         = 0, //!< 0x7F
+    EI_MAG1         = 1, //!< 'E'
+    EI_MAG2         = 2, //!< 'L'
+    EI_MAG3         = 3, //!< 'F'
+    EI_CLASS        = 4, //!< Architecture (32/64)
+    EI_DATA         = 5, //!< Byte Order
+    EI_VERSION      = 6, //!< ELF Version
+    EI_OSABI        = 7, //!< OS Specific
+    EI_ABIVERSION   = 8, //!< OS Specific
+    EI_PAD          = 9  //!< Padding
 };
 
 enum ELF_Types
 {
-    ELF_NONE        = 0, // Unkown Type
-    ELF_REL         = 1, // Relocatable File
-    ELF_EXEC        = 2  // Executable File
+    ELF_NONE        = 0, //!< Unkown Type
+    ELF_REL         = 1, //!< Relocatable File
+    ELF_EXEC        = 2  //!< Executable File
 };
 
 #ifdef __cplusplus

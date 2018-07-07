@@ -1,13 +1,12 @@
-/*
- * File:   symbol_table.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 13-Aug-2017 03:09:00 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T11:09:08-05:00
-*/
+/**
+ * @file   symbol_table.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:45:41-04:00
+ */
 
 #pragma once
 

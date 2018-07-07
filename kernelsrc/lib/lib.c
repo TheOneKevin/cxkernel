@@ -1,15 +1,15 @@
-/*
+/**
  * File:   lib.c
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
- *
- * Created on 31-Jul-2017 04:08:39 PM
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-26T11:22:04-05:00
-*/
-
-// Sort of low cohesion library where random shit belongs
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-05T20:48:08-04:00
+ * 
+ * Sort of low cohesion library where random shit belongs
+ */
 
 #include "lib/lib.h"
 #include "lib/string.h"

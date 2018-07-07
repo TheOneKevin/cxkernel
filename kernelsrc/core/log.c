@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 2017-08-28T14:32:06-04:00
+ * @date Created on 2017-08-28T14:32:06-04:00
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-08-28T16:16:18-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2017-08-28T16:16:18-04:00
 */
 
 #include "log.h"

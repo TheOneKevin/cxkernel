@@ -1,5 +1,10 @@
-/*  multiboot.h - Multiboot header file.  */
-/*  Copyright (C) 1999,2003,2007,2008,2009,2010  Free Software Foundation, Inc.
+/**
+ * @file multiboot.h
+ * Multiboot header file.
+ */
+/**
+ * @copyright
+ *  Copyright (C) 1999,2003,2007,2008,2009,2010  Free Software Foundation, Inc.
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to

@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  * 
- * Created on Saturday, June 30th 2018, 6:30:06 pm
+ * @date Created on Saturday, June 30th 2018, 6:30:06 pm
  * 
- * Last modified by:   Kevin Dai
- * Last modified time: 2018-06-30T18:41:21-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-02T13:14:16-04:00
  */
 
 #include "mm/paging.h"
@@ -14,6 +14,10 @@
 
 int map_single_page(virt_t va, phys_t pa, int flags)
 {
-    if(arch_map_page(va, pa, flags) < 0) return -1;
-    return 0;
+    return arch_map_page(va, pa, flags);
+}
+
+phys_t get_phys_addr(virt_t va)
+{
+    return arch_get_phys(va);
 }

@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 13-Aug-2017 07:26:38 PM
+ * @date Created on 13-Aug-2017 07:26:38 PM
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-28T08:04:56-04:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-03-28T08:04:56-04:00
 */
 
 #define __MODULE__ "SYSCL"

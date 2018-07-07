@@ -1,15 +1,13 @@
-/*
- * File:   list.h
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
- *
- * Created on 2017-09-10T19:24:49-04:00
- *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2018-03-29T21:15:58-04:00
-*/
-
-/* BLURB: This file implements two types of linked lists: circularly linked and regular. Circlularly linked
+/**
+ * @file   list.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, November 26th 2017, 9:42:00 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-07-06T15:26:15-04:00
+ * 
+ * This file implements two types of linked lists: circularly linked and regular. Circlularly linked
  * lists are abbreviated as "clist" while regular lists are "list."
  * Circularly linked lists has the last element reference the first element while in regular linked lists,
  * the last element references a NULL pointer thus terminating the list.
@@ -28,15 +26,15 @@ typedef struct list_head
     struct list_head *prev, *next;
 } list_head_t;
 
-// Gets the base pointer of the structure that contains the list head
+//! Gets the base pointer of the structure that contains the list head
 #define LIST_ENTRY(ptr, type, member) container_of(ptr, type, member)
-// Makes the list head's last node reference the first one (circular)
+//! Makes the list head's last node reference the first one (circular)
 #define INIT_CLIST_HEAD(ptr) do { (ptr) -> next = (ptr); (ptr) -> prev = (ptr); } while(0);
-// Makes new structure of a circularly linked list head
+//! Makes new structure of a circularly linked list head
 #define NEW_CLIST_HEAD(ptr) { &(ptr), &(ptr) }
-// Terminates the list's last entry by referencing it to NULL
+//! Terminates the list's last entry by referencing it to NULL
 #define INIT_LIST_HEAD(ptr) do { (ptr) -> next = (NULL); (ptr) -> prev = (ptr); } while(0);
-// Makes new structure of a list head
+//! Makes new structure of a list head
 #define NEW_LIST_HEAD() { (NULL), (NULL) }
 
 /**
@@ -78,11 +76,13 @@ typedef struct list_head
 #define foreach_list_safe(c, n, head) \
         for(list_head_t *c = (head), *n = c -> next; n != NULL; c = n, n = c -> next)
 
-// Imperative foreach loops
+//! Imperative foreach loops
+//!@{
 #define iforeach_list_entry(x) foreach_list_entry(x)
 #define iforeach_list(x) foreach_list(x)
 #define iforeach_clist_entry(x) foreach_clist_entry(x)
 #define iforeach_clist(x) foreach_clist(x)
+//!@}
 
 /* =============================== Internal functions =============================== */
 
@@ -153,7 +153,7 @@ static inline void list_add_tail(list_head_t* entry, list_head_t* head)
 /**
  * Checks if a circularly list head is the sole element in the list
  * @param  entry List head
- * @return       True or false
+ * @return True or false
  */
 static inline bool clist_is_empty(list_head_t* entry)
 {
@@ -174,7 +174,7 @@ static inline void clist_del_init(list_head_t* entry)
 /**
  * Checks if a list head is the sole element in the list
  * @param  entry List head
- * @return       True or false
+ * @return True or false
  */
 static inline bool list_is_empty(list_head_t* entry)
 {

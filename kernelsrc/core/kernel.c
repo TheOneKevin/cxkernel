@@ -3,10 +3,10 @@
  * Author: Kevin Dai
  * Email:  kevindai02@outlook.com
  *
- * Created on 2017-08-25T16:37:39-04:00
+  * @date Created on 2017-08-25T16:37:39-04:00
  *
- * @ Last modified by:   Kevin Dai
- * @ Last modified time: 2017-11-09T11:53:43-05:00
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2017-11-09T11:53:43-05:00
 */
 
 #include "common.h"
@@ -15,6 +15,14 @@
 
 #include "mm/sbrk.h"
 #include "mm/page_alloc.h"
+
+#include "list.h"
+
+typedef struct
+{
+    list_head_t list;
+    int id;
+} myStruct;
 
 void kernel_main(uint32_t sig, void* ptr)
 {
@@ -25,6 +33,6 @@ void kernel_main(uint32_t sig, void* ptr)
     pmm_init();                 // ?
     arch_init();                // Start init sequence
     arch_late_init();           // Start post init sequence (clean up, syscalls, etc...)
-
+    
     for(;;);
 }
