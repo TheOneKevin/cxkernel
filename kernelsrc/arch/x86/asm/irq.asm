@@ -36,11 +36,10 @@ irq_common_stub:
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov eax, esp
-    push eax
-    mov eax, irq_handler
-    call eax
-    pop eax
+    cld
+    push esp
+    call irq_handler
+    add esp, 4
     pop gs
     pop fs
     pop es

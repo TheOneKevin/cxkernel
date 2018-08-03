@@ -5,7 +5,7 @@
  * @date Created on Sunday, April 1st 2018, 3:17:20 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-05T20:44:40-04:00
+ * @date Last modified time: 2018-07-09T13:53:27-04:00
  */
 
 #pragma once
@@ -21,7 +21,7 @@ typedef struct region region_t;
 
 struct mapping
 {
-    struct list_head list;
+    struct list list;
 
     virt_t start;
     size_t size;
@@ -36,7 +36,7 @@ struct mapping
 
 struct region
 {
-    struct list_head list;
+    struct list list;
 
     unsigned long size;
     unsigned long flags;

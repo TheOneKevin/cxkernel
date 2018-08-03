@@ -9,7 +9,7 @@
  * @date Last modified time: 2018-03-28T14:25:51-04:00
 */
 
-#define __MODULE__ "INIT"
+#define __MODULE__ "INIT "
 
 #include "arch/x86/global.h"
 #include "arch/x86/multiboot.h"
@@ -34,7 +34,6 @@
 #include "mm/malloc.h"
 #include "lib/printk.h"
 #include "lib/string.h"
-#include "lib/tui/BasicDrawUtils.h"
 
 #include "core/console.h"
 #include "tasking/symbol_table.h"
@@ -58,6 +57,8 @@ console_t* arch_get_console(void)
     __internal_vga_cons.getc = __internal_serial_cons.getc;
     return &__internal_vga_cons;
 }
+
+void dummy_int3h_handler(regs_t* unused) { return; }
 
 /**
  * Early archietecture initialization procedure. Sets up system
@@ -116,13 +117,15 @@ void arch_early_init(uint32_t magic, void* ptr)
     g_memory_map.KRN_BRK = g_memory_map.KRN_END;
 
     // Install interrupt handlers
-    install_gdt();
-    install_idt();
+    init_gdt();
+    init_idt();
+    init_irq();
+    install_isrhandler(3, dummy_int3h_handler);
 
 #ifdef DEBUG
     initialize_debugger();
 #else
-    install_isr();
+    init_isr();
 #endif
 
     // Initialize ACPI boot time tables, and then deinitialize it
@@ -140,6 +143,7 @@ void arch_init(void)
 void arch_late_init(void)
 {
     syscalls_register();
+    IRQ_RES; // Enable irqs
 
     #ifdef KERNEL_SELF_TEST
         fprintf(STREAM_OUT, "Initiating kernel integrity self tests...");

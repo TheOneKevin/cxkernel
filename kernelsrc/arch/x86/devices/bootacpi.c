@@ -9,7 +9,7 @@
  * @date Last modified time: 2018-03-28T14:26:54-04:00
 */
 
-#define __MODULE__ "_ACPI"
+#define __MODULE__ "ACPI "
 
 #include "lib/printk.h"
 #include "lib/string.h"
@@ -160,7 +160,7 @@ NO_OPTIMIZE void getNUMADomains(void)
     fixACPImmap();
     if(SRAT == NULL)
     {
-        OS_PRN("[ACPI] No SRAT found. Assuming single NUMA domain.\n");
+        OS_PRN("No SRAT found. Assuming single NUMA domain.\n");
         return;
     }
 
@@ -173,7 +173,7 @@ NO_OPTIMIZE void getCPUInfo(void)
     fixACPImmap();
     if(table == NULL)
     {
-        OS_PRN("[ACPI] No MADT found. APIC unsupported.\n");
+        OS_PRN("No MADT found. APIC unsupported.\n");
         return;
     }
 

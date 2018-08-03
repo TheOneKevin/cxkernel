@@ -9,7 +9,7 @@
  * @date Last modified time: 2018-05-23T13:53:26-04:00
 */
 
-#define __MODULE__ "_PMAN"
+#define __MODULE__ "PMAN "
 
 #include "bitmap.h"
 #include "arch/x86/multiboot.h"

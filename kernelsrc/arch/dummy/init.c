@@ -9,7 +9,7 @@
  * @date Last modified time: 2018-03-28T14:40:18-04:00
 */
 
-#define __MODULE__ "INIT"
+#define __MODULE__ "INIT "
 
 #include "arch/arch_interface.h"
 

@@ -5,7 +5,7 @@
  * @date Created on Wednesday, December 6th 2017, 10:23:34 am
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-05T22:29:56-04:00
+ * @date Last modified time: 2018-07-30T10:18:24-04:00
  */
 
 #pragma once
@@ -31,7 +31,15 @@ struct MEMORY_MAP
     phys_t MOD_END;
 };
 
-typedef struct PT_REGS
+typedef struct
 {
+    uint32_t gs, fs, es, ds;                             // Pushed the segs last
+    uint32_t edi, esi, ebp, useless, ebx, edx, ecx, eax; // Pushed by 'pusha'
+    uint32_t int_no, err_code;                           // Our 'push byte #' and ecodes do this
+    uint32_t eip, cs, eflags, esp, ss;                   // Pushed by the processor automatically
+} regs_t;
 
-} arch_t;
+struct PT_REGS
+{
+    regs_t* registers;
+};

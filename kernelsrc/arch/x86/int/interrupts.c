@@ -10,6 +10,7 @@
 */
 
 #include "lib/string.h"
+#include "arch/x86/arch_common.h"
 #include "arch/x86/interrupts.h"
 #include "arch/x86/pic.h"
 
@@ -30,10 +31,11 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-irq_t interrupt_handlers[128]; // 16 will do... but no
+static irq_t interrupt_handlers[16] = { NULL }; // 16 will do... but no
 
 void init_irq()
 {
+    PIC_autoremap();
     idt_set_gate(32, (unsigned int) irq0, 0x08, 0x8E);
     idt_set_gate(33, (unsigned int) irq1, 0x08, 0x8E);
     idt_set_gate(34, (unsigned int) irq2, 0x08, 0x8E);
@@ -54,14 +56,16 @@ void init_irq()
 
 void irq_handler(regs_t* regs) // Our interrupt handler called from the assembly file
 {
-    // TODO: Improve somehow
-    if (interrupt_handlers[regs -> int_no] != 0)
-    {
-        irq_t handler = interrupt_handlers[regs -> int_no];
+    irq_t handler = NULL;
+    if(regs -> int_no < 32 && regs -> int_no > 47)
+        handler = NULL;
+    else
+        handler = interrupt_handlers[regs -> int_no - 32];
+    if (handler)
         handler(regs); // Call our handler pointer from the array
-    }
-    if (regs -> int_no >= 32)
+    else
         PIC_sendEOI(regs -> int_no - 32); // Send our EOI, so if IRQ breaks down, we KNOW this isn't the culprit
+    IRQ_RES;
 }
 
 void install_irqhandler(int irq, irq_t handler)
@@ -71,5 +75,5 @@ void install_irqhandler(int irq, irq_t handler)
 
 void uninstall_irqhandler(int irq)
 {
-    interrupt_handlers[irq] = 0;
+    interrupt_handlers[irq] = NULL;
 }

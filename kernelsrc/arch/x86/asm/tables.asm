@@ -1,5 +1,4 @@
 [GLOBAL load_gdt]
-
 load_gdt:
     mov eax, [esp+4]  ; Get the pointer to the GDT, passed as a parameter.
     lgdt [eax]        ; Load the new GDT pointer
@@ -15,8 +14,13 @@ load_gdt:
     ret
 
 [GLOBAL load_idt]    ; Allows the C code to call idt_flush().
-
 load_idt:
     mov eax, [esp+4]  ; Get the pointer to the IDT, passed as a parameter.
     lidt [eax]        ; Load the IDT pointer.
+    ret
+
+[GLOBAL load_tss]
+load_tss:
+    mov ax, 0x2B
+    ltr ax
     ret

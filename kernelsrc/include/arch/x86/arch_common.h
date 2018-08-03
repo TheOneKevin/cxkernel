@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-05T20:38:27-04:00
+ * @date Last modified time: 2018-07-25T16:09:53-04:00
  */
 
 #pragma once
@@ -27,3 +27,6 @@
     var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))
 #define ARCH_VIRT_PHYS(addr) ((addr) + ARCH_VIRT_BASE)
 #define ARCH_PAGE_NUMBER(addr) ((addr) >> 22)
+#define IRQ_OFF  asm volatile ("cli");
+#define IRQ_RES  asm volatile ("sti");
+#define HALT     asm volatile ("hlt");

@@ -5,12 +5,13 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-06T16:46:54-04:00
+ * @date Last modified time: 2018-07-30T09:50:29-04:00
  */
 
 #pragma once
 
 #include "common.h"
+#include "arch/arch_types.h"
 
 // Define each IRQ so its more organized
 #define IRQ0 32
@@ -51,17 +52,10 @@ struct idt_ptr
 } PACKED;
 typedef struct idt_ptr idt_ptr_t;
 
-typedef struct registers
-{
-    uint32_t gs, fs, es, ds;                            // Pushed the segs last
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;    // Pushed by 'pusha'
-    uint32_t int_no, err_code;                          // Our 'push byte #' and ecodes do this
-    uint32_t eip, cs, eflags, useresp, ss;              // Pushed by the processor automatically
-} regs_t;
-
 typedef void (*irq_t) (regs_t *r);
 
-void install_idt(void);
+void init_idt(void);
+void init_irq(void);
 void idt_set_gate(int idx, uint32_t base, uint16_t sel, uint8_t flags);
 
 void install_irqhandler(int irq, irq_t handler);

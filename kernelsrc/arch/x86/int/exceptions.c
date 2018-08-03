@@ -13,9 +13,11 @@
 #include "arch/x86/llio.h"
 
 #include "arch/x86/pic.h"
+#include "arch/x86/arch_common.h"
 #include "arch/x86/exceptions.h"
-#include "arch/x86/interrupts.h"
 #include "arch/x86/stack_trace.h"
+
+static irq_t interrupt_handlers[32] = { NULL };
 
 // Firstly, let's set up all our error messages
 static char* exception_messages[] =
@@ -67,7 +69,7 @@ static char* page_fault_messages[] =
 };
 
 // Here, we add the entries of our ISR to the IDT
-void install_isr(void)
+void init_isr(void)
 {
     idt_set_gate(0,  (unsigned int) isr0, 0x08, 0x8E);
     idt_set_gate(1,  (unsigned int) isr1, 0x08, 0x8E);
@@ -103,26 +105,45 @@ void install_isr(void)
     idt_set_gate(31, (unsigned int) isr31, 0x08, 0x8E);
 }
 
+void install_isrhandler(int isr, irq_t handler)
+{
+    interrupt_handlers[isr] = handler;
+}
+
+void uninstall_isrhandler(int isr)
+{
+    interrupt_handlers[isr] = NULL;
+}
+
 void isr_handler(regs_t* r) // Our exception handler called from the assembly file
 {
-    fprintf(STREAM_ERR, " === KERNEL EXCEPTION 0x%02X ===\n %s\n", r -> int_no, exception_messages[r -> int_no]);
+    irq_t handler = interrupt_handlers[r -> int_no];
 
-    if(r -> int_no == 14) // Page fault
+    if(handler)
+        handler(r);
+    else
     {
-        // The error code gives us details of what happened.
-        fprintf(STREAM_ERR, " %s\n", page_fault_messages[r -> err_code]);
-        fprintf(STREAM_ERR, " at: 0x%08X\n", read_cr2());
+        fprintf(STREAM_ERR, " === KERNEL UNHANDLED EXCEPTION 0x%02X ===\n %s\n", r -> int_no, exception_messages[r -> int_no]);
+
+        if(r -> int_no == 14) // Page fault
+        {
+            // The error code gives us details of what happened.
+            fprintf(STREAM_ERR, " %s\n", page_fault_messages[r -> err_code]);
+            fprintf(STREAM_ERR, " at: 0x%08X\n", read_cr2());
+        }
+
+        CallStackTrace(r -> ebp, false);
+
+        fprintf(STREAM_ERR, " === Regdump ===\n");
+        fprintf(STREAM_ERR, "eax: 0x%08X ebx: 0x%08X ecx: 0x%08X edx: 0x%08X err: 0x%08X\n", r -> eax, r -> ebx, r -> ecx, r -> edx, r -> err_code);
+        fprintf(STREAM_ERR, "edi: 0x%08X esi: 0x%08X esp: 0x%08X ebp: 0x%08X int: 0x%08X\n", r -> edi, r -> esi, r -> esp, r -> ebp, r -> int_no);
+        fprintf(STREAM_ERR, "gs:  0x%08X fs:  0x%08X es:  0x%08X ds:  0x%08X cs:  0x%08X\n", r -> gs, r -> fs, r -> es, r -> ds, r -> cs);
+        fprintf(STREAM_ERR, "cr0: 0x%08X cr2: 0x%08X cr3: 0x%08X cr4: 0x%08X\n\n", read_cr0(), read_cr2(), read_cr3(), read_cr4());
+        fprintf(STREAM_ERR, "eflags: 0x%08X eip: 0x%08X ss: 0x%08X\n", r -> eflags, r -> eip, r -> ss);
+
+        for(;;){ HALT; };
     }
 
-    CallStackTrace(r -> ebp, false);
-
-    fprintf(STREAM_ERR, " === Regdump ===\n");
-    fprintf(STREAM_ERR, "eax: 0x%08X ebx: 0x%08X ecx: 0x%08X edx: 0x%08X err: 0x%08X\n", r -> eax, r -> ebx, r -> ecx, r -> edx, r -> err_code);
-    fprintf(STREAM_ERR, "edi: 0x%08X esi: 0x%08X esp: 0x%08X ebp: 0x%08X int: 0x%08X\n", r -> edi, r -> esi, r -> esp, r -> ebp, r -> int_no);
-    fprintf(STREAM_ERR, "gs:  0x%08X fs:  0x%08X es:  0x%08X ds:  0x%08X cs:  0x%08X\n", r -> gs, r -> fs, r -> es, r -> ds, r -> cs);
-    fprintf(STREAM_ERR, "cr0: 0x%08X cr2: 0x%08X cr3: 0x%08X cr4: 0x%08X\n\n", read_cr0(), read_cr2(), read_cr3(), read_cr4());
-    fprintf(STREAM_ERR, "eflags: 0x%08X eip: 0x%08X useresp: 0x%08X ss: 0x%08X\n", r -> eflags, r -> eip, r -> useresp, r -> ss);
-    
-    for(;;);
     PIC_acknowledge();
+    IRQ_RES;
 }

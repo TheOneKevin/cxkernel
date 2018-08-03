@@ -66,10 +66,10 @@ isr_common_stub:
     mov es, ax
     mov fs, ax
     mov gs, ax
-    mov eax, esp   ; Push us the stack
-    push eax
+    cld
+    push esp   ; Push us the stack
     call isr_handler
-    pop eax
+    add esp, 4
     pop gs
     pop fs
     pop es

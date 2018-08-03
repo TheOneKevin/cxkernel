@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "*.h": "cpp"
+        "*.h": "cpp",
+        "typeinfo": "c"
     },
     
     "psi-header.changes-tracking": {

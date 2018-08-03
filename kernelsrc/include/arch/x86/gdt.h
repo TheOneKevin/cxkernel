@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-06T16:47:04-04:00
+ * @date Last modified time: 2018-07-24T15:01:18-04:00
  */
 
 #pragma once
@@ -27,6 +27,24 @@ struct gdt_entry
 } PACKED;
 typedef struct gdt_entry gdt_entry_t;
 
+struct tss
+{
+    uint32_t TSS_PREV;
+    uint32_t ESP0, SS0,
+             ESP1, SS1,
+             ESP2, SS2;
+    uint32_t CR3, EIP, EFLAGS;
+    uint32_t EAX, ECX, EDX, EBX,
+             ESP, EBP, ESI, EDI;
+    uint32_t ES, CS, SS,
+             DS, FS, GS;
+    uint32_t LDT;
+
+    uint16_t TRAP;
+    uint16_t IO_MAP_BASE;
+} PACKED;
+typedef struct tss tss_t;
+
 struct gdt_ptr
 {
     uint16_t limit;
@@ -34,8 +52,9 @@ struct gdt_ptr
 } PACKED;
 typedef struct gdt_ptr gdt_ptr_t;
 
-void install_gdt(void);
+void init_gdt(void);
 void gdt_set_gate(int, uint32_t, uint32_t, uint8_t, uint8_t);
+void set_tss_stack(uint32_t);
 
 #ifdef __cplusplus
 }

@@ -63,6 +63,32 @@
                     "message": 5
                 }
             }
+        },
+        {
+            "label": "Configure Project (debug)",
+            "type": "shell",
+            "windows": {
+                "command": "ubuntu -c 'export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin && cd /mnt/c/Users/Kevin/Documents/GitHub/Vagrant/EurusOS/ && make clean; ./configure --enable-debug'",
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": ["relative", "${workspaceFolder}/kernelsrc"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "Launch QEMU",
+            "type": "shell",
+            "windows": {
+                "command": "start -FilePath 'qemu-system-i386' -ArgumentList '-S -gdb tcp::1234 -boot d -cdrom bin/LiquiDOS.iso -m 512'"
+            }
         }
     ]
 }

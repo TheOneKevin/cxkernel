@@ -14,4 +14,4 @@ REM Config twice
 UBUNTU -c "cd %DIR% && ./configure"
 UBUNTU -c "export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin && cd %DIR% && ./configure"
 
-PAUSE
+REM PAUSE

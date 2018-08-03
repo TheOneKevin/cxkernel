@@ -26,8 +26,9 @@ int memcmp(const void* buf1, const void* buf2, size_t len)
 void* memcpy(void* dest, const void* src, size_t len)
 {
 #if ARCH_TYPE == PLATFORM_x86
-    asm volatile ("rep movsd" : : "D" (dest), "S" (src), "c" (len / 4) : "memory");
-    asm volatile ("rep movsb" : : "D" (dest + (len / 4) * 4), "S" (src + (len / 4) * 4), "c" (len - (len / 4) * 4) : "memory");
+    //asm volatile ("rep movsd" : : "D" (dest), "S" (src), "c" (len / 4) : "memory");
+    //asm volatile ("rep movsb" : : "D" (dest + (len / 4) * 4), "S" (src + (len / 4) * 4), "c" (len - (len / 4) * 4) : "memory");
+    asm volatile ("rep movsb" : : "D" (dest), "S" (src), "c" (len) : "memory");
     return dest;
 #endif
 }
@@ -54,8 +55,11 @@ char* strcpy(char* dest, const char* src)
 
 char* strdup(const char* str)
 {
-    char* ret = (char *) malloc(strlen(str));
-    strcpy(ret, ret);
+    if(!str) return NULL;
+    char* ret = (char *) malloc(strlen(str) + 1);
+    if(!ret) return NULL;
+    ret[strlen(str)] = '\0';
+    memcpy(ret, str, strlen(str));
     return ret;
 }
 

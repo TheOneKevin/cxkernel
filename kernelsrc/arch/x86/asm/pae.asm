@@ -2,7 +2,6 @@
 
 ; cdecl: void enable_pae_asm(uint32_t);
 enable_pae_asm:
-    xchg bx, bx
     push ebp
     ; Set up new stack frame
     mov ebp, esp

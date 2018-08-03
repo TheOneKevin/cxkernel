@@ -17,10 +17,11 @@
 #include "mm/page_alloc.h"
 
 #include "list.h"
+#include "tasking/task.h"
 
 typedef struct
 {
-    list_head_t list;
+    list_t list;
     int id;
 } myStruct;
 
@@ -33,6 +34,11 @@ void kernel_main(uint32_t sig, void* ptr)
     pmm_init();                 // ?
     arch_init();                // Start init sequence
     arch_late_init();           // Start post init sequence (clean up, syscalls, etc...)
+
+    arch_timer_install();
+    init_tasking();
     
+    asm volatile("int $0x3");
+
     for(;;);
 }

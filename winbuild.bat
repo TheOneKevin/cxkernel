@@ -12,4 +12,4 @@ FOR /F %%I IN ('POWERSHELL -COMMAND "ECHO %GP% | sed -e 's/\\/\//g' -e 's/C:/\/m
 ECHO Starting Ubuntu WSL and building project...
 UBUNTU -c "[ -d ~/barebones-toolchain/cross/x86_64/bin/ ] && { echo 'Barebones toolchain found.'; } || { echo 'Directory ~/barebones-toolchain/cross/x86_64/bin/ is missing. Did you run winconf.bat?'; }"
 UBUNTU -c "export PATH=$PATH:~/barebones-toolchain/cross/x86_64/bin && cd %DIR% && make clean; make"
-PAUSE
+REM PAUSE

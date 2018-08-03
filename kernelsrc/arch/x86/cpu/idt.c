@@ -16,7 +16,7 @@ idt_entry_t idt_entries[256];
 idt_ptr_t idt_ptr;
 extern void load_idt(uint32_t);
 
-void install_idt(void)
+void init_idt(void)
 {
     // Set up our pointer
     idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;

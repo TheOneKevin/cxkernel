@@ -5,18 +5,21 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-06T16:39:34-04:00
+ * @date Last modified time: 2018-07-09T14:54:08-04:00
  */
 
 #pragma once
 
 #include "common.h"
+#include "arch/x86/interrupts.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void install_isr(void);
+void install_isrhandler(int isr, irq_t handler);
+void uninstall_isrhandler(int isr);
+void init_isr(void);
 
 extern void isr0();
 extern void isr1();
