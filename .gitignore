@@ -61,3 +61,4 @@ EurusOScheck.cppcheck
 EurusOScheck-cppcheck-build-dir/
 docs/kernel/
 .vscode/
+isodir/boot/*.bin
