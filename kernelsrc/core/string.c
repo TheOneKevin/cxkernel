@@ -26,8 +26,8 @@ int memcmp(const void* buf1, const void* buf2, size_t len)
 void* memcpy(void* dest, const void* src, size_t len)
 {
 #if ARCH_TYPE == PLATFORM_x86
-    //asm volatile ("rep movsd" : : "D" (dest), "S" (src), "c" (len / 4) : "memory");
-    //asm volatile ("rep movsb" : : "D" (dest + (len / 4) * 4), "S" (src + (len / 4) * 4), "c" (len - (len / 4) * 4) : "memory");
+    //asm volatile ("rep movsl" : : "D" (dest), "S" (src), "c" (len / 4) : "memory");
+    //asm volatile ("rep movsb" : : "c" (len % 4) : "memory");
     asm volatile ("rep movsb" : : "D" (dest), "S" (src), "c" (len) : "memory");
     return dest;
 #endif
@@ -36,8 +36,9 @@ void* memcpy(void* dest, const void* src, size_t len)
 void* memset(void* str, int c, size_t len)
 {
 #if ARCH_TYPE == PLATFORM_x86
-    asm volatile ("rep stosl" : : "a" (c), "D" (str), "c" (len / 4) : "memory");
-    asm volatile ("rep stosb" : : "a" (c), "D" (str + (len / 4) * 4), "c" (len - (len / 4) * 4) : "memory");
+    //asm volatile ("rep stosl" : : "a" (c), "D" (str), "c" (len / 4) : "memory");
+    //asm volatile ("rep stosb" : : "c" (len % 4) : "memory");
+    asm volatile ("rep stosb" : : "a" (c), "D" (str), "c" (len) : "memory");
     return str;
 #endif
 }

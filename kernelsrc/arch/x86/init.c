@@ -58,7 +58,7 @@ console_t* arch_get_console(void)
     return &__internal_vga_cons;
 }
 
-void dummy_int3h_handler(regs_t* unused) { return; }
+void dummy_int3h_handler() { return; }
 
 /**
  * Early archietecture initialization procedure. Sets up system

@@ -38,7 +38,5 @@ void kernel_main(uint32_t sig, void* ptr)
     arch_timer_install();
     init_tasking();
     
-    asm volatile("int $0x3");
-
     for(;;);
 }

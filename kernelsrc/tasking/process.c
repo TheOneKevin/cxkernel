@@ -6,7 +6,7 @@
  * @date Created on Sunday, July 22nd 2018, 4:20:09 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-08-03T19:46:51-04:00
+ * @date Last modified time: 2018-08-03T21:44:54-04:00
  */
 
 //TODO: Seperate platform specific code
@@ -82,7 +82,17 @@ void init_tasking(void)
     asm volatile("movl %%esp, %0; movl %1, %%esp; movl %1, %%ebp"
         : "=r" (kernel_stack) : "r" (new_stack));*/
     sched_process(init);
+    kprintf("%s %s\n", init -> name, init -> desc);
     g_current_process = init;
+
+    process_t* init2 = (process_t *) malloc(sizeof(process_t));
+    init2 -> name = strdup("thing");
+    init2 -> desc = strdup("thing");
+    init2 -> sched_node.next = NULL;
+    init2 -> sched_node.prev = NULL;
+    kprintf("%s %s\n", init2 -> name, init2 -> desc);
+    sched_process(init2);
+
     OS_PRN("Tasking installed.\n");
     IRQ_RES;
 }
