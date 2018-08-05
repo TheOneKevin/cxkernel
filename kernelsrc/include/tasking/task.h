@@ -5,7 +5,7 @@
  * @date Created on Monday, July 2nd 2018, 4:03:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-30T12:43:42-04:00
+ * @date Last modified time: 2018-08-04T22:17:15-04:00
  */
 
 #pragma once
@@ -23,7 +23,9 @@ typedef unsigned char status_t;
 typedef struct thread
 {
     virt_t          kernel_stack;
+    virt_t          kernel_base;
     virt_t          user_stack;
+    virt_t          user_base;
     struct PT_REGS  regs;
     uintptr_t*      page_directory;
 } thread_t;
@@ -36,6 +38,10 @@ typedef struct process
 {
     pid_t               id;         //!< Process ID (pid)
     pid_t               ppid;       //!< Parent PID
+
+#define PROC_RUNNING 0
+#define PROC_INIT    1
+    status_t            status;     //!< Process status
 
     char*               name;       //!< Process name
     char*               desc;       //!< Process description
@@ -51,7 +57,6 @@ typedef struct process
 extern "C" {
 #endif
 
-void switch_task(bool resched);
 void switch_next(void);
 void init_tasking(void);
 

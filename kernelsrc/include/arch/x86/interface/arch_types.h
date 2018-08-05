@@ -5,7 +5,7 @@
  * @date Created on Wednesday, December 6th 2017, 10:23:34 am
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-30T10:18:24-04:00
+ * @date Last modified time: 2018-08-04T22:17:26-04:00
  */
 
 #pragma once
@@ -41,5 +41,5 @@ typedef struct
 
 struct PT_REGS
 {
-    regs_t* registers;
+    void* registers;
 };

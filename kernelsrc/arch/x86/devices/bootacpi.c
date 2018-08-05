@@ -217,8 +217,6 @@ NO_OPTIMIZE void initTmpBootACPI(void)
         OS_ERR("%s\n", "[ACPI boot] Invalid RSDT!\n");
         return;
     }
-
-    BOCHS_MAGIC_BREAK();
 }
 
 void deinitTmpBootACPI(void)

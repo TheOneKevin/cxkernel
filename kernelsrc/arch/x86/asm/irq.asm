@@ -25,6 +25,7 @@ IRQ  14,    46
 IRQ  15,    47
 
 [EXTERN irq_handler]
+[GLOBAL irq_return]
 irq_common_stub:
     pusha
     push ds
@@ -40,6 +41,8 @@ irq_common_stub:
     push esp
     call irq_handler
     add esp, 4
+    jmp irq_return
+  irq_return:
     pop gs
     pop fs
     pop es

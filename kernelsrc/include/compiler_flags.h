@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-05T20:46:10-04:00
+ * @date Last modified time: 2018-08-04T10:19:04-04:00
  */
 
 #pragma once
@@ -15,3 +15,4 @@
 #define PACKED __attribute__((packed))
 #define NOINLINE __attribute__((noinline))
 #define ALIGNED(x) __attribute__((aligned(x)))
+#define NORETURN __attribute__((noreturn))

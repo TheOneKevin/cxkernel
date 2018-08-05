@@ -41,7 +41,7 @@ all:
 
 	@echo "\n\033[1;36m[Building assembly sources]\033[0m"
 	@$(foreach src1,$(ASOURCES), echo "\033[1;32mBuilding [$(src1)] \033[0m"; $(AS) $(src1) -o $(ODIR)$(subst /,_,$(src1:%.s=%.o)) $(AFLAGS);)
-	@$(foreach src2,$(NSOURCES), echo "\033[1;32mBuilding [$(src2)] \033[0m"; nasm -felf $(src2) -o $(ODIR)$(subst /,_,$(src2:%.asm=%.o)) -w-number-overflow;)
+	@$(foreach src2,$(NSOURCES), echo "\033[1;32mBuilding [$(src2)] \033[0m"; nasm -felf $(src2) -o $(ODIR)$(subst /,_,$(src2:%.asm=%.o)) -w-number-overflow $(NFLAGS);)
 	@echo "\n\033[1;36m[Building unit tests]\033[0m"
 	@$(foreach src3,$(TSOURCES), echo "\033[1;32mBuilding [$(src3)] \033[0m"; $(CC) -c $(src3) -o $(ODIR)$(subst ..,,$(subst /,_,$(src3:%.c=%.o))) $(CFLAGS);)
 

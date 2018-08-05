@@ -59,8 +59,8 @@ if [test x"${ELFGCC0}" == x"found"] && [test x"${ELFGCC1}" == x"found"] && [test
 		echo -e "\n#define DEBUG\n" >> kernelsrc/include/autoconf.h
 		gcc_flags="-ffreestanding -Og -g -g3 -Wall -Wextra -Iinclude -fdiagnostics-color=auto -std=gnu99 -fno-omit-frame-pointer"
 		ld_flags="-lgcc -nostdlib -ffreestanding -g"
-		n_flags="-g"
-		a_flags="-g"
+		n_flags="-F dwarf -g"
+		as_flags="-g"
 	])
 else
 	AC_MSG_NOTICE([Did not find the i686-elf toolchain])

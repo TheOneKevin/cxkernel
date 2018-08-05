@@ -6,7 +6,7 @@
  * @date Created on Sunday, July 22nd 2018, 6:57:01 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-22T22:24:38-04:00
+ * @date Last modified time: 2018-08-04T19:04:07-04:00
  */
 
 #include "tasking/task.h"
@@ -29,6 +29,8 @@
 static uint64_t timer_ticks = 0;
 static uint64_t timer_real_ticks = 0;
 
+void switch_task(virt_t, bool);
+
 void timer_set_phase(int hz)
 {
     int div = PIT_SCALE / hz;    // Approx divisor from freq
@@ -48,7 +50,7 @@ void timer_handler(regs_t* r)
     PIC_sendEOI(TIMER_IRQ);
     PIC_acknowledge();
 
-    switch_task(true);
+    switch_task((virt_t) r, true);
 }
 
 void arch_timer_install(void)
