@@ -1,0 +1,34 @@
+/**
+ * @file   kernel.c
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * 
+ * @date Created on Sunday, October 7th 2018, 4:12:12 pm
+ * 
+ * @date Last modified by:   Kevin Dai
+ * @date Last modified time: 2018-10-20T12:50:33-04:00
+ */
+
+#include <stdio.h>
+
+#include "../abi/icxxabi.h"
+#include "platform/platform.h"
+#include "arch/arch_interface.h"
+
+typedef void(*ctor_func)(void);
+extern ctor_func* _ctors_start;
+extern ctor_func* _ctors_end;
+
+extern "C" void kernel_main(int sig, void* ptr)
+{
+    // Execute constructors (ctors)
+    for(ctor_func* func_arr = _ctors_start; func_arr < _ctors_end; func_arr++)
+        (*func_arr)();
+    init_early_handles();
+
+    Platform::GetConsole().clear();
+    Arch::EarlyInit(sig, ptr);
+    Platform::Init();
+    Arch::Init();
+    
+    for(;;);
+}

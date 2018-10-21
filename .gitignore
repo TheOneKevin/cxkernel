@@ -1,3 +1,19 @@
+# Binaries
+bin/*.bin
+bin/*.iso
+bin/isodir/
+
+# Patches
+patches/*
+!patches/*.*
+
+# IDE Folders
+.vscode/
+
+# Autohell
+autom4te.cache/
+Makefile
+
 # Object files
 *.o
 *.ko
@@ -31,34 +47,6 @@
 # Debug files
 *.dSYM/
 *.su
-kernelsrc/nbproject/
+
+# Git
 .git/
-bin/*.bin
-bin/*.iso
-
-# Patches
-patches/*
-!patches/*.*
-
-# Netbeans
-nbproject/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
-# Autohell
-autom4te.cache/
-Makefile
-
-.tags
-.project
-.cproject
-config.log
-config.status
-EurusOScheck.cppcheck
-EurusOScheck-cppcheck-build-dir/
-docs/kernel/
-.vscode/
-isodir/boot/*.bin
