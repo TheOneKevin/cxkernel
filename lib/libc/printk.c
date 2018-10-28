@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 13th 2018, 9:13:12 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-14T16:17:00-04:00
+ * @date Last modified time: 2018-10-26T22:54:44-04:00
  */
 
 // Have fun maintaining the code!
@@ -15,6 +15,7 @@
 
 EXPORT_SYMBOL(printf);
 EXPORT_SYMBOL(fprintf);
+EXPORT_CTOR(init_early_handles, 101);
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 

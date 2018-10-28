@@ -1,6 +1,7 @@
 # Binaries
 bin/*.bin
 bin/*.iso
+bin/*.tar
 bin/isodir/
 
 # Patches
@@ -8,7 +9,7 @@ patches/*
 !patches/*.*
 
 # IDE Folders
-.vscode/
+#.vscode/
 
 # Autohell
 autom4te.cache/
@@ -47,6 +48,7 @@ Makefile
 # Debug files
 *.dSYM/
 *.su
+log.txt
 
 # Git
 .git/

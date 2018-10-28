@@ -1,7 +1,7 @@
-# 1 "abi/arch/x86/start.S"
+# 1 "loader/arch/x86/start.S"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "abi/arch/x86/start.S"
+# 1 "loader/arch/x86/start.S"
 
 .set ALIGN, 1<<0
 .set MEMINFO, 1<<1
@@ -13,18 +13,18 @@
 # 1 "include/arch/x86/arch_common.h" 1
 # 11 "include/arch/x86/arch_common.h"
        
-# 10 "abi/arch/x86/start.S" 2
+# 10 "loader/arch/x86/start.S" 2
 # 1 "include/arch/x86/interface/arch_interface.h" 1
 # 11 "include/arch/x86/interface/arch_interface.h"
        
-# 11 "abi/arch/x86/start.S" 2
-# 21 "abi/arch/x86/start.S"
+# 11 "loader/arch/x86/start.S" 2
+# 21 "loader/arch/x86/start.S"
 .section .multiboot
 .align 4
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
-# 40 "abi/arch/x86/start.S"
+# 40 "loader/arch/x86/start.S"
 .section .bootloader_stack, "aw", @nobits
 .align 0x1000
 .global stack_top
@@ -88,8 +88,6 @@ _kernel_dir4:
 .global _start
 .type _start, @function
 
-.extern
-
 _start:
 
     cli
@@ -130,10 +128,9 @@ _start:
     lea 4f, %ecx
     jmp *%ecx
 4:
-# 161 "abi/arch/x86/start.S"
+# 159 "loader/arch/x86/start.S"
     mov $0xFF800000, %esp
-    call _init
-# 183 "abi/arch/x86/start.S"
+# 180 "loader/arch/x86/start.S"
     movl _perserve_magic, %eax
     movl _perserve_struct, %ebx
 
@@ -145,8 +142,7 @@ _start:
     pushl %eax
 
     call kernel_main
-    call _fini
-# 209 "abi/arch/x86/start.S"
+# 205 "loader/arch/x86/start.S"
     cli
 0: hlt
     jmp 0b

@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 13th 2018, 5:44:15 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-14T08:47:44-04:00
+ * @date Last modified time: 2018-10-27T19:23:42-04:00
  */
 
 #pragma once
@@ -17,23 +17,85 @@
 extern "C" {
 #endif
 
-void io_wait(void);
+static inline void io_wait(void)
+{
+    // Port 0x80 is used for 'checkpoints' during POST
+    // The Linux kernel seems to think it is free for use :-/
+    //// %%al instead of %0 makes no difference. Does the register need to be zeroed?
+    asm volatile ("outb %%al, $0x80" : : "a" (0));
+}
 
-uint8_t inb(uint16_t port);
-void outb(uint16_t port, uint8_t value);
+static inline void outb(uint16_t port, uint8_t value)
+{
+    asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
+}
 
-uint16_t inw(uint16_t port);
-void outw(uint16_t port, uint16_t value);
+static inline void outw(uint16_t port, uint16_t value)
+{
+    asm volatile ("outw %1, %0" : : "dN" (port), "a" (value));
+}
 
-arch_sz_t read_cr0(void);
-arch_sz_t read_cr2(void);
-arch_sz_t read_cr3(void);
-arch_sz_t read_cr4(void);
+static inline uint8_t inb(uint16_t port)
+{
+    uint8_t ret;
+    asm volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
+    return ret;
+}
 
-void write_cr0(arch_sz_t);
-void write_cr2(arch_sz_t);
-void write_cr3(arch_sz_t);
-void write_cr4(arch_sz_t);
+static inline uint16_t inw(uint16_t port)
+{
+    uint16_t ret;
+    asm volatile ("inw %1, %0" : "=a" (ret) : "dN" (port));
+    return ret;
+}
+
+static inline arch_sz_t read_cr0(void)
+{
+    arch_sz_t val;
+    asm volatile ("mov %%cr0, %0" : "=r" (val));
+    return val;
+}
+
+static inline arch_sz_t read_cr2(void)
+{
+    arch_sz_t val;
+    asm volatile ("mov %%cr2, %0" : "=r" (val));
+    return val;
+}
+
+static inline arch_sz_t read_cr3(void)
+{
+    arch_sz_t val;
+    asm volatile ("mov %%cr3, %0" : "=r" (val));
+    return val;
+}
+
+static inline arch_sz_t read_cr4(void)
+{
+    arch_sz_t val;
+    asm volatile ("mov %%cr4, %0" : "=r" (val));
+    return val;
+}
+
+static inline void write_cr0(arch_sz_t val)
+{
+    asm volatile("mov %0, %%cr0" : : "r" (val));
+}
+
+static inline void write_cr2(arch_sz_t val)
+{
+    asm volatile("mov %0, %%cr2" : : "r" (val));
+}
+
+static inline void write_cr3(arch_sz_t val)
+{
+    asm volatile("mov %0, %%cr3" : : "r" (val));
+}
+
+static inline void write_cr4(arch_sz_t val)
+{
+    asm volatile("mov %0, %%cr4" : : "r" (val));
+}
 
 #ifdef __cplusplus
 }

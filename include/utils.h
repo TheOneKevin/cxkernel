@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-19T16:05:50-04:00
+ * @date Last modified time: 2018-10-26T22:49:07-04:00
  * 
  * General purpose macros goes here
  */
@@ -20,8 +20,12 @@
 #define STRINGIFY_HIDDEN(x) #x
 #define STRINGIFY(x) STRINGIFY_HIDDEN(x)
 
+#define GET_ARG2(arg1, arg2, ...) arg2
+#define GET_ARG3(arg1, arg2, arg3, ...) arg3
+#define GET_ARG4(arg1, arg2, arg3, arg4, ...) arg4
+
 #define container_of(ptr, type, member) ({                  \
-    const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+    const __typeof__( ((type *)0)->member ) *__mptr = (ptr);    \
     (type *)( (char *)__mptr - offsetof(type,member) );})
 
 #ifdef CONFIG_UNDERSCORE_SYMBOL_PREFIX
@@ -42,7 +46,7 @@ struct krnl_sym
 };
 
 #define __EXPORT_SYMBOL(sym, sec)                           \
-    extern typeof(sym) sym;                                 \
+    extern __typeof__(sym) sym;                             \
     static const char __kstrtab_##sym[]                     \
     __attribute__((section("kstrtab"), aligned(1)))         \
     = OS_SYMBOL_STR(sym);                                   \
@@ -50,12 +54,12 @@ struct krnl_sym
     __attribute__((section("ksymtab" sec "+" #sym), used))  \
     = { (unsigned long)&sym, __kstrtab_##sym }
 
-#ifndef __cplusplus
 #define EXPORT_SYMBOL(sym)     __EXPORT_SYMBOL(sym, "")
 #define EXPORT_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_gpl")
-#else
-#define EXPORT_SYMBOL(sym)
-#define EXPORT_SYMBOL_GPL(sym)
-#endif
+
+#define __EXPORT_CTOR1(sym)     extern __typeof__(sym) sym __attribute__((constructor))
+#define __EXPORT_CTOR2(sym, x)  extern __typeof__(sym) sym __CTOR(x)
+#define __EXPORT_CTOR(...) GET_ARG3(__VA_ARGS__, __EXPORT_CTOR2, __EXPORT_CTOR1, )
+#define EXPORT_CTOR(...) __EXPORT_CTOR(__VA_ARGS__)(__VA_ARGS__)
 
 // Yeah!

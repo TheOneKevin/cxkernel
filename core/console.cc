@@ -5,11 +5,11 @@
  * @date Created on Saturday, October 13th 2018, 12:31:41 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-14T15:48:42-04:00
+ * @date Last modified time: 2018-10-27T19:04:42-04:00
  */
 
 #include "console.h"
-#include "platform/platform.h"
+#include "platform.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 

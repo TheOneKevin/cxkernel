@@ -1,11 +1,11 @@
 /**
- * @file   vga.c
+ * @file   vga.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
  *
  * @date Created on Saturday, October 13th 2018, 5:46:40 pm
  *
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-14T09:07:26-04:00
+ * @date Last modified time: 2018-10-27T18:50:40-04:00
  */
 
 #include "string.h"

@@ -100,8 +100,6 @@ _kernel_dir4: /* For PAE 1 */
 .global _start
 .type _start, @function
 
-.extern 
-
 _start:
     /* Oh how I hate GAS */
     cli
@@ -159,7 +157,6 @@ _start:
     */
 
     mov $ARCH_STACK_TOP, %esp
-    call _init
 
     /*
      * This is a good place to initialize crucial processor state before the
@@ -191,7 +188,6 @@ _start:
     pushl %eax
 
     call kernel_main
-    call _fini
 
     /*
      * If the system has nothing more to do, put the computer into an

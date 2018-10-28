@@ -5,7 +5,7 @@
  * @date Created on Thursday, October 11th 2018, 8:57:33 am
  *
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-14T16:15:53-04:00
+ * @date Last modified time: 2018-10-27T19:50:19-04:00
  */
 
 #include "string.h"
@@ -34,7 +34,7 @@ int memcmp(const void* buf1, const void* buf2, size_t len)
 
 void* memcpy(void* dest, const void* src, size_t len)
 {
-    #if ARCH_TYPE == PLATFORM_x86_32
+    #if ARCH_TYPE == ARCH_x86_32
         asm volatile ("rep movsb"
                       :
                       : "D" (dest), "S" (src), "c" (len)
@@ -51,7 +51,7 @@ void* memcpy(void* dest, const void* src, size_t len)
 
 void* memset(void* str, int c, size_t len)
 {
-    #if ARCH_TYPE == PLATFORM_x86_32
+    #if ARCH_TYPE == ARCH_x86_32
         asm volatile ("rep stosb"
                       :
                       : "a" (c), "D" (str), "c" (len)

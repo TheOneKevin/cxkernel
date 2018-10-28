@@ -5,7 +5,7 @@
  * @date Created on Monday, October 8th 2018, 5:12:18 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-14T16:43:47-04:00
+ * @date Last modified time: 2018-10-26T22:40:34-04:00
  */
 
 #define __MODULE__ "ARCH "
@@ -45,8 +45,6 @@ void EarlyInit(int sig, void* ptr)
     ASSERT_HARD(!((CHECK_FLAG(mbt.flags, 4) && CHECK_FLAG(mbt.flags, 5))), "Flags 4 and 5 are mutually exclusive.");
     ASSERT_HARD(CHECK_FLAG(mbt.flags, 6), "Memory map not loaded. Kernel cannot continue execution.");
     fprintf(STREAM_OUT, "DONE!\n");
-
-
 }
 
 void Init(void)

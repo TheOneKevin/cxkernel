@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 13th 2018, 6:24:19 pm
  *
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-19T16:10:21-04:00
+ * @date Last modified time: 2018-10-27T18:50:07-04:00
  */
 
 #pragma once
@@ -17,7 +17,8 @@
 namespace Platform
 {
     Console& GetConsole(void);
-    void     Init(void);
+    void EarlyInit(void);
+    void Init(void);
 }
 
 #endif
