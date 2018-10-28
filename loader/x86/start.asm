@@ -4,7 +4,7 @@
 ; @date Created on Monday, October 8th 2018, 4:35:25 pm
 ; 
 ; @date Last modified by:   Kevin Dai
-; @date Last modified time: 2018-10-08T22:30:53-04:00
+; @date Last modified time: 2018-10-28T15:25:05-04:00
 
 [BITS 32]
 ALIGN 4
@@ -16,9 +16,6 @@ FLAGS    equ ALIGNN | MEMINFO ; this is the Multiboot 'flag' field
 MAGIC    equ  0x1BADB002      ; 'magic number' lets bootloader find the header
 CHECKSUM equ -(MAGIC + FLAGS) ; checksum of above, to prove we are multiboot
 
-; Map our kernel to the higher half
-VIRTUAL_BASE equ 0xE0000000
-KRNL_PAGE_NUMBER equ (VIRTUAL_BASE >> 22)
 ARCH_PAGE_SIZE equ 0x1000
 
 ; Declare a multiboot header that marks the program as a kernel. These are magic
@@ -45,7 +42,7 @@ SECTION .bootloader_stack nobits alloc write ALIGN=4
 [GLOBAL stack_top]
 [GLOBAL stack_bottom]
 stack_bottom:
-    resb ARCH_PAGE_SIZE ; 4KB
+    resb 4096 ; This should be enough
 stack_top:
 
 ; Paging tables and directories for higher half kernel
@@ -87,65 +84,20 @@ _kernel_table6: resb ARCH_PAGE_SIZE
 align 0x1000
 _kernel_table7: resb ARCH_PAGE_SIZE
 
-perserve_magic: resd 1
-perserve_struct: resd 1
-
 ; The linker script specifies _start as the entry point to the kernel and the
 ; bootloader will jump to this position once the kernel has been loaded. It
 ; doesn't make sense to return from this function as the bootloader is gone.
 SECTION .text
 [GLOBAL _start]
-[EXTERN kernel_main]
-[EXTERN _init]
-[EXTERN _fini]
+[EXTERN main]
 
 _start:
     ; Oh how I love NASM
     cli
-    ; Save the GRUB registers
-    mov [perserve_magic - VIRTUAL_BASE], eax
-    mov [perserve_struct - VIRTUAL_BASE], ebx
-
-    mov edi, _kernel_table1 - VIRTUAL_BASE
-    mov esi, 0
-    mov ecx, 1024
-.1b:
-    mov edx, esi    ; ESI is the physical address
-    or edx, 0x3     ; Mark as present and writable
-    mov [edi], edx  ; Write to page table
-    add esi, ARCH_PAGE_SIZE ; Increment our pointer to the current mapped address
-    add edi, 4              ; Increment our pointer to the current entry in the table
-    loop .1b
-.2:
-    mov edi, _kernel_table2 - VIRTUAL_BASE
-    mov edx, stack_bottom - VIRTUAL_BASE
-    or edx, 0x3
-    mov edi, _kernel_table2 - VIRTUAL_BASE + 4 * 1023
-    mov [edi], edx
-    mov DWORD[_kernel_dir1 - VIRTUAL_BASE],                        _kernel_table1 - VIRTUAL_BASE + 0x3 ; Identity map the kernel table 1
-    mov DWORD[_kernel_dir1 - VIRTUAL_BASE + KRNL_PAGE_NUMBER * 4], _kernel_table1 - VIRTUAL_BASE + 0x3 ; Map kernel to virt base
-    mov DWORD[_kernel_dir1 - VIRTUAL_BASE + 0xFF4],                _kernel_table2 - VIRTUAL_BASE + 0x3 ; Map stack to 0xFF800000
-
-    ; Mov address of the PD to CR3
-    mov ecx, _kernel_dir1 - VIRTUAL_BASE
-    mov cr3, ecx
-    mov ecx, cr0
-    or ecx, 0x80010001
-    mov cr0, ecx ; Enable paging!
-    
-    mov eax, .3f
-    jmp eax ; Go go go!
-.3f:
-    mov esp, 0xFF800000 ; Set up stack
-    call _init
-    mov eax, [perserve_magic] ; Restore structs
-    mov ebx, [perserve_struct]
-    add ebx, VIRTUAL_BASE
-    push ebx
+    mov esp, stack_top ; Set up stack
+    push ebx ; Push grub multiboot structs
     push eax
-    call kernel_main
-    call _fini
-
+    call main
     cli
 .0b:
     hlt

@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 13th 2018, 5:40:19 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-16T19:25:06-04:00
+ * @date Last modified time: 2018-10-28T13:23:16-04:00
  */
 {
     // Use IntelliSense to learn about possible attributes.
@@ -28,7 +28,7 @@
             "name": "Launch with GDB",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/bin/cxkrnl.bin",
+            "program": "${workspaceRoot}/build/bin/cxkrnl.bin",
             "cwd": "${workspaceRoot}",
             "args": [],
             "windows":{
@@ -54,7 +54,7 @@
                     "ignoreFailures": true
                 },
                 {
-                    "text": "file C:/Users/Kevin/Desktop/osdev/bin/cxkrnl.bin"
+                    "text": "file C:/Users/Kevin/Desktop/osdev/build/bin/cxkrnl.bin"
                 },
                 {
                     "text": "break isr_handler",

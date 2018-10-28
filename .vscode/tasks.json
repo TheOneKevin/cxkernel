@@ -5,7 +5,7 @@
  * @date Created on Tuesday, October 9th 2018, 10:10:07 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-16T19:25:30-04:00
+ * @date Last modified time: 2018-10-28T13:23:38-04:00
  */
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
@@ -39,7 +39,7 @@
             "label": "Launch QEMU Debug",
             "type": "shell",
             "windows": {
-                "command": "start -FilePath 'qemu-system-i386' -ArgumentList '-S -gdb tcp::1234 -boot d -cdrom bin/LiquiDOS.iso -m 512 -serial file:log.txt'"
+                "command": "start -FilePath 'qemu-system-i386' -ArgumentList '-S -gdb tcp::1234 -boot d -cdrom build/bin/LiquiDOS.iso -m 512 -serial file:log.txt'"
             }
         },
         {

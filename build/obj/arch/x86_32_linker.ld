@@ -5,10 +5,10 @@
  * @date Created on Tuesday, October 9th 2018, 5:04:24 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T18:41:38-04:00
+ * @date Last modified time: 2018-10-28T13:57:14-04:00
  */
 
-ENTRY(_start)
+ENTRY(kernel_main)
 SECTIONS
 {
     . = 0xE0100000;

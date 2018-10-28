@@ -1,8 +1,8 @@
-# Binaries
-bin/*.bin
-bin/*.iso
-bin/*.tar
-bin/isodir/
+# Binaries and config
+build/bin/*.bin
+build/bin/*.iso
+build/bin/*.tar
+build/bin/isodir/
 
 # Patches
 patches/*
@@ -14,6 +14,9 @@ patches/*
 # Autohell
 autom4te.cache/
 Makefile
+build/config.h
+build/config.log
+build/config.status
 
 # Object files
 *.o
@@ -24,6 +27,7 @@ Makefile
 # Precompiled Headers
 *.gch
 *.pch
+*.i
 
 # Libraries
 *.lib

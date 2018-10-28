@@ -12,6 +12,7 @@
             "includePath": [
                 "${workspaceFolder}/include/",
                 "${workspaceFolder}/lib/libc/include/",
+                "${workspaceFolder}/lib/libc++/include/",
                 "C:/cygwin/lib/gcc/i686-pc-cygwin/7.3.0/include",
                 "C:/cygwin/lib/gcc/i686-pc-cygwin/7.3.0/include"
             ],

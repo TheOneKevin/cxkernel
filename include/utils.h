@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-26T22:49:07-04:00
+ * @date Last modified time: 2018-10-28T15:28:10-04:00
  * 
  * General purpose macros goes here
  */
@@ -54,8 +54,13 @@ struct krnl_sym
     __attribute__((section("ksymtab" sec "+" #sym), used))  \
     = { (unsigned long)&sym, __kstrtab_##sym }
 
-#define EXPORT_SYMBOL(sym)     __EXPORT_SYMBOL(sym, "")
-#define EXPORT_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_gpl")
+#ifdef __KERNEL__
+    #define EXPORT_SYMBOL(sym)     __EXPORT_SYMBOL(sym, "")
+    #define EXPORT_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_gpl")
+#else
+    #define EXPORT_SYMBOL(sym)
+    #define EXPORT_SYMBOL_GPL(sym)
+#endif
 
 #define __EXPORT_CTOR1(sym)     extern __typeof__(sym) sym __attribute__((constructor))
 #define __EXPORT_CTOR2(sym, x)  extern __typeof__(sym) sym __CTOR(x)
