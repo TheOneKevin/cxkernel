@@ -5,7 +5,7 @@
  * @date Created on Sunday, October 7th 2018, 4:12:12 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T22:57:54-04:00
+ * @date Last modified time: 2018-10-29T19:27:54-04:00
  */
 
 #include <stdio.h>
@@ -23,8 +23,7 @@ __NO_OPTIMIZE __NOINLINE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 extern "C" void kernel_main(int sig, void* ptr)
 {
     // Execute ctors, these really only initializes printf
-    for(ctor_func* func_arr = &_ctors_start; func_arr != &_ctors_end; func_arr++)
-        (*func_arr)();
+    for(ctor_func* func_arr = &_ctors_start; func_arr != &_ctors_end; func_arr++) (*func_arr)();
 
     Platform::GetConsole().clear();
     Arch::EarlyInit(sig, ptr);

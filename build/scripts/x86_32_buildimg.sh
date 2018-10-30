@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 rm -rf bin/isodir/
 mkdir -p bin/isodir/boot/grub
 tar -cvf bin/ramfs.tar `find -path "./grub/ramfs/*" -print`
