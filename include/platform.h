@@ -5,20 +5,16 @@
  * @date Created on Saturday, October 13th 2018, 6:24:19 pm
  *
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T18:50:07-04:00
+ * @date Last modified time: 2018-11-13T20:14:52-05:00
  */
 
 #pragma once
 #include "common.h"
 #include "console.h"
 
-#ifdef __cplusplus
-
-namespace Platform
+namespace platform
 {
-    Console& GetConsole(void);
-    void EarlyInit(void);
-    void Init(void);
+    Console& get_console(void);
+    void early_init(void);
+    void init(void);
 }
-
-#endif

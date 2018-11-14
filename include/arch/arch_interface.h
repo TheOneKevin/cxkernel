@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-19T16:10:15-04:00
+ * @date Last modified time: 2018-11-13T20:30:16-05:00
  * 
  * \sa include/arch/x86/interface/arch_interface.h
  * \sa include/arch/raspi/interface/arch_interface.h
@@ -38,10 +38,10 @@
 
 #ifdef __cplusplus
 
-namespace Arch
+namespace arch
 {
-    void EarlyInit(int, void*);
-    void Init(void);
+    void early_init(int, void*);
+    void init(void);
 }
 
 #endif

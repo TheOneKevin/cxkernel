@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 13th 2018, 6:07:19 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-19T16:08:04-04:00
+ * @date Last modified time: 2018-11-13T20:48:49-05:00
  */
 
 #pragma once
@@ -42,3 +42,21 @@
 #define DISABLE_INTERRUPTS asm volatile ("cli");
 
 #endif // __ASSEMBLER__
+
+#ifdef __cplusplus
+
+namespace x86_32 {
+
+void early_init();
+void init();
+
+}
+
+namespace x86_64 {
+
+void early_init();
+void init();
+
+}
+
+#endif

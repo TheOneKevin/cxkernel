@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T20:02:41-04:00
+ * @date Last modified time: 2018-11-13T20:43:56-05:00
  */
 
 #pragma once
@@ -54,19 +54,23 @@ typedef struct regs
     uint32_t eip, cs, eflags, esp, ss;                   //!< Pushed by the processor automatically
 } __PACKED regs_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef void (*irq_t) (regs_t *r);
 
-void init_idt(void);
-void init_irq(void);
-void idt_set_gate(int idx, uint32_t base, uint16_t sel, uint8_t flags);
-
-void install_irqhandler(int irq, irq_t handler);
-void uninstall_irqhandler(int irq);
-
 #ifdef __cplusplus
+
+namespace x86_32::irq {
+
+void init(void);
+void install(int irq, irq_t handler);
+void uninstall(int irq);
+
 }
+
+namespace x86_32::idt {
+
+void init(void);
+void set_gate(int idx, uint32_t base, uint16_t sel, uint8_t flags);
+
+}
+
 #endif

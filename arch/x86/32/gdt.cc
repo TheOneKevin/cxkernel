@@ -1,7 +1,6 @@
 /*
- * File:   gdt.c
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
+ * @file   gdt.c
+ * @author Kevin Dai \<kevindai02@outlook.com\>
  *
  * @date Created on 30-Jul-2017 04:28:56 PM
  *
@@ -12,14 +11,16 @@
 #include <string.h>
 #include "arch/x86/32/gdt.h"
 
-gdt_entry_t gdt_entries[6]; // null, code, data, user code, user data, tss
-gdt_ptr_t gdt_ptr;
-tss_t tss_entry;
+namespace x86::gdt {
+
+static gdt_entry_t gdt_entries[6]; // null, code, data, user code, user data, tss
+static gdt_ptr_t gdt_ptr;
+static tss_t tss_entry;
 
 extern "C" void load_gdt(uint32_t);
 extern "C" void load_tss(void);
 
-void init_gdt(void)
+void init(void)
 {
     // Set up our GDT pointer
     gdt_ptr.limit = (sizeof(gdt_entry_t) * 6) - 1;
@@ -29,15 +30,15 @@ void init_gdt(void)
     uint32_t tss_limit = tss_base + sizeof(tss_t);
 
     // Set up our GDT entries
-    gdt_set_gate(0, 0, 0, 0, 0);                // Null segment
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
-    gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
-    gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
-    gdt_set_gate(5, tss_base, tss_limit, 0xE9, 0x00); // TSS
+    set_gate(0, 0, 0, 0, 0);                // Null segment
+    set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
+    set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
+    set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
+    set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
+    set_gate(5, tss_base, tss_limit, 0xE9, 0x00); // TSS
 
-    // gdt_set_gate(5, 0, 0xFFFFFFFF, 0x9A, 0x0F); // 16 bit code segment
-    // gdt_set_gate(6, 0, 0xFFFFFFFF, 0x92, 0x0F); // 16 bit data segment
+    // set_gate(5, 0, 0xFFFFFFFF, 0x9A, 0x0F); // 16 bit code segment
+    // set_gate(6, 0, 0xFFFFFFFF, 0x92, 0x0F); // 16 bit data segment
 
     // Clear and initialize our TSS
     memset(&tss_entry, 0x0, sizeof(tss_t));
@@ -56,7 +57,7 @@ void init_gdt(void)
 }
 
 // Let's add a GDT entry
-void gdt_set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran)
+void set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran)
 {
     gdt_entries[idx].base_low = (base & 0xFFFF);
     gdt_entries[idx].base_middle = (base >> 16) & 0xFF;
@@ -72,4 +73,6 @@ void gdt_set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_
 void set_tss_stack(uint32_t stack)
 {
     tss_entry.ESP0 = stack;
+}
+
 }

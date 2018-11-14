@@ -1,7 +1,6 @@
 /*
- * File:   pic.c
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
+ * @file   pic.c
+ * @author Kevin Dai \<kevindai02@outlook.com\>
  *
  * @date Created on 30-Jul-2017 05:17:59 PM
  *
@@ -31,7 +30,10 @@
 #define ICW4_BUF_MASTER     0x0C        //!< Buffered mode/master
 #define ICW4_SFNM           0x10        //!< Special fully nested (not)
 
-void pic_remap(uint8_t offset1, uint8_t offset2)
+using namespace pc;
+namespace pc::pic {
+
+void remap(uint8_t offset1, uint8_t offset2)
 {
     uint8_t a1, a2;
 
@@ -52,25 +54,25 @@ void pic_remap(uint8_t offset1, uint8_t offset2)
     outb(PIC2_DATA, a2);
 }
 
-void pic_mask(uint8_t mask1, uint8_t mask2)
+void mask(uint8_t mask1, uint8_t mask2)
 {
     outb(PIC1_DATA, mask1);
     outb(PIC2_DATA, mask2);
 }
 
-void pic_sendEOI(uint8_t irq)
+void send_eoi(uint8_t irq)
 {
     if (irq >= 8)
         outb(PIC2_COMMAND, PIC_EOI);
     outb(PIC1_COMMAND, PIC_EOI);
 }
 
-void pic_acknowledge(void)
+void ack(void)
 {
     outb(PIC1_COMMAND, PIC_EOI);
 }
 
-void pic_autoremap(void)
+void autoremap(void)
 {
     // Remap the IRQ table.
     outb(0x20, 0x11);
@@ -83,4 +85,6 @@ void pic_autoremap(void)
     outb(0xA1, 0x01);
     outb(0x21, 0x0);
     outb(0xA1, 0x0);
+}
+
 }

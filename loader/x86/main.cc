@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 27th 2018, 11:30:14 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-29T19:30:43-04:00
+ * @date Last modified time: 2018-11-13T20:29:17-05:00
  * 
  * This is the main loader for our kernel. The loader should use
  * as little code as possible. Any source files used from the kernel
@@ -24,6 +24,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <panic.h>
+// Elf parser library
+#include <elf.h>
+#include <elf_parser.h>
 
 // CPU Topology
 #include "arch/x86/cpu.h"
@@ -37,7 +41,7 @@ __NO_OPTIMIZE __NOINLINE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 // Reserve spaces for structs
 static multiboot_info_t mbt;
 
-void main(int sig, multiboot_info_t* ptr)
+extern "C" void main(int sig, multiboot_info_t* ptr)
 {
     // Before anything bad happens
     memcpy(&mbt, ptr, sizeof(multiboot_info_t));
@@ -57,32 +61,49 @@ void main(int sig, multiboot_info_t* ptr)
     for(multiboot_module_t* mod = (multiboot_module_t *) mbt.mods_addr; (uint32_t) mod < mbt.mods_addr + mbt.mods_count * sizeof(multiboot_module_t); mod++)
     {
         printf("Found module [%X, %X] (%s)\n", mod -> mod_start, mod -> mod_end, (char *) mod -> cmdline);
-        if(strcmp((char *) mod -> cmdline, "cxkrnl32") == 0)
+        if(!memcmp((void *) mod -> cmdline, "cxkrnl32", 8))
         {
-            if(foundKrnl32)
-                printf("Warning: Duplicate cxkrnl32 modules found. Ignoring.\n");
-            else
-                foundKrnl32 = true, cxkrnl32 = mod;
+            if(!foundKrnl32) { foundKrnl32 = true, cxkrnl32 = mod; continue; }
+            printf("Warning: Duplicate cxkrnl32 modules found. Ignoring.\n");
         }
-        else if(strcmp((char *) mod -> cmdline, "cxkrnl64") == 0)
+        else if(!memcmp((void *) mod -> cmdline, "cxkrnl64", 8))
         {
-            if(foundKrnl64)
-                printf("Warning: Duplicate cxkrnl64 modules found. Ignoring.\n");
-            else
-                foundKrnl64 = true, cxkrnl64 = mod;
+            if(!foundKrnl64) { foundKrnl64 = true, cxkrnl64 = mod; continue; }
+            printf("Warning: Duplicate cxkrnl64 modules found. Ignoring.\n");
         }
     }
     // Check if the modules are found
-    ASSERT_HARD(foundKrnl32, "Error: 32 bit kernel not found, aborting...");
-    ASSERT(foundKrnl64 && cpu_check_feat(CPU_FEAT_EDX_PAE), "Warning: 64 bit kernel not found");
+    ASSERT_HARD(foundKrnl32 || foundKrnl64, "Error: No kernels loaded.")
+    ASSERT(foundKrnl64 && x86_feature_test(x86_FEATURE_LONGMODE), "Warning: No 64 bit kernel found but CPU supports x86_64");
+
+
+
     // Execute kernel
     if (CHECK_FLAG(mbt.flags, 2))
     {
-        printf ("Passed cmdline = [%s]\n", (char *) mbt.cmdline);
+        printf("Passed cmdline = [%s]\n", (char *) mbt.cmdline);
+        if(!memcmp((void *) mbt.cmdline, "cxkrnl32", 8))
+        {
+            ASSERT_HARD(foundKrnl32, "Error: 32 bit kernel not found, aborting...");
+        }
+        else if(!memcmp((void *) mbt.cmdline, "cxkrnl64", 8))
+        {
+            ASSERT_HARD(foundKrnl64, "Error: 64 bit kernel not found, aborting...");
+            ASSERT_HARD(x86_feature_test(x86_FEATURE_LONGMODE), "Error: CPU does not support long mode.")
+        }
     }
     else
     {
+        if(x86_feature_test(x86_FEATURE_LONGMODE) && foundKrnl64)
+        {
 
+        }
+        else if(foundKrnl32)
+        {
+
+        }
+        else
+            PANIC("Error: No compatible kernel found.")
     }
     for(;;);
 }

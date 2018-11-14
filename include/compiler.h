@@ -5,7 +5,7 @@
  * @date Created on Sunday, October 14th 2018, 3:43:52 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T20:08:16-04:00
+ * @date Last modified time: 2018-11-11T08:34:36-05:00
  */
 
 #pragma once
@@ -26,6 +26,9 @@
 #define __GET_CALLER(x) __builtin_return_address(0)
 #define __GET_FRAME(x)  __builtin_frame_address(0)
 #define DEPRECATED(x)   __attribute__((deprecated(x)))
+
+#define unlikely(x) __builtin_expect((x), 0)
+#define likely(x) __builtin_expect((x), 1)
 
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 

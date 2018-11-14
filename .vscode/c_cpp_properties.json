@@ -10,11 +10,11 @@
                 "databaseFilename": ""
             },
             "includePath": [
-                "${workspaceFolder}/include/",
-                "${workspaceFolder}/lib/libc/include/",
-                "${workspaceFolder}/lib/libc++/include/",
                 "C:/cygwin/lib/gcc/i686-pc-cygwin/7.3.0/include",
-                "C:/cygwin/lib/gcc/i686-pc-cygwin/7.3.0/include"
+                "${workspaceFolder}/include/",
+                "${workspaceFolder}/lib/libc++/include/",
+                "${workspaceFolder}/lib/elf_parser/include",
+                "${workspaceFolder}/lib/libc/include"
             ],
             "cStandard": "c99",
             "cppStandard": "c++11",

@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 13th 2018, 5:44:15 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-29T21:08:18-04:00
+ * @date Last modified time: 2018-11-11T08:26:54-05:00
  */
 
 #pragma once
@@ -100,9 +100,17 @@ static inline void write_cr4(arch_sz_t val)
 /**
  * Issue a CPUID command
  */
-static inline void cpuid(uint32_t code, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx)
+static inline void cpuid(uint32_t l, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx)
 {
-    asm volatile ("cpuid" : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx) : "a" (code));
+    asm volatile ("cpuid" : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx) : "a" (l));
+}
+
+/**
+ * Issue a CPUID command when the initial ecx value matters
+ */
+static inline void cpuidc(uint32_t l, uint32_t c, uint32_t* eax, uint32_t* ebx, uint32_t* ecx, uint32_t* edx)
+{
+    asm volatile ("cpuid" : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx) : "a" (l), "c" (c));
 }
 
 #ifdef __cplusplus

@@ -5,7 +5,7 @@
  * @date Created on Saturday, October 27th 2018, 11:46:27 am
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T11:49:40-04:00
+ * @date Last modified time: 2018-11-13T20:24:38-05:00
  */
 /**
  * @file   serial.h
@@ -26,14 +26,10 @@
 #define COM3 0x3E8
 #define COM4 0x2E8
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace pc::serial {
 
-void pc_serial_init(uint16_t);
-char pc_read_serial(uint16_t);
-void pc_write_serial(uint16_t, char);
+void init(uint16_t);
+char read(uint16_t);
+void write(uint16_t, char);
 
-#ifdef __cplusplus
 }
-#endif

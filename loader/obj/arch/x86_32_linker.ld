@@ -5,7 +5,7 @@
  * @date Created on Tuesday, October 9th 2018, 5:04:24 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-28T13:55:56-04:00
+ * @date Last modified time: 2018-11-11T09:39:23-05:00
  */
 
 ENTRY(_start)
@@ -26,6 +26,13 @@ SECTIONS
         *(.rodata*)
         *(.gnu.linkonce.r.*)
     }
+
+    .ctors : AT (ADDR (.ctors))
+    {
+        _ctors_start = .;
+        *(SORT(ctors*))
+    }
+    _ctors_end = .;
 
     .data ALIGN (4K) : AT (ADDR (.data))
     {

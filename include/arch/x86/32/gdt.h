@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T19:58:10-04:00
+ * @date Last modified time: 2018-11-13T20:43:49-05:00
  */
 
 #pragma once
@@ -46,13 +46,13 @@ typedef struct
 } __PACKED gdt_ptr_t;
 
 #ifdef __cplusplus
-extern "C" {
-#endif
 
-void init_gdt(void);
-void gdt_set_gate(int, uint32_t, uint32_t, uint8_t, uint8_t);
+namespace x86_32::gdt {
+
+void init(void);
+void set_gate(int, uint32_t, uint32_t, uint8_t, uint8_t);
 void set_tss_stack(uint32_t);
 
-#ifdef __cplusplus
 }
+
 #endif

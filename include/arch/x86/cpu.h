@@ -5,7 +5,7 @@
  * @date Created on Sunday, November 26th 2017, 9:42:00 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-29T22:19:52-04:00
+ * @date Last modified time: 2018-11-11T10:43:20-05:00
  * 
  * I hand wrote this. It was painful.
  */
@@ -38,12 +38,23 @@
 #define CPUID_VENDOR_VMWARE     "VMwareVMWare"
 #define CPUID_VENDOR_XENVMM     "XenVMMXenVMM"
 
+enum cpu_vendor_list
+{
+    x86_VENDOR_UNKNOWN,
+    x86_VENDOR_AMD,
+    x86_VENDOR_INTEL
+};
+
 /* ================================= CPUID COMMANDS ================================= */
 //! Based on AMD Architecture Manual Vol. 3 Rev. 3.23 March 2017 (Pub 24594)
 //! and the Intel Developer's Manual Vol. 2A, July 2017
 //! See 3-190 and 3-191 of the Intel Developer's Manual Vol. 2A
 //! See Appendix E of the AMD Manual
-enum cpuid_cmd
+
+#define MAX_SUPPORTED_CPUID 0xd
+#define MAX_SUPPORTED_CPUID_EXT 0x8000001eU
+
+enum cpuid_leaf_num
 {
     CPUID_BASE       = 0x0, //!< Basic CPUID Information
     CPUID_MODEL_FEAT = 0x1,
@@ -55,32 +66,33 @@ enum cpuid_cmd
     CPUID_MWAIT     = 0x5, //!< MONITOR/MWAIT Leaf
     CPUID_THERM     = 0x6, //!< Thermal and Power Management Leaf
     CPUID_EXT_FEAT  = 0x7, //!< Structured Extended Feature Flags Enumeration Leaf (Output depends on ECX input value)
-    CPUID_PERF      = 0xA, //!< (INTEL) Architectural Performance Monitoring Leaf
-    CPUID_TOPOLOGY  = 0xB, //!< (INTEL) Extended Topology Enumeration Leaf 
-    CPUID_XSAVE     = 0xD, //!< Processor Extended State Enumeration Main Leaf (EAX = 0DH, ECX = 0)
+    CPUID_PERF      = 0xa, //!< (INTEL) Architectural Performance Monitoring Leaf
+    CPUID_TOPOLOGY  = 0xb, //!< (INTEL) Extended Topology Enumeration Leaf 
+    CPUID_XSAVE     = 0xd, //!< Processor Extended State Enumeration Main Leaf (EAX = 0DH, ECX = 0)
     
     // Extended CPUID commands
-    CPUID_EXT_BASE = 0x80000000,
-    CPUID_EXT_MODEL_FEAT = 0x80000001,
-    CPUID_EXT_CACHE = 0x80000006,
-    CPUID_EXT_ADDR_SIZE = 0x80000008,
-}
+    CPUID_EXT_BASE          = 0x80000000,
+    CPUID_EXT_MODEL_FEAT    = 0x80000001,
+    CPUID_EXT_CACHE         = 0x80000006,
+    CPUID_EXT_ADDR_SIZE     = 0x80000008,
+    CPUID_EXT_AMD_TOPO      = 0x8000001e,
+};
 
 //! CPUID result structure (4 registers)
 struct cpuid_leaf
 {
     //! All 4 registers are 32 bits regardless of CPU mode
     uint32_t a, b, c, d;
-}
+};
 
 //! CPUID query structure
 struct cpuid_bit
 {
-    enum cpuid_cmd leaf;
+    enum cpuid_leaf_num leaf;
     uint8_t word, bit;
 } __PACKED;
 
-#define CPUID_BIT(l, w, b) (struct cpuid_bit){ (enum cpuid_cmd)(l), (w), (b) }
+#define CPUID_BIT(l, w, b) (struct cpuid_bit){ (enum cpuid_leaf_num)(l), (w), (b) }
 
 /* ================================= CPUID FEATURES ================================= */
 /* Add feature bits here, use CPUID_BIT(cpuid command, register (eax -> 0, etc), bit) */
@@ -114,6 +126,7 @@ struct cpuid_bit
 #define x86_FEATURE_SYSCALL                CPUID_BIT(CPUID_EXT_MODEL_FEAT, 3, 11) //!< SYSCALL/SYSRET available in 64-bit mode.
 #define x86_FEATURE_NX                     CPUID_BIT(CPUID_EXT_MODEL_FEAT, 3, 20) //!< Execute Disable Bit available
 #define x86_FEATURE_LONGMODE               CPUID_BIT(CPUID_EXT_MODEL_FEAT, 4, 29) //!< Intel® 64 Architecture available if 1, works on AMD too (page 615 of AMD Vol. 3)
+
 // INTEL ONLY
 #define IA_FEATURE_VMX                    CPUID_BIT(CPUID_MODEL_FEAT, 2, 5) //!< Virtual Machine Extensions
 #define IA_FEATURE_TM2                    CPUID_BIT(CPUID_MODEL_FEAT, 2, 8) //!< Thermal Manager 2
@@ -122,7 +135,8 @@ struct cpuid_bit
 #define IA_FEATURE_X2APIC                 CPUID_BIT(CPUID_MODEL_FEAT, 2, 21) //!< x2APIC 
 #define IA_FEATURE_TSCDEADLINE            CPUID_BIT(CPUID_MODEL_FEAT, 2, 24) //!< TSC-Deadline
 #define IA_FEATURE_ACPI                   CPUID_BIT(CPUID_MODEL_FEAT, 3, 22) //!< ACPI–Thermal Monitor and Clock Ctr
-/* USELESS SHIT that appears on Intel platforms
+
+// USELESS SHIT that appears on Intel platforms
 #define IA_FEATURE_DTES64                 CPUID_BIT(CPUID_MODEL_FEAT, 2, 2)
 #define IA_FEATURE_DSCPL                  CPUID_BIT(CPUID_MODEL_FEAT, 2, 4)
 #define IA_FEATURE_SMX                    CPUID_BIT(CPUID_MODEL_FEAT, 2, 6)
@@ -134,7 +148,6 @@ struct cpuid_bit
 #define IA_FEATURE_PSN                    CPUID_BIT(CPUID_MODEL_FEAT, 3, 18)
 #define IA_FEATURE_DS                     CPUID_BIT(CPUID_MODEL_FEAT, 3, 21)
 #define IA_FEATURE_PBE                    CPUID_BIT(CPUID_MODEL_FEAT, 3, 31)
-*/
 
 // AMD ONLY
 //! On AMD platforms, its reserved for hypervisor to indicate guest status (RAV?)
@@ -142,7 +155,7 @@ struct cpuid_bit
 #define AMD_FEATURE_HYP                   CPUID_BIT(CPUID_MODEL_FEAT, 2, 31)
 #define AMD_FEATURE_TOPO                  CPUID_BIT(CPUID_EXT_MODEL_FEAT, 2, 22)
 
-/* USESLESS SHIT that appears in both platforms
+// USESLESS SHIT that appears in both platforms
 #define x86_FEATURE_PCMULQDQ               CPUID_BIT(CPUID_MODEL_FEAT, 2, 1) //!< PCLMULQDQ (Carryless Multiplication) instruction support
 #define x86_FEATURE_FMA                    CPUID_BIT(CPUID_MODEL_FEAT, 2, 12) //!< FMA (Fused Multiply Add) instruction support
 #define x86_FEATURE_CMPXCHG16B             CPUID_BIT(CPUID_MODEL_FEAT, 2, 13) //!< CMPXCHG16B instruction support
@@ -158,17 +171,63 @@ struct cpuid_bit
 #define x86_FEATURE_MTRR                   CPUID_BIT(CPUID_MODEL_FEAT, 3, 12)
 #define x86_FEATURE_MCA                    CPUID_BIT(CPUID_MODEL_FEAT, 3, 14)
 #define x86_FEATURE_PAT                    CPUID_BIT(CPUID_MODEL_FEAT, 3, 16)
-*/
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * Fetches the CPU vendor string i.e., GenuineIntel
- * @return Pointer to read-only vendor string
- */
-const char* cpu_vend_string(void);
+extern enum cpu_vendor_list x86_vendor;
+
+static inline const struct cpuid_leaf* x86_cpuid_leaf(enum cpuid_leaf_num leaf)
+{
+    extern struct cpuid_leaf _cpuid[MAX_SUPPORTED_CPUID + 1];
+    extern struct cpuid_leaf _cpuid_ext[MAX_SUPPORTED_CPUID_EXT - (uint32_t) CPUID_EXT_BASE + 1];
+    extern uint32_t max_cpuid;
+    extern uint32_t max_ext_cpuid;
+    if(leaf <= max_cpuid)
+        return &_cpuid[(uint32_t) leaf];
+    else if(leaf >= CPUID_EXT_BASE && leaf <= max_ext_cpuid)
+        return &_cpuid_ext[(uint32_t) leaf - (uint32_t) CPUID_EXT_BASE];
+    
+    return NULL;
+}
+
+static inline bool x86_feature_test(struct cpuid_bit bit)
+{
+    if(bit.word > 3 || bit.bit > 31) return false;
+
+    const struct cpuid_leaf* leaf = x86_cpuid_leaf(bit.leaf);
+    if(!leaf) return false;
+    switch(bit.word)
+    {
+        case 0: return !!((1u << bit.bit) & leaf -> a);
+        case 1: return !!((1u << bit.bit) & leaf -> b);
+        case 2: return !!((1u << bit.bit) & leaf -> c);
+        case 3: return !!((1u << bit.bit) & leaf -> d);
+        default: return false;
+    }
+}
+
+static inline uint8_t x86_linear_addresss_width(void)
+{
+    const struct cpuid_leaf* leaf = x86_cpuid_leaf(CPUID_EXT_ADDR_SIZE);
+    if(!leaf) return 0;
+    return (leaf -> a >> 8) & 0xff;
+}
+
+static inline uint8_t x86_physical_addresss_width(void)
+{
+    const struct cpuid_leaf* leaf = x86_cpuid_leaf(CPUID_EXT_ADDR_SIZE);
+    if(!leaf) return 0;
+    return leaf -> a & 0xff;
+}
+
+static inline uint8_t x86_get_clflush_line_size(void)
+{
+    const struct cpuid_leaf* leaf = x86_cpuid_leaf(CPUID_MODEL_FEAT);
+    if(!leaf) return 0;
+    return ((leaf -> a >> 8) & 0xff) * 8u;
+}
 
 #ifdef __cplusplus
 }

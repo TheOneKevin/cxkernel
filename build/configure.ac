@@ -11,7 +11,7 @@ CXXFLAGS="-Wall -Wextra -ffreestanding -fdiagnostics-color=auto -fno-rtti -fno-e
 CCFLAGS=" -Wall -Wextra -ffreestanding -fdiagnostics-color=auto "
 ASFLAGS=""
 NAFLAGS=""
-LDFLAGS="-lgcc -nostdlib -ffreestanding -nodefaultlibs -nostdinc++ "
+LDFLAGS="-lgcc -nostdlib -ffreestanding -nostdinc++ "
 
 OBJDIR="build/obj"
 BINDIR="build/bin"

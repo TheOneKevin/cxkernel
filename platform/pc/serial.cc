@@ -1,7 +1,6 @@
 /*
- * File:   serial.cc
- * Author: Kevin Dai
- * Email:  kevindai02@outlook.com
+ * @file   serial.cc
+ * @author Kevin Dai \<kevindai02@outlook.com\>
  *
  * @date Created on 2017-08-27T13:34:28-04:00
  *
@@ -12,7 +11,19 @@
 #include "arch/x86/llio.h"
 #include "platform/pc/serial.h"
 
-void pc_serial_init(uint16_t port)
+namespace pc::serial {
+
+static int received(uint16_t port)
+{
+    return inb(port + 5) & 1;
+}
+
+static int is_transmit_empty(uint16_t port)
+{
+    return inb(port + 5) & 0x20;
+}
+
+void init(uint16_t port)
 {
     outb(port + 1, 0x00);    // Disable all interrupts
     outb(port + 3, 0x80);    // Enable DLAB (set baud rate divisor)
@@ -23,24 +34,16 @@ void pc_serial_init(uint16_t port)
     outb(port + 4, 0x0B);    // IRQs enabled, RTS/DSR set
 }
 
-static int serial_received(uint16_t port)
+char read(uint16_t port)
 {
-    return inb(port + 5) & 1;
-}
-
-char pc_read_serial(uint16_t port)
-{
-    while (serial_received(port) == 0);
+    while (received(port) == 0);
     return inb(port);
 }
 
-static int is_transmit_empty(uint16_t port)
-{
-    return inb(port + 5) & 0x20;
-}
-
-void pc_write_serial(uint16_t port, char a)
+void write(uint16_t port, char a)
 {
     while (is_transmit_empty(port) == 0);
     outb(port, a);
+}
+
 }

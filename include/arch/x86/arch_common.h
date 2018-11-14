@@ -5,7 +5,7 @@
  * @date Created on Sunday, October 14th 2018, 9:06:54 am
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-19T16:07:53-04:00
+ * @date Last modified time: 2018-11-13T20:47:55-05:00
  */
 
 #pragma once
@@ -25,13 +25,11 @@
     var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))
 #define ARCH_VIRT_PHYS(addr) ((addr) + ARCH_VIRT_BASE)
 #define ARCH_PAGE_NUMBER(addr) ((addr) >> 22)
-#define HALT     asm volatile ("hlt");
+#define HALT asm volatile ("hlt");
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 
 #ifdef __cplusplus
 }

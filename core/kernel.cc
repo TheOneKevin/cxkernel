@@ -5,7 +5,7 @@
  * @date Created on Sunday, October 7th 2018, 4:12:12 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-29T19:27:54-04:00
+ * @date Last modified time: 2018-11-13T20:30:41-05:00
  */
 
 #include <stdio.h>
@@ -25,10 +25,10 @@ extern "C" void kernel_main(int sig, void* ptr)
     // Execute ctors, these really only initializes printf
     for(ctor_func* func_arr = &_ctors_start; func_arr != &_ctors_end; func_arr++) (*func_arr)();
 
-    Platform::GetConsole().clear();
-    Arch::EarlyInit(sig, ptr);
-    Platform::Init();
-    Arch::Init();
+    platform::get_console().clear();
+    arch::early_init(sig, ptr);
+    platform::init();
+    arch::init();
     
     for(;;);
 }
