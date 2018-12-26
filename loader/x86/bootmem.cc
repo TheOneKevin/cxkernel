@@ -121,3 +121,5 @@ void pmm_free_page_multi(phys_t address, int pages)
         bitmap_clrbit(alloc_map.bitmap, ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE),
         OS_LOG("Freeing page at 0x%lX\n", ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE);
 }
+
+
