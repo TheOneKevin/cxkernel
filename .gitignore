@@ -3,13 +3,15 @@ build/bin/*.bin
 build/bin/*.iso
 build/bin/*.tar
 build/bin/isodir/
+build/cmake-build/
 
 # Patches
 patches/*
 !patches/*.*
 
 # IDE Folders
-#.vscode/
+.vscode/
+#.idea/
 
 # Autohell
 autom4te.cache/
@@ -17,6 +19,7 @@ Makefile
 build/config.h
 build/config.log
 build/config.status
+cmake-build-debug-wsl/
 
 # Object files
 *.o
@@ -56,3 +59,4 @@ log.txt
 
 # Git
 .git/
+

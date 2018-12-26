@@ -12,7 +12,7 @@ ENTRY(_start)
 SECTIONS
 {
     . = 0x100000;
-    _kernel_start = .;
+    _lodr_start = .;
 
     .text ALIGN (4K) : AT (ADDR (.text))
     {
@@ -48,5 +48,5 @@ SECTIONS
         *(.bootloader_stack)
     }
 
-    _kernel_end = .;
+    _lodr_end = .;
 }

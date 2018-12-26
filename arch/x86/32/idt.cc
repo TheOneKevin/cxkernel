@@ -11,7 +11,7 @@
 #include <string.h>
 #include "arch/x86/interrupts.h"
 
-namespace x86::idt {
+namespace x86_32::idt {
 
 static idt_entry_t idt_entries[256];
 static idt_ptr_t idt_ptr;

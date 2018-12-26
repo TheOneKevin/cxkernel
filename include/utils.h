@@ -17,6 +17,7 @@
 #define OF ,
 
 #define CHECK_FLAG(flags, bit) ((flags) & (1 << (bit)))
+#define CHECK_MFLG(flags, mask) ((flags) & (mask))
 #define STRINGIFY_HIDDEN(x) #x
 #define STRINGIFY(x) STRINGIFY_HIDDEN(x)
 
@@ -66,5 +67,13 @@ struct krnl_sym
 #define __EXPORT_CTOR2(sym, x)  extern __typeof__(sym) sym __CTOR(x)
 #define __EXPORT_CTOR(...) GET_ARG3(__VA_ARGS__, __EXPORT_CTOR2, __EXPORT_CTOR1, )
 #define EXPORT_CTOR(...) __EXPORT_CTOR(__VA_ARGS__)(__VA_ARGS__)
+
+#ifdef __cplusplus
+#define __BEGIN_CDECLS extern "C" {
+#define __END_CDECLS }
+#else
+#define __BEGIN_CDECLS
+#define __END_CDECLS
+#endif
 
 // Yeah!

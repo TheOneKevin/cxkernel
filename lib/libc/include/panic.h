@@ -12,9 +12,7 @@
 
 #include "common.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
@@ -29,9 +27,7 @@ void __panic__(char* f, int l);
 #define PANIC(s)            \
 {                           \
     fprintf(STREAM_ERR, s"\n"); \
-    __panic__(__FILE__, __LINE__); \
+    __panic__(__FILENAME__, __LINE__); \
 }
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

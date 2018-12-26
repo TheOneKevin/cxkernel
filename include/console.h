@@ -17,20 +17,18 @@
 class Console
 {
 public:
+    virtual void log(char c);
     virtual void putc(char c);
     virtual void clear(void);
     virtual char getc(void);
 };
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 void console_emit(char);
 void console_puts(char*);
 char console_getc(void);
+void console_log(char*);
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

@@ -11,7 +11,6 @@
 // Have fun maintaining the code!
 
 #include <stdio.h>
-#include "console.h"
 
 EXPORT_SYMBOL(printf);
 EXPORT_SYMBOL(fprintf);
@@ -47,18 +46,24 @@ void fflush(int fd)
 {
     switch(fd)
     {
+        case STREAM_LOG:
+            *__stream_buffer[1] = 0; // Null terminator
+#ifdef LOG_ENABLE
+            console_log(&__stream_buffer_org[1][0]);
+#else
+            console_puts(&__stream_buffer_org[1][0]);
+#endif
+            __stream_buffer[1] = &__stream_buffer_org[1][0];
+            break;
         case STREAM_OUT:
             *__stream_buffer[0] = 0; // Null terminator
             __stream_buffer[0] = &__stream_buffer_org[0][0]; // Reset buffer ptr
             while((*__stream_buffer[0]) && ((__stream_buffer[0] - &__stream_buffer_org[0][0]) < 512))
                 console_emit(*__stream_buffer[0]++);
-            //os_log(&__stream_buffer_org[0][0]);
+#ifdef LOG_ALL_OUTPUT
+            console_log(&__stream_buffer_org[0][0]);
+#endif
             __stream_buffer[0] = &__stream_buffer_org[0][0];
-            break;
-        case STREAM_LOG:
-            *__stream_buffer[1] = 0; // Null terminator
-            //os_log(&__stream_buffer_org[1][0]);
-            __stream_buffer[1] = &__stream_buffer_org[1][0];
             break;
     }
 }

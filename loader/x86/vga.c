@@ -13,11 +13,11 @@
  */
 
 #include "console.h"
-#include "arch/x86/llio.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-void console_puts(char* c){ }
+void console_log(char* c) { while(*c) outb(0x3F8, *c++); }
+void console_puts(char* c){ while(*c) console_emit(*c++); }
 char console_getc(void){ return 0; }
 
 /* Hardware text mode color constants. */
@@ -62,6 +62,15 @@ void console_init(void)
 			terminal_buffer[index] = vga_entry(' ');
 		}
 	}
+
+	// Serial
+	outb(0x3F9, 0x00);
+	outb(0x3FB, 0x80);
+	outb(0x3F8, 0x03);
+	outb(0x3F9, 0x00);
+	outb(0x3FB, 0x03);
+	outb(0x3FA, 0xC7);
+	outb(0x3FC, 0x0B);
 } EXPORT_CTOR(console_init, 102);
 
 void console_upd(void)

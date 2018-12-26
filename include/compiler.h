@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "common.h"
 #include "utils.h"
+#include "config.h"
 
 #define __NO_OPTIMIZE   __OPTIMIZE(0)
 #define __OPTIMIZE(x)   __attribute__((optimize("O"#x)))
@@ -26,6 +26,11 @@
 #define __GET_CALLER(x) __builtin_return_address(0)
 #define __GET_FRAME(x)  __builtin_frame_address(0)
 #define DEPRECATED(x)   __attribute__((deprecated(x)))
+#ifdef CUSTOM_FILENAME
+    #define __FILENAME__ __FILENAME_CUSTOM__
+#else
+    #define __FILENAME__ __FILE__
+#endif
 
 #define unlikely(x) __builtin_expect((x), 0)
 #define likely(x) __builtin_expect((x), 1)

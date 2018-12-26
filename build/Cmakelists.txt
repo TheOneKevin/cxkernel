@@ -1,7 +1,0 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
-PROJECT(cxkernel)
-
-file(GLOB_RECURSE SRCS )
-
-configure_file(build/config.h.in build/config.h)
-include_directories(build include)

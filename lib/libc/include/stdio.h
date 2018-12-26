@@ -18,9 +18,7 @@
 //! Writes format string to the output stream with module name
 #define OS_PRN(fmt, ...) fprintf(STREAM_OUT, "[%-5s] " fmt, __MODULE__, ## __VA_ARGS__)
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 void fflush(int stream);
 void init_early_handles(void);
@@ -65,6 +63,4 @@ int ssprintf(void (*g)(char, char**), char* buf, const char* fmt, va_list args);
  */
 int sprintf(char* buf, const char* fmt, ...);
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

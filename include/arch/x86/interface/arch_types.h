@@ -11,6 +11,8 @@
 #pragma once
 #include "common.h"
 
+__BEGIN_CDECLS
+
 #if ARCH_TYPE == ARCH_x86_32
     typedef uint32_t arch_sz_t;
     typedef uint32_t virt_t;
@@ -21,10 +23,4 @@
     typedef uint64_t phys_t;
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

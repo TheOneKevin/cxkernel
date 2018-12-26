@@ -13,9 +13,7 @@
 #include "common.h"
 #include "arch/arch_types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 static inline void io_wait(void)
 {
@@ -113,6 +111,4 @@ static inline void cpuidc(uint32_t l, uint32_t c, uint32_t* eax, uint32_t* ebx, 
     asm volatile ("cpuid" : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx) : "a" (l), "c" (c));
 }
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

@@ -11,13 +11,9 @@
 #pragma once
 #include "common.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 void initialize_debugger(void);
 void breakpoint(void);
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

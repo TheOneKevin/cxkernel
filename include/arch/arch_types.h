@@ -17,6 +17,8 @@
 #include "common.h"
 #include STRINGIFY(arch/TARGET_FOLDER/interface/arch_types.h)
 
+__BEGIN_CDECLS
+
 struct MEMORY_MAP
 {
     virt_t KRN_MMAP;
@@ -33,3 +35,5 @@ struct MEMORY_MAP
 
     phys_t MOD_END;
 };
+
+__END_CDECLS

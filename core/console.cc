@@ -9,11 +9,11 @@
  */
 
 #include "console.h"
-#include "platform.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 void Console::putc(char c) { }
+void Console::log(char c)  { }
 void Console::clear(void)  { }
 char Console::getc(void)   { return 0; }
 
@@ -30,4 +30,9 @@ extern "C" void console_puts(char* s)
 extern "C" char console_getc(void)
 {
     return platform::get_console().getc();
+}
+
+extern "C" void console_log(char* s)
+{
+    while(*s) platform::get_console().log(*s++);
 }

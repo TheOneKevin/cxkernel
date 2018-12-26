@@ -10,18 +10,19 @@
 
 #pragma once
 
-#define ARCH_PAGE_SIZE      0x1000
+#define ARCH_PAGE_SHIFT     12
+#define ARCH_PAGE_SIZE      (1 << (ARCH_PAGE_SHIFT))
 #define ARCH_SYSCALL_INT_NO 0x2E
 
 #ifndef __ASSEMBLER__
-#include "common.h"
 // Everything
+#include "common.h"
 #include "arch/arch_types.h"
 
 #define ARCH_PAGE_MASK (~(ARCH_PAGE_SIZE - 1))
-#define ARCH_PAGE_MASK_LL ((~((unsigned long long)ARCH_PAGE_SIZE - 1ULL)))
-#define ARCH_PAGE_ALIGN(addr) (((addr) + ARCH_PAGE_SIZE - 1) & ARCH_PAGE_MASK)
-#define ARCH_PAGE_ALIGN_DOWN(n) (ARCH_PAGE_ALIGN(n) == n ? ARCH_PAGE_ALIGN(n) : ARCH_PAGE_ALIGN(n) - ARCH_PAGE_SIZE)
+//#define ARCH_PAGE_MASK_LL ((~((unsigned long long)ARCH_PAGE_SIZE - 1ULL)))
+#define ARCH_PAGE_ALIGN(addr) (((addr) + (__typeof__ (addr))(ARCH_PAGE_SIZE - 1)) & (__typeof__ (addr))ARCH_PAGE_MASK)
+#define ARCH_PAGE_ALIGN_DOWN(addr) ((addr) & (__typeof__ (addr))ARCH_PAGE_MASK)
 
 /*#define __perform_x86_syscall(n, r0, r1, r2, r3, r4, r5) \
     asm volatile("mov %1, %%ebp; int %0" :: "i" (ARCH_SYSCALL_INT_NO), "r" (r5), \
@@ -41,8 +42,6 @@
 #define ENABLE_INTERRUPTS  asm volatile ("sti");
 #define DISABLE_INTERRUPTS asm volatile ("cli");
 
-#endif // __ASSEMBLER__
-
 #ifdef __cplusplus
 
 namespace x86_32 {
@@ -60,3 +59,5 @@ void init();
 }
 
 #endif
+
+#endif // __ASSEMBLER__

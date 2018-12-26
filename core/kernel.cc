@@ -5,17 +5,13 @@
  * @date Created on Sunday, October 7th 2018, 4:12:12 pm
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-13T20:30:41-05:00
+ * @date Last modified time: 2018-11-13T21:07:22-05:00
  */
 
-#include <stdio.h>
-#include <icxxabi.h>
-
 #include "platform.h"
-#include "arch/arch_interface.h"
 
 // Random ctor shit
-typedef void(*ctor_func)(void);
+using ctor_func = void (*)();
 extern ctor_func _ctors_start;
 extern ctor_func _ctors_end;
 __NO_OPTIMIZE __NOINLINE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
@@ -27,7 +23,8 @@ extern "C" void kernel_main(int sig, void* ptr)
 
     platform::get_console().clear();
     arch::early_init(sig, ptr);
-    platform::init();
+    platform::early_init();
+    platform::init();    
     arch::init();
     
     for(;;);

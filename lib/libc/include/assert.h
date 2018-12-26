@@ -12,18 +12,14 @@
 
 #include "common.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 
 void __assert__(bool condition, char* s, char* msg, int l, char* f);
 void __assert_hard__(bool condition, char* s, char* msg, int l, char* f);
 
-#define ASSERT(c, s) __assert__(c, #c, s, __LINE__, __FILE__);
-#define ASSERT_HARD(c, s) __assert_hard__(c, #c, s, __LINE__, __FILE__);
+#define ASSERT(c, s) __assert__(c, #c, s, __LINE__, __FILENAME__);
+#define ASSERT_HARD(c, s) __assert_hard__(c, #c, s, __LINE__, __FILENAME__);
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

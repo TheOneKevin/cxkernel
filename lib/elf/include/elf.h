@@ -83,7 +83,7 @@ typedef struct {
     elf32_off_t     e_phoff;    //!< Program header offset in bytes
     elf32_off_t     e_shoff;    //!< Section header offset in bytes
     elf32_word_t    e_flags;    //!< Some flags
-    elf32_half_t    e_ehsize;   //! ELF header's size in bytes.
+    elf32_half_t    e_ehsize;   //!< ELF header's size in bytes.
     elf32_half_t    e_phentsize;
     elf32_half_t    e_phnum;
     elf32_half_t    e_shentsize;
@@ -204,7 +204,7 @@ typedef struct {
     elf64_xword_t p_filesz;
     elf64_xword_t p_memsz;
     elf64_xword_t p_align;
-} elef64_phdr_t;
+} elf64_phdr_t;
 
 typedef struct {
     elf64_word_t  sh_name;

@@ -12,8 +12,7 @@
 #include "common.h"
 #include "console.h"
 
-namespace platform
-{
+namespace platform  {
     Console& get_console(void);
     void early_init(void);
     void init(void);

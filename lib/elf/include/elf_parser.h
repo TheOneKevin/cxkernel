@@ -12,19 +12,35 @@
 #include "common.h"
 #include <elf.h>
 
+#ifdef __cplusplus
 namespace elf
 {
     struct Context
     {
-        elf32_ehdr_t* ehdr;
-        elf32_shdr_t* shdr;
-        elf32_phdr_t* phdr;
+        union
+        {
+            elf32_ehdr_t* img32;
+            elf64_ehdr_t* img64;
+        };
+        union
+        {
+            elf32_shdr_t* shdr32;
+            elf32_shdr_t* shdr64;
+        };
+        union
+        {
+            elf32_phdr_t* phdr32;
+            elf64_phdr_t* phdr64;
+        };
     };
 
     void load_img32(elf32_ehdr_t* img, Context& ctx);
     void load_img64(elf64_ehdr_t* img, Context& ctx);
     void load_img(void* img, Context& ctx);
-}
+} // namespace elf
+#endif
+
+__BEGIN_CDECLS
 
 /**
  * Determines whether a given elf header is valid.
@@ -36,3 +52,5 @@ static inline bool isValidElf(elf32_ehdr_t* h)
     return (h -> e_ident[EI_MAG0] == ELFMAG0) && (h -> e_ident[EI_MAG1] == ELFMAG1) &&
            (h -> e_ident[EI_MAG2] == ELFMAG2) && (h -> e_ident[EI_MAG3] == ELFMAG3);
 }
+
+__END_CDECLS

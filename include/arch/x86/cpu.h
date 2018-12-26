@@ -172,9 +172,7 @@ struct cpuid_bit
 #define x86_FEATURE_MCA                    CPUID_BIT(CPUID_MODEL_FEAT, 3, 14)
 #define x86_FEATURE_PAT                    CPUID_BIT(CPUID_MODEL_FEAT, 3, 16)
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 extern enum cpu_vendor_list x86_vendor;
 
@@ -200,10 +198,10 @@ static inline bool x86_feature_test(struct cpuid_bit bit)
     if(!leaf) return false;
     switch(bit.word)
     {
-        case 0: return !!((1u << bit.bit) & leaf -> a);
-        case 1: return !!((1u << bit.bit) & leaf -> b);
-        case 2: return !!((1u << bit.bit) & leaf -> c);
-        case 3: return !!((1u << bit.bit) & leaf -> d);
+        case 0: return ((1u << bit.bit) & leaf -> a) != 0;
+        case 1: return ((1u << bit.bit) & leaf -> b) != 0;
+        case 2: return ((1u << bit.bit) & leaf -> c) != 0;
+        case 3: return ((1u << bit.bit) & leaf -> d) != 0;
         default: return false;
     }
 }
@@ -229,6 +227,4 @@ static inline uint8_t x86_get_clflush_line_size(void)
     return ((leaf -> a >> 8) & 0xff) * 8u;
 }
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

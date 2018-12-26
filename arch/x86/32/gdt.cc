@@ -11,7 +11,7 @@
 #include <string.h>
 #include "arch/x86/32/gdt.h"
 
-namespace x86::gdt {
+namespace x86_32::gdt {
 
 static gdt_entry_t gdt_entries[6]; // null, code, data, user code, user data, tss
 static gdt_ptr_t gdt_ptr;

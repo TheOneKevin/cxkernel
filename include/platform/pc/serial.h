@@ -27,9 +27,9 @@
 #define COM4 0x2E8
 
 namespace pc::serial {
+    void init(uint16_t);
 
-void init(uint16_t);
-char read(uint16_t);
-void write(uint16_t, char);
+    char read(uint16_t);
 
+    void write(uint16_t, char);
 }

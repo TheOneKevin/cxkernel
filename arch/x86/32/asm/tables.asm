@@ -6,6 +6,8 @@
 ; @date Last modified by:   Kevin Dai
 ; @date Last modified time: 2018-10-27T19:53:31-04:00
 
+[BITS 32]
+
 [GLOBAL load_gdt]
 load_gdt:
     mov eax, [esp+4]  ; Get the pointer to the GDT, passed as a parameter.

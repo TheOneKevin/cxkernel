@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "common.h"
 #define ATEXIT_MAX_FUNCS 128
 
 typedef struct
@@ -23,14 +24,10 @@ typedef struct
     void* dso_handle;
 } atexit_func_entry_t;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 int __cxa_atexit(void (*f)(void *), void *objptr, void *dso);
 void __cxa_finalize(void *f);
 void __cxa_pure_virtual();
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

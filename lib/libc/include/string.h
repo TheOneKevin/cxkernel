@@ -17,9 +17,7 @@
 // IEEE Std 1003.1, 2004 Edition
 // Copyright © 2001-2004 The IEEE and The Open Group, All Rights reserved.
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 int      strncmp(const char *, const char *, size_t);
 int      memcmp(const void *, const void *, size_t);
@@ -52,6 +50,4 @@ char    *strtok_r(char *, const char *, char **);
 size_t   strxfrm(char *restrict, const char *restrict, size_t);
 */
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

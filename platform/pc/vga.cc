@@ -9,9 +9,6 @@
  */
 
 #include "string.h"
-#include "platform/pc/vga.h"
-#include "arch/x86/llio.h"
-#include "arch/x86/arch_common.h"
 
 static uint8_t fg_color = VGA_COLOR_WHITE;
 static uint8_t bg_color = VGA_COLOR_BLACK;

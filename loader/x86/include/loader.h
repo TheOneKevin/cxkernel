@@ -11,12 +11,8 @@
 #pragma once
 #include "common.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

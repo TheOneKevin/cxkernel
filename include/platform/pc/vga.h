@@ -35,15 +35,11 @@ enum vga_color
     VGA_COLOR_WHITE = 15,
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+__BEGIN_CDECLS
 
 void pc_terminal_move_cursor(void);
 void pc_terminal_scroll(void);
 void pc_terminal_clear(uint8_t bg);
 void pc_terminal_putc(const char c);
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

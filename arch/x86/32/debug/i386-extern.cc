@@ -5,11 +5,10 @@
  * @date Created on Sunday, May 27th 2018, 9:21:35 am
  * 
  * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-13T20:37:15-05:00
+ * @date Last modified time: 2018-11-13T21:05:01-05:00
  */
 
 #include "platform/pc/serial.h"
-#include "arch/x86/interrupts.h"
 
 using namespace pc;
 
@@ -29,7 +28,7 @@ extern "C" int getDebugChar()
 /* assign an exception handler */
 extern "C" void exceptionHandler(int a, unsigned int b)
 {
-    x86::idt::set_gate(a, b, 0x08, 0x8E);
+    x86_32::idt::set_gate(a, b, 0x08, 0x8E);
 }
 
 extern "C" void initGdbSerial()

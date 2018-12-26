@@ -10,12 +10,10 @@
 
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "common.h"
+
+__BEGIN_CDECLS
 
 
 
-#ifdef __cplusplus
-}
-#endif
+__END_CDECLS

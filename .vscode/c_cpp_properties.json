@@ -4,7 +4,9 @@
             "name": "Win32",
             "browse": {
                 "path": [
-                    "${workspaceFolder}/**"
+                    "${workspaceFolder}/**",
+                    "${workspaceFolder}/**/**",
+                    "${workspaceFolder}/**/**/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
