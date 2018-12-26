@@ -13,6 +13,7 @@
  */
 
 #include "console.h"
+#include "arch/x86/llio.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 

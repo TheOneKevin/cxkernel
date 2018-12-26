@@ -9,6 +9,7 @@
  */
 
 #include "console.h"
+#include "platform.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 

@@ -8,7 +8,11 @@
  * @date Last modified time: 2018-11-13T21:07:22-05:00
  */
 
+#include <stdio.h>
+#include <icxxabi.h>
+
 #include "platform.h"
+#include "arch/arch_interface.h"
 
 // Random ctor shit
 using ctor_func = void (*)();

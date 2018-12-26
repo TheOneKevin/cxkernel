@@ -20,11 +20,22 @@
 // Internal includes
 #include "include/global.h"
 // Shared common files (nothing kernel related)
+#include "common.h"
+#include "system.h"
+#include "arch/x86/multiboot.h"
 // Standard library
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+#include <panic.h>
+#include <math.h>
 // Elf parser library
+#include <elf.h>
 #include <elf_parser.h>
+#include <math.h>
 // Arch-specific stuff
 #include "arch/x86/cpu.h"
+#include "arch/x86/arch_utils.h"
 
 // Random ctor shit
 using ctor_func = void (*)();

@@ -11,6 +11,7 @@
 // Have fun maintaining the code!
 
 #include <stdio.h>
+#include "console.h"
 
 EXPORT_SYMBOL(printf);
 EXPORT_SYMBOL(fprintf);

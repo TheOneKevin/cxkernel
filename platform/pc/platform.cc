@@ -9,6 +9,12 @@
  */
 
 #include "console.h"
+#include "platform.h"
+#include "platform/pc/vga.h"
+#include "platform/pc/pic.h"
+#include "platform/pc/serial.h"
+
+#include "arch/x86/interrupts.h"
 
 using namespace pc;
 

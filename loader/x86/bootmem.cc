@@ -13,6 +13,9 @@
 
 #include <stdio.h>
 #include <bitmap.h>
+#include <string.h>
+#include <math.h>
+#include <panic.h>
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/cpu.h"
 #include "include/global.h"

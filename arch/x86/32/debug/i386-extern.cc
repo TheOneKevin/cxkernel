@@ -9,6 +9,7 @@
  */
 
 #include "platform/pc/serial.h"
+#include "arch/x86/interrupts.h"
 
 using namespace pc;
 

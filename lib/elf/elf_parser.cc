@@ -11,6 +11,7 @@
 #define __MODULE__ "ELF "
 
 #include <string.h>
+#include <stdio.h>
 #include <elf.h>
 #include <elf_parser.h>
 
