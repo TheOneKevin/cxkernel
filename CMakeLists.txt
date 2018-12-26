@@ -7,6 +7,7 @@ set(CMAKE_C_FLAGS   "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=gnu99 ")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=c++14 ")
 set(CMAKE_CXX_LINK_FLAGS "-lgcc -nostdlib")
 
+# Target selection
 if(${TARGET} MATCHES ^i*86*$|^x86_32$|IA32|x86)
     message("Building for x86_32")
     # Setup variables
@@ -17,7 +18,7 @@ if(${TARGET} MATCHES ^i*86*$|^x86_32$|IA32|x86)
     set(CMAKE_ASM_NASM_FLAGS -g)
     set(CMAKE_ASM_NASM_OBJECT_FORMAT elf)
     enable_language(ASM_NASM)
-    set(CMAKE_ASM-ATT_SOURCE_FILE_EXTENSIONS s;S)
+    set(CMAKE_ASM-ATT_SOURCE_FILE_EXTENSIONS s;S;i)
     set(CMAKE_ASM_NASM_SOURCE_FILE_EXTENSIONS nasm;asm)
     # Define flags
     string(APPEND CMAKE_CXX_FLAGS "-fno-rtti -fno-exceptions -nostdinc++ -fno-omit-frame-pointer")
@@ -62,6 +63,19 @@ pprune(SOURCES3 /loader/)
 pprune(SOURCES4 /loader/)
 set(SOURCES ${SOURCES1} ${SOURCES2} ${SOURCES3} ${SOURCES4})
 
+# Preprocess assembly
+foreach(_file ${SOURCES3})
+    LIST(REMOVE_ITEM SOURCES3 ${_file})
+    string(REPLACE ".S" "" _nfile "${_file}") # Capital .S
+    add_custom_target(
+            PREPROCESS_${_nfile}
+            COMMAND ${TOOLCHAIN_PREFIX}gcc -nostdlib -ffreestanding -I$<JOIN:$<TARGET_PROPERTY:INCLUDE_DIRECTORIES>, -I> -x assembler-with-cpp -E ${_file} -o ${_nfile}.i
+    )
+    LIST(APPEND SOURCE3 ${_nfile})
+    add_dependencies(cxkrnl PREPROCESS_${_nfile})
+endforeach()
+
+# Build binary
 add_executable(cxkrnl ${SOURCES})
 lprune_target(cxkrnl "${PRXDIR}")
 set_target_properties(cxkrnl PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/build/obj/arch/${BITS}_linker.ld")
