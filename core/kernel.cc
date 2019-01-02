@@ -12,7 +12,7 @@
 #include <icxxabi.h>
 
 #include "platform.h"
-#include "arch/arch_interface.h"
+#include "arch/interface.h"
 
 // Random ctor shit
 using ctor_func = void (*)();
@@ -24,12 +24,11 @@ extern "C" void kernel_main(int sig, void* ptr)
 {
     // Execute ctors, these really only initializes printf
     for(ctor_func* func_arr = &_ctors_start; func_arr != &_ctors_end; func_arr++) (*func_arr)();
-
     platform::get_console().clear();
+    printf("Hello, World!\n");
     arch::early_init(sig, ptr);
     platform::early_init();
     platform::init();    
     arch::init();
-    
     for(;;);
 }

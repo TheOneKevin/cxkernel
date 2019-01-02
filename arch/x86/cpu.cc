@@ -37,7 +37,7 @@ static void x86_cpuid_init(void)
     {
         uint32_t id[3];
         char vendor[12];
-    } v;
+    } v { };
 
     v.id[0] = _cpuid[0].b;
     v.id[1] = _cpuid[1].c;
@@ -57,5 +57,3 @@ static void x86_cpuid_init(void)
     for(uint32_t i = 1; i - 1 < max_ext_cpuid - CPUID_EXT_BASE; i++)
         cpuidc(i + CPUID_EXT_BASE, 0, &_cpuid_ext[i].a, &_cpuid_ext[i].b, &_cpuid_ext[i].c, &_cpuid_ext[i].d);
 } EXPORT_CTOR(x86_cpuid_init);
-
-

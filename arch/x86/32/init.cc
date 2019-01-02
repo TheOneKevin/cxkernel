@@ -8,7 +8,7 @@
  * @date Last modified time: 2018-11-13T20:48:04-05:00
  */
 
-#include "arch/arch_interface.h"
+#include "arch/interface.h"
 #include "arch/x86/32/gdt.h"
 #include "arch/x86/32/idt.h"
 

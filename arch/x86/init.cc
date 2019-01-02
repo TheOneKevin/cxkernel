@@ -8,14 +8,14 @@
  * @date Last modified time: 2018-11-13T20:46:25-05:00
  */
 
-#define __MODULE__ "ARCH "
+#define __MODULE__ "ARCH"
 
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
 
 #include "console.h"
-#include "arch/arch_interface.h"
+#include "arch/interface.h"
 #include "arch/x86/multiboot.h"
 #include "arch/x86/global.h"
 

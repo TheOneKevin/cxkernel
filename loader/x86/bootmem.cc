@@ -8,9 +8,7 @@
  * @author Kevin Dai \<kevindai02@outlook.com\>
  * @date   Created on December 22 2018, 9:58 PM
  */
-
 #define __MODULE__ "BOOT"
-
 #include <stdio.h>
 #include <bitmap.h>
 #include <string.h>
@@ -19,6 +17,8 @@
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/cpu.h"
 #include "include/global.h"
+
+extern "C" {
 
 // External symbols
 extern uint32_t _lodr_start;
@@ -39,7 +39,7 @@ void init_bootmm32()
         PANIC("Not enough memory.\nNeeds at least 64 MB of continuous physical ram at 0x100000!\n");
         fprintf(
                 STREAM_LOG, "  Entry address: 0x%016lX Entry length: 0x%016lX (0x%02X)\n",
-                (uint64_t) mmap->addr, (uint64_t) mmap->len, (uint64_t) mmap->type
+                (uint64_t) mmap->addr, (uint64_t) mmap->len, mmap->type
         );
     }
     // Memory Topology
@@ -99,12 +99,13 @@ bool pmm_update_all(void)
     return false;
 }
 
-phys_t pmm_alloc_page(void)
+phys_t pmm_alloc_page(bool clear)
 {
     if(bitmap_tstbit(alloc_map.bitmap, _ptr) || _ptr <= 1)
         pmm_update_all(); // If it is not a free page, find one
     bitmap_setbit(alloc_map.bitmap, _ptr);
-    OS_LOG("Alloc page at %lX\n", (uint64_t)(_ptr * ARCH_PAGE_SIZE));
+    OS_LOG("Alloc %s page at 0x%lX\n", clear ? "cleared" : "new", (uint64_t)(_ptr * ARCH_PAGE_SIZE));
+    if(clear) memset((void*)(_ptr * ARCH_PAGE_SIZE), 0, ARCH_PAGE_SIZE);
     return (_ptr--) * ARCH_PAGE_SIZE; // Return the address of the allocated page
 }
 
@@ -121,3 +122,5 @@ void pmm_free_page_multi(phys_t address, int pages)
         bitmap_clrbit(alloc_map.bitmap, ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE),
         OS_LOG("Freeing page at 0x%lX\n", ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE);
 }
+
+} // End extern "C"

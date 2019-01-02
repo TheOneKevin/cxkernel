@@ -15,4 +15,4 @@
 #pragma once
 
 #include "common.h"
-#include STRINGIFY(arch/TARGET_FOLDER/interface/atomic.h)
+#include STRINGIFY(arch/TARGET_FOLDER/interface/arch_atomic.h)

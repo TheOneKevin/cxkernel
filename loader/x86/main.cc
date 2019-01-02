@@ -36,6 +36,7 @@
 // Arch-specific stuff
 #include "arch/x86/cpu.h"
 #include "arch/x86/arch_utils.h"
+#include "arch/x86/interface/arch_types.h"
 
 // Random ctor shit
 using ctor_func = void (*)();
@@ -54,8 +55,11 @@ static elf::Context ctx;
 
 void init32()
 {
+    initgdt32();
     init_bootmm32();
     elf::load_img(reinterpret_cast<void*>(cxkrnl32 -> mod_start), ctx);
+    loader::get_mmu().init();
+    loader::map_program32(ctx);
 }
 
 void init64()
@@ -133,7 +137,7 @@ extern "C" void main(int sig, multiboot_info_t* ptr)
         else if(!memcmp((void *) g_mbt.cmdline, "exec64", 6))
         {
             ASSERT_HARD(foundKrnl64, "Force 64 bit execute error: 64 bit kernel not found, aborting...");
-            ASSERT_HARD(x86_feature_test(x86_FEATURE_LONGMODE), "Error: CPU does not support long mode.")
+            ASSERT_HARD(x86_feature_test(x86_FEATURE_LONGMODE), "Error: CPU does not support long mode.");
             init64();
         }
         else
@@ -146,7 +150,7 @@ extern "C" void main(int sig, multiboot_info_t* ptr)
     {
         if(x86_feature_test(x86_FEATURE_LONGMODE) && foundKrnl64) init64();
         else if(foundKrnl32) init32();
-        else PANIC("Error: No compatible kernel found.")
+        else PANIC("Error: No compatible kernel found.");
     }
 
     // Hang forever

@@ -12,8 +12,11 @@
 #include "common.h"
 #include "console.h"
 
-namespace platform  {
+#ifdef __cplusplus
+namespace platform
+{
     Console& get_console(void);
     void early_init(void);
     void init(void);
 }
+#endif

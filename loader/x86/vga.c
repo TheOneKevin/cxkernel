@@ -17,7 +17,14 @@
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-void console_log(char* c) { while(*c) outb(0x3F8, *c++); }
+void console_log(char* c)
+{
+	while(*c)
+	{
+		while((inb(0x3FD) & 0x20) == 0);
+		outb(0x3F8, *c++);
+	}
+}
 void console_puts(char* c){ while(*c) console_emit(*c++); }
 char console_getc(void){ return 0; }
 

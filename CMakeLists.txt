@@ -2,6 +2,17 @@ cmake_minimum_required(VERSION 3.5)
 project(osdev)
 include(build/utils.cmake)
 
+# Options
+option(TARGET "Target platform" "x86")
+option(BITS "Target bits (64 or 32)" "x86_32")
+option(TOOLCHAIN_PATH "Path of the cross compiler toolchain" "~/barebones-toolchain/cross/x86_64/bin/")
+option(PRXDIR "This is the absolute path to the project folder (optional)" "")
+option(CUSTOM_FILENAME "Use the custome __FILENAME__ instead of __FILE__" OFF)
+option(LOG_ENABLE "Enable logging to serial" ON)
+option(LOG_ALL_OUTPUT "Redirect all stdout to screen and serial" ON)
+
+# More stuff
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Default flags that shouldn't really change
 set(CMAKE_C_FLAGS   "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=gnu99 ")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=c++14 ")
@@ -39,6 +50,9 @@ if(NOT HOME)
         set(HOME $ENV{HOME})
     endif()
 endif()
+
+# Generate header
+configure_file(build/config.h.in ../config.h)
 
 include_directories(build)
 include_directories(include)

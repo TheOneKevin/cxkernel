@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <elf_parser.h>
 #include "common.h"
 #include "system.h"
 #include "arch/x86/arch_utils.h"
@@ -31,8 +32,23 @@ extern phys_t MAX_MEM;
 // This initializes the bitmap (declared in bootmem.cc)
 void init_bootmm32();
 bool pmm_update_all(void);
-phys_t pmm_alloc_page(void);
+phys_t pmm_alloc_page(bool clear = true);
 void pmm_free_page(phys_t address);
 void pmm_free_page_multi(phys_t address, int pages);
 
+// GDT stuff
+void initgdt32();
+
 __END_CDECLS
+
+namespace loader
+{
+    class mmu
+    {
+    public:
+        virtual void init();
+        virtual void map(uint64_t virt, uint64_t phys, uint16_t flags);
+    };
+    mmu& get_mmu(void);
+    void map_program32(elf::Context& ctx);
+}  // namespace loader

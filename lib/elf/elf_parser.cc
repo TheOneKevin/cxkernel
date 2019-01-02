@@ -8,7 +8,7 @@
  * @date Last modified time: 2018-11-13T20:23:58-05:00
  */
 
-#define __MODULE__ "ELF "
+#define __MODULE__ "ELF"
 
 #include <string.h>
 #include <stdio.h>
@@ -146,7 +146,6 @@ namespace elf
             load_img32(hdr, ctx);
         else if(isValidElf(hdr) && hdr->e_ident[EI_CLASS] == ELFCLASS64)
             load_img64(reinterpret_cast<elf64_ehdr_t*>(hdr), ctx);
-
     }
 
 } // namespace elf

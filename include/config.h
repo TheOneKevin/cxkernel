@@ -10,13 +10,9 @@
 
 #pragma once
 
+// Define some constants
 #define ARCH_x86_32 1
 #define ARCH_x86_64 2
-#define CUSTOM_FILENAME
-#define LOG_ENABLE
-#ifdef LOG_ENABLE
-    #define LOG_ALL_OUTPUT
-#endif
 
-// Include the autoconf generated header
+// Include the autoconf generated header at the bottom
 #include "../build/config.h"

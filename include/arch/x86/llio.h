@@ -11,7 +11,7 @@
 #pragma once
 
 #include "common.h"
-#include "arch/arch_types.h"
+#include "arch/types.h"
 
 __BEGIN_CDECLS
 
@@ -112,3 +112,14 @@ static inline void cpuidc(uint32_t l, uint32_t c, uint32_t* eax, uint32_t* ebx, 
 }
 
 __END_CDECLS
+
+#define CR0_PE (1 << 0)  //!< Protected mode enable
+#define CR0_WP (1 << 16) //!< Write protect enable
+#define CR0_NW (1 << 29) //!< Globally disables write-through caching
+#define CR0_CD (1 << 30) //!< Globally disables memory cache
+#define CR0_PG (1 << 31) //!< Paging enable
+
+#define CR4_PSE (1 << 4) //!< PSE enable
+#define CR4_PAE (1 << 5) //!< PAE enable
+#define CR4_PGE (1 << 7) //!< Global pages enable
+

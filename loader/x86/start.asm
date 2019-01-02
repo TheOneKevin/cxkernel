@@ -45,45 +45,6 @@ stack_bottom:
     resb 4096 ; This should be enough
 stack_top:
 
-; Paging tables and directories for higher half kernel
-; Statically allocated for temporary usage
-SECTION .bss nobits alloc write
-
-[GLOBAL _kernel_dir1]
-[GLOBAL _kernel_dir2]
-[GLOBAL _kernel_dir3]
-[GLOBAL _kernel_dir4]
-[GLOBAL _kernel_table1]
-[GLOBAL _kernel_table2]
-[GLOBAL _kernel_table3]
-[GLOBAL _kernel_table4]
-[GLOBAL _kernel_table5]
-[GLOBAL _kernel_table6]
-[GLOBAL _kernel_table7]
-
-align 0x1000
-_kernel_dir1: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_dir2: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_dir3: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_dir4: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_table1: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_table2: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_table3: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_table4: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_table5: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_table6: resb ARCH_PAGE_SIZE
-align 0x1000
-_kernel_table7: resb ARCH_PAGE_SIZE
-
 ; The linker script specifies _start as the entry point to the kernel and the
 ; bootloader will jump to this position once the kernel has been loaded. It
 ; doesn't make sense to return from this function as the bootloader is gone.
@@ -102,3 +63,17 @@ _start:
 .0b:
     hlt
     jmp .0b
+
+[GLOBAL load_gdt]
+load_gdt:
+    mov eax, [esp+4]  ; Get the pointer to the GDT, passed as a parameter.
+    lgdt [eax]        ; Load the new GDT pointer
+    mov ax, 0x10      ; 0x10 is the offset in the GDT to our data segment
+    mov ds, ax        ; Load all data segment selectors
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+    jmp 0x08:.flush   ; 0x08 is the offset to our code segment: Far jump!
+.flush:
+    ret

@@ -17,7 +17,7 @@
 #ifndef __ASSEMBLER__
 // Everything
 #include "common.h"
-#include "arch/arch_types.h"
+#include "arch/types.h"
 
 #define ARCH_PAGE_MASK (~(ARCH_PAGE_SIZE - 1))
 //#define ARCH_PAGE_MASK_LL ((~((unsigned long long)ARCH_PAGE_SIZE - 1ULL)))

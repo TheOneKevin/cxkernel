@@ -33,10 +33,8 @@ void set_gate(int idx, uint32_t base, uint16_t sel, uint8_t flags)
 {
     idt_entries[idx].base_lo = base & 0xFFFF;
     idt_entries[idx].base_hi = (base >> 16) & 0xFFFF;
-
     idt_entries[idx].sel = sel;
     idt_entries[idx].always0 = 0;
-
     idt_entries[idx].flags = flags /* | 0x60 */;
 }
 

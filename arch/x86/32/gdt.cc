@@ -45,9 +45,9 @@ void init(void)
     tss_entry.SS0 = 0x10;
     tss_entry.ESP0 = 0x0;
     tss_entry.CS = 0x0B;
-    tss_entry.SS =
-    tss_entry.ES =
-    tss_entry.FS =
+    tss_entry.SS = 0x13;
+    tss_entry.ES = 0x13;
+    tss_entry.FS = 0x13;
     tss_entry.GS = 0x13;
     tss_entry.IO_MAP_BASE = sizeof(tss_entry);
 

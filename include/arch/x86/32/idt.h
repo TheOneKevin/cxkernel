@@ -11,7 +11,7 @@
 #pragma once
 
 #include "common.h"
-#include "arch/arch_types.h"
+#include "arch/types.h"
 
 // Define each IRQ so its more organized
 #define IRQ0 32

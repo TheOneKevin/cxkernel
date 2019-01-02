@@ -21,7 +21,7 @@
 #include "arch/x86/multiboot.h"
 
 #define __9042352479_TMP1__(TYPE, v) TYPE v
-#define BOCHS_MAGIC_BREAK() { kprintf("[BCHSB] line: %d at %s\n", __LINE__, __FILENAME__); asm volatile("xchg %bx, %bx"); }
+#define BOCHS_MAGIC_BREAK() { printf("[BCHSB] line: %d at %s\n", __LINE__, __FILENAME__); asm volatile("xchg %bx, %bx"); }
 #define ARCH_FOREACH_MMAP(var, mbt) \
     for(__9042352479_TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) ((mbt) -> mmap_addr + ARCH_VIRT_BASE); \
     (unsigned int) (var) < (mbt) -> mmap_addr + (mbt) -> mmap_length + ARCH_VIRT_BASE; \

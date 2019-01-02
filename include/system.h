@@ -12,7 +12,7 @@
 #pragma once
 
 #include "common.h"
-#include "arch/arch_types.h"
+#include "arch/types.h"
 
 __BEGIN_CDECLS
 

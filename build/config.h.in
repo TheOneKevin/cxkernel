@@ -1,25 +1,15 @@
-/* config.h.in.  Generated from configure.ac by autoheader.  */
+/* Auto generated header template for CMake */
 
-/* The architecture type */
-#undef ARCH_TYPE
+// To add a feature, first add define here:
+#cmakedefine CUSTOM_FILENAME
+#cmakedefine LOG_ENABLE
+#cmakedefine LOG_ALL_OUTPUT
 
-/* Define to the address where bug reports for this package should be sent. */
-#undef PACKAGE_BUGREPORT
+// Add any valued defines here:
+#define ARCH_TYPE           ARCH_@BITS@
+#define TARGET_FOLDER       @TARGET@
 
-/* Define to the full name of this package. */
-#undef PACKAGE_NAME
-
-/* Define to the full name and version of this package. */
-#undef PACKAGE_STRING
-
-/* Define to the one symbol short name of this package. */
-#undef PACKAGE_TARNAME
-
-/* Define to the home page for this package. */
-#undef PACKAGE_URL
-
-/* Define to the version of this package. */
-#undef PACKAGE_VERSION
-
-/* The target folder */
-#undef TARGET_FOLDER
+// Then add any logic here
+#ifndef LOG_ENABLE
+#undef LOG_ALL_OUTPUT
+#endif
