@@ -59,7 +59,7 @@ void init32()
     init_bootmm32();
     elf::load_img(reinterpret_cast<void*>(cxkrnl32 -> mod_start), ctx);
     loader::get_mmu().init();
-    loader::map_program32(ctx);
+    loader::run_program32(ctx);
 }
 
 void init64()

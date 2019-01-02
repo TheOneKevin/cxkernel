@@ -50,5 +50,5 @@ namespace loader
         virtual void map(uint64_t virt, uint64_t phys, uint16_t flags);
     };
     mmu& get_mmu(void);
-    void map_program32(elf::Context& ctx);
+    void run_program32(elf::Context& ctx);
 }  // namespace loader

@@ -97,33 +97,4 @@ namespace loader
     {
         return static_cast<mmu&>(__mmu32_nopae);
     }
-
-    void map_program32(elf::Context& ctx)
-    {
-        get_mmu().map(ARCH_VIRT_BASE + 0xB8000, 0xB8000, PTE_RW | PTE_PR);
-        //TODO: The identity map of 4 MiB may not cover the entire program header if the loader become too large.
-        for(int i = 0; i < ctx.img32->e_phnum; i++)
-        {
-            ASSERT(ctx.phdr32[i].p_align == ARCH_PAGE_SIZE, "Program section not page aligned!");
-            virt_t v = ctx.phdr32[i].p_vaddr;
-            phys_t p = ctx.phdr32[i].p_offset + (phys_t) ctx.img32;
-            uint8_t flags = PTE_PR | PTE_RW;
-            //if(CHECK_MFLG(ctx.phdr32[i].p_flags, PF_W)) flags |= PTE_RW;
-            if(ctx.phdr32[i].p_filesz != ctx.phdr32[i].p_memsz)
-            {
-                for(uint32_t j = 0; j < ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz); j += ARCH_PAGE_SIZE)
-                    get_mmu().map(v + j, pmm_alloc_page(false), flags);
-                memset((void*) v, 0, ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz));
-                memcpy((void*) v, (void*)(ctx.phdr32[i].p_offset + (uint32_t) ctx.img32), ctx.phdr32[i].p_filesz);
-            }
-            else
-            {
-                for(uint32_t j = 0; j < ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz); j += ARCH_PAGE_SIZE)
-                    get_mmu().map(v + j, p + j, flags);
-            }
-        }
-        OS_LOG("=== Loader will now exit ===\n");
-        ((void (*)(void))(ctx.img32->e_entry))(/*sig, ptr*/);
-        for(;;);
-    }
 }  // namespace loader
