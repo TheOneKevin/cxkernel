@@ -1,12 +1,12 @@
-/*
- * @file   pic.c
+/**
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
+ * @file   pic.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
- *
- * @date Created on 30-Jul-2017 05:17:59 PM
- *
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2017-11-26T12:44:29-05:00
- * 
+ * @date   Created on July 30 2017, 5:17 PM
  */
 
 #include "arch/x86/llio.h"

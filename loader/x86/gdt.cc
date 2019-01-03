@@ -12,8 +12,6 @@
 #include "arch/x86/32/gdt.h"
 #include "include/global.h"
 
-extern "C" {
-
 static gdt_entry_t gdt_entries[6]; // null, code, data, user code, user data, tss
 static gdt_ptr_t gdt_ptr;
 extern "C" void load_gdt(uint32_t);
@@ -27,6 +25,7 @@ static void set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uin
     gdt_entries[idx].granularity |= gran & 0xF0;
     gdt_entries[idx].access = access;
 }
+
 void initgdt32(void)
 {
     gdt_ptr.limit = (sizeof(gdt_entry_t) * 6) - 1;
@@ -36,5 +35,8 @@ void initgdt32(void)
     set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
     load_gdt((uint32_t) &gdt_ptr);
 }
+
+void initgdt64(void)
+{
 
 }

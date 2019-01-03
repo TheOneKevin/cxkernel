@@ -13,6 +13,21 @@
 
 #include "common.h"
 
+#ifdef __cplusplus
+
+namespace arch
+{
+    class Mmu
+    {
+    public:
+        virtual void init();
+        virtual void map_page(uint64_t virt, uint64_t phys, uint64_t flags);
+    };
+    Mmu& get_mmu(void);
+}
+
+#endif
+
 __BEGIN_CDECLS
 
 __END_CDECLS

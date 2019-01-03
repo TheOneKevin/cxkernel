@@ -1,18 +1,20 @@
 /**
- * @file   main.c
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
+ * @file   main.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on Saturday, October 27th 2018, 11:30:14 pm
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-13T20:29:17-05:00
- * 
+ * @date   Created on October 27 2018, 11:30 PM
+ *
  * This is the main loader for our kernel. The loader should use
  * as little code as possible. Any source files used from the kernel
  * must be added to sources.mk, as to deter heavy reliance on kernel code.
  * Standard libraries and i/o should be enough. As the codebase is small
  * and isolated, we don't need to worry too much about header files
  * and good extensibility and such. We can just manually extern in symbols :)
+ *
  */
 
 #define __MODULE__ "LODR"

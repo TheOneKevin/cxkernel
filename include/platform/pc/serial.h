@@ -1,20 +1,12 @@
 /**
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
  * @file   serial.h
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on Saturday, October 27th 2018, 11:46:27 am
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-13T20:24:38-05:00
- */
-/**
- * @file   serial.h
- * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on Sunday, November 26th 2017, 9:42:00 pm
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-07-05T20:42:46-04:00
+ * @date   Created on November 26 2017, 9:42 PM
  */
 
 #pragma once
@@ -26,10 +18,9 @@
 #define COM3 0x3E8
 #define COM4 0x2E8
 
-namespace pc::serial {
+namespace pc::serial
+{
     void init(uint16_t);
-
     char read(uint16_t);
-
     void write(uint16_t, char);
 }

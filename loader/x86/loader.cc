@@ -52,4 +52,4 @@ namespace loader
         ((void (*)(void)) (ctx.img32->e_entry))(/*sig, ptr*/);
         for(;;);
     }
-}  // namespace loader
+} // namespace loader

@@ -13,7 +13,7 @@
  * getc() and puts() with dummy functions.
  */
 
-#include "console.h"
+#include "platform/console.h"
 #include "arch/x86/llio.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"

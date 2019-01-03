@@ -1,12 +1,13 @@
 /**
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
  * @file   cpu.h
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on Sunday, November 26th 2017, 9:42:00 pm
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-11T10:43:20-05:00
- * 
+ * @date   Created on November 26 2017, 9:42 PM
+ *
  * I hand wrote this. It was painful.
  */
 
@@ -186,7 +187,6 @@ static inline const struct cpuid_leaf* x86_cpuid_leaf(enum cpuid_leaf_num leaf)
         return &_cpuid[(uint32_t) leaf];
     else if(leaf >= CPUID_EXT_BASE && leaf <= max_ext_cpuid)
         return &_cpuid_ext[(uint32_t) leaf - (uint32_t) CPUID_EXT_BASE];
-    
     return NULL;
 }
 

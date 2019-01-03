@@ -1,11 +1,12 @@
 /**
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
  * @file   vga.h
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on Saturday, October 13th 2018, 6:20:27 pm
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-27T17:52:33-04:00
+ * @date   Created on October 13 2018, 6:20 PM
  */
 
 #pragma once
@@ -14,6 +15,8 @@
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
 #define VGA_FRAMEBUFFER 0xB8000
+
+__BEGIN_CDECLS
 
 enum vga_color
 {
@@ -35,11 +38,16 @@ enum vga_color
     VGA_COLOR_WHITE = 15,
 };
 
-__BEGIN_CDECLS
-
-void pc_terminal_move_cursor(void);
-void pc_terminal_scroll(void);
-void pc_terminal_clear(uint8_t bg);
-void pc_terminal_putc(const char c);
-
 __END_CDECLS
+
+#ifdef __cplusplus
+
+namespace pc::vga
+{
+    void move_cursor(void);
+    void scroll(void);
+    void clear(uint8_t bg);
+    void putc(char c);
+}
+
+#endif

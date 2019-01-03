@@ -1,11 +1,12 @@
 /**
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
  * @file   cpu.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on 09-Aug-2017 02:10:45 PM
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-11T09:33:47-05:00
+ * @date   Created on August 09 2018, 2:10 PM
  */
 
 #include <string.h>

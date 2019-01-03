@@ -52,4 +52,4 @@ namespace loader
     };
     mmu& get_mmu(void);
     void run_program32(elf::Context& ctx);
-}  // namespace loader
+} // namespace loader

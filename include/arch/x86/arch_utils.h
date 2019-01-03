@@ -1,11 +1,12 @@
 /**
- * @file   util.h
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
+ * @file   arch_utils.h
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on Sunday, October 14th 2018, 9:06:54 am
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-13T20:47:55-05:00
+ * @date   Created on October 14 2018, 9:06 AM
  */
 
 #pragma once

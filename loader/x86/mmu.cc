@@ -175,4 +175,4 @@ namespace loader
             return __dummy_mmu;
         }
     }
-}  // namespace loader
+} // namespace loader

@@ -1,12 +1,13 @@
 /**
+ * Copyright (c) 2019 The cxkernel authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ *
  * @file   utils.h
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * 
- * @date Created on Sunday, November 26th 2017, 9:42:00 pm
- * 
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-10-28T15:28:10-04:00
- * 
+ * @date   Created on November 26 2017, 9:42 PM
+ *
  * General purpose macros goes here
  */
 
