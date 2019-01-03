@@ -48,6 +48,7 @@ __NO_OPTIMIZE __NOINLINE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 multiboot_info_t g_mbt;
 virt_t MODS_END;
 phys_t MAX_MEM;
+bool g_load64 = false;
 
 // File globals
 static multiboot_module_t *cxkrnl32, *cxkrnl64;
@@ -55,6 +56,7 @@ static elf::Context ctx;
 
 void init32()
 {
+    g_load64 = false;
     initgdt32();
     init_bootmm32();
     elf::load_img(reinterpret_cast<void*>(cxkrnl32 -> mod_start), ctx);
@@ -64,7 +66,7 @@ void init32()
 
 void init64()
 {
-
+    g_load64 = true;
 }
 
 extern "C" void main(int sig, multiboot_info_t* ptr)
@@ -96,7 +98,7 @@ extern "C" void main(int sig, multiboot_info_t* ptr)
             bool is32 = !memcmp((void*) mod->cmdline, "cxkrnl32", 8);
             bool is64 = !memcmp((void*) mod->cmdline, "cxkrnl64", 8);
             MODS_END = MAX(MODS_END, mod->mod_end);
-            OS_LOG("%02d Location: 0x%08X to 0x%08X (%s)\n", ++i, mod->mod_start, mod->mod_end, is32 || is64 ? "kernel" : "module");
+            OS_DBG("%02d Location: 0x%08X to 0x%08X (%s)\n", ++i, mod->mod_start, mod->mod_end, is32 || is64 ? "kernel" : "module");
             if(is32)
             {
                 if(!foundKrnl32)

@@ -1,10 +1,11 @@
+; Copyright (c) 2019 The cxkernel Authors. All rights reserved.
+; Use of this source code is governed by a MIT-style
+; license that can be found in the LICENSE file or at
+; https://opensource.org/licenses/MIT
+;
 ; @file   start.asm
 ; @author Kevin Dai \<kevindai02@outlook.com\>
-; 
-; @date Created on Monday, October 8th 2018, 4:35:25 pm
-; 
-; @date Last modified by:   Kevin Dai
-; @date Last modified time: 2018-10-28T15:25:05-04:00
+; @date   Created on October 08 2018, 4:35 PM
 
 [BITS 32]
 ALIGN 4
@@ -77,3 +78,10 @@ load_gdt:
     jmp 0x08:.flush   ; 0x08 is the offset to our code segment: Far jump!
 .flush:
     ret
+
+[GLOBAL enable_xd]
+enable_xd:
+    mov ecx, 0xC0000080
+    rdmsr
+    or eax, 1 << 11
+    wrmsr

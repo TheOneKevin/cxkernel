@@ -8,6 +8,7 @@
  * @author Kevin Dai \<kevindai02@outlook.com\>
  * @date   Created on January 02 2019, 4:58 PM
  */
+
 #define __MODULE__ "LODR"
 #include <elf_parser.h>
 #include <elf.h>
@@ -29,13 +30,16 @@ namespace loader
             ASSERT(ctx.phdr32[i].p_align == ARCH_PAGE_SIZE, "Program section not page aligned!");
             virt_t v = ctx.phdr32[i].p_vaddr;
             phys_t p = ctx.phdr32[i].p_offset + (phys_t) ctx.img32;
-            uint8_t flags = PTE_PR | PTE_RW;
-            //if(CHECK_MFLG(ctx.phdr32[i].p_flags, PF_W)) flags |= PTE_RW;
+            uint64_t flags = PTE_PR;
+            if(CHECK_MFLG(ctx.phdr32[i].p_flags, PF_W)) flags |= PTE_RW;
+            if(!CHECK_MFLG(ctx.phdr32[i].p_flags, PF_X)) flags |= PTE_NX;
             if(ctx.phdr32[i].p_filesz != ctx.phdr32[i].p_memsz)
             {
                 for(uint32_t j = 0; j < ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz); j += ARCH_PAGE_SIZE)
                     get_mmu().map(v + j, pmm_alloc_page(false), flags);
+                BOCHS_MAGIC_BREAK();
                 memset((void*) v, 0, ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz));
+                BOCHS_MAGIC_BREAK();
                 memcpy((void*) v, (void*) (ctx.phdr32[i].p_offset + (uint32_t) ctx.img32), ctx.phdr32[i].p_filesz);
             }
             else
@@ -44,7 +48,7 @@ namespace loader
                     get_mmu().map(v + j, p + j, flags);
             }
         }
-        OS_LOG("=== Loader will now exit ===\n");
+        OS_DBG("=== Loader will now exit ===\n");
         ((void (*)(void)) (ctx.img32->e_entry))(/*sig, ptr*/);
         for(;;);
     }

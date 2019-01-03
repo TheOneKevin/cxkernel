@@ -13,6 +13,12 @@
 
 //! Writes format string to the log stream with module name
 #define OS_LOG(fmt, ...) fprintf(STREAM_LOG, "[%-5s] " fmt, __MODULE__, ## __VA_ARGS__)
+//! Writes format string to the debug log stream with module name
+#ifdef DEBUG
+#define OS_DBG(fmt, ...) fprintf(STREAM_LOG, "[%-5s] " fmt, __MODULE__, ## __VA_ARGS__);
+#else
+#define OS_DBG(fmt, ...)
+#endif
 //! Writes format string to the error stream with module name
 #define OS_ERR(fmt, ...) fprintf(STREAM_ERR, "[%-5s] " fmt, __MODULE__, ## __VA_ARGS__)
 //! Writes format string to the output stream with module name

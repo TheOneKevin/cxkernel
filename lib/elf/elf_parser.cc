@@ -49,7 +49,7 @@ namespace elf
     {
         uint32_t i;
         char* sh_str;    /* section-header string-table is also a section. */
-        OS_LOG("Begin section headers dump.\n");
+        OS_DBG("Begin section headers dump.\n");
         /* Read section-header string-table */
         fprintf(STREAM_LOG, "eh.e_shstrndx = 0x%x\n", ctx.img32->e_shstrndx);
         sh_str = static_cast<char*>(read_section(ctx, ctx.img32->e_shstrndx));
@@ -95,7 +95,7 @@ namespace elf
 
     void print_program_headers(Context& ctx)
     {
-        OS_LOG("Begin program headers dump.\n");
+        OS_DBG("Begin program headers dump.\n");
         fprintf(STREAM_LOG, "================================================================================\n");
         fprintf(STREAM_LOG, " idx type    offset     virt addr  phys addr  mem size   file size  algn flags\n");
         fprintf(STREAM_LOG, "================================================================================\n");

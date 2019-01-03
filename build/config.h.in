@@ -4,6 +4,7 @@
 #cmakedefine CUSTOM_FILENAME
 #cmakedefine LOG_ENABLE
 #cmakedefine LOG_ALL_OUTPUT
+#cmakedefine DEBUG
 
 // Add any valued defines here:
 #define ARCH_TYPE           ARCH_@BITS@

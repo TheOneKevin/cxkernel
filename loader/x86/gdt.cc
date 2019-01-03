@@ -16,7 +16,6 @@ extern "C" {
 
 static gdt_entry_t gdt_entries[6]; // null, code, data, user code, user data, tss
 static gdt_ptr_t gdt_ptr;
-static tss_t tss_entry;
 extern "C" void load_gdt(uint32_t);
 static void set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran)
 {

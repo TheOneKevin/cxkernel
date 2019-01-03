@@ -10,13 +10,14 @@ option(PRXDIR "This is the absolute path to the project folder (optional)" "")
 option(CUSTOM_FILENAME "Use the custome __FILENAME__ instead of __FILE__" OFF)
 option(LOG_ENABLE "Enable logging to serial" ON)
 option(LOG_ALL_OUTPUT "Redirect all stdout to screen and serial" ON)
+option(DEBUG "Enable kernel debugging" OFF)
 
 # More stuff
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Default flags that shouldn't really change
 set(CMAKE_C_FLAGS   "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=gnu99 ")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=c++14 ")
-set(CMAKE_CXX_LINK_FLAGS "-lgcc -nostdlib")
+set(CMAKE_CXX_LINK_FLAGS "-lgcc -nostdlib ")
 
 # Target selection
 if(${TARGET} MATCHES ^i*86*$|^x86_32$|IA32|x86)
@@ -32,8 +33,16 @@ if(${TARGET} MATCHES ^i*86*$|^x86_32$|IA32|x86)
     set(CMAKE_ASM-ATT_SOURCE_FILE_EXTENSIONS s;S;i)
     set(CMAKE_ASM_NASM_SOURCE_FILE_EXTENSIONS nasm;asm)
     # Define flags
-    string(APPEND CMAKE_CXX_FLAGS "-fno-rtti -fno-exceptions -nostdinc++ -fno-omit-frame-pointer")
-    string(APPEND CMAKE_C_FLAGS "-fno-omit-frame-pointer")
+    string(APPEND CMAKE_CXX_FLAGS "-fno-rtti -fno-exceptions -nostdinc++ -fno-omit-frame-pointer ")
+    string(APPEND CMAKE_C_FLAGS "-fno-omit-frame-pointer ")
+    if(${DEBUG})
+        string(APPEND CMAKE_CXX_FLAGS "-Og -g -g3 ")
+        string(APPEND CMAKE_CXX_FLAGS "-Og -g -g3 ")
+        string(APPEND CMAKE_CXX_LINK_FLAGS "-g ")
+    else()
+        string(APPEND CMAKE_CXX_FLAGS "-O3 ")
+        string(APPEND CMAKE_CXX_FLAGS "-O3 ")
+    endif()
     # Set up toolchain
     include(build/elf-toolchain.cmake)
 elseif(${TARGET} MATCHES ^x86_64$|^AMD64$|^IA64$)

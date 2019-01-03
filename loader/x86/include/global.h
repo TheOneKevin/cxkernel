@@ -26,6 +26,7 @@ __BEGIN_CDECLS
 
 // These are declared in main.cc
 extern multiboot_info_t g_mbt;
+extern bool g_load64;
 extern virt_t MODS_END;
 extern phys_t MAX_MEM;
 
@@ -47,7 +48,7 @@ namespace loader
     {
     public:
         virtual void init();
-        virtual void map(uint64_t virt, uint64_t phys, uint16_t flags);
+        virtual void map(uint64_t virt, uint64_t phys, uint64_t flags);
     };
     mmu& get_mmu(void);
     void run_program32(elf::Context& ctx);

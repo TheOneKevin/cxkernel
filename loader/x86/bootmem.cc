@@ -8,6 +8,7 @@
  * @author Kevin Dai \<kevindai02@outlook.com\>
  * @date   Created on December 22 2018, 9:58 PM
  */
+
 #define __MODULE__ "BOOT"
 #include <stdio.h>
 #include <bitmap.h>
@@ -104,7 +105,7 @@ phys_t pmm_alloc_page(bool clear)
     if(bitmap_tstbit(alloc_map.bitmap, _ptr) || _ptr <= 1)
         pmm_update_all(); // If it is not a free page, find one
     bitmap_setbit(alloc_map.bitmap, _ptr);
-    OS_LOG("Alloc %s page at 0x%lX\n", clear ? "cleared" : "new", (uint64_t)(_ptr * ARCH_PAGE_SIZE));
+    OS_DBG("Alloc %s page at 0x%lX\n", clear ? "cleared" : "new", (uint64_t)(_ptr * ARCH_PAGE_SIZE));
     if(clear) memset((void*)(_ptr * ARCH_PAGE_SIZE), 0, ARCH_PAGE_SIZE);
     return (_ptr--) * ARCH_PAGE_SIZE; // Return the address of the allocated page
 }
@@ -112,7 +113,7 @@ phys_t pmm_alloc_page(bool clear)
 void pmm_free_page(phys_t address)
 {
     bitmap_clrbit(alloc_map.bitmap, ARCH_PAGE_ALIGN_DOWN(address) / ARCH_PAGE_SIZE);
-    OS_LOG("Freeing page at 0x%lX\n", ARCH_PAGE_ALIGN_DOWN(address) / ARCH_PAGE_SIZE);
+    OS_DBG("Freeing page at 0x%lX\n", ARCH_PAGE_ALIGN_DOWN(address) / ARCH_PAGE_SIZE);
 }
 
 void pmm_free_page_multi(phys_t address, int pages)
@@ -120,7 +121,7 @@ void pmm_free_page_multi(phys_t address, int pages)
     pages--;
     for(uint64_t a = address; a <= address + (uint64_t)(pages * ARCH_PAGE_SIZE); a++)
         bitmap_clrbit(alloc_map.bitmap, ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE),
-        OS_LOG("Freeing page at 0x%lX\n", ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE);
+        OS_DBG("Freeing page at 0x%lX\n", ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE);
 }
 
 } // End extern "C"

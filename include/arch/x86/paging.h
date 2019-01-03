@@ -36,18 +36,23 @@
 #define ARCH_GET_PD_IDX(a) ((a) >> 22 & 0x03FF)
 #define ARCH_GET_PT_IDX(a) ((a) >> 12 & 0x03FF)
 
+#define ARCH_PAE_GET_VIRT(pp, pd, pt) (((pp) << 30) | ((pd) << 21) | ((pt) << 12))
 #define ARCH_PAE_GET_PDPT_IDX(a) ((a) >> 30 & 0x01FF)
 #define ARCH_PAE_GET_PD_IDX(a)   ((a) >> 21 & 0x01FF)
 #define ARCH_PAE_GET_PT_IDX(a)   ((a) >> 12 & 0x01FF)
 
-#define PDP_PR 1 << 0
+#define PDP_PR (1 << 0)
 
-#define PDE_PR 1 << 0 //!< Present bit
-#define PDE_RW 1 << 1 //!< Read/Write. If not set, page is read only
-#define PDE_US 1 << 2 //!< User mode accessible
-#define PDE_WT 1 << 3 //!< Write-through caching
-#define PDE_CD 1 << 4 //!< Cache disable
+#define PDE_PR (1 << 0) //!< Present bit
+#define PDE_RW (1 << 1) //!< Read/Write. If not set, page is read only
+#define PDE_US (1 << 2) //!< User mode accessible
+#define PDE_WT (1 << 3) //!< Write-through caching
+#define PDE_CD (1 << 4) //!< Cache disable
 
-#define PTE_PR 1 << 0
-#define PTE_RW 1 << 1
-#define PTE_GL 1 << 8 //!< Global bit (prevents TLB flush)
+#define PTE_PR (1 << 0)
+#define PTE_RW (1 << 1)
+#define PTE_US (1 << 2) //!< User mode accessible
+#define PTE_WT (1 << 3) //!< Write-through caching
+#define PTE_CD (1 << 4) //!< Cache disable
+#define PTE_GL (1 << 8) //!< Global bit (prevents TLB flush)
+#define PTE_NX (1ULL << 63)
