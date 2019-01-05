@@ -44,12 +44,12 @@ __END_CDECLS
 
 namespace loader
 {
-    class mmu
+    class Mmu
     {
     public:
         virtual void init();
         virtual void map(uint64_t virt, uint64_t phys, uint64_t flags);
     };
-    mmu& get_mmu(void);
+    Mmu& get_mmu(void);
     void run_program32(elf::Context& ctx);
 } // namespace loader

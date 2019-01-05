@@ -13,7 +13,8 @@
 
 #include "common.h"
 
-namespace pc::pic {
+namespace pc::pic
+{
     /**
      * Remaps the PIC interrupts from offset 1 to offset 2. Automatically enables PIC too. If you don't know what
      * you are doing, use the autoremap_PIC();
@@ -34,5 +35,4 @@ namespace pc::pic {
     //! \deprecated { Automatically remaps the PIC interrupts to interrupt 32. Automatically enables PIC too. }
     DEPRECATED("Use pic_remap(0x20, 0x28) instead")
     void autoremap(void);
-
 } // namespace pc::pic

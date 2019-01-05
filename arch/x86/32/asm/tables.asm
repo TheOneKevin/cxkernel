@@ -1,10 +1,11 @@
+; Copyright (c) 2019 The cxkernel authors. All rights reserved.
+; Use of this source code is governed by a MIT-style
+; license that can be found in the LICENSE file or at
+; https://opensource.org/licenses/MIT
+;
 ; @file   tables.asm
 ; @author Kevin Dai \<kevindai02@outlook.com\>
-; 
-; @date Created on Saturday, October 27th 2018, 7:53:15 pm
-; 
-; @date Last modified by:   Kevin Dai
-; @date Last modified time: 2018-10-27T19:53:31-04:00
+; @date   Created on October 27 2018, 7:53 PM
 
 [BITS 32]
 

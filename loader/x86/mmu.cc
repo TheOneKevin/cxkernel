@@ -39,12 +39,12 @@ namespace loader
     }
 
     // Default implementations
-    void mmu::init() { }
-    void mmu::map(uint64_t virt, uint64_t phys, uint64_t flags) { }
-    static mmu __dummy_mmu;
+    void Mmu::init() { }
+    void Mmu::map(uint64_t virt, uint64_t phys, uint64_t flags) { }
+    static Mmu __dummy_mmu;
 
     // Override virtual classes
-    class mmu32_nopae : public mmu
+    class Mmu32NopaeImpl : public Mmu
     {
     private:
         uint32_t page_dir_addr = 0;
@@ -88,9 +88,9 @@ namespace loader
             __tlb32_flush_single(virt & ARCH_PAGE_MASK);
         }
     };
-    static mmu32_nopae __mmu32_nopae;
+    static Mmu32NopaeImpl __mmu32_nopae;
 
-    class mmu32_pae : public mmu
+    class Mmu32PaeImpl : public Mmu
     {
     public:
         void init() override
@@ -160,15 +160,15 @@ namespace loader
             __tlb32_flush_single(virt & ARCH_PAGE_MASK);
         }
     };
-    static mmu32_pae __mmu32_pae;
+    static Mmu32PaeImpl __mmu32_pae;
 
     // Get the MMU
-    mmu& get_mmu(void)
+    Mmu& get_mmu(void)
     {
         if(!g_load64)
         {
-            if(x86_feature_test(x86_FEATURE_PAE)) return static_cast<mmu &>(__mmu32_pae);
-            return static_cast<mmu &>(__mmu32_nopae);
+            if(x86_feature_test(x86_FEATURE_PAE)) return static_cast<Mmu &>(__mmu32_pae);
+            return static_cast<Mmu &>(__mmu32_nopae);
         }
         else
         {

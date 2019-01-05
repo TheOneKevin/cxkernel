@@ -59,19 +59,11 @@ typedef void (*irq_t) (regs_t *r);
 
 #ifdef __cplusplus
 
-namespace x86_32::irq {
-
-void init(void);
-void install(int irq, irq_t handler);
-void uninstall(int irq);
-
-}
-
-namespace x86_32::idt {
-
-void init(void);
-void set_gate(int idx, uint32_t base, uint16_t sel, uint8_t flags);
-
+namespace x86_32::idt
+{
+    void init(void);
+    void set_gate(int idx, uint32_t base, uint16_t sel, uint8_t flags);
+    uint32_t get_gate(int idx);
 }
 
 #endif

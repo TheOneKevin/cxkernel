@@ -10,7 +10,11 @@
  */
 
 #include "platform/pc/serial.h"
-#include "arch/x86/interrupts.h"
+#if ARCH_TYPE == ARCH_x86_32
+#include "arch/x86/32/idt.h"
+#elif ARCH_TYPE == ARCH_x86_64
+#include "arch/x86/64/idt.h"
+#endif
 
 using namespace pc;
 

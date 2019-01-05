@@ -45,18 +45,16 @@
 
 #ifdef __cplusplus
 
-namespace x86_32 {
-
-void early_init();
-void init();
-
+namespace x86_32
+{
+    void early_init();
+    void init();
 }
 
-namespace x86_64 {
-
-void early_init();
-void init();
-
+namespace x86_64
+{
+    void early_init();
+    void init();
 }
 
 #endif

@@ -48,12 +48,11 @@ typedef struct
 
 #ifdef __cplusplus
 
-namespace x86_32::gdt {
-
-void init(void);
-void set_gate(int, uint32_t, uint32_t, uint8_t, uint8_t);
-void set_tss_stack(uint32_t);
-
+namespace x86_32::gdt
+{
+    void init(void);
+    void set_gate(int, uint32_t, uint32_t, uint8_t, uint8_t);
+    void set_tss_stack(uint32_t);
 }
 
 #endif

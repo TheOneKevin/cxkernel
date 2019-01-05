@@ -76,7 +76,7 @@ namespace pc::vga
 
         // Move the hardware cursor back to the start.
         _y = 0;
-        _y = 0;
+        _x = 0;
         move_cursor();
     }
 

@@ -15,9 +15,10 @@
 
 __BEGIN_CDECLS
 
-typedef void (*irq_handler)(void*);
-void irq_install_handler(int, irq_handler);
+typedef void (*irq_handler_t)(void*);
+void irq_install_handler(int, irq_handler_t);
 void irq_remove_handler(int);
+irq_handler_t irq_get_handler(int);
 
 __END_CDECLS
 
@@ -27,8 +28,9 @@ namespace platform
     class Irq
     {
     public:
-        virtual void install_handler(int n, irq_handler handler);
+        virtual void install_handler(int n, irq_handler_t handler);
         virtual void remove_handler(int n);
+        virtual irq_handler_t get_handler(int n);
     };
 }
 #endif
