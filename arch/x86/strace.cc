@@ -23,7 +23,7 @@ void CallStackTrace(arch_sz_t aEBP, bool aBOOL)
         ebp = &aEBP - 2;
     int i = 0;
     printf("StackTrace (ebp): 0x%X\n", ebp);
-    while((arch_sz_t) ebp < ARCH_STACK_TOP && (arch_sz_t) ebp > ARCH_STACK_TOP - ARCH_PAGE_SIZE)
+    while((arch_sz_t) ebp < ARCH_STACK_BOTTOM && (arch_sz_t) ebp > ARCH_STACK_BOTTOM - ARCH_PAGE_SIZE)
     {
         arch_sz_t eip = ebp[1];
         arch_sz_t sym_addr = elf::get_symbol_addr32(eip, x86::g::ctx);

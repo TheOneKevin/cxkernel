@@ -63,6 +63,8 @@ void init32()
     initgdt32();
     init_bootmm32();
     elf::load_img(reinterpret_cast<void*>(cxkrnl32 -> mod_start), ctx);
+    ASSERT_HARD(ctx.strtab32 != nullptr, "Malformed kernel (no strtab).");
+    ASSERT_HARD(ctx.symtab32 != nullptr, "Malformed kernel (no symtab).");
     loader::get_mmu().init();
     loader::run_program32(ctx);
 }

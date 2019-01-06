@@ -45,7 +45,7 @@ isr_common_stub:
     mov fs, ax
     mov gs, ax
     cld
-    push esp   ; Push us the stack
+    push esp       ; Push us the stack
     call isr_handler
     add esp, 4
     pop gs

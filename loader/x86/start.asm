@@ -85,3 +85,8 @@ enable_xd:
     rdmsr
     or eax, 1 << 11
     wrmsr
+
+[GLOBAL jump32]
+jump32:
+    cli
+

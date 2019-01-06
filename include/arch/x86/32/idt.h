@@ -67,3 +67,9 @@ namespace x86_32::idt
 }
 
 #endif
+
+__BEGIN_CDECLS
+
+void exception_handler(regs_t* r);
+
+__END_CDECLS

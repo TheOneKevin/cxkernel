@@ -88,11 +88,8 @@ namespace x86_32
 
     void init()
     {
-        irq_install_handler(0, [](void* c)
-        {
-            auto* r = (regs_t*)c;
-            printf("Caught exception %X!\n", r->int_no);
-            for(;;);
-        });
+        for(int i = 0; i < 32; i++)
+            irq_install_handler(i, (irq_handler_t) &exception_handler);
+        asm volatile("int $0x0");
     }
 } // namespace x86_32

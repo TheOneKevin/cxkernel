@@ -139,7 +139,7 @@ namespace elf
             }
         }
         if(!sym) return nullptr;
-        char* sh_str = static_cast<char*>(read_section32(ctx, ctx.img32->e_shstrndx));
+        char* sh_str = (char*)(ctx.strtab32->sh_offset+(uint32_t) ctx.img32);
         return &sh_str[sym->st_name];
     }
 
