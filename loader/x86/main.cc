@@ -48,6 +48,7 @@ __NO_OPTIMIZE __NOINLINE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 
 // Globals
 multiboot_info_t g_mbt;
+int g_sig;
 virt_t MODS_END;
 phys_t MAX_MEM;
 bool g_load64 = false;
@@ -75,13 +76,14 @@ extern "C" void main(int sig, multiboot_info_t* ptr)
 {
     // Before anything bad happens
     memcpy(&g_mbt, ptr, sizeof(multiboot_info_t));
+    g_sig = sig;
     // Construct everything before we do anything
     for(ctor_func* func_arr = &_ctors_start; func_arr != &_ctors_end; func_arr++) (*func_arr)();
 
     // Check to ensure our structure is intact
     OS_PRN("%-66s", "Checking multiboot integrity... ");
     fflush(STREAM_OUT);
-    ASSERT_HARD(sig == MULTIBOOT_BOOTLOADER_MAGIC, "Magic number is invalid.");
+    ASSERT_HARD(g_sig == MULTIBOOT_BOOTLOADER_MAGIC, "Magic number is invalid.");
     ASSERT_HARD(!!CHECK_FLAG(g_mbt.flags, 0), "No memory information provided. Loader cannot continue.");
     ASSERT_HARD(CHECK_FLAG(g_mbt.flags, 3) && g_mbt.mods_addr != 0 && g_mbt.mods_count > 0, "No module(s) loaded. Check GRUB config file.");
     ASSERT_HARD(!((CHECK_FLAG(g_mbt.flags, 4) && CHECK_FLAG(g_mbt.flags, 5))), "Flags 4 and 5 are mutually exclusive.");

@@ -13,6 +13,7 @@
 
 #include "common.h"
 #include "arch/types.h"
+#include <elf_parser.h>
 
 __BEGIN_CDECLS
 
@@ -29,5 +30,12 @@ typedef struct
     virt_t CX_PAGE_TABLES_BEGIN;
     virt_t CX_PAGE_TABLES_END;
 } sysinfo_t;
+
+typedef struct
+{
+    int magic;
+    elf::Context& ctx;
+    void* obj;
+} loader_t;
 
 __END_CDECLS

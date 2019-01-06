@@ -49,7 +49,7 @@ namespace loader
             }
         }
         OS_DBG("=== Loader will now exit ===\n");
-        ((void (*)(void)) (ctx.img32->e_entry))(/*sig, ptr*/);
+        ((void (*)(loader_t)) (ctx.img32->e_entry))({g_sig, ctx, &g_mbt});
         for(;;);
     }
 } // namespace loader

@@ -23,9 +23,9 @@
 
 #define __9042352479_TMP1__(TYPE, v) TYPE v
 #define BOCHS_MAGIC_BREAK() { printf("[BCHSB] line: %d at %s\n", __LINE__, __FILENAME__); asm volatile("xchg %bx, %bx"); }
-#define ARCH_FOREACH_MMAP(var, mbt) \
-    for(__9042352479_TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) ((mbt) -> mmap_addr + ARCH_VIRT_BASE); \
-    (unsigned int) (var) < (mbt) -> mmap_addr + (mbt) -> mmap_length + ARCH_VIRT_BASE; \
+#define ARCH_FOREACH_MMAP(var, mbt, off) \
+    for(__9042352479_TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) ((mbt) -> mmap_addr + (off)); \
+    (unsigned int) (var) < (mbt) -> mmap_addr + (mbt) -> mmap_length + (off); \
     var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))
 #define ARCH_VIRT_PHYS(addr) ((addr) + ARCH_VIRT_BASE)
 #define ARCH_PAGE_NUMBER(addr) ((addr) >> ARCH_PAGE_SHIFT)

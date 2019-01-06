@@ -19,6 +19,7 @@
 // Everything
 #include "common.h"
 #include "arch/types.h"
+#include "system.h"
 
 #define ARCH_PAGE_MASK (~(ARCH_PAGE_SIZE - 1))
 //#define ARCH_PAGE_MASK_LL ((~((unsigned long long)ARCH_PAGE_SIZE - 1ULL)))
@@ -47,13 +48,13 @@
 
 namespace x86_32
 {
-    void early_init();
+    void early_init(loader_t args);
     void init();
 }
 
 namespace x86_64
 {
-    void early_init();
+    void early_init(loader_t args);
     void init();
 }
 

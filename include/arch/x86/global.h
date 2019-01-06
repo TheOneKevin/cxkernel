@@ -10,7 +10,16 @@
  */
 
 #pragma once
+
 #include "common.h"
+#include "system.h"
 #include "arch/x86/multiboot.h"
 
-multiboot_info_t* g_mbt_struct;
+#ifdef __cplusplus
+namespace x86::g
+{
+    extern multiboot_info_t* mbt;
+    extern elf::Context ctx;
+    extern MEMORY_MAP mmap;
+}
+#endif

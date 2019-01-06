@@ -34,7 +34,7 @@ static uint32_t __bt[8192];
 
 void init_bootmm32()
 {
-    FOREACH_MMAP(mmap, &g_mbt)
+    ARCH_FOREACH_MMAP(mmap, &g_mbt, 0)
     {
         if(mmap->addr == 0x100000 && !(mmap->type == MULTIBOOT_MEMORY_AVAILABLE && mmap->len > 0x4000000))
         PANIC("Not enough memory.\nNeeds at least 64 MB of continuous physical ram at 0x100000!\n");
@@ -44,7 +44,7 @@ void init_bootmm32()
         );
     }
     // Memory Topology
-    FOREACH_MMAP(mmap, &g_mbt) MAX_MEM = MAX(MAX_MEM, mmap->addr + mmap->len);
+    ARCH_FOREACH_MMAP(mmap, &g_mbt, 0) MAX_MEM = MAX(MAX_MEM, mmap->addr + mmap->len);
     // Initialize and zero out the bitmap
     auto num_pages = (uint32_t)(ARCH_PAGE_ALIGN(MAX_MEM) / ARCH_PAGE_SIZE);
     alloc_map.length = bitmap_getlength(num_pages);
@@ -57,7 +57,7 @@ void init_bootmm32()
     // Each free area starts aligned upwards, and ends aligned downwards (some space may be wasted)
     // The worst case scenario would be if the free region was [0x1001 -> 0x3FFF], then we would end up with a region [0x2000 -> 0x3000]
     // The most this can waste is 1 page of memory
-    FOREACH_MMAP(mmap, &g_mbt)
+    ARCH_FOREACH_MMAP(mmap, &g_mbt, 0)
     {
         if(!x86_feature_test(x86_FEATURE_PAE) && mmap->addr >= 0xFFFFFFFFUL)
             break;

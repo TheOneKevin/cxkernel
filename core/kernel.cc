@@ -21,12 +21,12 @@ extern ctor_func _ctors_start;
 extern ctor_func _ctors_end;
 __NOINLINE __NO_OPTIMIZE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 
-extern "C" void kernel_main(int sig, void* ptr)
+extern "C" void kernel_main(loader_t args)
 {
     // Execute ctors, these really only initializes printf
     for(ctor_func* func_arr = &_ctors_start; func_arr != &_ctors_end; func_arr++) (*func_arr)();
     platform::get_console().clear();
-    arch::early_init(sig, ptr);
+    arch::early_init(args);
     platform::early_init();
     platform::init();    
     arch::init();

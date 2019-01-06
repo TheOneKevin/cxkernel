@@ -20,34 +20,30 @@
 #include "arch/x86/multiboot.h"
 #include "arch/x86/global.h"
 
-namespace arch {
-
-// Reserve spaces for structs
-static multiboot_info_t mbt;
-
-/**
- * Early architecture initialization procedure. Sets up system
- * and collects information from bootloader. Mainly here to bootstrap
- * the physical and virtual memory managers.
- * @param sig Magic boot verification number.
- * @param ptr Pointer to any boot data structure(s).
- */
-void early_init(int sig, void* ptr)
+namespace arch
 {
+    /**
+     * Early architecture initialization procedure. Sets up system
+     * and collects information from bootloader. Mainly here to bootstrap
+     * the physical and virtual memory managers.
+     * @param sig Magic boot verification number.
+     * @param ptr Pointer to any boot data structure(s).
+     */
+    void early_init(loader_t args)
+    {
 #if ARCH_TYPE == ARCH_x86_32
-    x86_32::early_init();
+        x86_32::early_init(args);
 #elif ARCH_TYPE == ARCH_x86_64
-    x86_64::early_init();
+        x86_64::early_init(args);
 #endif
-}
+    }
 
-void init(void)
-{
+    void init(void)
+    {
 #if ARCH_TYPE == ARCH_x86_32
-    x86_32::init();
+        x86_32::init();
 #elif ARCH_TYPE == ARCH_x86_64
-    x86_64::init();
+        x86_64::init();
 #endif
-}
-
+    }
 } // namespace arch

@@ -16,6 +16,7 @@
 #pragma once
 
 #include "common.h"
+#include "system.h"
 #include STRINGIFY(arch/TARGET_FOLDER/interface/arch_interface.h)
 
 #ifndef ARCH_PAGE_SIZE
@@ -41,7 +42,7 @@
 
 namespace arch
 {
-    void early_init(int, void*);
+    void early_init(loader_t);
     void init(void);
 }
 

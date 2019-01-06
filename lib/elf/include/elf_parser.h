@@ -32,8 +32,21 @@ namespace elf
             elf32_phdr_t* phdr32;
             elf64_phdr_t* phdr64;
         };
+        union
+        {
+            elf32_shdr_t* symtab32;
+            elf32_shdr_t* symtab64;
+        };
+        union
+        {
+            elf32_shdr_t* strtab32;
+            elf32_shdr_t* strtab64;
+        };
     };
 
+    char* get_symbol_name32(uint32_t addr, Context& ctx);
+    uint32_t get_symbol_addr32(uint32_t addr, Context& ctx);
+    elf32_shdr_t* find_section32(const char* name, Context& ctx);
     void load_img32(elf32_ehdr_t* img, Context& ctx);
     void load_img64(elf64_ehdr_t* img, Context& ctx);
     void load_img(void* img, Context& ctx);

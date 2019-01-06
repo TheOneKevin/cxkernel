@@ -16,12 +16,6 @@
 #include "system.h"
 #include "arch/x86/arch_utils.h"
 
-// Careful with the ARCH_VIRT_BASE shenanigans
-#define FOREACH_MMAP(var, mbt) \
-    for(__9042352479_TMP1__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) ((mbt) -> mmap_addr); \
-    (unsigned int) (var) < (mbt) -> mmap_addr + (mbt) -> mmap_length; \
-    var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))
-
 __BEGIN_CDECLS
 
 // These are declared in main.cc
@@ -29,6 +23,7 @@ extern multiboot_info_t g_mbt;
 extern bool g_load64;
 extern virt_t MODS_END;
 extern phys_t MAX_MEM;
+extern int g_sig;
 
 // This initializes the bitmap (declared in bootmem.cc)
 void init_bootmm32();

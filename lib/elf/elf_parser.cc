@@ -17,12 +17,12 @@
 
 namespace elf
 {
-    static void* read_section(const Context &ctx, int idx)
+    static void* read_section32(const Context &ctx, int idx)
     {
         return (void*) ((uint32_t) ctx.img32 + ctx.shdr32[idx].sh_offset);
     }
 
-    static void print_section_flags(elf32_word_t flag, char (&ret)[11])
+    static void print_section_flags32(elf32_word_t flag, char (&ret)[11])
     {
         ret[0] = CHECK_MFLG(flag, SHF_WRITE) ? 'w' : '-';
         ret[1] = CHECK_MFLG(flag, SHF_ALLOC) ? 'a' : '-';
@@ -37,7 +37,7 @@ namespace elf
         ret[10] = 0;
     }
 
-    static void print_program_flags(elf32_word_t flag, char(&ret)[4])
+    static void print_program_flags32(elf32_word_t flag, char(&ret)[4])
     {
         ret[0] = CHECK_MFLG(flag, PF_R) ? 'r' : '-';
         ret[1] = CHECK_MFLG(flag, PF_W) ? 'w' : '-';
@@ -45,14 +45,14 @@ namespace elf
         ret[3] = 0;
     }
 
-    static void print_section_headers(const Context &ctx)
+    static void print_section_headers32(const Context &ctx)
     {
         uint32_t i;
         char* sh_str;    /* section-header string-table is also a section. */
         OS_DBG("Begin section headers dump.\n");
         /* Read section-header string-table */
         fprintf(STREAM_LOG, "eh.e_shstrndx = 0x%x\n", ctx.img32->e_shstrndx);
-        sh_str = static_cast<char*>(read_section(ctx, ctx.img32->e_shstrndx));
+        sh_str = static_cast<char*>(read_section32(ctx, ctx.img32->e_shstrndx));
         fprintf(STREAM_LOG, "================================================================================\n");
         fprintf(STREAM_LOG, " idx offset     load-addr  size       algn flags      type       section\n");
         fprintf(STREAM_LOG, "================================================================================\n");
@@ -61,7 +61,7 @@ namespace elf
 
         for(i = 0; i < ctx.img32->e_shnum; i++)
         {
-            print_section_flags(ctx.shdr32[i].sh_flags, c);
+            print_section_flags32(ctx.shdr32[i].sh_flags, c);
             fprintf(STREAM_LOG, " %03d ", i);
             fprintf(STREAM_LOG, "0x%08x ", ctx.shdr32[i].sh_offset);
             fprintf(STREAM_LOG, "0x%08x ", ctx.shdr32[i].sh_addr);
@@ -93,7 +93,7 @@ namespace elf
         fprintf(STREAM_LOG, "================================================================================\n");
     }
 
-    void print_program_headers(Context& ctx)
+    static void print_program_headers(Context& ctx)
     {
         OS_DBG("Begin program headers dump.\n");
         fprintf(STREAM_LOG, "================================================================================\n");
@@ -102,7 +102,7 @@ namespace elf
         char c[4] = {' '}; c[3] = 0; // Extra one for null terminator
         for(int i = 0; i < ctx.img32->e_phnum; i++)
         {
-            print_program_flags(ctx.phdr32[i].p_flags, c);
+            print_program_flags32(ctx.phdr32[i].p_flags, c);
             fprintf(STREAM_LOG, " %03d ", i);
             if(ctx.phdr32[i].p_type == PT_NULL) fprintf(STREAM_LOG, "NULL    ");
             else if(ctx.phdr32[i].p_type == PT_LOAD) fprintf(STREAM_LOG, "LOAD    ");
@@ -125,13 +125,58 @@ namespace elf
         fprintf(STREAM_LOG, "================================================================================\n");
     }
 
+    char* get_symbol_name32(uint32_t addr, Context& ctx)
+    {
+        elf32_sym_t* sym = nullptr;
+        auto* tab = (elf32_sym_t*)(ctx.symtab32->sh_offset+(uint32_t) ctx.img32);
+        elf32_addr_t val = 0;
+        for(elf32_word_t i = 0; i < ctx.symtab32->sh_size / sizeof(elf32_sym_t); i++)
+        {
+            if(tab[i].st_value > val && tab[i].st_value <= addr)
+            {
+                sym = &tab[i];
+                val = tab[i].st_value;
+            }
+        }
+        if(!sym) return nullptr;
+        char* sh_str = static_cast<char*>(read_section32(ctx, ctx.img32->e_shstrndx));
+        return &sh_str[sym->st_name];
+    }
+
+    uint32_t get_symbol_addr32(uint32_t addr, Context& ctx)
+    {
+        auto* tab = (elf32_sym_t*)(ctx.symtab32->sh_offset+(uint32_t) ctx.img32);
+        elf32_addr_t val = 0;
+        for(elf32_word_t i = 0; i < ctx.symtab32->sh_size / sizeof(elf32_sym_t); i++)
+            if(tab[i].st_value > val && tab[i].st_value <= addr)
+                val = tab[i].st_value;
+        return val;
+    }
+
+    elf32_shdr_t* find_section32(const char* name, Context& ctx)
+    {
+        char* sh_str = static_cast<char*>(read_section32(ctx, ctx.img32->e_shstrndx));
+        for(uint32_t i = 0; i < ctx.img32->e_shnum; i++)
+        {
+            if((name[0] == 0) && (strcmp(".null", name) == 0))
+                return &ctx.shdr32[i];
+            if(strcmp(sh_str + ctx.shdr32[i].sh_name, name) == 0)
+                return &ctx.shdr32[i];
+        }
+        return nullptr;
+    }
+
     void load_img32(elf32_ehdr_t* img, Context &ctx)
     {
         ctx.img32 = img;
         ctx.shdr32 = (elf32_shdr_t*) ((uint32_t) img + img->e_shoff);
         ctx.phdr32 = (elf32_phdr_t*) ((uint32_t) img + img->e_phoff);
-        print_section_headers(ctx);
+        ctx.strtab32 = find_section32(".strtab", ctx);
+        ctx.symtab32 = find_section32(".symtab", ctx);
+#ifdef DEBUG
+        print_section_headers32(ctx);
         print_program_headers(ctx);
+#endif
     }
 
     void load_img64(elf64_ehdr_t* img, Context &ctx)
@@ -147,5 +192,4 @@ namespace elf
         else if(isValidElf(hdr) && hdr->e_ident[EI_CLASS] == ELFCLASS64)
             load_img64(reinterpret_cast<elf64_ehdr_t*>(hdr), ctx);
     }
-
 } // namespace elf
