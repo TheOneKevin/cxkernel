@@ -167,7 +167,7 @@ namespace loader
     {
         if(!g_load64)
         {
-            //if(x86_feature_test(x86_FEATURE_PAE)) return static_cast<Mmu &>(__mmu32_pae);
+            if(x86_feature_test(x86_FEATURE_PAE)) return static_cast<Mmu &>(__mmu32_pae);
             return static_cast<Mmu &>(__mmu32_nopae);
         }
         else

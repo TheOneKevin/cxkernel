@@ -90,6 +90,5 @@ namespace x86_32
     {
         for(int i = 0; i < 32; i++)
             irq_install_handler(i, (irq_handler_t) &exception_handler);
-        asm volatile("int $0x0");
     }
 } // namespace x86_32
