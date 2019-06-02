@@ -62,7 +62,9 @@
 #ifdef __cplusplus
     #define __BEGIN_CDECLS extern "C" {
     #define __END_CDECLS   }
+    #define TYPEOF(x) __typeof__(x)
 #else
     #define __BEGIN_CDECLS
     #define __END_CDECLS
+    #define TYPEOF(x) typeof(x)
 #endif

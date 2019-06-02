@@ -16,14 +16,14 @@ SECTION .text
         isr%+i:
             cli
             push i
-            jmp isr_common_stub
+            jmp int_stub
     %else
         ;[GLOBAL isr%+i]
         isr%+i:
             cli
             push 0
             push i
-            jmp isr_common_stub
+            jmp int_stub
     %endif
     %assign i i+1
 %endrep
@@ -33,7 +33,7 @@ SECTION .text
 ; This is our common ISR stub. It saves the processor state, sets
 ; up for kernel mode segments, calls the C-level fault handler,
 ; and finally restores the stack frame.
-isr_common_stub:
+int_stub:
     pusha
     push ds
     push es

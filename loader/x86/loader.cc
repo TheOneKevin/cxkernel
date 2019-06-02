@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <platform/pc/vga.h>
+#include "core/vm.h"
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/paging.h"
 #include "include/global.h"
@@ -23,7 +25,7 @@ namespace loader
 {
     void run_program32(elf::Context &ctx)
     {
-        get_mmu().map(ARCH_VIRT_BASE + 0xB8000, 0xB8000, PTE_RW | PTE_PR);
+        get_mmu().map(ARCH_VIRT_BASE + VGA_FRAME_BASE, VGA_FRAME_BASE, PTE_RW | PTE_PR);
         //TODO: The identity map of 4 MiB may not cover the entire program header if the loader become too large.
         for(int i = 0; i < ctx.img32->e_phnum; i++)
         {
@@ -37,9 +39,7 @@ namespace loader
             {
                 for(uint32_t j = 0; j < ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz); j += ARCH_PAGE_SIZE)
                     get_mmu().map(v + j, pmm_alloc_page(false), flags);
-                BOCHS_MAGIC_BREAK();
                 memset((void*) v, 0, ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz));
-                BOCHS_MAGIC_BREAK();
                 memcpy((void*) v, (void*) (ctx.phdr32[i].p_offset + (uint32_t) ctx.img32), ctx.phdr32[i].p_filesz);
             }
             else

@@ -19,12 +19,13 @@
 // Everything
 #include "common.h"
 #include "arch/types.h"
+#include "arch/mmu.h"
 #include "system.h"
 
 #define ARCH_PAGE_MASK (~(ARCH_PAGE_SIZE - 1))
 //#define ARCH_PAGE_MASK_LL ((~((unsigned long long)ARCH_PAGE_SIZE - 1ULL)))
-#define ARCH_PAGE_ALIGN(addr) (((addr) + (__typeof__ (addr))(ARCH_PAGE_SIZE - 1)) & (__typeof__ (addr))ARCH_PAGE_MASK)
-#define ARCH_PAGE_ALIGN_DOWN(addr) ((addr) & (__typeof__ (addr))ARCH_PAGE_MASK)
+#define ARCH_PAGE_ALIGN(addr) (((addr) + (TYPEOF (addr))(ARCH_PAGE_SIZE - 1)) & (TYPEOF (addr))ARCH_PAGE_MASK)
+#define ARCH_PAGE_ALIGN_DOWN(addr) ((addr) & (TYPEOF (addr))ARCH_PAGE_MASK)
 
 /*#define __perform_x86_syscall(n, r0, r1, r2, r3, r4, r5) \
     asm volatile("mov %1, %%ebp; int %0" :: "i" (ARCH_SYSCALL_INT_NO), "r" (r5), \
@@ -50,12 +51,14 @@ namespace x86_32
 {
     void early_init(loader_t args);
     void init();
+    arch::Mmu& get_mmu();
 }
 
 namespace x86_64
 {
     void early_init(loader_t args);
     void init();
+    arch::Mmu& get_mmu();
 }
 
 #endif

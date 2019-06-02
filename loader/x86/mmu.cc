@@ -129,7 +129,9 @@ namespace loader
                 enable_xd();
             }
             else
+            {
                 OS_DBG("NX/XD not supported!\n");
+            }
             __tlb_flush_all();
         }
         void map(uint64_t a, uint64_t b, uint64_t c) override

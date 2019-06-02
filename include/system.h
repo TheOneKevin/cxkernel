@@ -13,23 +13,12 @@
 
 #include "common.h"
 #include "arch/types.h"
+#include "arch/x86/multiboot.h"
+
 #include <elf_parser.h>
+#include <linked_list.h>
 
 __BEGIN_CDECLS
-
-typedef struct
-{
-    virt_t CX_SLAB_BASE;
-    virt_t CX_SLAB_BREAK;
-    virt_t CX_IMAGE_BASE;
-    virt_t CX_IMAGE_END;
-    virt_t CX_PFN_DATABASE_BEGIN;
-    virt_t CX_PFN_DATABASE_END;
-    virt_t CX_STACK_LIMIT;
-    virt_t CX_STACK_BOTTOM;
-    virt_t CX_PAGE_TABLES_BEGIN;
-    virt_t CX_PAGE_TABLES_END;
-} sysinfo_t;
 
 typedef struct
 {

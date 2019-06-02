@@ -9,6 +9,8 @@
  * @date   Created on January 03 2019, 2:54 PM
  */
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wreturn-type"
+
 #include "platform.h"
 #include "platform/interrupts.h"
 using namespace platform;

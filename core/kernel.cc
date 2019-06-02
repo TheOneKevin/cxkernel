@@ -13,6 +13,7 @@
 #include <icxxabi.h>
 
 #include "platform.h"
+#include "core/vm.h"
 #include "arch/interface.h"
 
 // Random ctor shit
@@ -28,7 +29,11 @@ extern "C" void kernel_main(loader_t args)
     platform::get_console().clear();
     arch::early_init(args);
     platform::early_init();
-    platform::init();    
+    platform::init();
+    // Init memory functions
+
+    // Do some final arch inits
     arch::init();
+    //Execute start module
     for(;;);
 }

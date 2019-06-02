@@ -15,6 +15,8 @@
 #include <elf.h>
 #include <elf_parser.h>
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 namespace elf
 {
     static void* read_section32(const Context &ctx, int idx)

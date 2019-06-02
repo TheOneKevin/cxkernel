@@ -22,6 +22,29 @@ typedef struct list_node
 } list_node_t;
 typedef struct list_node list_head_t;
 
+#define INIT_LLIST(ptr) {(ptr)->next=(NULL);(ptr)->prev=(ptr);}
+#define LIST_ENTRY(ptr, type, member) container_of(ptr, type, member)
+
+/**
+ * Iterates through each list of a list
+ * @param  counter The current list pointer
+ * @param  head    A list of the list
+ */
+#define foreach_llist(counter, head) \
+        for(counter = (head); counter -> next != NULL; counter = counter -> next)
+/**
+ * Iterates through each entry of the list
+ * @param  counter The pointer to the current iterated structure
+ * @param  member  The name of the list in the structure
+ * @param  head    The pointer to the structure of the list
+ */
+#define foreach_llist_entry(counter, member, head) \
+        for(counter = LIST_ENTRY(head, TYPEOF(*counter), member); \
+            counter -> member.next != NULL; \
+            counter = LIST_ENTRY(counter -> member.next, TYPEOF(*counter), member))
+#define foreach_llist_safe(c, n, head) \
+        for(list_t *c = (head), *n = c -> next; n != NULL; c = n, n = c -> next)
+
 static inline list_node_t* list_begin(list_node_t* a)
 {
     while(a -> prev != a) a = a -> prev;
@@ -43,13 +66,31 @@ static inline void list_append(list_head_t* head, list_node_t* node)
     head -> next = node;
 }
 
-static inline void list_insert(list_head_t* head, list_head_t* list)
+static inline void list_insert(list_head_t* head, list_head_t* node)
+{
+    node -> next = head;
+    node -> prev = head -> prev;
+    if(head -> prev == head)
+        node -> prev = node;
+    else
+        head -> prev -> next = node;
+    head -> prev = node;
+}
+
+static inline void list_push_front(list_head_t* head, list_head_t* list)
 {
     list_node_t* s = list_begin(list);
     list_node_t* t = list_end(list);
     s -> prev = head;
     t -> next = head -> next;
     head -> next = s;
+}
+
+static inline list_node_t* list_remove(list_node_t* node)
+{
+    node->prev->next = node->next;
+    if(node->next) node->next->prev = node->prev;
+    return node;
 }
 
 __END_CDECLS

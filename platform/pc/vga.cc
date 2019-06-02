@@ -44,7 +44,7 @@ namespace pc::vga
     {
         // We only want to calculate this once
         uint16_t blank = vga_entry(' ');
-        auto* terminal_buffer = (uint16_t*) ARCH_VIRT_PHYS(VGA_FRAMEBUFFER); // We need to cast this.
+        auto* terminal_buffer = (uint16_t*) ARCH_VIRT_PHYS(VGA_FRAME_BASE); // We need to cast this.
         // Row 25 is the end, this means we need to scroll up
         if(_y >= VGA_HEIGHT)
         {
@@ -69,7 +69,7 @@ namespace pc::vga
         // We only want to calculate this once
         uint16_t entry = vga_entry(' ');
         bg_color = bg;
-        auto* terminal_buffer = (uint16_t*) ARCH_VIRT_PHYS(VGA_FRAMEBUFFER); // Cast the void pointer
+        auto* terminal_buffer = (uint16_t*) ARCH_VIRT_PHYS(VGA_FRAME_BASE); // Cast the void pointer
 
         for(int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++)
             terminal_buffer[i] = entry;
@@ -84,7 +84,7 @@ namespace pc::vga
     {
         // Let's get the entry we're going to write to VRAM first
         uint16_t entry = vga_entry((unsigned char) c);
-        auto* terminal_buffer = (uint16_t*) ARCH_VIRT_PHYS(VGA_FRAMEBUFFER);
+        auto* terminal_buffer = (uint16_t*) ARCH_VIRT_PHYS(VGA_FRAME_BASE);
         // Backspace by decreasing the cursor x
         if(c == '\b' && _x)
             _x--;

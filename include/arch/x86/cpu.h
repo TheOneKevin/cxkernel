@@ -52,8 +52,8 @@ enum cpu_vendor_list
 //! See 3-190 and 3-191 of the Intel Developer's Manual Vol. 2A
 //! See Appendix E of the AMD Manual
 
-#define MAX_SUPPORTED_CPUID 0xd
-#define MAX_SUPPORTED_CPUID_EXT 0x8000001eU
+#define MAX_SUPPORTED_CPUID 0xD
+#define MAX_SUPPORTED_CPUID_EXT 0x8000001EU
 
 enum cpuid_leaf_num
 {
@@ -76,7 +76,7 @@ enum cpuid_leaf_num
     CPUID_EXT_MODEL_FEAT    = 0x80000001,
     CPUID_EXT_CACHE         = 0x80000006,
     CPUID_EXT_ADDR_SIZE     = 0x80000008,
-    CPUID_EXT_AMD_TOPO      = 0x8000001e,
+    CPUID_EXT_AMD_TOPO      = 0x8000001E,
 };
 
 //! CPUID result structure (4 registers)

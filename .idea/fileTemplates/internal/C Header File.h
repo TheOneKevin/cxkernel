@@ -1,5 +1,5 @@
 #parse("C File Header.h")
-#pragma once
+\#pragma once
 \#include "common.h"
 
 __BEGIN_CDECLS

@@ -28,7 +28,7 @@ void CallStackTrace(arch_sz_t aEBP, bool aBOOL)
         arch_sz_t eip = ebp[1];
         arch_sz_t sym_addr = elf::get_symbol_addr32(eip, x86::g::ctx);
         char* sym_name = elf::get_symbol_name32(eip, x86::g::ctx);
-        if(sym_addr < ARCH_VIRT_BASE) sym_name = "???";
+        if(sym_addr < ARCH_VIRT_BASE) sym_name = (char*) "???";
         if(i == 0)
             printf("Call generated from 0x%08X - %s() + %d\n", sym_addr, sym_name, eip - sym_addr);
         else

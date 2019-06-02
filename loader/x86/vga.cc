@@ -55,7 +55,7 @@ enum vga_color
 
 #define VGA_WIDTH  80
 #define VGA_HEIGHT 25
-#define VGA_FRAMEBUFFER 0xB8000
+#define VGA_FRAME_BASE 0xB8000
 
 static uint8_t fg_color = VGA_COLOR_WHITE;
 static uint8_t bg_color = VGA_COLOR_BLACK;
@@ -68,7 +68,7 @@ static inline uint16_t vga_entry(unsigned char c) { return (uint16_t) c | ((uint
 void console_init(void)
 {
     _x = 0, _y = 0;
-    uint16_t* terminal_buffer = (uint16_t*) VGA_FRAMEBUFFER;
+    uint16_t* terminal_buffer = (uint16_t*) VGA_FRAME_BASE;
     for(size_t y = 0; y < VGA_HEIGHT; y++)
     {
         for(size_t x = 0; x < VGA_WIDTH; x++)
@@ -101,7 +101,7 @@ void console_upd(void)
 void console_emit(const char c)
 {
     uint16_t entry = vga_entry(c);
-    uint16_t* terminal_buffer = (uint16_t*) VGA_FRAMEBUFFER;
+    uint16_t* terminal_buffer = (uint16_t*) VGA_FRAME_BASE;
     if(c == '\b' && _x) _x--;
     else if(c == '\t') _x = (uint8_t) ((_x + 8) & ~(8 - 1));
     else if(c == '\r') _x = 0;

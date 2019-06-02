@@ -21,7 +21,7 @@ namespace arch
     {
     public:
         virtual void init();
-        virtual void map_page(uint64_t virt, uint64_t phys, uint64_t flags);
+        virtual void map(uint64_t virt, uint64_t phys, uint64_t flags);
     };
     Mmu& get_mmu(void);
 }

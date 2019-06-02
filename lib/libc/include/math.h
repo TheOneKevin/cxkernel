@@ -19,10 +19,10 @@
 #include "common.h"
 
 // Find maximum of a and b, avoids double evaluation too.
-#define MAX(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
+#define MAX(a,b) ({ TYPEOF (a) _a = (a); TYPEOF (b) _b = (b); _a > _b ? _a : _b; })
 
 // Find minimum of a and b, avoids double evaluation too.
-#define MIN(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a < _b ? _a : _b; })
+#define MIN(a,b) ({ TYPEOF (a) _a = (a); TYPEOF (b) _b = (b); _a < _b ? _a : _b; })
 
 #define PI                  3.14159265
 #define RAD2DEG(x)          ((x)/PI*180)

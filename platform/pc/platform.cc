@@ -9,9 +9,17 @@
  */
 
 #include <string.h>
+#include <panic.h>
+#include <stdio.h>
+#include <math.h>
+
+#include "core/vm.h"
+#include "arch/x86/global.h"
+#include "arch/x86/arch_utils.h"
+#include "arch/x86/interface/arch_interface.h"
+#include "platform.h"
 #include "platform/interrupts.h"
 #include "platform/console.h"
-#include "platform.h"
 #include "platform/pc/vga.h"
 #include "platform/pc/pic.h"
 #include "platform/pc/serial.h"
@@ -77,6 +85,20 @@ namespace pc
 namespace platform
 {
     using namespace pc;
+    using namespace x86;
+
+    static pmm_arena_t arena32 =
+    {
+        .node = { NULL, NULL },
+        .flags = CX_ARENA_PRESENT,
+        .base = 0,
+        .size = 0x100000,
+        .free = 0,
+        .priority = 1,
+        .pages = (page_t*) ARCH_PPS_BASE,
+        .free_list = { NULL, NULL }
+    };
+
     Console &get_console(void)
     {
         return static_cast<Console &>(console::__internal_vga_cons);
@@ -84,11 +106,20 @@ namespace platform
 
     void early_init(void)
     {
+        // Memory Topology
+        ARCH_FOREACH_MMAP(mmap, g::mbt, 0)
+            g::max_mem = MAX(g::max_mem, mmap->addr + mmap->len);
+
+        // PIC and other PC stuff
         pic::remap(IRQ0, IRQ0 + 8);
         pic::mask(0xFF, 0xFF);
         serial::init(COM1);
         serial::init(COM2);
         memset(interrupts::handlers, 0, sizeof(interrupts::handlers));
+
+        // Initialize data structures
+        arena32.size = (uint32_t)(ARCH_PAGE_ALIGN(g::max_mem) / ARCH_PAGE_SIZE);
+        pmm_add_arena(&arena32);
     }
 
     void init(void)

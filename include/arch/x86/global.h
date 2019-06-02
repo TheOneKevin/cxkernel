@@ -16,10 +16,14 @@
 #include "arch/x86/multiboot.h"
 
 #ifdef __cplusplus
+
 namespace x86::g
 {
-    extern multiboot_info_t* mbt;
-    extern elf::Context ctx;
     extern MEMORY_MAP mmap;
+    extern elf::Context ctx;
+    extern multiboot_info_t* mbt;
+    extern virt_t mods_end;
+    extern phys_t max_mem;
 }
+
 #endif

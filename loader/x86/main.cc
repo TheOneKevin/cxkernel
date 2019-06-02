@@ -46,12 +46,14 @@ extern ctor_func _ctors_start;
 extern ctor_func _ctors_end;
 __NO_OPTIMIZE __NOINLINE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 
+using namespace loader;
+
 // Globals
-multiboot_info_t g_mbt;
-int g_sig;
-virt_t MODS_END;
-phys_t MAX_MEM;
-bool g_load64 = false;
+multiboot_info_t loader::g_mbt;
+int loader::g_sig;
+virt_t loader::MODS_END;
+phys_t loader::MAX_MEM;
+bool loader::g_load64 = false;
 
 // File globals
 static multiboot_module_t *cxkrnl32, *cxkrnl64;
@@ -66,7 +68,9 @@ void init32()
     ASSERT_HARD(ctx.strtab32 != nullptr, "Malformed kernel (no strtab).");
     ASSERT_HARD(ctx.symtab32 != nullptr, "Malformed kernel (no symtab).");
     loader::get_mmu().init();
+    init_pps32();
     loader::run_program32(ctx);
+    for(;;);
 }
 
 void init64()
@@ -96,7 +100,7 @@ extern "C" void main(int sig, multiboot_info_t* ptr)
     bool foundKrnl32 = false, foundKrnl64 = false;
 
     { // Begin local scope
-        uint32_t i = 0;
+        int i = 0;
         multiboot_module_t* mod;
         OS_PRN("%d %s\n", g_mbt.mods_count, g_mbt.mods_count == 1 ? "module loaded." : "modules loaded.");
         for(mod = (multiboot_module_t*) g_mbt.mods_addr; (uint32_t) mod < g_mbt.mods_addr + g_mbt.mods_count * sizeof(multiboot_module_t); mod++)

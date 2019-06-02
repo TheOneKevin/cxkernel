@@ -57,4 +57,45 @@ typedef struct bitmap
  */
 #define bitmap_getbits(L) ((L) * sizeof(unsigned int) * 8) // 8 bits per char
 
+/**
+ * Get's the first occurence of a zeroth bit
+ * @param b The bitmap to search
+ * @return The index of the bit. If none was found, returns -1
+ */
+static inline int bitmap_firstz(bitmap_t b)
+{
+    int _ptr = 0;
+    for(size_t i = 0; i < b.length; i++)
+    {
+        if(b.bitmap[i] != ~0U)
+        {
+            _ptr = 0;
+            while(_ptr < 32 && bitmap_tstbit(b.bitmap, _ptr + bitmap_getbits(i))) _ptr++;
+            _ptr += (int) bitmap_getbits(i);
+            return _ptr;
+        }
+    }
+    return -1;
+}
+
+/**
+ * Gets the last occurence of a zeroth bit
+ * @param b The bitmap to search
+ * @return The index of the bit. If none was found, returns -1
+ */
+static inline int bitmap_lastz(bitmap_t b)
+{
+    int _ptr = 0;
+    for(size_t i = b.length; i > 0; i--)
+    {
+        if(b.bitmap[i - 1] != ~0U)
+        {
+            while(_ptr > 0 && bitmap_tstbit(b.bitmap, (_ptr - 1) + bitmap_getbits(i - 1))) _ptr--;
+            _ptr += (int) bitmap_getbits(i - 1);
+            return _ptr;
+        }
+    }
+    return -1;
+}
+
 __END_CDECLS

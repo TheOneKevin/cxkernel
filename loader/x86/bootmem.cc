@@ -15,9 +15,15 @@
 #include <string.h>
 #include <math.h>
 #include <panic.h>
+
+#include "arch/x86/paging.h"
+#include "core/vm.h"
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/cpu.h"
 #include "include/global.h"
+
+// Comment out by default.
+#define ALLOCATE_FIRST
 
 extern "C" {
 
@@ -29,8 +35,11 @@ extern uint32_t _lodr_end;
 static bitmap_t alloc_map;
 static bitmap_t resrv_map;
 static uint64_t avail_mem;
+static uint32_t num_pages;
 static phys_t _ptr;
 static uint32_t __bt[8192];
+
+using namespace loader;
 
 void init_bootmm32()
 {
@@ -46,7 +55,7 @@ void init_bootmm32()
     // Memory Topology
     ARCH_FOREACH_MMAP(mmap, &g_mbt, 0) MAX_MEM = MAX(MAX_MEM, mmap->addr + mmap->len);
     // Initialize and zero out the bitmap
-    auto num_pages = (uint32_t)(ARCH_PAGE_ALIGN(MAX_MEM) / ARCH_PAGE_SIZE);
+    num_pages = (uint32_t)(ARCH_PAGE_ALIGN(MAX_MEM) / ARCH_PAGE_SIZE);
     alloc_map.length = bitmap_getlength(num_pages);
     alloc_map.bitmap = (unsigned int*)ARCH_PAGE_ALIGN(MODS_END);
     resrv_map.length = 8192;
@@ -80,34 +89,47 @@ void init_bootmm32()
     OS_PRN("0x%lX bytes usable, 0x%X entries, 0x%X pages indexed\n", avail_mem, alloc_map.length, num_pages);
 }
 
+void init_pps32()
+{
+    // Init per-page structure(round up)
+    uint32_t num_struct = (num_pages*sizeof(page_t)+1)/ARCH_PAGE_SIZE;
+    OS_PRN("Preparing 0x%X page structures...\n", num_struct);
+    for(uint32_t i = 0; i <= num_struct; i++)
+        loader::get_mmu().map(ARCH_PPS_BASE + i*ARCH_PAGE_SIZE, pmm_alloc_page(false), PTE_RW | PTE_PR);
+}
+
 // If we run out of room, we search the bitmap again to find
 // a single free page frame.
 bool pmm_update_all(void)
 {
-    // Find first highest memory page
-    for(size_t i = alloc_map.length; i > 0; i--)
-    {
-        if(alloc_map.bitmap[i - 1] != ~0U)
-        {
-            for(_ptr = 32; _ptr > 0; _ptr--)
-                if(!bitmap_tstbit(alloc_map.bitmap, (_ptr - 1) + bitmap_getbits(i - 1)))
-                    break;
-            _ptr = bitmap_getbits(i - 1);
-            return true;
-        }
-    }
-    PANIC("No memory left on init!\n");
+#ifdef ALLOCATE_FIRST
+    _ptr = (size_t) bitmap_firstz(alloc_map);
+    if(bitmap_firstz(alloc_map) != -1) return true;
+#else
+    _ptr = (size_t) bitmap_lastz(alloc_map);
+    if(bitmap_lastz(alloc_map) != -1) return true;
+#endif
+    PANIC("No free memory on boot!");
     return false;
 }
 
 phys_t pmm_alloc_page(bool clear)
 {
+#ifdef ALLOCATE_FIRST
+    if(bitmap_tstbit(alloc_map.bitmap, _ptr) || _ptr >= num_pages)
+        pmm_update_all();
+#else
     if(bitmap_tstbit(alloc_map.bitmap, _ptr) || _ptr <= 1)
         pmm_update_all(); // If it is not a free page, find one
+#endif
     bitmap_setbit(alloc_map.bitmap, _ptr);
     OS_DBG("Alloc %s page at 0x%lX\n", clear ? "cleared" : "new", (uint64_t)(_ptr * ARCH_PAGE_SIZE));
     if(clear) memset((void*)(_ptr * ARCH_PAGE_SIZE), 0, ARCH_PAGE_SIZE);
+#ifdef ALLOCATE_FIRST
+    return (_ptr++) * ARCH_PAGE_SIZE;
+#else
     return (_ptr--) * ARCH_PAGE_SIZE; // Return the address of the allocated page
+#endif
 }
 
 void pmm_free_page(phys_t address)
@@ -120,8 +142,10 @@ void pmm_free_page_multi(phys_t address, int pages)
 {
     pages--;
     for(uint64_t a = address; a <= address + (uint64_t)(pages * ARCH_PAGE_SIZE); a++)
-        bitmap_clrbit(alloc_map.bitmap, ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE),
+    {
+        bitmap_clrbit(alloc_map.bitmap, ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE);
         OS_DBG("Freeing page at 0x%lX\n", ARCH_PAGE_ALIGN_DOWN(a) / ARCH_PAGE_SIZE);
+    }
 }
 
 } // End extern "C"

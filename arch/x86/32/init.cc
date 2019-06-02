@@ -32,19 +32,24 @@ namespace x86::g
 {
     MEMORY_MAP mmap = {};
     elf::Context ctx = {};
-    multiboot_info_t* mbt;
+    multiboot_info_t* mbt = NULL;
+    virt_t mods_end = 0;
+    phys_t max_mem = 0;
 }
 
 namespace x86_32
 {
+    using namespace x86;
+
     // Reserve spaces for structs
     static multiboot_info_t mbt;
+
     void early_init(loader_t args)
     {
         // Save the multiboot info pointer in a global variable
         memcpy(&mbt, args.obj, sizeof(multiboot_info_t));
-        x86::g::mbt = &mbt;
-        memcpy(&x86::g::ctx, &args.ctx, sizeof(elf::Context));
+        g::mbt = &mbt;
+        memcpy(&g::ctx, &args.ctx, sizeof(elf::Context));
 
         // Multiboot sanity check
         OS_PRN("%-66s", "Checking multiboot integrity... ");
@@ -75,10 +80,10 @@ namespace x86_32
         mod--;
 
         // Initialize memory map
-        x86::g::mmap.MOD_END = ARCH_VIRT_PHYS(mod -> mod_end);
-        x86::g::mmap.KRN_BEGIN = (virt_t) &_kernel_start;
-        x86::g::mmap.KRN_END = (virt_t) &_kernel_end;
-        x86::g::mmap.KRN_BRK = x86::g::mmap.KRN_END;
+        g::mmap.MOD_END = ARCH_VIRT_PHYS(mod -> mod_end);
+        g::mmap.KRN_BEGIN = (virt_t) &_kernel_start;
+        g::mmap.KRN_END = (virt_t) &_kernel_end;
+        g::mmap.KRN_BRK = g::mmap.KRN_END;
 
         gdt::init();
         idt::init();

@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT
  *
- * @file   vmm.h
+ * @file   vm.h
  * @author Kevin Dai \<kevindai02@outlook.com\>
  * @date   Created on December 15 2018, 7:23 PM
  */
@@ -12,6 +12,12 @@
 #pragma once
 
 #include "common.h"
+#include "system.h"
+#include <linked_list.h>
+
+#define CX_ARENA_PRESENT            (1 << 0)
+
+#define CX_PAGE_OCCUPIED            (1 << 0)
 
 #define CX_PERM_READ    			(1 << 0)
 #define CX_PERM_WRITE   			(1 << 1)
@@ -27,6 +33,30 @@
 
 __BEGIN_CDECLS
 
+typedef struct page
+{
+    list_node_t node;
+    uint32_t index;
+    uint32_t flags;
+    uint32_t ref;
+} page_t;
+
+typedef struct pmm_arena
+{
+    list_node_t node;
+    uint32_t flags;
+    phys_t base;
+    size_t size;
+    size_t free;
+    int priority;
+    page_t* pages;
+    list_node_t free_list;
+} pmm_arena_t;
+
 typedef struct region vmm_region_t;
+
+void pmm_add_arena(pmm_arena_t*);
+size_t pmm_alloc(size_t cnt, list_node_t* pages);
+size_t pmm_free(list_node_t* pages);
 
 __END_CDECLS

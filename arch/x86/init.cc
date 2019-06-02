@@ -16,6 +16,7 @@
 #include <assert.h>
 
 #include "platform/console.h"
+#include "arch/mmu.h"
 #include "arch/interface.h"
 #include "arch/x86/multiboot.h"
 #include "arch/x86/global.h"
@@ -38,12 +39,28 @@ namespace arch
 #endif
     }
 
+    /**
+     * Begins the main intialization sequence.
+     */
     void init(void)
     {
 #if ARCH_TYPE == ARCH_x86_32
         x86_32::init();
 #elif ARCH_TYPE == ARCH_x86_64
         x86_64::init();
+#endif
+    }
+
+    /**
+     * Get's this archietecture's MMU
+     * @return MMU sturcture, complete with all functions.
+     */
+    Mmu& get_mmu()
+    {
+#if ARCH_TYPE == ARCH_x86_32
+        return x86_32::get_mmu();
+#elif ARCH_TYPE == ARCH_x86_64
+        return x86_64::get_mmu();
 #endif
     }
 } // namespace arch

@@ -3,7 +3,7 @@ build/bin/*.bin
 build/bin/*.iso
 build/bin/*.tar
 build/bin/isodir/
-build/cmake-build/
+build/cmake-*/
 
 # Patches
 patches/*
