@@ -29,11 +29,15 @@ extern "C" void kernel_main(loader_t args)
     platform::get_console().clear();
     arch::early_init(args);
     platform::early_init();
-    platform::init();
-    // Init memory functions
-
     // Do some final arch inits
     arch::init();
+    platform::init();
+    // Init memory functions
+    list_node_t pages;
+    INIT_LLIST(&pages);
+    pmm_alloc(1, &pages);
+    pmm_free(&pages);
+
     //Execute start module
     for(;;);
 }

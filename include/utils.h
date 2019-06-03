@@ -31,11 +31,11 @@
     (type *)( (char *)__mptr - offsetof(type,member) );})
 
 #ifdef CONFIG_UNDERSCORE_SYMBOL_PREFIX
-#define __OS_SYMBOL(x) _##x
-#define __OS_SYMBOL_STR(x) "_" #x
+    #define __OS_SYMBOL(x) _##x
+    #define __OS_SYMBOL_STR(x) "_" #x
 #else
-#define __OS_SYMBOL(x) x
-#define __OS_SYMBOL_STR(x) #x
+    #define __OS_SYMBOL(x) x
+    #define __OS_SYMBOL_STR(x) #x
 #endif
 
 #define OS_SYMBOL(x) __OS_SYMBOL(x)
@@ -48,7 +48,7 @@ struct krnl_sym
 };
 
 #define __EXPORT_SYMBOL(sym, sec)                           \
-    extern TYPEOF(sym) sym;                             \
+    extern TYPEOF(sym) sym;                                 \
     static const char __kstrtab_##sym[]                     \
     __attribute__((section("kstrtab"), aligned(1)))         \
     = OS_SYMBOL_STR(sym);                                   \
@@ -70,11 +70,13 @@ struct krnl_sym
 #define EXPORT_CTOR(...) __EXPORT_CTOR(__VA_ARGS__)(__VA_ARGS__)
 
 #ifdef __cplusplus
-#define __BEGIN_CDECLS extern "C" {
-#define __END_CDECLS }
+    #define __BEGIN_CDECLS extern "C" {
+    #define __END_CDECLS }
+    //#undef NULL
+    //#define NULL nullptr
 #else
-#define __BEGIN_CDECLS
-#define __END_CDECLS
+    #define __BEGIN_CDECLS
+    #define __END_CDECLS
 #endif
 
 // Yeah!

@@ -49,9 +49,9 @@ namespace loader
             }
         }
         OS_DBG("=== Loader will now exit ===\n");
-        get_mmu().map(ARCH_STACK_BOTTOM - ARCH_PAGE_SIZE, pmm_alloc_page(false), PTE_PR | PTE_RW | PTE_NX);
+        get_mmu().map(ARCH_STACK_BOTTOM - 1*ARCH_PAGE_SIZE, pmm_alloc_page(false), PTE_PR | PTE_RW | PTE_NX);
         memset((void*)(ARCH_STACK_BOTTOM - ARCH_PAGE_SIZE), 0, ARCH_PAGE_SIZE);
-        asm volatile("mov %0, %%esp" :: "r" (ARCH_STACK_BOTTOM - 0x100));
+        asm volatile("mov %0, %%esp" :: "r" (ARCH_STACK_BOTTOM - 0x10));
         BOCHS_MAGIC_BREAK();
         ((void (*)(loader_t)) (ctx.img32->e_entry))({g_sig, ctx, &g_mbt});
         for(;;);

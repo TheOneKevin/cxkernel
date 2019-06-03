@@ -61,7 +61,7 @@ static inline void list_append(list_head_t* head, list_node_t* node)
 {
     if(head -> next != NULL)
         head -> next -> prev = node;
-    node -> next = head->next;
+    node -> next = head -> next;
     node -> prev = head;
     head -> next = node;
 }

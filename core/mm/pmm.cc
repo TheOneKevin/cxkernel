@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <arch/x86/arch_utils.h>
 #include "system.h"
 #include "core/vm.h"
 #include "arch/interface.h"
@@ -36,21 +37,27 @@ void pmm_add_arena(pmm_arena_t* arena)
     INIT_LLIST(&arena->node);
     INIT_LLIST(&arena->free_list);
     arena->free = 0;
-    pmm_arena_t* an;
-    foreach_llist_entry(an, node, arena_list.next)
+    pmm_arena_t* an = NULL;
+    if(arena_list.next != NULL)
     {
-        if(an->priority > arena->priority)
-            break;
+        foreach_llist_entry(an, node, arena_list.next)
+        {
+            if(an->priority > arena->priority)
+                break;
+        }
     }
     if(an == NULL)
         list_append(list_end(&arena_list), &arena->node);
     else
         list_insert(&an->node, &arena->node);
-    //memset(arena->pages, 0, arena->size*sizeof(page_t));
+    // Prepare page array
+    memset(arena->pages, 0, arena->size*sizeof(page_t));
+    list_node_t* prev = &arena->free_list;
     for(size_t i = 0; i < arena->size; i++)
     {
-        page_t* p = &arena->pages[i];
-        list_append(list_end(&arena->free_list), &p->node);
+        INIT_LLIST(&arena->pages[i].node);
+        list_append(prev, &arena->pages[i].node);
+        prev = &arena->pages[i].node;
         arena->free++;
     }
 }

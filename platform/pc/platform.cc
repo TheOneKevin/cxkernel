@@ -106,25 +106,22 @@ namespace platform
 
     void early_init(void)
     {
-        // Memory Topology
-        ARCH_FOREACH_MMAP(mmap, g::mbt, 0)
-            g::max_mem = MAX(g::max_mem, mmap->addr + mmap->len);
-
         // PIC and other PC stuff
         pic::remap(IRQ0, IRQ0 + 8);
         pic::mask(0xFF, 0xFF);
         serial::init(COM1);
         serial::init(COM2);
         memset(interrupts::handlers, 0, sizeof(interrupts::handlers));
-
-        // Initialize data structures
-        arena32.size = (uint32_t)(ARCH_PAGE_ALIGN(g::max_mem) / ARCH_PAGE_SIZE);
-        pmm_add_arena(&arena32);
     }
 
     void init(void)
     {
-
+        // Memory Topology
+        ARCH_FOREACH_MMAP(mmap, g::mbt, 0)
+            g::max_mem = MAX(g::max_mem, mmap->addr + mmap->len);
+        // Initialize data structures
+        arena32.size = (uint32_t)(ARCH_PAGE_ALIGN(g::max_mem) / ARCH_PAGE_SIZE);
+        pmm_add_arena(&arena32);
     }
 
     Irq& get_irq()

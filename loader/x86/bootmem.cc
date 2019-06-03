@@ -82,7 +82,7 @@ void init_bootmm32()
 
     // Mark the kernel and modules as not free
     // The kernel's end is really the end of the bitmap
-    for(auto i = (uint32_t)(&_lodr_start); i <= ARCH_PAGE_ALIGN((uint32_t) alloc_map.bitmap + alloc_map.length * sizeof(unsigned int)) / ARCH_PAGE_SIZE; i++)
+    for(auto i = 0; i <= ARCH_PAGE_ALIGN((uint32_t) alloc_map.bitmap + alloc_map.length * sizeof(unsigned int)) / ARCH_PAGE_SIZE; i++)
         bitmap_setbit(alloc_map.bitmap, i), bitmap_setbit(resrv_map.bitmap, i);
 
     pmm_update_all();
