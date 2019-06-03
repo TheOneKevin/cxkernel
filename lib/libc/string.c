@@ -51,18 +51,18 @@ void* memcpy(void* dest, const void* src, size_t len)
 
 void* memset(void* dest, int c, size_t len)
 {
-    /*#if ARCH_TYPE == ARCH_x86_32
+    #if ARCH_TYPE == ARCH_x86_32
         asm volatile ("rep stosb"
                       :
                       : "a" (c), "D" (dest), "c" (len)
                       : "memory");
-        return src;
-    #else*/
+        return dest;
+    #else
         unsigned char* ptr = dest;
         while (len-- > 0)
             *ptr++ = c;
         return dest;
-    //#endif
+    #endif
 }
 
 void* memmove(void* dest, void* src, size_t len)
