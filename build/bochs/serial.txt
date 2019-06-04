@@ -1,0 +1,444 @@
+[LODR ] Checking multiboot integrity...                                   DONE!
+[LODR ] 2 modules loaded.
+[LODR ] 01 Location: 0x0012D000 to 0x00161B20 (kernel)
+[LODR ] 02 Location: 0x00162000 to 0x00164800 (module)
+Passed cmdline = [exec32]
+  Entry address: 0x0000000000000000 Entry length: 0x000000000009F000 (0x01)
+  Entry address: 0x000000000009F000 Entry length: 0x0000000000001000 (0x02)
+  Entry address: 0x00000000000E8000 Entry length: 0x0000000000018000 (0x02)
+  Entry address: 0x0000000000100000 Entry length: 0x000000001FEF0000 (0x01)
+  Entry address: 0x000000001FFF0000 Entry length: 0x0000000000010000 (0x03)
+  Entry address: 0x00000000FFFC0000 Entry length: 0x0000000000040000 (0x02)
+[BOOT ] 0x1FF8F000 bytes usable, 0x8001 entries, 0x100000 pages indexed
+[ELF  ] Begin section headers dump.
+eh.e_shstrndx = 0x14
+================================================================================
+ idx offset     load-addr  size       algn flags      type       section
+================================================================================
+ 000 0x00000000 0x00000000 0x00000000    0 ---------- NULL      
+ 001 0x00001000 0xe0100000 0x000051d1   16 -ax------- PROGBITS  .text
+ 002 0x00007000 0xe0106000 0x00001140   32 -a-------- PROGBITS  .rodata
+ 003 0x00008140 0xe0107140 0x00001290    4 -a-------- PROGBITS  .eh_frame
+ 004 0x0000a000 0xe0109000 0x00000464   32 wa-------- PROGBITS  .data
+ 005 0x0000a464 0xe0109464 0x00000010    4 wa-------- PROGBITS  .ctors
+ 006 0x0000a474 0xe0109474 0x00000070    4 -a-------- PROGBITS  .ksymtab
+ 007 0x0000a4e4 0xe01094e4 0x00000068    1 -a-------- PROGBITS  .kstrtab
+ 008 0x0000a54c 0xe010a000 0x000045e0   32 wa-------- NOBITS    .bss
+ 009 0x0000a54c 0x00000000 0x0000a169    1 ---------- PROGBITS  .debug_info
+ 010 0x000146b5 0x00000000 0x00002aa4    1 ---------- PROGBITS  .debug_abbrev
+ 011 0x00017159 0x00000000 0x00000398    1 ---------- PROGBITS  .debug_aranges
+ 012 0x000174f1 0x00000000 0x000091b3    1 ---------- PROGBITS  .debug_macro
+ 013 0x000206a4 0x00000000 0x00004c92    1 ---------- PROGBITS  .debug_line
+ 014 0x00025336 0x00000000 0x00009164    1 ---ms----- PROGBITS  .debug_str
+ 015 0x0002e49a 0x00000000 0x00000011    1 ---ms----- PROGBITS  .comment
+ 016 0x0002e4ab 0x00000000 0x00002192    1 ---------- PROGBITS  .debug_loc
+ 017 0x0003063d 0x00000000 0x00000258    1 ---------- PROGBITS  .debug_ranges
+ 018 0x00030898 0x00000000 0x00000204    4 ---------- PROGBITS  .stab
+ 019 0x00030a9c 0x00000000 0x00000076    1 ---------- STRTAB    .stabstr
+ 020 0x000346b1 0x00000000 0x000000d5    1 ---------- STRTAB    .shstrtab
+ 021 0x00030b14 0x00000000 0x00002230    4 ---------- SYMTAB    .symtab
+ 022 0x00032d44 0x00000000 0x0000196d    1 ---------- STRTAB    .strtab
+================================================================================
+[ELF  ] Begin program headers dump.
+================================================================================
+ idx type    offset     virt addr  phys addr  mem size   file size  algn flags
+================================================================================
+ 000 LOAD    0x00001000 0xe0100000 0x00100000 0x000083d0 0x000083d0 4096 r-x 
+ 001 LOAD    0x0000a000 0xe0109000 0x00109000 0x000055e0 0x0000054c 4096 rw- 
+================================================================================
+[BOOT ] Alloc cleared page at 0x0
+[BOOT ] Alloc cleared page at 0x1000
+[BOOT ] Alloc cleared page at 0x2000
+[BOOT ] Alloc cleared page at 0x3000
+[BOOT ] Alloc cleared page at 0x4000
+[BOOT ] Alloc cleared page at 0x5000
+[MMU  ] 32-bit paging with PAE enabled!
+[MMU  ] NX/XD supported!
+[BOOT ] Preparing 0x1400 page structures...
+[BOOT ] Alloc new page at 0x6000
+[MMU  ] Map 0x6000 -> 0xC0000000 (0x3)
+[BOOT ] Alloc new page at 0x7000
+[BOOT ] Alloc new page at 0x8000
+[MMU  ] Map 0x8000 -> 0xC0001000 (0x3)
+[BOOT ] Alloc new page at 0x9000
+[MMU  ] Map 0x9000 -> 0xC0002000 (0x3)
+[BOOT ] Alloc new page at 0xA000
+[MMU  ] Map 0xA000 -> 0xC0003000 (0x3)
+[BOOT ] Alloc new page at 0xB000
+[MMU  ] Map 0xB000 -> 0xC0004000 (0x3)
+[BOOT ] Alloc new page at 0xC000
+[MMU  ] Map 0xC000 -> 0xC0005000 (0x3)
+[BOOT ] Alloc new page at 0xD000
+[MMU  ] Map 0xD000 -> 0xC0006000 (0x3)
+[BOOT ] Alloc new page at 0xE000
+[MMU  ] Map 0xE000 -> 0xC0007000 (0x3)
+[BOOT ] Alloc new page at 0xF000
+[MMU  ] Map 0xF000 -> 0xC0008000 (0x3)
+[BOOT ] Alloc new page at 0x10000
+[MMU  ] Map 0x10000 -> 0xC0009000 (0x3)
+[BOOT ] Alloc new page at 0x11000
+[MMU  ] Map 0x11000 -> 0xC000A000 (0x3)
+[BOOT ] Alloc new page at 0x12000
+[MMU  ] Map 0x12000 -> 0xC000B000 (0x3)
+[BOOT ] Alloc new page at 0x13000
+[MMU  ] Map 0x13000 -> 0xC000C000 (0x3)
+[BOOT ] Alloc new page at 0x14000
+[MMU  ] Map 0x14000 -> 0xC000D000 (0x3)
+[BOOT ] Alloc new page at 0x15000
+[MMU  ] Map 0x15000 -> 0xC000E000 (0x3)
+[BOOT ] Alloc new page at 0x16000
+[MMU  ] Map 0x16000 -> 0xC000F000 (0x3)
+[BOOT ] Alloc new page at 0x17000
+[MMU  ] Map 0x17000 -> 0xC0010000 (0x3)
+[BOOT ] Alloc new page at 0x18000
+[MMU  ] Map 0x18000 -> 0xC0011000 (0x3)
+[BOOT ] Alloc new page at 0x19000
+[MMU  ] Map 0x19000 -> 0xC0012000 (0x3)
+[BOOT ] Alloc new page at 0x1A000
+[MMU  ] Map 0x1A000 -> 0xC0013000 (0x3)
+[BOOT ] Alloc new page at 0x1B000
+[MMU  ] Map 0x1B000 -> 0xC0014000 (0x3)
+[BOOT ] Alloc new page at 0x1C000
+[MMU  ] Map 0x1C000 -> 0xC0015000 (0x3)
+[BOOT ] Alloc new page at 0x1D000
+[MMU  ] Map 0x1D000 -> 0xC0016000 (0x3)
+[BOOT ] Alloc new page at 0x1E000
+[MMU  ] Map 0x1E000 -> 0xC0017000 (0x3)
+[BOOT ] Alloc new page at 0x1F000
+[MMU  ] Map 0x1F000 -> 0xC0018000 (0x3)
+[BOOT ] Alloc new page at 0x20000
+[MMU  ] Map 0x20000 -> 0xC0019000 (0x3)
+[BOOT ] Alloc new page at 0x21000
+[MMU  ] Map 0x21000 -> 0xC001A000 (0x3)
+[BOOT ] Alloc new page at 0x22000
+[MMU  ] Map 0x22000 -> 0xC001B000 (0x3)
+[BOOT ] Alloc new page at 0x23000
+[MMU  ] Map 0x23000 -> 0xC001C000 (0x3)
+[BOOT ] Alloc new page at 0x24000
+[MMU  ] Map 0x24000 -> 0xC001D000 (0x3)
+[BOOT ] Alloc new page at 0x25000
+[MMU  ] Map 0x25000 -> 0xC001E000 (0x3)
+[BOOT ] Alloc new page at 0x26000
+[MMU  ] Map 0x26000 -> 0xC001F000 (0x3)
+[BOOT ] Alloc new page at 0x27000
+[MMU  ] Map 0x27000 -> 0xC0020000 (0x3)
+[BOOT ] Alloc new page at 0x28000
+[MMU  ] Map 0x28000 -> 0xC0021000 (0x3)
+[BOOT ] Alloc new page at 0x29000
+[MMU  ] Map 0x29000 -> 0xC0022000 (0x3)
+[BOOT ] Alloc new page at 0x2A000
+[MMU  ] Map 0x2A000 -> 0xC0023000 (0x3)
+[BOOT ] Alloc new page at 0x2B000
+[MMU  ] Map 0x2B000 -> 0xC0024000 (0x3)
+[BOOT ] Alloc new page at 0x2C000
+[MMU  ] Map 0x2C000 -> 0xC0025000 (0x3)
+[BOOT ] Alloc new page at 0x2D000
+[MMU  ] Map 0x2D000 -> 0xC0026000 (0x3)
+[BOOT ] Alloc new page at 0x2E000
+[MMU  ] Map 0x2E000 -> 0xC0027000 (0x3)
+[BOOT ] Alloc new page at 0x2F000
+[MMU  ] Map 0x2F000 -> 0xC0028000 (0x3)
+[BOOT ] Alloc new page at 0x30000
+[MMU  ] Map 0x30000 -> 0xC0029000 (0x3)
+[BOOT ] Alloc new page at 0x31000
+[MMU  ] Map 0x31000 -> 0xC002A000 (0x3)
+[BOOT ] Alloc new page at 0x32000
+[MMU  ] Map 0x32000 -> 0xC002B000 (0x3)
+[BOOT ] Alloc new page at 0x33000
+[MMU  ] Map 0x33000 -> 0xC002C000 (0x3)
+[BOOT ] Alloc new page at 0x34000
+[MMU  ] Map 0x34000 -> 0xC002D000 (0x3)
+[BOOT ] Alloc new page at 0x35000
+[MMU  ] Map 0x35000 -> 0xC002E000 (0x3)
+[BOOT ] Alloc new page at 0x36000
+[MMU  ] Map 0x36000 -> 0xC002F000 (0x3)
+[BOOT ] Alloc new page at 0x37000
+[MMU  ] Map 0x37000 -> 0xC0030000 (0x3)
+[BOOT ] Alloc new page at 0x38000
+[MMU  ] Map 0x38000 -> 0xC0031000 (0x3)
+[BOOT ] Alloc new page at 0x39000
+[MMU  ] Map 0x39000 -> 0xC0032000 (0x3)
+[BOOT ] Alloc new page at 0x3A000
+[MMU  ] Map 0x3A000 -> 0xC0033000 (0x3)
+[BOOT ] Alloc new page at 0x3B000
+[MMU  ] Map 0x3B000 -> 0xC0034000 (0x3)
+[BOOT ] Alloc new page at 0x3C000
+[MMU  ] Map 0x3C000 -> 0xC0035000 (0x3)
+[BOOT ] Alloc new page at 0x3D000
+[MMU  ] Map 0x3D000 -> 0xC0036000 (0x3)
+[BOOT ] Alloc new page at 0x3E000
+[MMU  ] Map 0x3E000 -> 0xC0037000 (0x3)
+[BOOT ] Alloc new page at 0x3F000
+[MMU  ] Map 0x3F000 -> 0xC0038000 (0x3)
+[BOOT ] Alloc new page at 0x40000
+[MMU  ] Map 0x40000 -> 0xC0039000 (0x3)
+[BOOT ] Alloc new page at 0x41000
+[MMU  ] Map 0x41000 -> 0xC003A000 (0x3)
+[BOOT ] Alloc new page at 0x42000
+[MMU  ] Map 0x42000 -> 0xC003B000 (0x3)
+[BOOT ] Alloc new page at 0x43000
+[MMU  ] Map 0x43000 -> 0xC003C000 (0x3)
+[BOOT ] Alloc new page at 0x44000
+[MMU  ] Map 0x44000 -> 0xC003D000 (0x3)
+[BOOT ] Alloc new page at 0x45000
+[MMU  ] Map 0x45000 -> 0xC003E000 (0x3)
+[BOOT ] Alloc new page at 0x46000
+[MMU  ] Map 0x46000 -> 0xC003F000 (0x3)
+[BOOT ] Alloc new page at 0x47000
+[MMU  ] Map 0x47000 -> 0xC0040000 (0x3)
+[BOOT ] Alloc new page at 0x48000
+[MMU  ] Map 0x48000 -> 0xC0041000 (0x3)
+[BOOT ] Alloc new page at 0x49000
+[MMU  ] Map 0x49000 -> 0xC0042000 (0x3)
+[BOOT ] Alloc new page at 0x4A000
+[MMU  ] Map 0x4A000 -> 0xC0043000 (0x3)
+[BOOT ] Alloc new page at 0x4B000
+[MMU  ] Map 0x4B000 -> 0xC0044000 (0x3)
+[BOOT ] Alloc new page at 0x4C000
+[MMU  ] Map 0x4C000 -> 0xC0045000 (0x3)
+[BOOT ] Alloc new page at 0x4D000
+[MMU  ] Map 0x4D000 -> 0xC0046000 (0x3)
+[BOOT ] Alloc new page at 0x4E000
+[MMU  ] Map 0x4E000 -> 0xC0047000 (0x3)
+[BOOT ] Alloc new page at 0x4F000
+[MMU  ] Map 0x4F000 -> 0xC0048000 (0x3)
+[BOOT ] Alloc new page at 0x50000
+[MMU  ] Map 0x50000 -> 0xC0049000 (0x3)
+[BOOT ] Alloc new page at 0x51000
+[MMU  ] Map 0x51000 -> 0xC004A000 (0x3)
+[BOOT ] Alloc new page at 0x52000
+[MMU  ] Map 0x52000 -> 0xC004B000 (0x3)
+[BOOT ] Alloc new page at 0x53000
+[MMU  ] Map 0x53000 -> 0xC004C000 (0x3)
+[BOOT ] Alloc new page at 0x54000
+[MMU  ] Map 0x54000 -> 0xC004D000 (0x3)
+[BOOT ] Alloc new page at 0x55000
+[MMU  ] Map 0x55000 -> 0xC004E000 (0x3)
+[BOOT ] Alloc new page at 0x56000
+[MMU  ] Map 0x56000 -> 0xC004F000 (0x3)
+[BOOT ] Alloc new page at 0x57000
+[MMU  ] Map 0x57000 -> 0xC0050000 (0x3)
+[BOOT ] Alloc new page at 0x58000
+[MMU  ] Map 0x58000 -> 0xC0051000 (0x3)
+[BOOT ] Alloc new page at 0x59000
+[MMU  ] Map 0x59000 -> 0xC0052000 (0x3)
+[BOOT ] Alloc new page at 0x5A000
+[MMU  ] Map 0x5A000 -> 0xC0053000 (0x3)
+[BOOT ] Alloc new page at 0x5B000
+[MMU  ] Map 0x5B000 -> 0xC0054000 (0x3)
+[BOOT ] Alloc new page at 0x5C000
+[MMU  ] Map 0x5C000 -> 0xC0055000 (0x3)
+[BOOT ] Alloc new page at 0x5D000
+[MMU  ] Map 0x5D000 -> 0xC0056000 (0x3)
+[BOOT ] Alloc new page at 0x5E000
+[MMU  ] Map 0x5E000 -> 0xC0057000 (0x3)
+[BOOT ] Alloc new page at 0x5F000
+[MMU  ] Map 0x5F000 -> 0xC0058000 (0x3)
+[BOOT ] Alloc new page at 0x60000
+[MMU  ] Map 0x60000 -> 0xC0059000 (0x3)
+[BOOT ] Alloc new page at 0x61000
+[MMU  ] Map 0x61000 -> 0xC005A000 (0x3)
+[BOOT ] Alloc new page at 0x62000
+[MMU  ] Map 0x62000 -> 0xC005B000 (0x3)
+[BOOT ] Alloc new page at 0x63000
+[MMU  ] Map 0x63000 -> 0xC005C000 (0x3)
+[BOOT ] Alloc new page at 0x64000
+[MMU  ] Map 0x64000 -> 0xC005D000 (0x3)
+[BOOT ] Alloc new page at 0x65000
+[MMU  ] Map 0x65000 -> 0xC005E000 (0x3)
+[BOOT ] Alloc new page at 0x66000
+[MMU  ] Map 0x66000 -> 0xC005F000 (0x3)
+[BOOT ] Alloc new page at 0x67000
+[MMU  ] Map 0x67000 -> 0xC0060000 (0x3)
+[BOOT ] Alloc new page at 0x68000
+[MMU  ] Map 0x68000 -> 0xC0061000 (0x3)
+[BOOT ] Alloc new page at 0x69000
+[MMU  ] Map 0x69000 -> 0xC0062000 (0x3)
+[BOOT ] Alloc new page at 0x6A000
+[MMU  ] Map 0x6A000 -> 0xC0063000 (0x3)
+[BOOT ] Alloc new page at 0x6B000
+[MMU  ] Map 0x6B000 -> 0xC0064000 (0x3)
+[BOOT ] Alloc new page at 0x6C000
+[MMU  ] Map 0x6C000 -> 0xC0065000 (0x3)
+[BOOT ] Alloc new page at 0x6D000
+[MMU  ] Map 0x6D000 -> 0xC0066000 (0x3)
+[BOOT ] Alloc new page at 0x6E000
+[MMU  ] Map 0x6E000 -> 0xC0067000 (0x3)
+[BOOT ] Alloc new page at 0x6F000
+[MMU  ] Map 0x6F000 -> 0xC0068000 (0x3)
+[BOOT ] Alloc new page at 0x70000
+[MMU  ] Map 0x70000 -> 0xC0069000 (0x3)
+[BOOT ] Alloc new page at 0x71000
+[MMU  ] Map 0x71000 -> 0xC006A000 (0x3)
+[BOOT ] Alloc new page at 0x72000
+[MMU  ] Map 0x72000 -> 0xC006B000 (0x3)
+[BOOT ] Alloc new page at 0x73000
+[MMU  ] Map 0x73000 -> 0xC006C000 (0x3)
+[BOOT ] Alloc new page at 0x74000
+[MMU  ] Map 0x74000 -> 0xC006D000 (0x3)
+[BOOT ] Alloc new page at 0x75000
+[MMU  ] Map 0x75000 -> 0xC006E000 (0x3)
+[BOOT ] Alloc new page at 0x76000
+[MMU  ] Map 0x76000 -> 0xC006F000 (0x3)
+[BOOT ] Alloc new page at 0x77000
+[MMU  ] Map 0x77000 -> 0xC0070000 (0x3)
+[BOOT ] Alloc new page at 0x78000
+[MMU  ] Map 0x78000 -> 0xC0071000 (0x3)
+[BOOT ] Alloc new page at 0x79000
+[MMU  ] Map 0x79000 -> 0xC0072000 (0x3)
+[BOOT ] Alloc new page at 0x7A000
+[MMU  ] Map 0x7A000 -> 0xC0073000 (0x3)
+[BOOT ] Alloc new page at 0x7B000
+[MMU  ] Map 0x7B000 -> 0xC0074000 (0x3)
+[BOOT ] Alloc new page at 0x7C000
+[MMU  ] Map 0x7C000 -> 0xC0075000 (0x3)
+[BOOT ] Alloc new page at 0x7D000
+[MMU  ] Map 0x7D000 -> 0xC0076000 (0x3)
+[BOOT ] Alloc new page at 0x7E000
+[MMU  ] Map 0x7E000 -> 0xC0077000 (0x3)
+[BOOT ] Alloc new page at 0x7F000
+[MMU  ] Map 0x7F000 -> 0xC0078000 (0x3)
+[BOOT ] Alloc new page at 0x80000
+[MMU  ] Map 0x80000 -> 0xC0079000 (0x3)
+[BOOT ] Alloc new page at 0x81000
+[MMU  ] Map 0x81000 -> 0xC007A000 (0x3)
+[BOOT ] Alloc new page at 0x82000
+[MMU  ] Map 0x82000 -> 0xC007B000 (0x3)
+[BOOT ] Alloc new page at 0x83000
+[MMU  ] Map 0x83000 -> 0xC007C000 (0x3)
+[BOOT ] Alloc new page at 0x84000
+[MMU  ] Map 0x84000 -> 0xC007D000 (0x3)
+[BOOT ] Alloc new page at 0x85000
+[MMU  ] Map 0x85000 -> 0xC007E000 (0x3)
+[BOOT ] Alloc new page at 0x86000
+[MMU  ] Map 0x86000 -> 0xC007F000 (0x3)
+[BOOT ] Alloc new page at 0x87000
+[MMU  ] Map 0x87000 -> 0xC0080000 (0x3)
+[BOOT ] Alloc new page at 0x88000
+[MMU  ] Map 0x88000 -> 0xC0081000 (0x3)
+[BOOT ] Alloc new page at 0x89000
+[MMU  ] Map 0x89000 -> 0xC0082000 (0x3)
+[BOOT ] Alloc new page at 0x8A000
+[MMU  ] Map 0x8A000 -> 0xC0083000 (0x3)
+[BOOT ] Alloc new page at 0x8B000
+[MMU  ] Map 0x8B000 -> 0xC0084000 (0x3)
+[BOOT ] Alloc new page at 0x8C000
+[MMU  ] Map 0x8C000 -> 0xC0085000 (0x3)
+[BOOT ] Alloc new page at 0x8D000
+[MMU  ] Map 0x8D000 -> 0xC0086000 (0x3)
+[BOOT ] Alloc new page at 0x8E000
+[MMU  ] Map 0x8E000 -> 0xC0087000 (0x3)
+[BOOT ] Alloc new page at 0x8F000
+[MMU  ] Map 0x8F000 -> 0xC0088000 (0x3)
+[BOOT ] Alloc new page at 0x90000
+[MMU  ] Map 0x90000 -> 0xC0089000 (0x3)
+[BOOT ] Alloc new page at 0x91000
+[MMU  ] Map 0x91000 -> 0xC008A000 (0x3)
+[BOOT ] Alloc new page at 0x92000
+[MMU  ] Map 0x92000 -> 0xC008B000 (0x3)
+[BOOT ] Alloc new page at 0x93000
+[MMU  ] Map 0x93000 -> 0xC008C000 (0x3)
+[BOOT ] Alloc new page at 0x94000
+[MMU  ] Map 0x94000 -> 0xC008D000 (0x3)
+[BOOT ] Alloc new page at 0x95000
+[MMU  ] Map 0x95000 -> 0xC008E000 (0x3)
+[BOOT ] Alloc new page at 0x96000
+[MMU  ] Map 0x96000 -> 0xC008F000 (0x3)
+[BOOT ] Alloc new page at 0x97000
+[MMU  ] Map 0x97000 -> 0xC0090000 (0x3)
+[BOOT ] Alloc new page at 0x98000
+[MMU  ] Map 0x98000 -> 0xC0091000 (0x3)
+[BOOT ] Alloc new page at 0x99000
+[MMU  ] Map 0x99000 -> 0xC0092000 (0x3)
+[BOOT ] Alloc new page at 0x9A000
+[MMU  ] Map 0x9A000 -> 0xC0093000 (0x3)
+[BOOT ] Alloc new page at 0x9B000
+[MMU  ] Map 0x9B000 -> 0xC0094000 (0x3)
+[BOOT ] Alloc new page at 0x9C000
+[MMU  ] Map 0x9C000 -> 0xC0095000 (0x3)
+[BOOT ] Alloc new page at 0x9D000
+[MMU  ] Map 0x9D000 -> 0xC0096000 (0x3)
+[BOOT ] Alloc new page at 0x9E000
+[MMU  ] Map 0x9E000 -> 0xC0097000 (0x3)
+[BOOT ] Alloc new page at 0x100000
+[MMU  ] Map 0x100000 -> 0xC0098000 (0x3)
+[BOOT ] Alloc new page at 0x101000
+[MMU  ] Map 0x101000 -> 0xC0099000 (0x3)
+[BOOT ] Alloc new page at 0x102000
+[MMU  ] Map 0x102000 -> 0xC009A000 (0x3)
+[BOOT ] Alloc new page at 0x103000
+[MMU  ] Map 0x103000 -> 0xC009B000 (0x3)
+[BOOT ] Alloc new page at 0x104000
+[MMU  ] Map 0x104000 -> 0xC009C000 (0x3)
+[BOOT ] Alloc new page at 0x105000
+[MMU  ] Map 0x105000 -> 0xC009D000 (0x3)
+[BOOT ] Alloc new page at 0x106000
+[MMU  ] Map 0x106000 -> 0xC009E000 (0x3)
+[BOOT ] Alloc new page at 0x107000
+[MMU  ] Map 0x107000 -> 0xC009F000 (0x3)
+[BOOT ] Alloc new page at 0x108000
+[MMU  ] Map 0x108000 -> 0xC00A0000 (0x3)
+[BOOT ] Alloc new page at 0x109000
+[MMU  ] Map 0x109000 -> 0xC00A1000 (0x3)
+[BOOT ] Alloc new page at 0x10A000
+[MMU  ] Map 0x10A000 -> 0xC00A2000 (0x3)
+[BOOT ] Alloc new page at 0x10B000
+[MMU  ] Map 0x10B000 -> 0xC00A3000 (0x3)
+[BOOT ] Alloc new page at 0x10C000
+[MMU  ] Map 0x10C000 -> 0xC00A4000 (0x3)
+[BOOT ] Alloc new page at 0x10D000
+[MMU  ] Map 0x10D000 -> 0xC00A5000 (0x3)
+[BOOT ] Alloc new page at 0x10E000
+[MMU  ] Map 0x10E000 -> 0xC00A6000 (0x3)
+[BOOT ] Alloc new page at 0x10F000
+[MMU  ] Map 0x10F000 -> 0xC00A7000 (0x3)
+[BOOT ] Alloc new page at 0x110000
+[MMU  ] Map 0x110000 -> 0xC00A8000 (0x3)
+[BOOT ] Alloc new page at 0x111000
+[MMU  ] Map 0x111000 -> 0xC00A9000 (0x3)
+[BOOT ] Alloc new page at 0x112000
+[MMU  ] Map 0x112000 -> 0xC00AA000 (0x3)
+[BOOT ] Alloc new page at 0x113000
+[MMU  ] Map 0x113000 -> 0xC00AB000 (0x3)
+[BOOT ] Alloc new page at 0x114000
+[MMU  ] Map 0x114000 -> 0xC00AC000 (0x3)
+[BOOT ] Alloc new page at 0x115000
+[MMU  ] Map 0x115000 -> 0xC00AD000 (0x3)
+[BOOT ] Alloc new page at 0x116000
+[MMU  ] Map 0x116000 -> 0xC00AE000 (0x3)
+[BOOT ] Alloc new page at 0x117000
+[MMU  ] Map 0x117000 -> 0xC00AF000 (0x3)
+[BOOT ] Alloc new page at 0x118000
+[MMU  ] Map 0x118000 -> 0xC00B0000 (0x3)
+[BOOT ] Alloc new page at 0x119000
+[MMU  ] Map 0x119000 -> 0xC00B1000 (0x3)
+[BOOT ] Alloc new page at 0x11A000
+[MMU  ] Map 0x11A000 -> 0xC00B2000 (0x3)
+[BOOT ] Alloc new page at 0x11B000
+[MMU  ] Map 0x11B000 -> 0xC00B3000 (0x3)
+[BOOT ] Alloc new page at 0x11C000
+[MMU  ] Map 0x11C000 -> 0xC00B4000 (0x3)
+[BOOT ] Alloc new page at 0x11D000
+[MMU  ] Map 0x11D000 -> 0xC00B5000 (0x3)
+[BOOT ] Alloc new page at 0x11E000
+[MMU  ] Map 0x11E000 -> 0xC00B6000 (0x3)
+[BOOT ] Alloc new page at 0x11F000
+[MMU  ] Map 0x11F000 -> 0xC00B7000 (0x3)
+[BOOT ] Alloc new page at 0x120000
+[MMU  ] Map 0x120000 -> 0xC00B8000 (0x3)
+[BOOT ] Alloc new page at 0x121000
+[MMU  ] Map 0x121000 -> 0xC00B9000 (0x3)
+[BOOT ] Alloc new page at 0x122000
+[MMU  ] Map 0x122000 -> 0xC00BA000 (0x3)
+[BOOT ] Alloc new page at 0x123000
+[MMU  ] Map 0x123000 -> 0xC00BB000 (0x3)
+[BOOT ] Alloc new page at 0x124000
+[MMU  ] Map 0x124000 -> 0xC00BC000 (0x3)
+[BOOT ] Alloc new page at 0x125000
+[MMU  ] Map 0x125000 -> 0xC00BD000 (0x3)
+[BOOT ] Alloc new page at 0x126000
+[MMU  ] Map 0x126000 -> 0xC00BE000 (0x3)
+[BOOT ] Alloc new page at 0x127000
+[MMU  ] Map 0x127000 -> 0xC00BF000 (0x3)
+[BOOT ] Alloc new page at 0x128000
+[MMU  ] Map 0x128000 -

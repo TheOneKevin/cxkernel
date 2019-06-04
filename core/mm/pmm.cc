@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include <arch/x86/arch_utils.h>
+#include "arch/x86/arch_utils.h"
 #include "system.h"
 #include "core/vm.h"
 #include "arch/interface.h"

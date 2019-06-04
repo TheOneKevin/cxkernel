@@ -10,7 +10,14 @@
 
 #pragma once
 
-#include "common.h"
+#ifndef libm
+    #include "common.h"
+#else
+    #define __BEGIN_CDECLS
+    #define __END_CDECLS
+    #include <stdbool.h>
+    #include <stddef.h>
+#endif
 
 // As defined in the:
 // The Open Group Base Specifications Issue 6
@@ -23,7 +30,7 @@ int      strncmp(const char *, const char *, size_t);
 int      memcmp(const void *, const void *, size_t);
 void    *memcpy(void *, const void *, size_t);
 void    *memset(void *, int, size_t);
-void    *memmove(void *, void *, size_t);
+void    *memmove(void *, const void *, size_t);
 char    *strcat(char *, const char *);
 char    *strcpy(char *, const char *);
 char    *strdup(const char *);

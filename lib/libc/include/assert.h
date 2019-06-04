@@ -10,7 +10,14 @@
 
 #pragma once
 
-#include "common.h"
+#ifndef libm
+    #include "common.h"
+#else
+    #define __FILENAME__ __FILE__
+    #define __BEGIN_CDECLS
+    #define __END_CDECLS
+    #include <stdbool.h>
+#endif
 
 __BEGIN_CDECLS
 
@@ -21,5 +28,7 @@ void __assert_hard__(bool condition, char* s, char* msg, int l, char* f);
 
 #define ASSERT(c, s) __assert__(c, #c, s, __LINE__, __FILENAME__);
 #define ASSERT_HARD(c, s) __assert_hard__(c, #c, s, __LINE__, __FILENAME__);
+
+#define assert(x) ASSERT(x, "")
 
 __END_CDECLS

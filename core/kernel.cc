@@ -10,6 +10,8 @@
  */
 
 #include <stdio.h>
+#include <ctype.h>
+#include <math.h>
 #include <icxxabi.h>
 
 #include "platform.h"
@@ -32,12 +34,6 @@ extern "C" void kernel_main(loader_t args)
     // Do some final arch inits
     arch::init();
     platform::init();
-    // Init memory functions
-    list_node_t pages;
-    INIT_LLIST(&pages);
-    pmm_alloc(1, &pages);
-    pmm_free(&pages);
-
     //Execute start module
     for(;;);
 }

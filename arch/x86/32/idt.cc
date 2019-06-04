@@ -49,12 +49,3 @@ namespace x86_32::idt
         return (uint32_t) (idt_entries[idx].base_hi << 16) | idt_entries[idx].base_lo;
     }
 } // namespace x86_32::idt
-
-extern "C" void isr_handler(regs_t* r)
-{
-    if(platform::get_irq().get_handler(r->int_no) != 0)
-        platform::get_irq().get_handler(r->int_no)(r);
-    else
-        OS_ERR("Unhandled exception 0x%X!\n", r->int_no);
-    pc::pic::send_eoi(r->int_no);
-}

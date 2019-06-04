@@ -1,0 +1,1255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="GROUP_BY_SEVERITY" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="osdev" targetName="cxkrnl" />
+      <config projectName="osdev" targetName="iso" />
+      <config projectName="osdev" targetName="cxlodr" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug-WSL" CONFIG_NAME="Debug" TOOLCHAIN_NAME="WSL" GENERATION_OPTIONS="-DTARGET=x86 -DTOOLCHAIN_PATH=/Programming/git/barebones-toolchain/cross/x86_64/bin/ -DPRXDIR=/mnt/c/Users/Kevin/Desktop/osdev/ -DCUSTOM_FILENAME=ON -DDEBUG=ON -DLOG_ENABLE=ON" GENERATION_DIR="build/cmake-debug" />
+      <configuration PROFILE_NAME="Release-WSL" CONFIG_NAME="Release" TOOLCHAIN_NAME="WSL" GENERATION_OPTIONS="-DTARGET=x86 -DTOOLCHAIN_PATH=/Programming/git/barebones-toolchain/cross/x86_64/bin/ -DPRXDIR=/mnt/c/Users/Kevin/Desktop/osdev/ -DCUSTOM_FILENAME=ON -DDEBUG=OFF -DLOG_ENABLE=OFF" GENERATION_DIR="build/cmake-release" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="22b14523-e93f-4dc7-a404-18468e4a7b8f" name="Default Changelist" comment="Reverted memset.">
+      <change afterPath="$PROJECT_DIR$/core/mm/vmm.cc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/libc/stdlib.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile.in" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Makefile.in" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/bin/cxkrnl.sys" beforeDir="false" afterPath="$PROJECT_DIR$/build/bin/cxkrnl.sys" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/configure.ac" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/scripts/install_prereq.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build/scripts/install_prereq.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/kernel.cc" beforeDir="false" afterPath="$PROJECT_DIR$/core/kernel.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/mm/pmm.cc" beforeDir="false" afterPath="$PROJECT_DIR$/core/mm/pmm.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/core/vm.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/core/vm.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libc++/icxxabi.cc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libc++/include/icxxabi.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libc/include/assert.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/libc/include/assert.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libc/include/math.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/libc/include/math.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libc/include/stdlib.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/libc/include/stdlib.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libc/include/string.h" beforeDir="false" afterPath="$PROJECT_DIR$/lib/libc/include/string.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libc/vsprintf.c" beforeDir="false" afterPath="$PROJECT_DIR$/lib/libc/vsprintf.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/openlibm/Make.inc" beforeDir="false" afterPath="$PROJECT_DIR$/lib/openlibm/Make.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/openlibm/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/lib/openlibm/Makefile" afterDir="false" />
+    </list>
+    <list id="bc590105-027d-4a80-9c9d-509b31b3681d" name="Let's try again." comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/bochs/bochsout.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/bochs/bochsrc.bxrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/bochs/bx_enh_dbg.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/bochs/serial.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arch/x86/32/idt.cc" beforeDir="false" afterPath="$PROJECT_DIR$/arch/x86/32/idt.cc" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <ignored path="$PROJECT_DIR$/cmake-build-debug-wsl/" />
+    <ignored path="$PROJECT_DIR$/build/cmake-build/" />
+    <ignored path="$PROJECT_DIR$/cmake-build-release/" />
+    <ignored path="$PROJECT_DIR$/cmake-build-release-cygwin/" />
+    <ignored path="$PROJECT_DIR$/build/debug/" />
+    <ignored path="$PROJECT_DIR$/build/release/" />
+    <ignored path="$PROJECT_DIR$/build/cmake-debug/" />
+    <ignored path="$PROJECT_DIR$/build/cmake-release/" />
+    <ignored path="$PROJECT_DIR$/CMakeFiles/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+    <option name="clangWarnings" value="-Wno-unused-variable,-Werror=implicit-function-declaration,-Wshadow,-Wno-shadow-field-in-constructor-modified,-Wno-shadow-ivar" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="osdev" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/kernel.cc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="35" column="21" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
+              <folding>
+                <element signature="e#340#358#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/mm/pmm.cc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/mm/vmm.cc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2074">
+              <caret line="122" column="26" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/libc/stdlib.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="79">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/core/vm.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+              <folding>
+                <element signature="e#351#370#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CMakeLists.txt" />
+      </list>
+    </option>
+    <option name="SCHEME" value="Project" />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>0xB</find>
+      <find>0xB8000</find>
+      <find>0x\d+</find>
+      <find>0xE</find>
+      <find>ALIGN</find>
+      <find>list.h</find>
+      <find>__typeof__</find>
+      <find>loader_t</find>
+      <find>arena</find>
+      <find>init_pps32</find>
+      <find>pmm_init</find>
+      <find>CTOR</find>
+      <find>pages</find>
+      <find>x86::g</find>
+      <find>MAX_MEM</find>
+      <find>unused</find>
+      <find>CX_</find>
+      <find>SET</find>
+      <find>list_insert</find>
+      <find>pps</find>
+      <find>page_t</find>
+      <find>exception</find>
+      <find>page</find>
+      <find>excep</find>
+      <find>get_mmu</find>
+      <find>0xC00A8</find>
+      <find>inline</find>
+      <find>0x136000</find>
+      <find>0x12E000</find>
+      <find>NULL</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>__BEGIN_CDECLS</replace>
+      <replace>__END_CDECLS</replace>
+      <replace>fprintf(STREAM_LOG,</replace>
+      <replace>if(ctx.phdr32[i].p_type == \m)</replace>
+      <replace>if(ctx.shdr32[i].sh_type == PT_$1)</replace>
+      <replace>ctx.shdr32\[i\].sh_type == _(\w+)</replace>
+      <replace>ctx.shdr32\[i\].sh_type == SHT_$1</replace>
+      <replace>OS_DBG</replace>
+      <replace>// namespace</replace>
+      <replace>TYPEOF</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>C:\Users\Kevin\Desktop\osdev\</dir>
+      <dir>C:\Users\Kevin\Desktop\osdev</dir>
+      <dir>C:\Users\Kevin\Desktop\osdev\include</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="TheCool1James &lt;kevindai02@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="PUSH_TAGS">
+      <GitPushTagMode />
+    </option>
+    <option name="SIGN_OFF_COMMIT" value="true" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/include/arch/x86/32/gdt.h" />
+        <option value="$PROJECT_DIR$/arch/x86/32/asm/tables.asm" />
+        <option value="$PROJECT_DIR$/arch/x86/32/i386-extern.cc" />
+        <option value="$PROJECT_DIR$/platform/pc/idt.cc" />
+        <option value="$PROJECT_DIR$/include/platform/interrupts.h" />
+        <option value="$PROJECT_DIR$/platform/pc/vga.cc" />
+        <option value="$PROJECT_DIR$/arch/x86/32/idt.cc" />
+        <option value="$PROJECT_DIR$/include/arch/x86/mboot.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/strace.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/32/mboot.h" />
+        <option value="$PROJECT_DIR$/arch/x86/mboot.cc" />
+        <option value="$PROJECT_DIR$/lib/elf/include/elf_parser.h" />
+        <option value="$PROJECT_DIR$/include/arch/interface.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/arch_utils.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/32/idt.h" />
+        <option value="$PROJECT_DIR$/arch/x86/32/exceptions.cc" />
+        <option value="$PROJECT_DIR$/loader/x86/start.asm" />
+        <option value="$PROJECT_DIR$/arch/x86/init.cc" />
+        <option value="$PROJECT_DIR$/include/arch/mmu.h" />
+        <option value="$PROJECT_DIR$/core/interrupts.cc" />
+        <option value="$PROJECT_DIR$/arch/x86/strace.cc" />
+        <option value="$PROJECT_DIR$/arch/x86/32/asm/irq.asm" />
+        <option value="$APPLICATION_CONFIG_DIR$/clion64.exe.vmoptions" />
+        <option value="$PROJECT_DIR$/lib/ebl/include/bitmap.h" />
+        <option value="$PROJECT_DIR$/lib/libc/include/stdio.h" />
+        <option value="$PROJECT_DIR$/include/platform/pc/vga.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/cpu.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/32/arch_defs.h" />
+        <option value="$PROJECT_DIR$/arch/x86/32/mmu.cc" />
+        <option value="$PROJECT_DIR$/include/compiler.h" />
+        <option value="$PROJECT_DIR$/loader/x86/mmu.cc" />
+        <option value="$PROJECT_DIR$/include/system.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/interface/arch_interface.h" />
+        <option value="$PROJECT_DIR$/loader/x86/include/global.h" />
+        <option value="$PROJECT_DIR$/include/arch/x86/global.h" />
+        <option value="$PROJECT_DIR$/arch/x86/32/init.cc" />
+        <option value="$PROJECT_DIR$/lib/elf/elf_parser.cc" />
+        <option value="$PROJECT_DIR$/loader/x86/main.cc" />
+        <option value="$PROJECT_DIR$/platform/pc/platform.cc" />
+        <option value="$PROJECT_DIR$/loader/x86/loader.cc" />
+        <option value="$PROJECT_DIR$/lib/ebl/include/linked_list.h" />
+        <option value="$PROJECT_DIR$/build/config.h" />
+        <option value="$PROJECT_DIR$/include/utils.h" />
+        <option value="$PROJECT_DIR$/loader/x86/bootmem.cc" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/lib/libc/string.c" />
+        <option value="$PROJECT_DIR$/core/kernel.cc" />
+        <option value="$PROJECT_DIR$/core/mm/pmm.cc" />
+        <option value="$PROJECT_DIR$/include/core/vm.h" />
+        <option value="$PROJECT_DIR$/core/mm/vmm.cc" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+      </list>
+    </option>
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="HUlUfhnM" />
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-10" />
+    <option name="width" value="980" />
+    <option name="height" value="1040" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="osdev" type="b2602c69:ProjectViewProjectNode" />
+              <item name="osdev" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="osdev" type="b2602c69:ProjectViewProjectNode" />
+              <item name="osdev" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SearchEverywhereHistoryKey" value="irq&#9;FILE&#9;file://C:/Users/Kevin/Desktop/osdev/arch/x86/32/asm/irq.asm&#10;get_consol&#9;null&#9;null" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="true&#10;C:/Users/Kevin/Desktop/osdev/log.txt" />
+    <property name="full.screen.before.presentation.mode" value="false" />
+    <property name="js.buildTools.grunt.grunt-cli.package" value="" />
+    <property name="js.buildTools.gulp.gulp_package_dir" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs.jest.jest_package" value="" />
+    <property name="nodejs.protractor.protractor_package" value="" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Kevin\Desktop\osdev\arch\x86\32" />
+      <recent name="C:\Users\Kevin\Desktop\osdev\arch\x86" />
+      <recent name="C:\Users\Kevin\Desktop\osdev\include\arch\x86\32" />
+      <recent name="C:\Users\Kevin\Desktop\osdev\include\platform" />
+      <recent name="C:\Users\Kevin\Desktop\osdev\include\arch\x86" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="GDB Remote Debug.QEMU">
+    <configuration default="true" type="elmot.embedded.openocd.conf.type" factoryName="elmot.embedded.openocd.conf.factory" singleton="false" PASS_PARENT_ENVS_2="true">
+      <openocd gdb-port="3333" telnet-port="4444" reset-type="INIT" download-type="ALWAYS" />
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="QEMU" type="CLion_Remote" singleton="false" toolchainName="WSL" remoteCommand=":1234" symbolFile="$PROJECT_DIR$/build/bin/cxkrnl.sys" sysroot="$PROJECT_DIR$/">
+      <pathMapping remote=":/mnt/c/Users/Kevin/Desktop/osdev/" local="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="Run (Debug)" run_configuration_type="CMakeRunConfiguration" />
+      </method>
+    </configuration>
+    <configuration name="Run (Debug)" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="/C &quot;start qemu-system-i386 -S -gdb tcp::1234 -boot d -cdrom build/bin/LiquiDOS.iso -m 512 -serial file:log.txt &quot; -no-reboot" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug-WSL" RUN_PATH="C:/Windows/System32/cmd.exe" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="/C &quot;start qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 512 -serial file:log.txt &quot;" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug-WSL" RUN_PATH="C:/Windows/System32/cmd.exe" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="js.build_tools.grunt">
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.Run" />
+      <item itemvalue="CMake Application.Run (Debug)" />
+      <item itemvalue="GDB Remote Debug.QEMU" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\Kevin\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="22b14523-e93f-4dc7-a404-18468e4a7b8f" name="Default Changelist" comment="" />
+      <changelist id="bc590105-027d-4a80-9c9d-509b31b3681d" name="Let's try again." comment="" />
+      <created>1542161611421</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1542161611421</updated>
+      <workItem from="1542161615098" duration="2243000" />
+      <workItem from="1542167468667" duration="406000" />
+      <workItem from="1542167936393" duration="1324000" />
+      <workItem from="1542381601369" duration="178000" />
+      <workItem from="1542382014307" duration="11528000" />
+      <workItem from="1542424976341" duration="13019000" />
+      <workItem from="1542477932961" duration="6027000" />
+      <workItem from="1542511580108" duration="1599000" />
+      <workItem from="1542513385126" duration="2044000" />
+      <workItem from="1542570798658" duration="5256000" />
+      <workItem from="1542581943204" duration="873000" />
+      <workItem from="1542583503487" duration="2387000" />
+      <workItem from="1542681163546" duration="6000" />
+      <workItem from="1542768702819" duration="4000" />
+      <workItem from="1544743198450" duration="541000" />
+      <workItem from="1544888230158" duration="1299000" />
+      <workItem from="1544893562221" duration="1060000" />
+      <workItem from="1544917657302" duration="5000" />
+      <workItem from="1544919463728" duration="6027000" />
+      <workItem from="1545530887047" duration="782000" />
+      <workItem from="1545533248137" duration="395000" />
+      <workItem from="1545533670655" duration="503000" />
+      <workItem from="1545534465547" duration="10000" />
+      <workItem from="1545534623037" duration="149000" />
+      <workItem from="1545534803266" duration="109000" />
+      <workItem from="1545534948394" duration="154000" />
+      <workItem from="1545535153782" duration="224000" />
+      <workItem from="1545535403947" duration="315000" />
+      <workItem from="1545535947894" duration="296000" />
+      <workItem from="1545536856852" duration="188000" />
+      <workItem from="1545537201140" duration="1923000" />
+      <workItem from="1545655876206" duration="269000" />
+      <workItem from="1545656195298" duration="296000" />
+      <workItem from="1545664854774" duration="259000" />
+      <workItem from="1545670404256" duration="495000" />
+      <workItem from="1545672572395" duration="59681000" />
+      <workItem from="1545868422805" duration="98000" />
+      <workItem from="1546277609221" duration="26585000" />
+      <workItem from="1546467651775" duration="25145000" />
+      <workItem from="1546640777308" duration="10511000" />
+      <workItem from="1546665110331" duration="1076000" />
+      <workItem from="1546666344394" duration="3258000" />
+      <workItem from="1546724419563" duration="15491000" />
+      <workItem from="1546824875530" duration="1389000" />
+      <workItem from="1548212561490" duration="1613000" />
+      <workItem from="1548258875827" duration="2000" />
+      <workItem from="1548448708725" duration="847000" />
+      <workItem from="1548731623368" duration="2000" />
+      <workItem from="1549665984445" duration="2000" />
+      <workItem from="1550021944313" duration="98000" />
+      <workItem from="1550114483011" duration="591000" />
+      <workItem from="1551023309268" duration="883000" />
+      <workItem from="1551970046769" duration="621000" />
+      <workItem from="1551970941095" duration="1247000" />
+      <workItem from="1552450039987" duration="2777000" />
+      <workItem from="1552508870704" duration="1213000" />
+      <workItem from="1552578234143" duration="6000" />
+      <workItem from="1552603746417" duration="188000" />
+      <workItem from="1552611949110" duration="5324000" />
+      <workItem from="1552617781406" duration="919000" />
+      <workItem from="1552649376518" duration="4478000" />
+      <workItem from="1552688163247" duration="1951000" />
+      <workItem from="1552708292123" duration="574000" />
+      <workItem from="1552709671595" duration="529000" />
+      <workItem from="1552757465131" duration="4016000" />
+      <workItem from="1552837371120" duration="272000" />
+      <workItem from="1552837798717" duration="466000" />
+      <workItem from="1552839604655" duration="40000" />
+      <workItem from="1552840406631" duration="200000" />
+      <workItem from="1552841193117" duration="962000" />
+      <workItem from="1552843720313" duration="1048000" />
+      <workItem from="1552852298041" duration="1207000" />
+      <workItem from="1552865714465" duration="8160000" />
+      <workItem from="1552947176072" duration="1783000" />
+      <workItem from="1552959937017" duration="8516000" />
+      <workItem from="1553215405122" duration="153000" />
+      <workItem from="1553267037231" duration="5000" />
+      <workItem from="1553782607953" duration="3000" />
+      <workItem from="1554693051753" duration="1858000" />
+      <workItem from="1555068202576" duration="426000" />
+      <workItem from="1555069922157" duration="604000" />
+      <workItem from="1555164962015" duration="2593000" />
+      <workItem from="1555250065478" duration="2878000" />
+      <workItem from="1555262752316" duration="833000" />
+      <workItem from="1555263738592" duration="4392000" />
+      <workItem from="1555457008501" duration="592000" />
+      <workItem from="1555691347624" duration="759000" />
+      <workItem from="1555692661140" duration="2416000" />
+      <workItem from="1557772055368" duration="1026000" />
+      <workItem from="1559368335415" duration="342000" />
+      <workItem from="1559394236287" duration="906000" />
+      <workItem from="1559410167887" duration="33469000" />
+      <workItem from="1559506922601" duration="2477000" />
+      <workItem from="1559514952924" duration="1856000" />
+      <workItem from="1559536412769" duration="3941000" />
+      <workItem from="1559620230559" duration="386000" />
+      <workItem from="1559620678944" duration="20000" />
+      <workItem from="1559658834202" duration="59000" />
+      <workItem from="1559700444263" duration="717000" />
+    </task>
+    <task id="LOCAL-00001" summary="Updated boot time memory management">
+      <created>1545795890733</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1545795890733</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed JetBrains nonsense.">
+      <created>1545796359038</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1545796359038</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fixed more JetBrains nonsense.">
+      <created>1545835018874</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1545835018874</updated>
+    </task>
+    <task id="LOCAL-00004" summary="I think I managed to get the preprocessor to work with Cmake. Thus this will be last autoconf commit.">
+      <created>1545840509733</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1545840509733</updated>
+    </task>
+    <task id="LOCAL-00005" summary="The loader is now complete. The kernel binary can now be loaded from elf format. Next step: Bring all kernel code over.">
+      <created>1546466233832</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1546466233832</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Reorganized files.">
+      <created>1546466497007</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1546466497007</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Added PAE and NX support.">
+      <created>1546491304762</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1546491304762</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Minor refactoring.">
+      <created>1546547434909</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1546547434909</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Interrupts work now.">
+      <created>1546663173548</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1546663173548</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Let's try again.">
+      <created>1546666614865</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1546666614865</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Exceptions, stack trace and all have been migrated/ported over from master branch.">
+      <created>1546750534136</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1546750534136</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Stack trace fixed.">
+      <created>1546802093649</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1546802093649</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Stack trace fixed.">
+      <created>1552450173940</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1552450173940</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added physical memory manager.">
+      <created>1559449710676</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1559449710676</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Fixed physical allocator.">
+      <created>1559537049756</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1559537049757</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Reverted memset.">
+      <created>1559537214809</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1559537214809</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Reverted memset.">
+      <created>1559537341777</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1559537341777</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="318673000" />
+  </component>
+  <component name="TodoView" selected-index="2">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <layout>
+      <window_info id="Favorites" order="0" sideWeight="0.49008498" side_tool="true" weight="0.17114094" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.509915" visible="true" weight="0.2181208" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.35977337" />
+      <window_info anchor="bottom" id="CMake" order="2" sideWeight="0.49789384" visible="true" weight="0.28328612" />
+      <window_info anchor="bottom" id="Messages" order="3" sideWeight="0.49710983" weight="0.30311614" />
+      <window_info anchor="bottom" id="Run" order="4" sideWeight="0.49779737" weight="0.3045326" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="7" sideWeight="0.4966443" weight="0.4362606" />
+      <window_info anchor="bottom" id="TODO" order="8" sideWeight="0.49958712" weight="0.3286119" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4979356" weight="0.26770538" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5033557" side_tool="true" weight="0.34844193" />
+      <window_info anchor="bottom" id="Inspection Results" order="12" weight="0.3286119" />
+      <window_info anchor="bottom" id="Version Control" order="13" sideWeight="0.49710983" weight="0.4164306" />
+      <window_info anchor="bottom" id="clangd" order="14" show_stripe_button="false" weight="0.3286119" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" show_stripe_button="false" weight="0.3295302" />
+      <window_info anchor="right" id="make" order="4" show_stripe_button="false" weight="0.3295302" />
+      <window_info anchor="right" id="Structure" order="5" sideWeight="0.47792706" weight="0.23758389" />
+      <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="6" side_tool="true" weight="0.3295302" />
+      <window_info anchor="right" id="Cargo" order="7" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Favorites" order="0" sideWeight="0.49008498" side_tool="true" weight="0.17114094" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.509915" visible="true" weight="0.20604026" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.35977337" />
+      <window_info anchor="bottom" id="CMake" order="2" sideWeight="0.49789384" weight="0.28611898" />
+      <window_info anchor="bottom" id="Messages" order="3" sideWeight="0.49710983" weight="0.30311614" />
+      <window_info anchor="bottom" id="Run" order="4" sideWeight="0.49779737" weight="0.3045326" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="7" sideWeight="0.4966443" visible="true" weight="0.36402267" />
+      <window_info anchor="bottom" id="TODO" order="8" sideWeight="0.49958712" weight="0.3286119" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4979356" weight="0.26770538" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5033557" side_tool="true" weight="0.34844193" />
+      <window_info anchor="bottom" id="Inspection Results" order="12" weight="0.3286119" />
+      <window_info anchor="bottom" id="Version Control" order="13" sideWeight="0.49710983" weight="0.4164306" />
+      <window_info anchor="bottom" id="clangd" order="14" show_stripe_button="false" weight="0.3286119" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" show_stripe_button="false" weight="0.3295302" />
+      <window_info anchor="right" id="make" order="4" show_stripe_button="false" weight="0.3295302" />
+      <window_info anchor="right" id="Structure" order="5" sideWeight="0.47792706" weight="0.23758389" />
+      <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="6" side_tool="true" weight="0.3295302" />
+      <window_info anchor="right" id="Cargo" order="7" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated boot time memory management" />
+    <MESSAGE value="Fixed JetBrains nonsense." />
+    <MESSAGE value="Fixed more JetBrains nonsense." />
+    <MESSAGE value="I think I managed to get the preprocessor to work with Cmake. Thus this will be last autoconf commit." />
+    <MESSAGE value="The loader is now complete. The kernel binary can now be loaded from elf format. Next step: Bring all kernel code over." />
+    <MESSAGE value="Reorganized files." />
+    <MESSAGE value="Added PAE and NX support." />
+    <MESSAGE value="Minor refactoring." />
+    <MESSAGE value="Interrupts work now." />
+    <MESSAGE value="Is this commit signed?" />
+    <MESSAGE value="Let's try again." />
+    <MESSAGE value="Exceptions, stack trace and all have been migrated/ported over from master branch." />
+    <MESSAGE value="Stack trace fixed." />
+    <MESSAGE value="Added physical memory manager." />
+    <MESSAGE value="Fixed physical allocator." />
+    <MESSAGE value="Reverted memset.&#10;&#10;Signed-off-by: Kevin &lt;kevindai02@outlook.com&gt;" />
+    <MESSAGE value="Reverted memset." />
+    <option name="LAST_COMMIT_MESSAGE" value="Reverted memset." />
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="breakpointCondition">
+      <expression>
+        <expression-string>i == 0x100000 - 2</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="watch">
+      <expression>
+        <expression-string>yeah</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arena_list</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="setValue">
+      <expression>
+        <expression-string>0xE010f0b0</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>arena-&gt;size/ARCH_PAGE_SIZE*sizeof(page_t)</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&amp;arena-&gt;pages[0x100000]</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arena-&gt;pages[0x100001]</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arena-&gt;pages[0x100000]</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arena-&gt;pages[0]</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>arena-&gt;pages</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>sizeof(page_t)</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>LIST_ENTRY(arena_list.next,pmm_arena_t,node)</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>(pmm_arena_t*)LIST_ENTRY(arena_list.next,pmm_arena_t,node)</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/include/compiler.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
+          <folding>
+            <element signature="e#1977#2051#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arch/x86/32/i386-stub.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1149">
+          <caret line="530" column="5" selection-start-line="530" selection-start-column="5" selection-end-line="530" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arch/x86/32/asm/irq.asm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="11" column="11" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/interface.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="45" column="9" selection-start-line="45" selection-start-column="9" selection-end-line="45" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/common.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="22" column="8" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/libc/include/stdio.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+          <folding>
+            <element signature="e#501#589#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/libc/vsprintf.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2412" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/libc/printk.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="59" column="22" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
+          <folding>
+            <element signature="e#1318#1358#0" expanded="true" />
+            <element signature="e#1857#1897#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arch/x86/32/mmu.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="107" column="12" lean-forward="true" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
+          <folding>
+            <element signature="e#414#432#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/elf/include/elf_parser.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-216">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/paging.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-101">
+          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/elf/include/elf.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="81" column="20" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/interrupts.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arch/x86/init.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="47" column="17" lean-forward="true" selection-start-line="47" selection-start-column="17" selection-end-line="47" selection-end-column="17" />
+          <folding>
+            <element signature="e#365#383#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/interface/arch_atomic.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/interface/arch_interface.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="61" column="1" selection-start-line="61" selection-start-column="1" selection-end-line="61" selection-end-column="1" />
+          <folding>
+            <element signature="e#516#535#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arch/x86/strace.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="28" column="67" selection-start-line="28" selection-start-column="67" selection-end-line="28" selection-end-column="67" />
+          <folding>
+            <element signature="e#340#358#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/loader/x86/include/global.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="35" column="36" selection-start-line="35" selection-start-column="36" selection-end-line="35" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/system.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="e#355#374#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/mmu.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/global.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="24" column="26" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
+          <folding>
+            <element signature="e#354#373#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/loader/x86/vga.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="18" selection-start-line="18" selection-end-line="18" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/config.h.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/arch_utils.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-16">
+          <caret line="16" column="38" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/cpu.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="181" column="35" selection-start-line="181" selection-start-column="29" selection-end-line="181" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/elf/elf_parser.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="17" column="51" selection-start-line="17" selection-start-column="51" selection-end-line="17" selection-end-column="51" />
+          <folding>
+            <element signature="e#269#288#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/interface/arch_types.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/types.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="18" column="51" lean-forward="true" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/loader/x86/main.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-832">
+          <caret line="103" column="32" selection-start-line="103" selection-start-column="32" selection-end-line="103" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/loader/x86/mmu.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="579">
+          <caret line="100" selection-start-line="100" selection-end-line="100" />
+          <folding>
+            <element signature="e#416#435#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/32/idt.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="72" column="12" lean-forward="true" selection-start-line="72" selection-start-column="12" selection-end-line="72" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/ebl/include/linked_list.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-433">
+          <caret line="47" column="14" selection-start-line="47" selection-start-column="7" selection-end-line="47" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/arch/x86/32/arch_defs.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="32" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arch/x86/32/init.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="96" column="59" selection-start-line="96" selection-start-column="59" selection-end-line="96" selection-end-column="59" />
+          <folding>
+            <element signature="e#367#385#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/home/kevin/barebones-toolchain/cross/x86_64/lib/gcc/i686-elf/6.2.0/include/stddef.h" />
+    <entry file="file://$PROJECT_DIR$/include/utils.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="75" column="6" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
+          <folding>
+            <element signature="e#976#1037#0" expanded="true" />
+            <element signature="e#1885#1946#0" expanded="true" />
+            <element signature="e#2337#2380#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/log.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="34398" column="14" selection-start-line="34398" selection-start-column="14" selection-end-line="34398" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/config.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+          <folding>
+            <element signature="e#324#345#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeCache.txt" />
+    <entry file="file://$PROJECT_DIR$/lib/libc/string.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-103">
+          <caret line="149" column="16" selection-start-line="149" selection-start-column="16" selection-end-line="149" selection-end-column="16" />
+          <folding>
+            <element signature="e#1005#1117#0" expanded="true" />
+            <element signature="e#1397#1494#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/loader/x86/loader.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="37" column="63" selection-start-line="37" selection-start-column="63" selection-end-line="37" selection-end-column="63" />
+          <folding>
+            <element signature="e#367#390#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/loader/x86/bootmem.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="84" column="23" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
+          <folding>
+            <element signature="e#369#387#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arch/x86/32/exceptions.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="93" selection-start-line="93" selection-end-line="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/platform/pc/platform.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1050">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+          <folding>
+            <element signature="e#240#259#0" expanded="true" />
+            <element signature="e#712#740#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/kernel.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="35" column="21" selection-start-line="35" selection-start-column="21" selection-end-line="35" selection-end-column="21" />
+          <folding>
+            <element signature="e#340#358#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/mm/pmm.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/mm/vmm.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2074">
+          <caret line="122" column="26" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/core/vm.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding>
+            <element signature="e#351#370#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="61" column="8" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/libc/stdlib.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="79">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

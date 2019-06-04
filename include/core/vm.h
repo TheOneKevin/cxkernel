@@ -36,7 +36,6 @@ __BEGIN_CDECLS
 typedef struct page
 {
     list_node_t node;
-    uint32_t index;
     uint32_t flags;
     uint32_t ref;
 } page_t;
@@ -53,10 +52,19 @@ typedef struct pmm_arena
     list_node_t free_list;
 } pmm_arena_t;
 
-typedef struct region vmm_region_t;
+typedef struct region
+{
+    list_node_t node;
+    uint32_t flags;
+    size_t size;
+    unsigned int ref;
+    list_node_t pages;
+    list_node_t mappings;
+    struct region* parent;
+} vmm_region_t;
 
 void pmm_add_arena(pmm_arena_t*);
-size_t pmm_alloc(size_t cnt, list_node_t* pages);
+size_t pmm_alloc(size_t, list_node_t* pages);
 size_t pmm_free(list_node_t* pages);
 
 __END_CDECLS

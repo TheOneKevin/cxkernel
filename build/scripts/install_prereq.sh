@@ -12,6 +12,14 @@ do
         ${osInfo[$f]} install git
         ${osInfo[$f]} install nasm
         ${osInfo[$f]} install xorriso
+        ${osInfo[$f]} install quilt
         ${osInfo[$f]} install grub-pc grub-pc-bin grub-rescue-pc
     fi
 done
+
+echo Now patching openlibm...
+
+cd ../lib/
+rm -rf openlibm
+git clone https://github.com/JuliaMath/openlibm.git openlibm/
+quilt push

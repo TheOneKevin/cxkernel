@@ -65,7 +65,7 @@ void* memset(void* dest, int c, size_t len)
     #endif
 }
 
-void* memmove(void* dest, void* src, size_t len)
+void* memmove(void* dest, const void* src, size_t len)
 {
     char* d = dest;
     char* s = src;

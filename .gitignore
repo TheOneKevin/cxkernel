@@ -5,13 +5,10 @@ build/bin/*.tar
 build/bin/isodir/
 build/cmake-*/
 
-# Patches
-patches/*
-!patches/*.*
-
 # IDE Folders
 .vscode/
 #.idea/
+.directory
 
 # Autohell
 autom4te.cache/
@@ -61,3 +58,6 @@ CMakeCache.txt
 # Git
 .git/
 
+# Patches
+lib/.pc/
+lib/openlibm/
