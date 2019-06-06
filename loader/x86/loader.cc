@@ -21,6 +21,8 @@
 #include "arch/x86/paging.h"
 #include "include/global.h"
 
+extern bitmap_t alloc_map; // pmm bitmap
+
 namespace loader
 {
     void run_program32(elf::Context &ctx)
@@ -53,7 +55,7 @@ namespace loader
         memset((void*)(ARCH_STACK_BOTTOM - ARCH_PAGE_SIZE), 0, ARCH_PAGE_SIZE);
         asm volatile("mov %0, %%esp" :: "r" (ARCH_STACK_BOTTOM - 0x10));
         BOCHS_MAGIC_BREAK();
-        ((void (*)(loader_t)) (ctx.img32->e_entry))({g_sig, ctx, &g_mbt});
+        ((void (*)(loader_t)) (ctx.img32->e_entry))({g_sig, &alloc_map, ctx, &g_mbt});
         for(;;);
     }
 } // namespace loader

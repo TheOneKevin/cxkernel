@@ -33,6 +33,8 @@
     #define __FILENAME__ __FILE__
 #endif
 
+#define IGNORE(x) GCC diagnostic ignored #x
+
 #define unlikely(x) __builtin_expect((x), 0)
 #define likely(x) __builtin_expect((x), 1)
 

@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ * 
+ * @file   platform.cc
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * @date   Created on June 05 2019, 5:19 PM
+ */
 /**
  * @file   platform.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
@@ -85,7 +95,6 @@ namespace pc
 namespace platform
 {
     using namespace pc;
-    using namespace x86;
 
     static pmm_arena_t arena32 =
     {
@@ -117,11 +126,11 @@ namespace platform
     void init(void)
     {
         // Memory Topology
-        ARCH_FOREACH_MMAP(mmap, g::mbt, 0)
-            g::max_mem = MAX(g::max_mem, mmap->addr + mmap->len);
+        ARCH_FOREACH_MMAP(mmap, x86::g::mbt, 0)
+            x86::g::max_mem = MAX(x86::g::max_mem, mmap->addr + mmap->len);
         // Initialize data structures
-        arena32.size = (uint32_t)(ARCH_PAGE_ALIGN(g::max_mem) / ARCH_PAGE_SIZE);
-        pmm_add_arena(&arena32);
+        arena32.size = (uint32_t)(ARCH_PAGE_ALIGN(x86::g::max_mem) / ARCH_PAGE_SIZE);
+        pmm_add_arena(&arena32, g::loader -> bitmap);
     }
 
     Irq& get_irq()

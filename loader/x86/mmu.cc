@@ -9,8 +9,8 @@
  * @date   Created on December 26 2018, 9:41 AM
  */
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 #define __MODULE__ "MMU"
+
 #include <string.h>
 #include <stdio.h>
 #include <elf_parser.h>
@@ -20,6 +20,8 @@
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/paging.h"
 #include "include/global.h"
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 extern "C" void enable_xd();
 

@@ -11,6 +11,7 @@
  * C++ standard. These functions are required by GCC.
  */
 
+#include <stdlib.h>
 #include <icxxabi.h>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -36,6 +37,7 @@ extern "C" void __cxa_finalize(void* f)
 void __cxa_pure_virtual()
 {
     // Do nothing
+    abort();
 }
 
 // The ABI requires a 64-bit type.

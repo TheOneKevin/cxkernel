@@ -8,11 +8,13 @@
  * @author Kevin Dai \<kevindai02@outlook.com\>
  * @date   Created on January 03 2019, 2:54 PM
  */
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Wreturn-type"
 
 #include "platform.h"
 #include "platform/interrupts.h"
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wreturn-type"
+
 using namespace platform;
 
 void Irq::install_handler(int n, irq_handler_t handler) { }

@@ -57,6 +57,20 @@ static inline list_node_t* list_end(list_node_t* a)
     return a;
 }
 
+static inline bool list_isempty(list_node_t* a)
+{
+    list_node_t* front = list_begin(a);
+    return front -> next == NULL && front -> prev == front;
+}
+
+static inline int list_count(list_node_t* a)
+{
+    int ctr = 0;
+    list_node_t* front = list_begin(a);
+    while(front -> next != NULL) front = front -> next, ctr++;
+    return ctr;
+}
+
 static inline void list_append(list_head_t* head, list_node_t* node)
 {
     if(head -> next != NULL)
