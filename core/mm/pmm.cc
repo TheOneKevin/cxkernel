@@ -1,13 +1,3 @@
-/*
- * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
- * Use of this source code is governed by a MIT-style
- * license that can be found in the LICENSE file or at
- * https://opensource.org/licenses/MIT
- * 
- * @file   pmm.cc
- * @author Kevin Dai \<kevindai02@outlook.com\>
- * @date   Created on June 05 2019, 9:03 PM
- */
 /**
  * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style

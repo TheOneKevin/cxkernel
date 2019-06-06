@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style
  * license that can be found in the LICENSE file or at
@@ -7,16 +7,6 @@
  * @file   vm.h
  * @author Kevin Dai \<kevindai02@outlook.com\>
  * @date   Created on June 06 2019, 12:19 AM
- */
-/**
- * Copyright (c) 2018 The cxkernel Authors. All rights reserved.
- * Use of this source code is governed by a MIT-style
- * license that can be found in the LICENSE file or at
- * https://opensource.org/licenses/MIT
- *
- * @file   vm.h
- * @author Kevin Dai \<kevindai02@outlook.com\>
- * @date   Created on December 15 2018, 7:23 PM
  */
 
 #pragma once
