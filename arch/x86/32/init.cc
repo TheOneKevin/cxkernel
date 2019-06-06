@@ -39,8 +39,6 @@ namespace x86::g
 
 namespace x86_32
 {
-    using namespace x86;
-
     // Reserve spaces for structs
     static multiboot_info_t mbt;
 
@@ -48,8 +46,8 @@ namespace x86_32
     {
         // Save the multiboot info pointer in a global variable
         memcpy(&mbt, args.obj, sizeof(multiboot_info_t));
-        g::mbt = &mbt;
-        memcpy(&g::ctx, &args.ctx, sizeof(elf::Context));
+        x86::g::mbt = &mbt;
+        memcpy(&x86::g::ctx, &args.ctx, sizeof(elf::Context));
 
         // Multiboot sanity check
         OS_PRN("%-66s", "Checking multiboot integrity... ");
@@ -80,10 +78,10 @@ namespace x86_32
         mod--;
 
         // Initialize memory map
-        g::mmap.MOD_END = ARCH_VIRT_PHYS(mod -> mod_end);
-        g::mmap.KRN_BEGIN = (virt_t) &_kernel_start;
-        g::mmap.KRN_END = (virt_t) &_kernel_end;
-        g::mmap.KRN_BRK = g::mmap.KRN_END;
+        x86::g::mmap.MOD_END = ARCH_VIRT_PHYS(mod -> mod_end);
+        x86::g::mmap.KRN_BEGIN = (virt_t) &_kernel_start;
+        x86::g::mmap.KRN_END = (virt_t) &_kernel_end;
+        x86::g::mmap.KRN_BRK = x86::g::mmap.KRN_END;
 
         gdt::init();
         idt::init();

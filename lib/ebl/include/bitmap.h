@@ -18,6 +18,7 @@ __BEGIN_CDECLS
 typedef struct bitmap
 {
     size_t length;        //!< Array size of bitmap, not total bit count
+    size_t bit_count;     //!< Bit count
     unsigned int* bitmap; //!< Bitmap array
 } bitmap_t;
 
@@ -62,15 +63,15 @@ typedef struct bitmap
  * @param b The bitmap to search
  * @return The index of the bit. If none was found, returns -1
  */
-static inline int bitmap_firstz(bitmap_t b)
+static inline int bitmap_firstz(bitmap_t* b)
 {
     int _ptr = 0;
-    for(size_t i = 0; i < b.length; i++)
+    for(size_t i = 0; i < b -> length; i++)
     {
-        if(b.bitmap[i] != ~0U)
+        if(b -> bitmap[i] != ~0U)
         {
             _ptr = 0;
-            while(_ptr < 32 && bitmap_tstbit(b.bitmap, _ptr + bitmap_getbits(i))) _ptr++;
+            while(_ptr < 32 && bitmap_tstbit(b -> bitmap, _ptr + bitmap_getbits(i))) _ptr++;
             _ptr += (int) bitmap_getbits(i);
             return _ptr;
         }
@@ -83,14 +84,14 @@ static inline int bitmap_firstz(bitmap_t b)
  * @param b The bitmap to search
  * @return The index of the bit. If none was found, returns -1
  */
-static inline int bitmap_lastz(bitmap_t b)
+static inline int bitmap_lastz(bitmap_t* b)
 {
     int _ptr = 0;
-    for(size_t i = b.length; i > 0; i--)
+    for(size_t i = b -> length; i > 0; i--)
     {
-        if(b.bitmap[i - 1] != ~0U)
+        if(b -> bitmap[i - 1] != ~0U)
         {
-            while(_ptr > 0 && bitmap_tstbit(b.bitmap, (_ptr - 1) + bitmap_getbits(i - 1))) _ptr--;
+            while(_ptr > 0 && bitmap_tstbit(b -> bitmap, (_ptr - 1) + bitmap_getbits(i - 1))) _ptr--;
             _ptr += (int) bitmap_getbits(i - 1);
             return _ptr;
         }

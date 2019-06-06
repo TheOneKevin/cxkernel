@@ -10,6 +10,12 @@
  */
 
 #include <stdlib.h>
+#include <panic.h>
+
+void abort(void)
+{
+    PANIC("Kernel aborted!");
+}
 
 int abs(int j)
 {

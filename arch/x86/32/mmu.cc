@@ -9,7 +9,6 @@
  * @date   Created on March 13 2019, 4:03 PM
  */
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 #define __MODULE__ "MMU"
 
 #include <stdio.h>
@@ -20,6 +19,8 @@
 #include "arch/x86/paging.h"
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/llio.h"
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 static inline void __tlb_flush_all(void)
 {

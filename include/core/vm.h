@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ * 
+ * @file   vm.h
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * @date   Created on June 06 2019, 12:19 AM
+ */
 /**
  * Copyright (c) 2018 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style
@@ -31,6 +41,10 @@
 #define CX_PERM_SPECIFIC			(1 << 9)
 #define CX_PERM_SPECIFIC_OVERWRITE	(1 << 10)
 
+// If we wish to use listed allocators and modify page lists
+#define PMM_TYPE_LIST  1
+#define PMM_TYPE_OTHER 2
+
 __BEGIN_CDECLS
 
 typedef struct page
@@ -63,8 +77,29 @@ typedef struct region
     struct region* parent;
 } vmm_region_t;
 
-void pmm_add_arena(pmm_arena_t*);
-size_t pmm_alloc(size_t, list_node_t* pages);
-size_t pmm_free(list_node_t* pages);
+typedef virt_t allocpage_t; // TODO: Review all allocpage_t uses
+
+void pmm_add_arena(pmm_arena_t*, bitmap_t*);
+size_t pmm_alloc_pages(size_t, allocpage_t pages);
+size_t pmm_free(allocpage_t pages);
 
 __END_CDECLS
+
+#ifdef __cplusplus
+
+namespace pmm
+{
+    class PhysicalAllocator
+    {
+    public:
+        virtual void AddArena(pmm_arena_t* arena, bitmap_t* bt = NULL);
+        virtual size_t Allocate(size_t, allocpage_t pages);
+        virtual size_t AllocateSingle(allocpage_t pages);
+        virtual size_t Free(allocpage_t pages);
+        virtual int GetType();
+    };
+    void SetPhysicalAllocator(PhysicalAllocator*);
+    PhysicalAllocator& GetPhysicalAllocator();
+}
+
+#endif

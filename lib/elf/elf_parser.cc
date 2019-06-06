@@ -16,6 +16,7 @@
 #include <elf_parser.h>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-function"
 
 namespace elf
 {

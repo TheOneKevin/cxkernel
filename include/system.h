@@ -15,6 +15,7 @@
 #include "arch/types.h"
 #include "arch/x86/multiboot.h"
 
+#include <bitmap.h>
 #include <elf_parser.h>
 #include <linked_list.h>
 
@@ -23,8 +24,18 @@ __BEGIN_CDECLS
 typedef struct
 {
     int magic;
+    bitmap_t* bitmap;
     elf::Context& ctx;
     void* obj;
 } loader_t;
 
 __END_CDECLS
+
+#ifdef __cplusplus
+
+namespace g
+{
+    extern loader_t* loader;
+}
+
+#endif

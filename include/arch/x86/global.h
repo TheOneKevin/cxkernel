@@ -24,6 +24,7 @@ namespace x86::g
     extern multiboot_info_t* mbt;
     extern virt_t mods_end;
     extern phys_t max_mem;
+    extern loader_t* loader;
 }
 
 #endif

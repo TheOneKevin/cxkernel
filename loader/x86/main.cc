@@ -40,6 +40,8 @@
 #include "arch/x86/arch_utils.h"
 #include "arch/x86/interface/arch_types.h"
 
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 // Random ctor shit
 using ctor_func = void (*)();
 extern ctor_func _ctors_start;

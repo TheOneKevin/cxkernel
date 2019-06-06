@@ -9,9 +9,11 @@
  * @date   Created on October 13 2018, 12:31 PM
  */
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "platform/console.h"
 #include "platform.h"
+#include "platform/console.h"
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 using namespace platform;
 
 void Console::putc(char c) { }
