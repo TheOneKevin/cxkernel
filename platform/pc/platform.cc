@@ -8,25 +8,17 @@
  * @author Kevin Dai \<kevindai02@outlook.com\>
  * @date   Created on June 05 2019, 5:19 PM
  */
-/**
- * @file   platform.cc
- * @author Kevin Dai \<kevindai02@outlook.com\>
- *
- * @date Created on Saturday, October 13th 2018, 6:18:56 pm
- *
- * @date Last modified by:   Kevin Dai
- * @date Last modified time: 2018-11-13T21:04:52-05:00
- */
 
 #include <string.h>
 #include <panic.h>
 #include <stdio.h>
 #include <math.h>
 
-#include "core/vm.h"
+#include "core/memory.h"
 #include "arch/x86/global.h"
 #include "arch/x86/arch_utils.h"
 #include "arch/x86/interface/arch_interface.h"
+#include "arch/x86/cpu.h"
 #include "platform.h"
 #include "platform/interrupts.h"
 #include "platform/console.h"
@@ -80,7 +72,7 @@ namespace pc
 
             void remove_handler(int n) override
             {
-                handlers[n] = nullptr;
+                handlers[n] = NULL;
             }
 
             irq_handler_t get_handler(int n) override
@@ -96,22 +88,36 @@ namespace platform
 {
     using namespace pc;
 
-    static pmm_arena_t arena32 =
+    static pmm_arena_t arena =
     {
+#if ARCH_TYPE == ARCH_x86_32
         .node = { NULL, NULL },
         .flags = CX_ARENA_PRESENT,
         .base = 0,
-        .size = 0x100000,
+        .size = 0,
         .free = 0,
         .priority = 1,
-        .pages = (page_t*) ARCH_PPS_BASE,
+        .pages = NULL,
         .free_list = { NULL, NULL }
+#endif
     };
 
-    Console &get_console(void)
+    static pmm_arena_t kmap =
     {
-        return static_cast<Console &>(console::__internal_vga_cons);
-    }
+#if ARCH_TYPE == ARCH_x86_32
+        .node = { NULL, NULL },
+        .flags = CX_ARENA_PRESENT | CX_ARENA_KERNEL,
+        .base = 0,
+        .size = 0,
+        .free = 0,
+        .priority = 2,
+        .pages = NULL,
+        .free_list = { NULL, NULL }
+#endif
+    };
+
+    Console &console = static_cast<Console &>(console::__internal_vga_cons);
+    Irq& irq = static_cast<Irq &>(interrupts::__internal_irq);
 
     void early_init(void)
     {
@@ -123,18 +129,51 @@ namespace platform
         memset(interrupts::handlers, 0, sizeof(interrupts::handlers));
     }
 
+    static phys_t max_pa = 0;
     void init(void)
     {
         // Memory Topology
         ARCH_FOREACH_MMAP(mmap, x86::g::mbt, 0)
             x86::g::max_mem = MAX(x86::g::max_mem, mmap->addr + mmap->len);
-        // Initialize data structures
-        arena32.size = (uint32_t)(ARCH_PAGE_ALIGN(x86::g::max_mem) / ARCH_PAGE_SIZE);
-        pmm_add_arena(&arena32, g::loader -> bitmap);
+        
+        // Map the lower XX MiB/GiB into upper memory
+        virt_t va = 0;
+        ARCH_FOREACH_MMAP(mmap, x86::g::mbt, 0)
+        {
+            if(va >= ARCH_KMALLOC_LENGTH) break;
+
+            if(!x86_feature_test(x86_FEATURE_PAE) && mmap->addr >= 0xFFFFFFFFUL)
+                break;
+            if(mmap->type == MULTIBOOT_MEMORY_AVAILABLE)
+            {
+                phys_t start_addr = ARCH_PAGE_ALIGN(mmap->addr);
+                phys_t end_addr = ARCH_PAGE_ALIGN_DOWN(mmap->addr + mmap->len);
+                
+                // TODO: We waste 1 MiB of ram by mapping the lower 16 MiB to 0xC000`0000
+                // and the lower 1 MiB to 0xE000`0000, see kmem_init()
+                for(phys_t pa = start_addr; (pa < end_addr) && (va < ARCH_KMALLOC_LENGTH);)
+                {
+                    arch::get_mmu().map((uint64_t) va + ARCH_KMALLOC_BASE, pa, 0x3);
+                    pa += ARCH_PAGE_SIZE, va += ARCH_PAGE_SIZE;
+                    max_pa = MAX(pa, max_pa);
+                }
+            }
+        }
+
+        BOCHS_MAGIC_BREAK();
     }
 
-    Irq& get_irq()
+    void meminit(void)
     {
-        return static_cast<Irq &>(interrupts::__internal_irq);
+        // Initialize data structures
+        kmap.base = 0;
+        kmap.size = max_pa / ARCH_PAGE_SIZE;
+        kmap.pages = (page_t*) (g::loader -> pps_start);
+        pmm_add_arena(&kmap, g::loader -> bitmap);
+
+        arena.base = max_pa;
+        arena.size = (uint32_t)((ARCH_PAGE_ALIGN(x86::g::max_mem) - max_pa) / ARCH_PAGE_SIZE);
+        arena.pages = &((page_t*) g::loader -> pps_start)[max_pa / ARCH_PAGE_SIZE];
+        pmm_add_arena(&arena, g::loader -> bitmap);
     }
 } // namespace platform

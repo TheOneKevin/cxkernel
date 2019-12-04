@@ -51,6 +51,7 @@ namespace x86_32
 {
     void early_init(loader_t args);
     void init();
+    void init_mmu();
     arch::Mmu& get_mmu();
 }
 
@@ -58,7 +59,6 @@ namespace x86_64
 {
     void early_init(loader_t args);
     void init();
-    arch::Mmu& get_mmu();
 }
 
 #endif

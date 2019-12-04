@@ -18,9 +18,11 @@
 #ifdef __cplusplus
 namespace platform
 {
-    Console& get_console(void);
-    Irq& get_irq();
+    extern Console& console;
+    extern Irq& irq;
+    
     void early_init(void);
     void init(void);
+    void meminit(void);
 }
 #endif

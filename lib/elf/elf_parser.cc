@@ -130,7 +130,7 @@ namespace elf
 
     char* get_symbol_name32(uint32_t addr, Context& ctx)
     {
-        elf32_sym_t* sym = nullptr;
+        elf32_sym_t* sym = NULL;
         auto* tab = (elf32_sym_t*)(ctx.symtab32->sh_offset+(uint32_t) ctx.img32);
         elf32_addr_t val = 0;
         for(elf32_word_t i = 0; i < ctx.symtab32->sh_size / sizeof(elf32_sym_t); i++)
@@ -141,7 +141,7 @@ namespace elf
                 val = tab[i].st_value;
             }
         }
-        if(!sym) return nullptr;
+        if(!sym) return NULL;
         char* sh_str = (char*)(ctx.strtab32->sh_offset+(uint32_t) ctx.img32);
         return &sh_str[sym->st_name];
     }
@@ -166,7 +166,7 @@ namespace elf
             if(strcmp(sh_str + ctx.shdr32[i].sh_name, name) == 0)
                 return &ctx.shdr32[i];
         }
-        return nullptr;
+        return NULL;
     }
 
     void load_img32(elf32_ehdr_t* img, Context &ctx)

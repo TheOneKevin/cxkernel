@@ -73,7 +73,7 @@ struct krnl_sym
     #define __BEGIN_CDECLS extern "C" {
     #define __END_CDECLS }
     //#undef NULL
-    //#define NULL nullptr
+    //#define NULL NULL
 #else
     #define __BEGIN_CDECLS
     #define __END_CDECLS

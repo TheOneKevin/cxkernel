@@ -26,6 +26,7 @@ typedef struct
     int magic;
     bitmap_t* bitmap;
     elf::Context& ctx;
+    virt_t pps_start;
     void* obj;
 } loader_t;
 

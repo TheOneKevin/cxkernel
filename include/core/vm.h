@@ -16,6 +16,10 @@
 #include <linked_list.h>
 
 #define CX_ARENA_PRESENT            (1 << 0)
+#define CX_ARENA_KERNEL             (1 << 1)
+
+#define CX_ARENA_TYPE_NORMAL        0
+#define CX_ARENA_TYPE_DMA32         1
 
 #define CX_PAGE_OCCUPIED            (1 << 0)
 
@@ -33,30 +37,45 @@
 
 // If we wish to use listed allocators and modify page lists
 #define PMM_TYPE_LIST  1
-#define PMM_TYPE_OTHER 2
+#define PMM_TYPE_BOOT  2
+#define PMM_TYPE_OTHER 3
 
 __BEGIN_CDECLS
 
-typedef struct page
+typedef struct page             page_t;
+typedef struct pmm_arena        pmm_arena_t;
+typedef struct region           vmm_region_t;
+typedef struct pmm_freeblock    pmm_freeblock_t;
+
+typedef unsigned int kmem_objctl_t;
+
+struct page
 {
     list_node_t node;
     uint32_t flags;
     uint32_t ref;
-} page_t;
+};
 
-typedef struct pmm_arena
+struct pmm_arena
+{
+    list_node_t node;       //!< Node to link all arenas together
+    uint16_t flags;         //!< Arena flags
+    phys_t base;            //!< Base physical address
+    size_t size;            //!< Size of arena in pages
+    size_t free;            //!< Number of pages free
+    int priority;           //!< Lower priority = more likely to be allocated from
+    page_t* pages;          //!< Ordered array of all physical pages
+    list_node_t free_list;  //!< Unordered linked list of all free pages
+};
+
+struct pmm_freeblock
 {
     list_node_t node;
-    uint32_t flags;
     phys_t base;
     size_t size;
-    size_t free;
-    int priority;
-    page_t* pages;
-    list_node_t free_list;
-} pmm_arena_t;
+};
 
-typedef struct region
+struct region
 {
     list_node_t node;
     uint32_t flags;
@@ -65,13 +84,12 @@ typedef struct region
     list_node_t pages;
     list_node_t mappings;
     struct region* parent;
-} vmm_region_t;
-
-typedef virt_t allocpage_t; // TODO: Review all allocpage_t uses
+};
 
 void pmm_add_arena(pmm_arena_t*, bitmap_t*);
-size_t pmm_alloc_pages(size_t, allocpage_t pages);
-size_t pmm_free(allocpage_t pages);
+size_t pmm_alloc_pages(size_t, list_head_t* pages);
+size_t pmm_free(list_head_t* pages);
+phys_t pmm_get_phys(page_t* page);
 
 __END_CDECLS
 
@@ -83,10 +101,13 @@ namespace pmm
     {
     public:
         virtual void AddArena(pmm_arena_t* arena, bitmap_t* bt = NULL);
-        virtual size_t Allocate(size_t, allocpage_t pages);
-        virtual size_t AllocateSingle(allocpage_t pages);
-        virtual size_t Free(allocpage_t pages);
+        virtual phys_t PageToPhysical(uintptr_t page);
+        virtual size_t Allocate(size_t, uintptr_t pages);
+        virtual size_t AllocateSingle(uintptr_t pages);
+        virtual size_t AllocateContiguous(size_t, uintptr_t pages);
+        virtual size_t Free(uintptr_t pages);
         virtual int GetType();
+        virtual size_t GetSize();
     };
     void SetPhysicalAllocator(PhysicalAllocator*);
     PhysicalAllocator& GetPhysicalAllocator();

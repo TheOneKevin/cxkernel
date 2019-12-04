@@ -38,7 +38,7 @@
 #define ARCH_GET_PT_IDX(a) ((a) >> 12 & 0x03FF)
 
 #define ARCH_PAE_GET_VIRT(pp, pd, pt) (((pp) << 30) | ((pd) << 21) | ((pt) << 12))
-#define ARCH_PAE_GET_PDPT_IDX(a) ((a) >> 30 & 0x01FF)
+#define ARCH_PAE_GET_PDPT_IDX(a) ((a) >> 30 & 0x3)
 #define ARCH_PAE_GET_PD_IDX(a)   ((a) >> 21 & 0x01FF)
 #define ARCH_PAE_GET_PT_IDX(a)   ((a) >> 12 & 0x01FF)
 

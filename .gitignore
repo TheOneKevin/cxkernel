@@ -1,14 +1,14 @@
 # Binaries and config
 build/bin/*.bin
-build/bin/*.sys
 build/bin/*.iso
 build/bin/*.tar
+build/bin/*.sys
 build/bin/isodir/
 build/cmake-*/
 
 # IDE Folders
-.vscode/
-#.idea/
+#.vscode/
+.idea/
 .directory
 
 # Autohell

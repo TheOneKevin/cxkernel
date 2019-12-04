@@ -22,8 +22,12 @@
 #include "include/global.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-value"
 
 extern "C" void enable_xd();
+
+#undef OS_DBG
+#define OS_DBG
 
 namespace loader
 {
@@ -102,24 +106,28 @@ namespace loader
             pdpt[1] = pmm_alloc_page();
             pdpt[2] = pmm_alloc_page();
             pdpt[3] = pmm_alloc_page();
-            auto* pd = (uint64_t*) pdpt[3];
-            pd[511] = (pdpt[3]) | (PDE_PR | PDE_RW);
-            pd[510] = (pdpt[2]) | (PDE_PR | PDE_RW);
-            pd[509] = (pdpt[1]) | (PDE_PR | PDE_RW);
-            pd[508] = (pdpt[0]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[2])[508] = ((uint64_t) pdpt[0]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[2])[509] = ((uint64_t) pdpt[1]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[2])[510] = ((uint64_t) pdpt[2]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[2])[511] = ((uint64_t) pdpt[3]) | (PDE_PR | PDE_RW);
+
             // Map the first 4 MiB
+            auto* pt0 = (uint64_t*) pmm_alloc_page();
             auto* pt1 = (uint64_t*) pmm_alloc_page();
-            auto* pt2 = (uint64_t*) pmm_alloc_page();
-            auto* pd1 = (uint64_t*) pdpt[0];
-            for(uint64_t i = 0; i < 512; i++) pt1[i] = (i << ARCH_PAGE_SHIFT) | (PTE_PR | PTE_RW);
-            for(uint64_t i = 512; i < 1024; i++) pt2[i - 512] = (i << ARCH_PAGE_SHIFT) | (PTE_PR | PTE_RW);
-            pd1[0] = ((uint64_t) pt1) | (PDE_PR | PDE_RW);
-            pd1[1] = ((uint64_t) pt2) | (PDE_PR | PDE_RW);
+            auto* pd0 = (uint64_t*) pdpt[0];
+            for(uint64_t i = 0; i < 512; i++)
+                pt0[i] = (i << ARCH_PAGE_SHIFT) | (PTE_PR | PTE_RW);
+            for(uint64_t i = 512; i < 1024; i++)
+                pt1[i - 512] = (i << ARCH_PAGE_SHIFT) | (PTE_PR | PTE_RW);
+            pd0[0] = ((uint64_t) pt0) | (PDE_PR | PDE_RW);
+            pd0[1] = ((uint64_t) pt1) | (PDE_PR | PDE_RW);
+
             // Enable PDPT entries
             pdpt[0] |= PDP_PR;
             pdpt[1] |= PDP_PR;
             pdpt[2] |= PDP_PR;
             pdpt[3] |= PDP_PR;
+
             // Enable paging
             write_cr3((uint32_t) &pdpt);
             write_cr4(read_cr4() | CR4_PAE | CR4_PGE);
@@ -127,12 +135,12 @@ namespace loader
             OS_PRN("32-bit paging with PAE enabled!\n");
             if(x86_feature_test(x86_FEATURE_NX))
             {
-                OS_DBG("NX/XD supported!\n");
+                OS_PRN("NX/XD supported!\n");
                 enable_xd();
             }
             else
             {
-                OS_DBG("NX/XD not supported!\n");
+                OS_PRN("NX/XD not supported!\n");
             }
             __tlb_flush_all();
         }
@@ -149,16 +157,20 @@ namespace loader
             uint32_t ppid = ARCH_PAE_GET_PDPT_IDX(virt);
             uint32_t pdid = ARCH_PAE_GET_PD_IDX(virt);
             uint32_t ptid = ARCH_PAE_GET_PT_IDX(virt);
-            uint64_t ptvd = ARCH_PAE_GET_VIRT(3UL, 508 + ppid, pdid);
-            auto* page_dir = (uint64_t*)(0xFFFFF000);
+            
+            auto* rpage_dir = (uint64_t*) ARCH_PAE_GET_VIRT(2UL, 510, 508 + ppid);
+            auto ptvd = (uint64_t) ARCH_PAE_GET_VIRT(2UL, 508 + ppid, pdid);
+
             OS_DBG("Map 0x%lX -> 0x%X (0x%lX)\n", phys, virt, flags);
-            if(page_dir[pdid] == 0) // Page table does not exist yet
+            
+            if(rpage_dir[pdid] == 0) // Page table does not exist yet
             {
-                auto addr = (uint32_t) pmm_alloc_page(false);
-                page_dir[pdid] = addr | (PDE_RW | PDE_PR);
+                auto addr = (uint64_t) pmm_alloc_page(false);
+                rpage_dir[pdid] = addr | (PDE_RW | PDE_PR);
                 __tlb32_flush_single(ptvd);
                 memset((void*) ptvd, 0, ARCH_PAGE_SIZE);
             }
+
             auto* page_tab = (uint64_t*) ptvd;
             page_tab[ptid] = ((uint32_t) phys) | flags;
             __tlb32_flush_single(virt & ARCH_PAGE_MASK);
@@ -171,7 +183,9 @@ namespace loader
     {
         if(!g_load64)
         {
+#ifdef WITH_PAE
             if(x86_feature_test(x86_FEATURE_PAE)) return static_cast<Mmu &>(__mmu32_pae);
+#endif
             return static_cast<Mmu &>(__mmu32_nopae);
         }
         else

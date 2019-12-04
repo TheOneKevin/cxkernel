@@ -11,6 +11,7 @@ option(CUSTOM_FILENAME "Use the custome __FILENAME__ instead of __FILE__" OFF)
 option(LOG_ENABLE "Enable logging to serial" ON)
 option(LOG_ALL_OUTPUT "Redirect all stdout to screen and serial" ON)
 option(DEBUG "Enable kernel debugging" OFF)
+option(WITH_PAE "Enable PAE support" ON)
 
 # CMake printing options
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

@@ -15,7 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <platform/pc/vga.h>
+#include <math.h>
+
+#include "platform/pc/vga.h"
 #include "core/vm.h"
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/paging.h"
@@ -27,7 +29,11 @@ namespace loader
 {
     void run_program32(elf::Context &ctx)
     {
-        get_mmu().map(ARCH_VIRT_BASE + VGA_FRAME_BASE, VGA_FRAME_BASE, PTE_RW | PTE_PR);
+        for(int i = 0; i < 0x100000; i += ARCH_PAGE_SIZE)
+            get_mmu().map(ARCH_VIRT_BASE + i, i, PTE_RW | PTE_PR);
+        
+        uint32_t my_pps_hard = 0;
+
         //TODO: The identity map of 4 MiB may not cover the entire program header if the loader become too large.
         for(int i = 0; i < ctx.img32->e_phnum; i++)
         {
@@ -49,13 +55,20 @@ namespace loader
                 for(uint32_t j = 0; j < ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz); j += ARCH_PAGE_SIZE)
                     get_mmu().map(v + j, p + j, flags);
             }
+
+            my_pps_hard = MAX(my_pps_hard, v + ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz));
         }
+        
+        OS_DBG("Kernel image end: 0x%X\n", my_pps_hard);
+
+        init_pps32(my_pps_hard);
+
         OS_DBG("=== Loader will now exit ===\n");
         get_mmu().map(ARCH_STACK_BOTTOM - 1*ARCH_PAGE_SIZE, pmm_alloc_page(false), PTE_PR | PTE_RW | PTE_NX);
         memset((void*)(ARCH_STACK_BOTTOM - ARCH_PAGE_SIZE), 0, ARCH_PAGE_SIZE);
         asm volatile("mov %0, %%esp" :: "r" (ARCH_STACK_BOTTOM - 0x10));
         BOCHS_MAGIC_BREAK();
-        ((void (*)(loader_t)) (ctx.img32->e_entry))({g_sig, &alloc_map, ctx, &g_mbt});
+        ((void (*)(loader_t)) (ctx.img32->e_entry))({g_sig, &alloc_map, ctx, my_pps_hard, &g_mbt});
         for(;;);
     }
 } // namespace loader

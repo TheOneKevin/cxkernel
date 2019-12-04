@@ -30,9 +30,12 @@ namespace pmm
 
         ~PmmNode() { }
 
+        phys_t PageToPhysical(uintptr_t page) override;
         void AddArena(pmm_arena_t* arena, bitmap_t* bt = NULL) override;
-        size_t Allocate(size_t cnt, allocpage_t pages) override;
-        size_t Free(allocpage_t pages) override;
+        size_t Allocate(size_t cnt, uintptr_t pages) override;
+        size_t AllocateSingle(uintptr_t pages) override;
+        size_t AllocateContiguous(size_t cnt, uintptr_t pages) override;
+        size_t Free(uintptr_t pages) override;
     };
 
     PhysicalAllocator* GetPmmNodeAllocator();

@@ -1,0 +1,93 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake Configure (Debug x86)",
+            "type": "shell",
+            "command": "rm -rf build/cmake-debug; mkdir build/cmake-debug; cd build/cmake-debug && cmake -DCMAKE_BUILD_TYPE=Debug -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=/Programming/git/barebones-toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=ON -DLOG_ENABLE=ON ${workspaceFolder}",
+            "problemMatcher": []
+        },
+        {
+            "label": "CMake Configure (Release x86)",
+            "type": "shell",
+            "command": "rm -rf build/cmake-release; mkdir build/cmake-release; cd build/cmake-release && cmake -DCMAKE_BUILD_TYPE=Release -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=/Programming/git/barebones-toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=OFF -DLOG_ENABLE=OFF ${workspaceFolder}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Debug",
+            "type": "shell",
+            "command": "make -C build/cmake-debug/",
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": "absolute"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Make Clean Debug",
+            "type": "shell",
+            "command": "make clean -C build/cmake-debug/",
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": "absolute"
+            }
+        },
+        {
+            "label": "Launch QEMU Debug",
+            "type": "shell",
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+            "command": "qemu-system-i386 -S -gdb tcp::1234 -boot d -cdrom build/bin/LiquiDOS.iso -m 256 -serial file:log.txt"
+        },
+        {
+            "label": "Launch QEMU",
+            "type": "shell",
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".",
+                    }
+                }
+            ],
+            "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
+        },
+        {
+            "label": "Kill All QEMU Instances",
+            "type": "shell",
+            "command": "pkill qemu",
+            "problemMatcher": []
+        }
+    ]
+}

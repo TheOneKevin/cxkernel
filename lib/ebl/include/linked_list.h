@@ -42,6 +42,10 @@ typedef struct list_node list_head_t;
         for(counter = LIST_ENTRY(head, TYPEOF(*counter), member); \
             counter -> member.next != NULL; \
             counter = LIST_ENTRY(counter -> member.next, TYPEOF(*counter), member))
+
+/**
+ * Same as foreach_llist, but with a NULL check.
+ */
 #define foreach_llist_safe(c, n, head) \
         for(list_t *c = (head), *n = c -> next; n != NULL; c = n, n = c -> next)
 
@@ -65,7 +69,7 @@ static inline bool list_isempty(list_node_t* a)
 
 static inline int list_count(list_node_t* a)
 {
-    int ctr = 0;
+    register int ctr = 0;
     list_node_t* front = list_begin(a);
     while(front -> next != NULL) front = front -> next, ctr++;
     return ctr;

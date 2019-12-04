@@ -23,20 +23,20 @@ char Console::getc(void)   { return 0; }
 
 extern "C" void console_emit(char c)
 {
-    platform::get_console().putc(c);
+    platform::console.putc(c);
 }
 
 extern "C" void console_puts(char* s)
 {
-    while(*s) platform::get_console().putc(*s++);
+    while(*s) platform::console.putc(*s++);
 }
 
 extern "C" char console_getc(void)
 {
-    return platform::get_console().getc();
+    return platform::console.getc();
 }
 
 extern "C" void console_log(char* s)
 {
-    while(*s) platform::get_console().log(*s++);
+    while(*s) platform::console.log(*s++);
 }

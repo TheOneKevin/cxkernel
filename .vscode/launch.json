@@ -1,0 +1,77 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch kernel with GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build/bin/cxkrnl.sys",
+            "cwd": "${workspaceRoot}",
+            "args": [],
+            "environment": [],
+            "targetArchitecture": "x86",
+            "MIMode": "gdb",
+            "miDebuggerArgs": "-nh",
+            "externalConsole": false,
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote localhost:1234",
+                    "description": "Connect to QEMU remote debugger"
+                }
+            ],
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "file /home/kevin/Desktop/User/osdev/build/bin/cxkrnl.sys"
+                },
+                {
+                    "text": "break isr_handler",
+                    "description": "Break on exception handler."
+                }
+            ],
+            "preLaunchTask": "Launch QEMU Debug",
+            "postDebugTask": "Kill All QEMU Instances"
+        },
+
+        {
+            "name": "Launch loader with GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build/bin/cxlodr.bin",
+            "cwd": "${workspaceRoot}",
+            "args": [],
+            "targetArchitecture": "x86",
+            "MIMode": "gdb",
+            "miDebuggerArgs": "",
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote localhost:1234",
+                    "description": "Connect to QEMU remote debugger"
+                }
+            ],
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "file /home/kevin/Desktop/User/osdev/build/bin/cxlodr.bin"
+                },
+                {
+                    "text": "break isr_handler",
+                    "description": "Break on exception handler."
+                }
+            ],
+            "preLaunchTask": "Launch QEMU Debug",
+            "postDebugTask": "Kill All QEMU Instances"
+        }
+    ]
+}

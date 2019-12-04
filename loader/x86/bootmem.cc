@@ -15,6 +15,7 @@
 #include <string.h>
 #include <math.h>
 #include <panic.h>
+#include <assert.h>
 
 #include "arch/x86/paging.h"
 #include "core/vm.h"
@@ -24,7 +25,14 @@
 
 // Comment out by default.
 #define ALLOCATE_FIRST
-#define MM_DBG OS_DBG
+// #define ANNOYING_LOG
+
+#ifdef ANNOYING_LOG
+    #define MM_DBG OS_DBG
+#else
+    #pragma GCC diagnostic ignored "-Wunused-value"
+    #define MM_DBG
+#endif
 
 extern "C" {
 
@@ -56,15 +64,18 @@ void init_bootmm32()
     }
     // Memory Topology
     ARCH_FOREACH_MMAP(mmap, &g_mbt, 0) MAX_MEM = MAX(MAX_MEM, mmap->addr + mmap->len);
-    // Initialize and zero out the bitmap
+    
+    // Initialize and "one" out the bitmap
     num_pages = (uint32_t)(ARCH_PAGE_ALIGN(MAX_MEM) / ARCH_PAGE_SIZE);
     alloc_map.length = bitmap_getlength(num_pages);
     alloc_map.bit_count = num_pages;
     alloc_map.bitmap = (unsigned int*)ARCH_PAGE_ALIGN(MODS_END);
-    // ?
+    memset(alloc_map.bitmap, -1, alloc_map.length * sizeof(unsigned int));
+
+    // ? To be decided...
     resrv_map.length = 8192;
     resrv_map.bitmap = (unsigned int*)__bt;
-    memset(alloc_map.bitmap, -1, alloc_map.length * sizeof(unsigned int)); // # of bits in bitmap / 8
+
     // Initialize the physical memory manager
     // Mark all free areas in bitmap
     // Each free area starts aligned upwards, and ends aligned downwards (some space may be wasted)
@@ -76,29 +87,36 @@ void init_bootmm32()
             break;
         if(mmap->type == MULTIBOOT_MEMORY_AVAILABLE)
         {
-            avail_mem += mmap->len;
             uint64_t start_addr = ARCH_PAGE_ALIGN(mmap->addr) / ARCH_PAGE_SIZE;
             uint64_t end_addr = ARCH_PAGE_ALIGN_DOWN(mmap->addr + mmap->len) / ARCH_PAGE_SIZE;
+            avail_mem += (end_addr - start_addr) * ARCH_PAGE_SIZE;
             for(uint64_t i = start_addr; i < end_addr; i++)
                 bitmap_clrbit(alloc_map.bitmap, i);
         }
     }
+    
+    uint32_t _a = 0;
+    for(uint32_t i = 0; i < alloc_map.bit_count; i++)
+        if(!bitmap_tstbit(alloc_map.bitmap, i))
+            _a += ARCH_PAGE_SIZE;
+    ASSERT_HARD(avail_mem == _a, "Someone messed up our bitmaps!");
+
     // Mark the kernel and modules as not free
     // The kernel's end is really the end of the bitmap
     //for(auto i = 0; i <= ARCH_PAGE_ALIGN((uint32_t) alloc_map.bitmap + alloc_map.length * sizeof(unsigned int)) / ARCH_PAGE_SIZE; i++)
-    for(uint32_t i = 0; i <= ARCH_PAGE_ALIGN(MODS_END) / ARCH_PAGE_SIZE; i++)
+    for(uint32_t i = 0x100000 / ARCH_PAGE_SIZE; i <= ARCH_PAGE_ALIGN(MODS_END) / ARCH_PAGE_SIZE; i++)
         bitmap_setbit(alloc_map.bitmap, i), bitmap_setbit(resrv_map.bitmap, i);
     pmm_update_all();
     OS_PRN("0x%lX bytes usable, 0x%X entries, 0x%X pages indexed\n", avail_mem, alloc_map.length, num_pages);
 }
 
-void init_pps32()
+void init_pps32(uint32_t base)
 {
     // Init per-page structure(round up)
     uint32_t num_struct = (num_pages*sizeof(page_t)+1)/ARCH_PAGE_SIZE;
     OS_PRN("Preparing 0x%X page structures...\n", num_struct);
     for(uint32_t i = 0; i <= num_struct; i++)
-        loader::get_mmu().map(ARCH_PPS_BASE + i*ARCH_PAGE_SIZE, pmm_alloc_page(false), PTE_RW | PTE_PR);
+        loader::get_mmu().map(base + i*ARCH_PAGE_SIZE, pmm_alloc_page(false), PTE_RW | PTE_PR);
 }
 
 // If we run out of room, we search the bitmap again to find

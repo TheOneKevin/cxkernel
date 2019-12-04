@@ -5,6 +5,7 @@
 #cmakedefine LOG_ENABLE
 #cmakedefine LOG_ALL_OUTPUT
 #cmakedefine DEBUG
+#cmakedefine WITH_PAE
 
 // Add any valued defines here:
 #define ARCH_TYPE           ARCH_@BITS@

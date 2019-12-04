@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style
  * license that can be found in the LICENSE file or at
@@ -6,10 +6,10 @@
  * 
  * @file   pmm_node.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * @date   Created on June 05 2019, 11:30 PM
+ * @date   Created on June 06 2019, 11:49 AM
  */
 
-#define __MODULE__ "PMM"
+#define __MODULE__ "NDALC"
 
 #include <stdlib.h>
 #include <linked_list.h>
@@ -25,13 +25,31 @@
 
 #define PAGE_IS_IN_ARENA(p, a) \
         (((virt_t)(p) >= (virt_t)(a)->pages) && (virt_t)(p) < (virt_t)(a)->pages+(a)->size/ARCH_PAGE_SIZE*sizeof(page_t))
+#define ADDRESS_FROM_ARENA(p, a) \
+        ((a)->base + (phys_t)(((virt_t)(p) - (virt_t)((a)->pages)) / sizeof(page_t)) * (ARCH_PAGE_SIZE))
+#define ADDRESS_IS_IN_ARENA(p, a) \
+        (((phys_t)(p) >= (a)->base) && ((phys_t)(p) < (a)->base+(a)->size*(ARCH_PAGE_SIZE)))
+#define INDEX_FROM_ADDRESS(p, a) (((phys_t)(p)-(a)-> base) / (ARCH_PAGE_SIZE))
+#define ADDRESS_FROM_INDEX(i, a) ((phys_t)((i)*(ARCH_PAGE_SIZE)+(a)->base))
 
 namespace pmm
 {
     static PmmNode __internal_PmmNodeAllocator;
 
+    phys_t PmmNode::PageToPhysical(uintptr_t page)
+    {
+        pmm_arena_t* arena;
+        foreach_llist_entry(arena, node, arena_list.next)
+        {
+            if(PAGE_IS_IN_ARENA(page, arena))
+                return ADDRESS_FROM_ARENA(page, arena);
+        }
+        return 0;
+    }
+
     void PmmNode::AddArena(pmm_arena_t* arena, bitmap_t* bt)
     {
+        OS_LOG("Add arena from 0x%08lX to 0x%08lX\n", arena->base, (arena->base+arena->size*ARCH_PAGE_SIZE));
         INIT_LLIST(&arena->node);
         INIT_LLIST(&arena->free_list);
         arena->free = 0;
@@ -61,7 +79,7 @@ namespace pmm
         // Go through bitmap
         if(bt != NULL)
         {
-            for(size_t i = 0; i < bt -> bit_count; i++)
+            for(size_t i = arena -> base / ARCH_PAGE_SIZE; i < arena -> size; i++)
             {
                 if(bitmap_tstbit(bt -> bitmap, i))
                     list_remove(&arena->pages[i].node);
@@ -70,7 +88,7 @@ namespace pmm
         OS_PRN("Loaded 0x%X page_t entries\n", list_count(arena->free_list.next));
     }
 
-    size_t PmmNode::Allocate(size_t cnt, allocpage_t p)
+    size_t PmmNode::Allocate(size_t cnt, uintptr_t p)
     {
         list_node_t* pages = (list_node_t*) p;
         size_t ret = 0;
@@ -94,7 +112,24 @@ namespace pmm
         return ret;
     }
 
-    size_t PmmNode::Free(allocpage_t p)
+    size_t PmmNode::AllocateSingle(uintptr_t p)
+    {
+        return Allocate(1, p);
+    }
+
+    size_t PmmNode::AllocateContiguous(size_t cnt, uintptr_t p)
+    {
+        list_node_t* pages = (list_node_t*) p;
+        size_t ret = 0;
+        if(cnt == 0) return 0;
+        pmm_arena_t* arena;
+        foreach_llist_entry(arena, node, arena_list.next)
+        {
+            
+        }
+    }
+
+    size_t PmmNode::Free(uintptr_t p)
     {
         list_node_t* pages = (list_node_t*) p;
         size_t ret = 0;

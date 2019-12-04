@@ -36,9 +36,11 @@ namespace pmm
     public:
         // Other stuff
         void AddArena(pmm_arena_t*, bitmap_t* bt = NULL) override;
-        size_t AllocateSingle(allocpage_t page) override;
-        size_t Free(allocpage_t st) override;
+        phys_t PageToPhysical(uintptr_t page) override;
+        size_t AllocateSingle(uintptr_t page) override;
+        size_t Free(uintptr_t st) override;
         int GetType() override;
+        size_t GetSize() override;
     };
 
     PhysicalAllocator* GetBootAllocator();

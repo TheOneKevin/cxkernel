@@ -1,15 +1,15 @@
-/*
+/**
  * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT
  * 
- * @file   bootmem.cc
+ * @file   bootalloc.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * @date   Created on June 05 2019, 9:19 PM
+ * @date   Created on June 06 2019, 11:21 AM
  */
 
-#define __MODULE__ "PMM"
+#define __MODULE__ "BTALC"
 
 #include <stdio.h>
 #include <panic.h>
@@ -24,12 +24,16 @@
 
 namespace pmm
 {
-    // typedef phys_t* allocpage_t;
     static BootAllocator __internal_BootAllocator;
 
     PhysicalAllocator* GetBootAllocator()
     {
         return static_cast<PhysicalAllocator*>(&__internal_BootAllocator);
+    }
+
+    phys_t BootAllocator::PageToPhysical(uintptr_t page)
+    {
+        return ((bafree_t*) page) -> addr;
     }
 
     // If we run out of room, we search the bitmap again to find
@@ -47,9 +51,8 @@ namespace pmm
         return false;
     }
 
-    size_t BootAllocator::AllocateSingle(allocpage_t p)
+    size_t BootAllocator::AllocateSingle(uintptr_t p)
     {
-        uint32_t* page = (uint32_t*) p;
     #ifdef ALLOCATE_FIRST
         if(bitmap_tstbit(alloc_map -> bitmap, _ptr) || _ptr >= alloc_map -> bit_count)
             BootAllocator::UpdateAll();
@@ -59,15 +62,16 @@ namespace pmm
     #endif
         bitmap_setbit(alloc_map -> bitmap, _ptr);
     #ifdef ALLOCATE_FIRST
-        *page = (_ptr++) * ARCH_PAGE_SIZE;
+        ((bafree_t*) p) -> addr = (_ptr++) * ARCH_PAGE_SIZE;
     #else
-        *page = (_ptr--) * ARCH_PAGE_SIZE; // Return the address of the allocated page
+        ((bafree_t*) p) -> addr = (_ptr--) * ARCH_PAGE_SIZE; // Return the address of the allocated page
     #endif
         return 1;
     }
 
     void BootAllocator::AddArena(pmm_arena_t* arena, bitmap_t* bt)
     {
+        OS_LOG("Add arena from 0x%08lX to 0x%08lX\n", arena->base, (arena->base+arena->size*ARCH_PAGE_SIZE));
         if(bt != NULL)
         {
             OS_PRN("Loaded 0x%X bitmapped pages\n", bt->bit_count);
@@ -76,7 +80,7 @@ namespace pmm
         }
     }
 
-    size_t BootAllocator::Free(allocpage_t st)
+    size_t BootAllocator::Free(uintptr_t st)
     {
         int pages = ((bafree_t*) st) -> pages;
         phys_t address = ((bafree_t*) st) -> addr;
@@ -88,6 +92,11 @@ namespace pmm
 
     int BootAllocator::GetType()
     {
-        return PMM_TYPE_OTHER;
+        return PMM_TYPE_BOOT;
+    }
+
+    size_t BootAllocator::GetSize()
+    {
+        return sizeof(bafree_t);
     }
 }

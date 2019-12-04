@@ -92,8 +92,8 @@ void exception_handler(regs_t* r) // Our exception handler called from the assem
 
 extern "C" void isr_handler(regs_t* r)
 {
-    if(platform::get_irq().get_handler(r->int_no) != 0)
-        platform::get_irq().get_handler(r->int_no)(r);
+    if(platform::irq.get_handler(r->int_no) != 0)
+        platform::irq.get_handler(r->int_no)(r);
     else
         OS_ERR("Unhandled exception 0x%X!\n", r->int_no);
     pc::pic::send_eoi(r->int_no);

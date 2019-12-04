@@ -14,6 +14,8 @@
 #include "utils.h"
 #include "config.h"
 
+#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+
 #define __NO_OPTIMIZE   __OPTIMIZE(0)
 #define __OPTIMIZE(x)   __attribute__((optimize("O"#x)))
 #define __PACKED        __attribute__((packed))
@@ -36,9 +38,8 @@
 #define IGNORE(x) GCC diagnostic ignored #x
 
 #define unlikely(x) __builtin_expect((x), 0)
-#define likely(x) __builtin_expect((x), 1)
-
-#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#define likely(x)   __builtin_expect((x), 1)
+#define alloca(x)   __builtin_alloca((x))
 
 // Compiler checks
 #if __STDC_HOSTED__ == 1

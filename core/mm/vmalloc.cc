@@ -1,20 +1,19 @@
-/*
+/**
  * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT
  * 
- * @file   slab.h
+ * @file   vmalloc.cc
  * @author Kevin Dai \<kevindai02@outlook.com\>
- * @date   Created on June 05 2019, 11:17 PM
+ * @date   Created on July 17 2019, 9:56 AM
  */
 
-#pragma once
+#define __MODULE__ "VMM"
 
-#include "common.h"
+#include "core/memory.h"
 
-__BEGIN_CDECLS
-
-
-
-__END_CDECLS
+void* vmalloc(size_t size)
+{
+    
+}

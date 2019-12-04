@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "core/memory.h"
+
 #include "arch/mmu.h"
 #include "arch/x86/cpu.h"
 #include "arch/x86/paging.h"
@@ -21,6 +23,11 @@
 #include "arch/x86/llio.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-value"
+
+// Disable the annoying logging if need be
+#undef OS_DBG
+#define OS_DBG
 
 static inline void __tlb_flush_all(void)
 {
@@ -44,11 +51,11 @@ namespace arch
     class Mmu32NopaeImpl : public Mmu
     {
     private:
-        uint32_t page_dir_addr = 0;
+        uint32_t page_dir_addr = 0xFFFFF000;
     public:
         void init() override
         {
-
+            OS_PRN("Registered paging without PAE\n");
         }
         void map(uint64_t a, uint64_t b, uint64_t c) override
         {
@@ -63,7 +70,9 @@ namespace arch
             OS_DBG("Map 0x%X -> 0x%X (0x%X)\n", phys, virt, flags);
             if(page_dir[pdid] == 0) // Page table does not exist yet
             {
-                auto addr = 0;//(uint32_t) pmm_alloc_page(false);
+                void* page = alloca(pmm::GetPhysicalAllocator().GetSize());
+                pmm::GetPhysicalAllocator().AllocateSingle((uintptr_t) page);
+                auto addr = (uint32_t) pmm::GetPhysicalAllocator().PageToPhysical((uintptr_t) page);
                 page_dir[pdid] = addr | (PDE_RW | PDE_PR);
                 __tlb32_flush_single(ptvd);
                 memset((void*) ptvd, 0, ARCH_PAGE_SIZE);
@@ -80,7 +89,7 @@ namespace arch
     public:
         void init() override
         {
-
+            OS_PRN("Registered paging with PAE\n");
         }
         void map(uint64_t a, uint64_t b, uint64_t c) override
         {
@@ -95,16 +104,22 @@ namespace arch
             uint32_t ppid = ARCH_PAE_GET_PDPT_IDX(virt);
             uint32_t pdid = ARCH_PAE_GET_PD_IDX(virt);
             uint32_t ptid = ARCH_PAE_GET_PT_IDX(virt);
-            uint32_t ptvd = ARCH_PAE_GET_VIRT(3UL, 508 + ppid, pdid);
-            auto* page_dir = (uint64_t*)(0xFFFFF000);
+            
+            auto* rpage_dir = (uint64_t*) ARCH_PAE_GET_VIRT(2UL, 510, 508 + ppid);
+            auto ptvd = (uint64_t) ARCH_PAE_GET_VIRT(2UL, 508 + ppid, pdid);
+
             OS_DBG("Map 0x%lX -> 0x%X (0x%lX)\n", phys, virt, flags);
-            if(page_dir[pdid] == 0) // Page table does not exist yet
+            
+            if(rpage_dir[pdid] == 0) // Page table does not exist yet
             {
-                auto addr = 0;//(uint32_t) pmm_alloc_page(false);
-                page_dir[pdid] = addr | (PDE_RW | PDE_PR);
+                void* page = alloca(pmm::GetPhysicalAllocator().GetSize());
+                pmm::GetPhysicalAllocator().AllocateSingle((uintptr_t) page);
+                auto addr = (uint64_t) pmm::GetPhysicalAllocator().PageToPhysical((uintptr_t) page);
+                rpage_dir[pdid] = addr | (PDE_RW | PDE_PR);
                 __tlb32_flush_single(ptvd);
                 memset((void*) ptvd, 0, ARCH_PAGE_SIZE);
             }
+
             auto* page_tab = (uint64_t*) ptvd;
             page_tab[ptid] = ((uint32_t) phys) | flags;
             __tlb32_flush_single(virt & ARCH_PAGE_MASK);
@@ -115,9 +130,23 @@ namespace arch
 
 namespace x86_32
 {
+    void init_mmu()
+    {
+#ifdef WITH_PAE
+        if(x86_feature_test(x86_FEATURE_PAE))
+            static_cast<arch::Mmu&>(arch::__mmu32_pae).init();
+        else
+#endif
+            static_cast<arch::Mmu&>(arch::__mmu32_nopae).init();
+    }
+
     arch::Mmu& get_mmu()
     {
-        if(x86_feature_test(x86_FEATURE_PAE)) return static_cast<arch::Mmu &>(arch::__mmu32_pae);
-        return static_cast<arch::Mmu &>(arch::__mmu32_nopae);
+#ifdef WITH_PAE
+        if(x86_feature_test(x86_FEATURE_PAE))
+            return static_cast<arch::Mmu&>(arch::__mmu32_pae);
+        else
+#endif
+            return static_cast<arch::Mmu&>(arch::__mmu32_nopae);
     }
 }
