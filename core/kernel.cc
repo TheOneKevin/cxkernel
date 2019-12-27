@@ -61,10 +61,10 @@ extern "C" void kernel_main(loader_t args)
     
     kmem_init();
     
-    char* str = (char*) kmem_cache_alloc(strlen("Hello, World!") + 1);
-    memset(str, 0, strlen("Hello, World!") + 1);
+    char* str = (char*) kmem_cache_alloc(20);
+    memset(str, 0, 20);
     str = "Hello, World!";
-    printf("%s", str);
+    printf("0x%X %s", (virt_t) str, str);
     fflush(STREAM_OUT);
 
     /*list_node_t pages;
@@ -73,5 +73,5 @@ extern "C" void kernel_main(loader_t args)
     pmm_free((uintptr_t) &pages);*/
 
     //Execute start module
-    for(;;);
+    for(;;) HALT_CPU;
 }

@@ -29,7 +29,7 @@
                     "ignoreFailures": true
                 },
                 {
-                    "text": "file /home/kevin/Desktop/User/osdev/build/bin/cxkrnl.sys"
+                    "text": "file ${workspaceFolder}/build/bin/cxkrnl.sys"
                 },
                 {
                     "text": "break isr_handler",
@@ -63,7 +63,7 @@
                     "ignoreFailures": true
                 },
                 {
-                    "text": "file /home/kevin/Desktop/User/osdev/build/bin/cxlodr.bin"
+                    "text": "file ${workspaceFolder}/build/bin/cxlodr.bin"
                 },
                 {
                     "text": "break isr_handler",

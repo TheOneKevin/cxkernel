@@ -1,6 +1,6 @@
 {
     "files.associations": {
-        "fstream": "cpp",
+        /*"fstream": "cpp",
         "cstdio": "cpp",
         "istream_helpers": "cpp",
         "cstdlib": "cpp",
@@ -63,12 +63,13 @@
         "type_traits": "cpp",
         "tuple": "cpp",
         "typeinfo": "cpp",
-        "utility": "cpp",
+        "utility": "cpp",*/
+        
         "panic.h": "c",
         "common.h": "c",
         "compiler.h": "c",
         "config.h": "c"
     },
-    "C_Cpp.errorSquiggles": "Disabled",
-    //"C_Cpp.errorSquiggles": "Enabled"
+    //"C_Cpp.errorSquiggles": "Disabled",
+    "C_Cpp.errorSquiggles": "Enabled"
 }

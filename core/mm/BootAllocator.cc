@@ -71,7 +71,6 @@ namespace pmm
 
     void BootAllocator::AddArena(pmm_arena_t* arena, bitmap_t* bt)
     {
-        OS_LOG("Add arena from 0x%08lX to 0x%08lX\n", arena->base, (arena->base+arena->size*ARCH_PAGE_SIZE));
         if(bt != NULL)
         {
             OS_PRN("Loaded 0x%X bitmapped pages\n", bt->bit_count);

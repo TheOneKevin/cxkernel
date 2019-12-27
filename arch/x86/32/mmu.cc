@@ -29,6 +29,9 @@
 #undef OS_DBG
 #define OS_DBG
 
+#define PG_FLAG_MASK        0b100011111
+#define PG_PAE_FLAG_MASK    0b100011111ULL
+
 static inline void __tlb_flush_all(void)
 {
     // Read the value of CR3 into CR3 to flush the TLB
@@ -63,7 +66,7 @@ namespace arch
             auto phys = (uint32_t) b;
             auto flags = (uint16_t) c;
             auto* page_dir = (uint32_t*) page_dir_addr;
-            flags &= 0b100011111;
+            flags &= PG_FLAG_MASK;
             uint32_t pdid = ARCH_GET_PD_IDX(virt);
             uint32_t ptid = ARCH_GET_PT_IDX(virt);
             uint32_t ptvd = ARCH_GET_VIRT(1023, pdid);
@@ -98,9 +101,9 @@ namespace arch
             auto phys = (uint64_t) b;
             auto flags = (uint64_t) c;
             if(x86_feature_test(x86_FEATURE_NX))
-                flags &= PTE_NX | 0b100011111ULL;
+                flags &= PTE_NX | PG_PAE_FLAG_MASK;
             else
-                flags &= 0b100011111ULL;
+                flags &= PG_PAE_FLAG_MASK;
             uint32_t ppid = ARCH_PAE_GET_PDPT_IDX(virt);
             uint32_t pdid = ARCH_PAE_GET_PD_IDX(virt);
             uint32_t ptid = ARCH_PAE_GET_PT_IDX(virt);

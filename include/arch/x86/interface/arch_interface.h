@@ -44,6 +44,7 @@
 
 #define ENABLE_INTERRUPTS  asm volatile ("sti");
 #define DISABLE_INTERRUPTS asm volatile ("cli");
+#define HALT_CPU           asm volatile ("hlt");
 
 #ifdef __cplusplus
 

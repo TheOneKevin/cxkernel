@@ -58,7 +58,7 @@
                     }
                 }
             ],
-            "command": "qemu-system-i386 -S -gdb tcp::1234 -boot d -cdrom build/bin/LiquiDOS.iso -m 256 -serial file:log.txt"
+            "command": "qemu-system-i386 -S -gdb tcp::1234 -boot d -cdrom build/bin/LiquiDOS.iso -m 128 -serial file:log.txt -monitor stdio"
         },
         {
             "label": "Launch QEMU",
@@ -81,12 +81,19 @@
                     }
                 }
             ],
-            "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
+            "linux": {
+                "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256 -enable-kvm -cpu host"
+            },
+            "windows": {
+                "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
+            }
         },
         {
             "label": "Kill All QEMU Instances",
             "type": "shell",
-            "command": "pkill qemu",
+            "linux": {
+                "command": "pkill qemu",
+            },
             "problemMatcher": []
         }
     ]

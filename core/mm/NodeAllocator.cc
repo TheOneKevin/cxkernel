@@ -85,7 +85,7 @@ namespace pmm
                     list_remove(&arena->pages[i].node);
             }
         }
-        OS_PRN("Loaded 0x%X page_t entries\n", list_count(arena->free_list.next));
+        OS_PRN("Loaded 0x%X free page_t entries\n", list_count(arena->free_list.next));
     }
 
     size_t PmmNode::Allocate(size_t cnt, uintptr_t p)
@@ -122,11 +122,45 @@ namespace pmm
         list_node_t* pages = (list_node_t*) p;
         size_t ret = 0;
         if(cnt == 0) return 0;
+
+        // Search all arenas...
+        size_t r1 = 0;
+        int idx = 0;
+        pmm_arena_t* farena = NULL;
+
+        // Start brute-force search...
         pmm_arena_t* arena;
         foreach_llist_entry(arena, node, arena_list.next)
         {
-            
+            size_t r2 = 0;
+            for(int i = 0; i < (int) arena -> size; i++)
+            {
+                if(CHECK_MFLG(arena -> pages[i].flags, CX_PAGE_OCCUPIED))
+                    r2++;
+                else
+                {
+                    if(r2 <= r1 && r2 >= cnt)
+                        idx = i, r1 = r2, farena = arena;
+                    if(r2 == cnt)
+                        goto done;
+                    r2 = 0;
+                }
+            }
         }
+
+done:
+        // Allocate the run!
+        if(r1 != cnt || !farena) return 0;
+        for(int i = idx; i < (int) r1; i++)
+        {
+            page_t* pg = &farena -> pages[i];
+            list_remove(&pg->node);
+            pg->flags |= CX_PAGE_OCCUPIED;
+            farena->free--;
+            list_append(list_end(pages), &pg->node);
+            ret++;
+        }
+        return ret;
     }
 
     size_t PmmNode::Free(uintptr_t p)
