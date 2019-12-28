@@ -2,7 +2,7 @@ image:
   file: Dockerfile
 tasks:
   - init: mkdir logs && cd build && . ./scripts/install_prereq.sh
-    command: export PATH=$PATH:/workspace/LiquiDOS/build/toolchain
+    command: export PATH=$PATH:/workspace/LiquiDOS/build/toolchain/cross/x86_64/bin/
 
 vscode:
   extensions:
