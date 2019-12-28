@@ -3,15 +3,16 @@ project(osdev)
 include(build/utils.cmake)
 
 # All configure options
-option(TARGET "Target platform" "x86")
-option(BITS "Target bits (64 or 32)" "x86_32")
-option(TOOLCHAIN_PATH "Path of the cross compiler toolchain" "~/barebones-toolchain/cross/x86_64/bin/")
-option(PRXDIR "This is the absolute path to the project folder (optional)" "")
-option(CUSTOM_FILENAME "Use the custome __FILENAME__ instead of __FILE__" OFF)
-option(LOG_ENABLE "Enable logging to serial" ON)
-option(LOG_ALL_OUTPUT "Redirect all stdout to screen and serial" ON)
-option(DEBUG "Enable kernel debugging" OFF)
-option(WITH_PAE "Enable PAE support" ON)
+set(TARGET "x86"        CACHE STRING "Target platform")
+set(BITS   "x86_32"     CACHE STRING "Target bits (64 or 32)")
+set(TOOLCHAIN_PATH "build/toolchain/cross/x86_64/bin/" CACHE PATH "Path of the cross compiler toolchain")
+set(PRXDIR ""           CACHE STRING "This is the absolute path to the project folder (optional)")
+set(CUSTOM_FILENAME OFF CACHE BOOL   "Use the custome __FILENAME__ instead of __FILE__")
+set(LOG_ENABLE      ON  CACHE BOOL   "Enable logging to serial")
+set(LOG_ALL_OUTPUT  ON  CACHE BOOL   "Redirect all stdout to screen and serial")
+set(DEBUG           OFF CACHE BOOL   "Enable kernel debugging")
+set(WITH_TESTS      OFF CACHE BOOL   "Compile with kernel unit tests")
+set(WITH_PAE        ON  CACHE BOOL   "Enable PAE support")
 
 # CMake printing options
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -20,6 +21,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_FLAGS   "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=gnu99 ")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=c++14 ")
 set(CMAKE_CXX_LINK_FLAGS "-lgcc -nostdlib -L${PROJECT_SOURCE_DIR}/build/obj -lopenlibm ")
+
+if(${WITH_TESTS})
+    set(DEBUG ON)
+    #include(CTest)
+endif()
 
 # Target platform selection
 if(${TARGET} MATCHES ^i*86*$|^x86_32$|IA32|x86)
@@ -94,6 +100,9 @@ pprune(SOURCES1 ${CXKRNL_PPRUNE})
 pprune(SOURCES2 ${CXKRNL_PPRUNE})
 pprune(SOURCES3 ${CXKRNL_PPRUNE})
 pprune(SOURCES4 ${CXKRNL_PPRUNE})
+if(${WITH_TESTS})
+    include(tests/sources.cmake)
+endif()
 set(SOURCES ${SOURCES1} ${SOURCES2} ${SOURCES3} ${SOURCES4})
 
 # Preprocess assembly

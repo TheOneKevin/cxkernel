@@ -5,9 +5,14 @@ build/bin/*.tar
 build/bin/*.sys
 build/bin/isodir/
 build/cmake-*/
+build/CMakeFiles/
+build/toolchain/
+
+# Patches and libraries
+lib/.pc/
+lib/openlibm/
 
 # IDE Folders
-#.vscode/
 .idea/
 .directory
 
@@ -53,12 +58,8 @@ cmake-build-debug-wsl/
 # Debug files
 *.dSYM/
 *.su
-log.txt
+logs/
 CMakeCache.txt
 
 # Git
 .git/
-
-# Patches
-lib/.pc/
-lib/openlibm/

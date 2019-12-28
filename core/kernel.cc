@@ -22,6 +22,10 @@
 #include "core/bootalloc.h"
 #include "arch/interface.h"
 
+#ifdef WITH_TESTS
+    #include "unitytest.h"
+#endif
+
 // Random ctor shit
 using ctor_func = void (*)();
 extern ctor_func _ctors_start;
@@ -61,17 +65,21 @@ extern "C" void kernel_main(loader_t args)
     
     kmem_init();
     
-    char* str = (char*) kmem_cache_alloc(20);
+    /*char* str = (char*) kmem_cache_alloc(20);
     memset(str, 0, 20);
     str = "Hello, World!";
     printf("0x%X %s", (virt_t) str, str);
     fflush(STREAM_OUT);
 
-    /*list_node_t pages;
+    list_node_t pages;
     INIT_LLIST(&pages);
     pmm_alloc_pages(1, (uintptr_t) &pages);
     pmm_free((uintptr_t) &pages);*/
 
+#ifdef WITH_TESTS
+    UnitTest::main();
+#else
     //Execute start module
+#endif
     for(;;) HALT_CPU;
 }

@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include/**"
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/build/config.h"
             ],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c99",

@@ -160,6 +160,9 @@ done:
             list_append(list_end(pages), &pg->node);
             ret++;
         }
+
+        OS_DBG("Contiguous allocation at 0x%lX for %d pages\n", PmmNode::PageToPhysical((uintptr_t)(&farena -> pages[idx])), ret);
+
         return ret;
     }
 

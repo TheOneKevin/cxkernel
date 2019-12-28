@@ -13,9 +13,13 @@ do
         ${osInfo[$f]} install nasm
         ${osInfo[$f]} install xorriso
         ${osInfo[$f]} install quilt
+        ${osInfo[$f]} install minicom
         ${osInfo[$f]} install grub-pc grub-pc-bin grub-rescue-pc
     fi
 done
+
+echo Downloading toolchain...
+git clone https://github.com/rm-hull/barebones-toolchain.git toolchain
 
 echo Now patching openlibm...
 

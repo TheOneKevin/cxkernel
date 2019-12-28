@@ -5,6 +5,7 @@
 #cmakedefine LOG_ENABLE
 #cmakedefine LOG_ALL_OUTPUT
 #cmakedefine DEBUG
+#cmakedefine WITH_TESTS
 #cmakedefine WITH_PAE
 
 // Add any valued defines here:

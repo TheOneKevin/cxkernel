@@ -6,19 +6,25 @@
         {
             "label": "CMake Configure (Debug x86)",
             "type": "shell",
-            "command": "rm -rf build/cmake-debug; mkdir build/cmake-debug; cd build/cmake-debug && cmake -DCMAKE_BUILD_TYPE=Debug -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=/Programming/git/barebones-toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=ON -DLOG_ENABLE=ON ${workspaceFolder}",
+            "command": "rm -rf build/cmake-debug; mkdir build/cmake-debug; cd build/cmake-debug && cmake -DCMAKE_BUILD_TYPE=Debug -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=${workspaceFolder}/build/toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=ON -DLOG_ENABLE=ON ${workspaceFolder}",
+            "problemMatcher": []
+        },
+        {
+            "label": "CMake Configure (Test x86)",
+            "type": "shell",
+            "command": "rm -rf build/cmake-test; mkdir build/cmake-test; cd build/cmake-test && cmake -DCMAKE_BUILD_TYPE=Debug -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=${workspaceFolder}/build/toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=ON -DWITH_TESTS=ON -DLOG_ENABLE=ON ${workspaceFolder}",
             "problemMatcher": []
         },
         {
             "label": "CMake Configure (Release x86)",
             "type": "shell",
-            "command": "rm -rf build/cmake-release; mkdir build/cmake-release; cd build/cmake-release && cmake -DCMAKE_BUILD_TYPE=Release -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=/Programming/git/barebones-toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=OFF -DLOG_ENABLE=OFF ${workspaceFolder}",
+            "command": "rm -rf build/cmake-release; mkdir build/cmake-release; cd build/cmake-release && cmake -DCMAKE_BUILD_TYPE=Release -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=${workspaceFolder}/build/toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=OFF -DLOG_ENABLE=OFF ${workspaceFolder}",
             "problemMatcher": []
         },
         {
-            "label": "Build Debug",
+            "label": "Build",
             "type": "shell",
-            "command": "make -C build/cmake-debug/",
+            "command": "make -C build/cmake-${input:buildType}/",
             "problemMatcher": {
                 "base": "$gcc",
                 "fileLocation": "absolute"
@@ -29,9 +35,9 @@
             }
         },
         {
-            "label": "Make Clean Debug",
+            "label": "Make Clean",
             "type": "shell",
-            "command": "make clean -C build/cmake-debug/",
+            "command": "make clean -C build/cmake-${input:buildType}/",
             "problemMatcher": {
                 "base": "$gcc",
                 "fileLocation": "absolute"
@@ -54,33 +60,30 @@
                     "background": {
                         "activeOnStart": true,
                         "beginsPattern": ".",
-                        "endsPattern": ".",
+                        "endsPattern": "."
                     }
                 }
             ],
-            "command": "qemu-system-i386 -S -gdb tcp::1234 -boot d -cdrom build/bin/LiquiDOS.iso -m 128 -serial file:log.txt -monitor stdio"
+            "command": [
+                "qemu-system-i386 -S -gdb tcp::1234",
+                "-boot d -cdrom build/bin/LiquiDOS.iso -m 128",
+                "-serial file:logs/COM1.log -monitor stdio"
+            ]
+        },
+        {
+            "label": "Launch QEMU Kernel Tests",
+            "type": "shell",
+            "command": [ 
+                "qemu-system-i386 -display none",
+                "-boot d -cdrom build/bin/LiquiDOS.iso -m 128 -enable-kvm -cpu host,-pae",
+                "-chardev stdio,id=char0,logfile=logs/COM3.log",
+                "-monitor pty -serial file:logs/COM1.log -serial null -serial chardev:char0"
+            ],
+            "problemMatcher": []
         },
         {
             "label": "Launch QEMU",
             "type": "shell",
-            "isBackground": true,
-            "problemMatcher": [
-                {
-                    "pattern": [
-                        {
-                            "regexp": ".",
-                            "file": 1,
-                            "location": 2,
-                            "message": 3
-                        }
-                    ],
-                    "background": {
-                        "activeOnStart": true,
-                        "beginsPattern": ".",
-                        "endsPattern": ".",
-                    }
-                }
-            ],
             "linux": {
                 "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256 -enable-kvm -cpu host"
             },
@@ -92,9 +95,22 @@
             "label": "Kill All QEMU Instances",
             "type": "shell",
             "linux": {
-                "command": "pkill qemu",
+                "command": "pkill qemu"
             },
             "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+          "type": "pickString",
+          "id": "buildType",
+          "description": "What type build did you configure?",
+          "options": [
+            "debug",
+            "test",
+            "release"
+          ],
+          "default": "debug"
         }
     ]
 }

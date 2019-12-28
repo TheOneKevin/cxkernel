@@ -78,7 +78,7 @@ void exception_handler(regs_t* r) // Our exception handler called from the assem
         fprintf(STREAM_ERR, " at: 0x%08X\n", read_cr2());
     }
 
-    CallStackTrace(r->ebp, false);
+    //CallStackTrace(r->ebp, false);
 
     fprintf(STREAM_ERR, " === Dump ===\n");
     fprintf(STREAM_ERR, "eax: 0x%08X ebx: 0x%08X ecx: 0x%08X edx: 0x%08X err: 0x%08X\n", r->eax, r->ebx, r->ecx, r->edx, r->err_code);
