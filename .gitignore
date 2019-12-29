@@ -9,6 +9,7 @@ build/CMakeFiles/
 build/toolchain/
 
 tests/build/
+Testing/
 
 # Patches and libraries
 lib/.pc/

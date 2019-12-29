@@ -24,16 +24,12 @@
 
 // This file will be unit tested, so we should set up a standalone environment
 
-#ifdef IS_HOSTED
-    #define OS_DBG(f_, ...) printf((f_), ##__VA_ARGS__)
-    #define OS_LOG(f_, ...) printf((f_), ##__VA_ARGS__)
-    #define OS_PRN(f_, ...) printf((f_), ##__VA_ARGS__)
-#else
+#ifndef IS_HOSTED
     #include <panic.h>
 #endif
 
 #define PAGE_IS_IN_ARENA(p, a) \
-        (((virt_t)(p) >= (virt_t)(a)->pages) && (virt_t)(p) < (virt_t)(a)->pages+(a)->size/ARCH_PAGE_SIZE*sizeof(page_t))
+        (((virt_t)(p) >= (virt_t)(a)->pages) && (virt_t)(p) < (virt_t)(a)->pages+(a)->size*sizeof(page_t))
 #define ADDRESS_FROM_ARENA(p, a) \
         ((a)->base + (phys_t)(((virt_t)(p) - (virt_t)((a)->pages)) / sizeof(page_t)) * (ARCH_PAGE_SIZE))
 #define ADDRESS_IS_IN_ARENA(p, a) \

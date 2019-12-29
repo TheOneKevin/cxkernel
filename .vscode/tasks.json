@@ -4,46 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Configure (Debug)",
+            "label": "Configure",
             "type": "shell",
             "command": [
                 "rm -rf build/cmake-build;",
                 "mkdir build/cmake-build;",
                 "cd build/cmake-build && ",
-                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=DEBUG -DCUSTOM_FILENAME=ON ${workspaceFolder}"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "Configure (Integration Test)",
-            "type": "shell",
-            "command": [
-                "rm -rf build/cmake-build;",
-                "mkdir build/cmake-build;",
-                "cd build/cmake-build && ",
-                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=INTEGRATION_TEST -DCUSTOM_FILENAME=ON ${workspaceFolder}"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "Configure (Unit Test)",
-            "type": "shell",
-            "command": [
-                "rm -rf build/cmake-build;",
-                "mkdir build/cmake-build;",
-                "cd build/cmake-build && ",
-                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=UNIT_TEST -DCUSTOM_FILENAME=ON ${workspaceFolder}"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "Configure (Release)",
-            "type": "shell",
-            "command": [
-                "rm -rf build/cmake-build;",
-                "mkdir build/cmake-build;",
-                "cd build/cmake-build &&",
-                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=RELEASE -DCUSTOM_FILENAME=ON ${workspaceFolder}"
+                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=${input:buildType} -DCUSTOM_FILENAME=ON ${workspaceFolder}"
             ],
             "problemMatcher": []
         },
@@ -136,6 +103,18 @@
               //"x86_64"
             ],
             "default": "x86_32"
-          }
+        },
+        {
+            "type": "pickString",
+            "id": "buildType",
+            "description": "Which type of build do you want to configure for?",
+            "options": [
+              "Debug",
+              "Release",
+              "Integration_Test",
+              "Unit_Test"
+            ],
+            "default": "Debug"
+        },
     ]
 }

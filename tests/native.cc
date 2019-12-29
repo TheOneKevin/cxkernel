@@ -11,9 +11,14 @@
 
 #include "unity/unity.h"
 
+#include <random>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+
+#define OS_DBG(f_, ...) printf((f_), ##__VA_ARGS__)
+#define OS_LOG(f_, ...) printf((f_), ##__VA_ARGS__)
+#define OS_PRN(f_, ...) printf((f_), ##__VA_ARGS__)
 
 #include "core/vm.h"
 #include "core/pmm_node.h"
@@ -26,6 +31,22 @@ static uint32_t bitarray[32];
 
 static pmm_arena_t arena;
 static bitmap_t bitmap;
+
+// Overkill
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_int_distribution<> dis(1, 1024);
+
+static void clear_random_n_bits(int nfree)
+{
+    for(int i = 0; i < nfree; i++)
+    {
+        int idx = dis(gen);
+        while(!bitmap_tstbit(bitarray, idx))
+            idx = dis(gen);
+        bitmap_clrbit(bitarray, idx);
+    }
+}
 
 extern "C" void setUp()
 {
@@ -47,11 +68,8 @@ extern "C" void setUp()
         .bitmap = bitarray
     };
 
-    for(int i = 1; i < 31; i++)
-        bitarray[i] = 0xFFFFFFFF;
     auto allocator = new pmm::PmmNode();
     pmm::SetPhysicalAllocator(allocator);
-    pmm::GetPhysicalAllocator().AddArena(&arena, &bitmap);
 }
 
 extern "C" void tearDown()
@@ -65,16 +83,48 @@ extern "C" void tearDown()
 
 extern "C" void Test_AllocationEdge()
 {
-    const size_t alloc = 2*32;
+    // Randomly clear nfree bits
+    int nfree = dis(gen);
+    memset(bitarray, -1, sizeof(bitarray));
+    clear_random_n_bits(nfree);
+    // Add to allocator
+    pmm::GetPhysicalAllocator().AddArena(&arena, &bitmap);
+    TEST_ASSERT_EQUAL_size_t(nfree, arena.free);
+    // Test!
     void* p = alloca(pmm::GetPhysicalAllocator().GetSize());
-    size_t sz = pmm::GetPhysicalAllocator().Allocate(alloc, (uintptr_t) p);
-    TEST_ASSERT_EQUAL_size_t(alloc, sz);
+    size_t sz = pmm::GetPhysicalAllocator().Allocate(nfree, (uintptr_t) p);
+    TEST_ASSERT_EQUAL_size_t(nfree, sz);
+    TEST_ASSERT_EQUAL_size_t(arena.free, (size_t) list_count(arena.free_list.next));
+}
+
+extern "C" void Test_AllocFree()
+{
+    // Randomly clear nfree bits
+    int nfree = dis(gen);
+    memset(bitarray, -1, sizeof(bitarray));
+    clear_random_n_bits(nfree);
+    // Add to allocator
+    pmm::GetPhysicalAllocator().AddArena(&arena, &bitmap);
+    TEST_ASSERT_EQUAL_size_t(nfree, arena.free);
+    // Test!
+    void* p = alloca(pmm::GetPhysicalAllocator().GetSize());
+    for(int i = 0; i < 10000; i++)
+    {
+        memset(p, 0, pmm::GetPhysicalAllocator().GetSize());
+        size_t sz = pmm::GetPhysicalAllocator().Allocate(nfree, (uintptr_t) p);
+        TEST_ASSERT_EQUAL_size_t(nfree, sz);
+        TEST_ASSERT_EQUAL_size_t(0, arena.free);
+        TEST_ASSERT_EQUAL_size_t(arena.free, (size_t) list_count(arena.free_list.next));
+        pmm::GetPhysicalAllocator().Free((uintptr_t) p);
+        TEST_ASSERT_EQUAL_size_t(nfree, arena.free);
+        TEST_ASSERT_EQUAL_size_t(arena.free, (size_t) list_count(arena.free_list.next));
+    }
 }
 
 int main()
 {
     UNITY_BEGIN();
     RUN_TEST(Test_AllocationEdge);
-    RUN_TEST(Test_AllocationEdge);
+    RUN_TEST(Test_AllocFree);
     return UNITY_END();
 }

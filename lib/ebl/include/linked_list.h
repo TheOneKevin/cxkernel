@@ -34,7 +34,8 @@ typedef struct list_node list_head_t;
         for(counter = (head); counter != NULL; counter = counter -> next)
 
 /**
-foreach_llist * @param  counter The pointer to the current iterated structure
+ * Iterates through each entry of the list
+ * @param  counter The pointer to the current iterated structure
  * @param  member  The name of the list in the structure
  * @param  head    The pointer to the structure of the list
  */
@@ -51,24 +52,28 @@ foreach_llist * @param  counter The pointer to the current iterated structure
 
 static inline list_node_t* list_begin(list_node_t* a)
 {
+    if(a == NULL) return a;
     while(a -> prev != a) a = a -> prev;
     return a;
 }
 
 static inline list_node_t* list_end(list_node_t* a)
 {
+    if(a == NULL) return a;
     while(a -> next != NULL) a = a -> next;
     return a;
 }
 
 static inline bool list_isempty(list_node_t* a)
 {
+    if(a == NULL) return true;
     list_node_t* front = list_begin(a);
     return front -> next == NULL && front -> prev == front;
 }
 
 static inline int list_count(list_node_t* a)
 {
+    if(a == NULL) return 0;
     register int ctr = 0;
     list_node_t* front = list_begin(a);
     while(front -> next != NULL) front = front -> next, ctr++;

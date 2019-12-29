@@ -60,7 +60,13 @@
         "cwchar": "cpp",
         "string": "cpp",
         "type_traits": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "optional": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "system_error": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     },
     
     "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",

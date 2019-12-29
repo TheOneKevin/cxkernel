@@ -78,6 +78,7 @@ extern "C" void kernel_main(loader_t args)
 
 #ifdef WITH_TESTS
     UnitTest::main();
+    DEBUG_EXIT;
 #else
     //Execute start module
 #endif
