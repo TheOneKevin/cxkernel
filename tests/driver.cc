@@ -28,7 +28,7 @@ extern "C" void tearDown()
 
 extern "C" void TestModuleXXXX()
 {
-    TEST_ASSERT_EQUAL_HEX8(80, 90);
+    TEST_ASSERT_EQUAL_HEX8(80, 80);
 }
 
 int UnitTest::main()

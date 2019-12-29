@@ -147,6 +147,9 @@ repeat:
                 fmt++;
             }
 
+            // Ignore llX vs lX
+            if((*fmt == 'l')) fmt++;
+
             switch(*fmt)
             {
                 case 's': ; // Don't mind me, I'm just a semicolon because of some C standard shit

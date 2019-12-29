@@ -4,27 +4,53 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CMake Configure (Debug x86)",
+            "label": "Configure (Debug)",
             "type": "shell",
-            "command": "rm -rf build/cmake-debug; mkdir build/cmake-debug; cd build/cmake-debug && cmake -DCMAKE_BUILD_TYPE=Debug -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=${workspaceFolder}/build/toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=ON -DLOG_ENABLE=ON ${workspaceFolder}",
+            "command": [
+                "rm -rf build/cmake-build;",
+                "mkdir build/cmake-build;",
+                "cd build/cmake-build && ",
+                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=DEBUG -DCUSTOM_FILENAME=ON ${workspaceFolder}"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "CMake Configure (Test x86)",
+            "label": "Configure (Integration Test)",
             "type": "shell",
-            "command": "rm -rf build/cmake-test; mkdir build/cmake-test; cd build/cmake-test && cmake -DCMAKE_BUILD_TYPE=Debug -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=${workspaceFolder}/build/toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=ON -DWITH_TESTS=ON -DLOG_ENABLE=ON ${workspaceFolder}",
+            "command": [
+                "rm -rf build/cmake-build;",
+                "mkdir build/cmake-build;",
+                "cd build/cmake-build && ",
+                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=INTEGRATION_TEST -DCUSTOM_FILENAME=ON ${workspaceFolder}"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "CMake Configure (Release x86)",
+            "label": "Configure (Unit Test)",
             "type": "shell",
-            "command": "rm -rf build/cmake-release; mkdir build/cmake-release; cd build/cmake-release && cmake -DCMAKE_BUILD_TYPE=Release -G 'Unix Makefiles' -DTARGET=x86 -DTOOLCHAIN_PATH=${workspaceFolder}/build/toolchain/cross/x86_64/bin/ -DPRXDIR=${workspaceFolder} -DCUSTOM_FILENAME=ON -DDEBUG=OFF -DLOG_ENABLE=OFF ${workspaceFolder}",
+            "command": [
+                "rm -rf build/cmake-build;",
+                "mkdir build/cmake-build;",
+                "cd build/cmake-build && ",
+                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=UNIT_TEST -DCUSTOM_FILENAME=ON ${workspaceFolder}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Configure (Release)",
+            "type": "shell",
+            "command": [
+                "rm -rf build/cmake-build;",
+                "mkdir build/cmake-build;",
+                "cd build/cmake-build &&",
+                "cmake -G 'Unix Makefiles' -DTARGET=${input:buildTarget} -DBUILD_TYPE=RELEASE -DCUSTOM_FILENAME=ON ${workspaceFolder}"
+            ],
             "problemMatcher": []
         },
         {
             "label": "Build",
             "type": "shell",
-            "command": "make -C build/cmake-${input:buildType}/",
+            "command": "make --no-print-directory -C build/cmake-build/",
             "problemMatcher": {
                 "base": "$gcc",
                 "fileLocation": "absolute"
@@ -37,7 +63,7 @@
         {
             "label": "Make Clean",
             "type": "shell",
-            "command": "make clean -C build/cmake-${input:buildType}/",
+            "command": "make clean --no-print-directory -C build/cmake-build/",
             "problemMatcher": {
                 "base": "$gcc",
                 "fileLocation": "absolute"
@@ -102,15 +128,14 @@
     ],
     "inputs": [
         {
-          "type": "pickString",
-          "id": "buildType",
-          "description": "What type build did you configure?",
-          "options": [
-            "debug",
-            "test",
-            "release"
-          ],
-          "default": "debug"
-        }
+            "type": "pickString",
+            "id": "buildTarget",
+            "description": "Which target do you want to build for?",
+            "options": [
+              "x86_32",
+              //"x86_64"
+            ],
+            "default": "x86_32"
+          }
     ]
 }

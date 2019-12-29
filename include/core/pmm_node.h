@@ -36,6 +36,7 @@ namespace pmm
         size_t AllocateSingle(uintptr_t pages) override;
         size_t AllocateContiguous(size_t cnt, uintptr_t pages) override;
         size_t Free(uintptr_t pages) override;
+        int GetType() override;
     };
 
     PhysicalAllocator* GetPmmNodeAllocator();

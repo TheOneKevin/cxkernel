@@ -7,7 +7,9 @@
 #ifndef UNITY_INTERNALS_H
 #define UNITY_INTERNALS_H
 
-#define UNITY_INCLUDE_CONFIG_H
+#if __STDC_HOSTED__ != 1
+  #define UNITY_INCLUDE_CONFIG_H
+#endif
 
 #ifdef UNITY_INCLUDE_CONFIG_H
 #include "unity_config.h"

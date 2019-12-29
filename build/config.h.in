@@ -9,7 +9,7 @@
 #cmakedefine WITH_PAE
 
 // Add any valued defines here:
-#define ARCH_TYPE           ARCH_@BITS@
+#define ARCH_TYPE           ARCH_@TARGET@_@BITS@
 #define TARGET_FOLDER       @TARGET@
 
 // Then add any logic here

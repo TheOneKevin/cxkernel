@@ -1,4 +1,56 @@
 {
+    "psi-header.config": {
+        "forceToTop": true,
+        // Put in your name and email here:
+        // "author": "John Doe",
+        // "authorEmail": "johndoe@example.com"
+    },
+    "psi-header.templates": [
+        {
+            "language": "*",
+            "template": [
+                "Copyright (c) <<year>> The cxkernel Authors. All rights reserved.",
+                "Use of this source code is governed by a MIT-style",
+                "license that can be found in the LICENSE file or at",
+                "https://opensource.org/licenses/MIT",
+                "",
+                "@file   <<filename>>",
+                "@author <<author>> \\<<<authoremail>>\\>",
+                "@date   Created on <<filecreated('MMMM DD YYYY, h:mm A')>>",
+            ]
+        }
+    ],
+    "psi-header.lang-config": [
+        {
+			"language": "cpp",
+			"begin": "/**",
+			"prefix": " * ",
+			"end": " */",
+			"blankLinesAfter": 1,
+			"forceToTop": true
+        },
+        {
+			"language": "c",
+			"begin": "/**",
+			"prefix": " * ",
+			"end": " */",
+			"blankLinesAfter": 1,
+			"forceToTop": true
+        },
+        {
+            "language": "*",
+            "begin": "",
+			"prefix": "# ",
+			"end": "",
+			"blankLinesAfter": 1,
+			"forceToTop": true
+        }
+    ],
+
+    "psi-header.changes-tracking": {
+        "autoHeader": "manualSave"
+    },
+
     "files.associations": {
         "panic.h": "c",
         "common.h": "c",
@@ -7,17 +59,23 @@
         "cstddef": "cpp",
         "cwchar": "cpp",
         "string": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "array": "cpp"
     },
+    
     "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",
     "terminal.integrated.env.linux": {
         "PATH": "${env:PATH}:${workspaceFolder}/build/toolchain/cross/x86_64/bin/"
     },
+
     "cSpell.words": [
         "Ceedling",
         "Karlesky",
         "Voord",
         "cxkernel",
         "kevindai"
-    ]
+    ],
+    "cSpell.logLevel": "Information",
+
+    "cmakeExplorer.buildDir": "build/cmake-build/"
 }

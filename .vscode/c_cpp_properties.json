@@ -5,13 +5,24 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include/**",
-                "${workspaceFolder}/build/config.h"
+                "${workspaceFolder}/build/",
+                "/usr/include/x86_64-linux-gnu/c++/7"
             ],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c99",
             "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x86",
-            "compileCommands": "${workspaceFolder}/build/cmake-debug/compile_commands.json"
+            "compileCommands": "${workspaceFolder}/build/cmake-build/compile_commands.json",
+            "compilerArgs": [],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**",
+                    "${workspaceFolder}/include/**",
+                    "${workspaceFolder}/build/",
+                    "/usr/include/x86_64-linux-gnu/c++/7"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4

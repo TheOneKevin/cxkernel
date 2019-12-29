@@ -8,6 +8,8 @@ build/cmake-*/
 build/CMakeFiles/
 build/toolchain/
 
+tests/build/
+
 # Patches and libraries
 lib/.pc/
 lib/openlibm/

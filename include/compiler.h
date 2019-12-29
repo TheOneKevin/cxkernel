@@ -39,11 +39,15 @@
 
 #define unlikely(x) __builtin_expect((x), 0)
 #define likely(x)   __builtin_expect((x), 1)
-#define alloca(x)   __builtin_alloca((x))
+
+#ifndef alloca
+    #define alloca(x)   __builtin_alloca((x))
+#endif
 
 // Compiler checks
 #if __STDC_HOSTED__ == 1
-    #error "This is a fucking kernel. Please compile in a freestanding environment."
+    #define IS_HOSTED
+    #warning "If you're not compiling tests, please compile in a freestanding environment."
 #endif
 
 #ifndef __GNUC__
@@ -51,11 +55,11 @@
 #endif
 
 #ifdef __EXCEPTIONS
-    #error "Anyone who want's to implement exception handling, feel free to create a PR."
+    #warning "Anyone who want's to implement exception handling, feel free to create a PR."
 #endif
 
 #ifdef __GXX_RTTI
-    #error "This compilation will fail (vtables etc)."
+    #warning "This compilation will fail (vtables etc)."
 #endif
 
 #if __SSP__ < 1

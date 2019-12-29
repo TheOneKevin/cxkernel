@@ -31,17 +31,17 @@ typedef struct list_node list_head_t;
  * @param  head    A list of the list
  */
 #define foreach_llist(counter, head) \
-        for(counter = (head); counter -> next != NULL; counter = counter -> next)
+        for(counter = (head); counter != NULL; counter = counter -> next)
+
 /**
- * Iterates through each entry of the list
- * @param  counter The pointer to the current iterated structure
+foreach_llist * @param  counter The pointer to the current iterated structure
  * @param  member  The name of the list in the structure
  * @param  head    The pointer to the structure of the list
  */
 #define foreach_llist_entry(counter, member, head) \
         for(counter = LIST_ENTRY(head, TYPEOF(*counter), member); \
-            counter -> member.next != NULL; \
-            counter = LIST_ENTRY(counter -> member.next, TYPEOF(*counter), member))
+            counter != NULL; counter = counter -> member.next == NULL ? \
+            NULL : LIST_ENTRY(counter -> member.next, TYPEOF(*counter), member))
 
 /**
  * Same as foreach_llist, but with a NULL check.

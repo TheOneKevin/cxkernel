@@ -3,36 +3,66 @@ project(osdev)
 include(build/utils.cmake)
 
 # All configure options
-set(TARGET "x86"        CACHE STRING "Target platform")
-set(BITS   "x86_32"     CACHE STRING "Target bits (64 or 32)")
-set(TOOLCHAIN_PATH "build/toolchain/cross/x86_64/bin/" CACHE PATH "Path of the cross compiler toolchain")
-set(PRXDIR ""           CACHE STRING "This is the absolute path to the project folder (optional)")
-set(CUSTOM_FILENAME OFF CACHE BOOL   "Use the custome __FILENAME__ instead of __FILE__")
-set(LOG_ENABLE      ON  CACHE BOOL   "Enable logging to serial")
-set(LOG_ALL_OUTPUT  ON  CACHE BOOL   "Redirect all stdout to screen and serial")
-set(DEBUG           OFF CACHE BOOL   "Enable kernel debugging")
-set(WITH_TESTS      OFF CACHE BOOL   "Compile with kernel unit tests")
+set(TARGET "x86"        CACHE STRING "Target platform [x86_32, x86_64]")
+set(BUILD_TYPE ""       CACHE STRING "Build type (leave blank if you want to configure options)")
 set(WITH_PAE        ON  CACHE BOOL   "Enable PAE support")
-
-# CMake printing options
+set(CUSTOM_FILENAME OFF CACHE BOOL   "Use the custome __FILENAME__ instead of __FILE__")
+# Setting BUILD_TYPE will override many of these options
+set(LOG_ENABLE      ON  CACHE BOOL   "[!!] Enable logging to serial")
+set(LOG_ALL_OUTPUT  OFF CACHE BOOL   "[!!] Redirect all stdout to screen and serial")
+set(DEBUG           OFF CACHE BOOL   "[!!] Enable kernel debugging")
+set(WITH_TESTS      OFF CACHE BOOL   "[!!] Compile with kernel unit tests")
+# Path related options
+set(TOOLCHAIN_PATH "${CMAKE_SOURCE_DIR}/build/toolchain/cross/x86_64/bin/" CACHE PATH "Path of the cross compiler toolchain (optional)")
+set(PRXDIR "${CMAKE_SOURCE_DIR}" CACHE PATH "This is the absolute path to the project folder (optional)")
+# CMake printing options and internal options
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(BITS "32" STRING)
+
+string(TOUPPER ${BUILD_TYPE} BUILD_TYPE)
+if(${BUILD_TYPE} STREQUAL DEBUG)
+    message("Configuring kernel for debugging...")
+    set(DEBUG ON)
+    set(WITH_TESTS OFF)
+    set(LOG_ENABLE ON)
+    set(LOG_ALL_OUTPUT ON)
+    set(CMAKE_BUILD_TYPE Debug)
+elseif(${BUILD_TYPE} MATCHES ^INTEGRATION_TEST$)
+    message("Configuring kernel for integration testing...")
+    set(DEBUG ON)
+    set(WITH_TESTS ON)
+    set(LOG_ENABLE ON)
+    set(LOG_ALL_OUTPUT ON)
+    set(CMAKE_BUILD_TYPE Debug)
+    include(tests/integration.cmake)
+elseif(${BUILD_TYPE} MATCHES ^UNIT_TEST$)
+    message("Configuring kernel for native unit testing...")
+    set(CMAKE_BUILD_TYPE Debug)
+    include(tests/unit.cmake)
+    return()
+elseif(${BUILD_TYPE} MATCHES ^RELEASE$)
+    message("Configuring kernel for release...")
+    set(DEBUG OFF)
+    set(WITH_TESTS OFF)
+    set(LOG_ENABLE ON)
+    set(LOG_ALL_OUTPUT OFF)
+    set(CMAKE_BUILD_TYPE Release)
+else()
+    message(WARNING "No known BUILD_TYPE specified!")
+endif()
 
 # Default flags that shouldn't really change
 set(CMAKE_C_FLAGS   "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=gnu99 ")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -ffreestanding -D__KERNEL__ -std=c++14 ")
 set(CMAKE_CXX_LINK_FLAGS "-lgcc -nostdlib -L${PROJECT_SOURCE_DIR}/build/obj -lopenlibm ")
 
-if(${WITH_TESTS})
-    set(DEBUG ON)
-    #include(CTest)
-endif()
-
 # Target platform selection
 if(${TARGET} MATCHES ^i*86*$|^x86_32$|IA32|x86)
     message("Building for x86_32")
     # Setup variables
     set(TOOLCHAIN_PREFIX i686-elf-)
-    set(BITS x86_32)
+    set(TARGET x86)
+    set(BITS 32)
     # Set up assembler
     enable_language(ASM-ATT)
     set(CMAKE_ASM_NASM_FLAGS -g)
@@ -55,9 +85,10 @@ if(${TARGET} MATCHES ^i*86*$|^x86_32$|IA32|x86)
     include(build/elf-toolchain.cmake)
 elseif(${TARGET} MATCHES ^x86_64$|^AMD64$|^IA64$)
     message("Building for IA64 (AMD64)")
-    set(BITS x86_64)
+    set(TARGET x86)
+    set(BITS 64)
 else()
-    message("No target specified. Building for x86_32")
+    message(FATAL_ERROR "No known target specified.")
 endif()
 
 # Set home directory
@@ -100,9 +131,6 @@ pprune(SOURCES1 ${CXKRNL_PPRUNE})
 pprune(SOURCES2 ${CXKRNL_PPRUNE})
 pprune(SOURCES3 ${CXKRNL_PPRUNE})
 pprune(SOURCES4 ${CXKRNL_PPRUNE})
-if(${WITH_TESTS})
-    include(tests/sources.cmake)
-endif()
 set(SOURCES ${SOURCES1} ${SOURCES2} ${SOURCES3} ${SOURCES4})
 
 # Preprocess assembly
@@ -120,7 +148,7 @@ endforeach()
 # Build binary
 add_executable(cxkrnl ${SOURCES})
 lprune_target(cxkrnl "${PRXDIR}")
-set_target_properties(cxkrnl PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/build/obj/arch/${BITS}_linker.ld")
+set_target_properties(cxkrnl PROPERTIES LINK_FLAGS "-T ${CMAKE_CURRENT_SOURCE_DIR}/build/obj/arch/${TARGET}_${BITS}_linker.ld")
 set_target_properties(cxkrnl PROPERTIES SUFFIX ".sys")
 
 # Build loader
@@ -165,7 +193,7 @@ add_custom_command(
         OUTPUT  LiquiDOS.iso
         DEPENDS cxlodr
         DEPENDS cxkrnl
-        COMMAND . ./scripts/${BITS}_buildimg.sh
+        COMMAND . ./scripts/${TARGET}_${BITS}_buildimg.sh
         WORKING_DIRECTORY ../
         VERBATIM
 )

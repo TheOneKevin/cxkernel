@@ -9,11 +9,8 @@
  * @date   Created on March 18 2019, 11:15 PM
  */
 
-#define __MODULE__ "PMM"
-
 #include <stdlib.h>
 #include <linked_list.h>
-#include <panic.h>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>

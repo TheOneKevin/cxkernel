@@ -13,7 +13,6 @@
 
 #include <stdlib.h>
 #include <linked_list.h>
-#include <panic.h>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
@@ -22,6 +21,16 @@
 #include "core/vm.h"
 #include "arch/interface.h"
 #include "core/pmm_node.h"
+
+// This file will be unit tested, so we should set up a standalone environment
+
+#ifdef IS_HOSTED
+    #define OS_DBG(f_, ...) printf((f_), ##__VA_ARGS__)
+    #define OS_LOG(f_, ...) printf((f_), ##__VA_ARGS__)
+    #define OS_PRN(f_, ...) printf((f_), ##__VA_ARGS__)
+#else
+    #include <panic.h>
+#endif
 
 #define PAGE_IS_IN_ARENA(p, a) \
         (((virt_t)(p) >= (virt_t)(a)->pages) && (virt_t)(p) < (virt_t)(a)->pages+(a)->size/ARCH_PAGE_SIZE*sizeof(page_t))
@@ -49,7 +58,13 @@ namespace pmm
 
     void PmmNode::AddArena(pmm_arena_t* arena, bitmap_t* bt)
     {
-        OS_LOG("Add arena from 0x%08lX to 0x%08lX\n", arena->base, (arena->base+arena->size*ARCH_PAGE_SIZE));
+        if(arena == NULL)
+        {
+            OS_LOG("Tried init will null arena?\n");
+            return;
+        }
+
+        OS_LOG("Add arena from 0x%08llX to 0x%08llX\n", arena->base, (arena->base+arena->size*ARCH_PAGE_SIZE));
         INIT_LLIST(&arena->node);
         INIT_LLIST(&arena->free_list);
         arena->free = 0;
@@ -82,7 +97,10 @@ namespace pmm
             for(size_t i = arena -> base / ARCH_PAGE_SIZE; i < arena -> size; i++)
             {
                 if(bitmap_tstbit(bt -> bitmap, i))
+                {
                     list_remove(&arena->pages[i].node);
+                    arena->free--;
+                }
             }
         }
         OS_PRN("Loaded 0x%X free page_t entries\n", list_count(arena->free_list.next));
@@ -91,6 +109,7 @@ namespace pmm
     size_t PmmNode::Allocate(size_t cnt, uintptr_t p)
     {
         list_node_t* pages = (list_node_t*) p;
+        INIT_LLIST(pages);
         size_t ret = 0;
         if(cnt == 0) return 0;
         pmm_arena_t* arena;
@@ -161,7 +180,7 @@ done:
             ret++;
         }
 
-        OS_DBG("Contiguous allocation at 0x%lX for %d pages\n", PmmNode::PageToPhysical((uintptr_t)(&farena -> pages[idx])), ret);
+        OS_DBG("Contiguous allocation at 0x%llX for %d pages\n", PmmNode::PageToPhysical((uintptr_t)(&farena -> pages[idx])), ret);
 
         return ret;
     }
@@ -187,6 +206,11 @@ done:
             }
         }
         return ret;
+    }
+
+    int PmmNode::GetType()
+    {
+        return PMM_TYPE_LIST;
     }
 
     PhysicalAllocator* GetPmmNodeAllocator()
