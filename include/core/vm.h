@@ -113,9 +113,9 @@ namespace pmm
     void set_allocator(PhysicalAllocator*);
     PhysicalAllocator& get_allocator();
     void add_arena(pmm_arena_t* arena, bitmap_t* bt);
-    size_t alloc_pages(size_t cnt, list_head_t* pages);
-    size_t alloc_pages_contig(size_t cnt, list_head_t* pages);
-    size_t free(list_head_t* pages);
+    size_t alloc_pages(size_t cnt, list_head_t** pages);
+    size_t alloc_pages_contig(size_t cnt, list_head_t** pages);
+    size_t free(list_head_t** pages);
     phys_t get_phys(page_t* page);
 }
 

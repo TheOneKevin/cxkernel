@@ -11,6 +11,7 @@
 
 #define __MODULE__ "[SLAB]"
 
+#include <math.h>
 #include <string.h>
 #include <assert.h>
 #include <linked_list.h>
@@ -41,9 +42,11 @@ namespace kmem
         // TODO: Improve algorithm for calculation cache order
 
         int free = ARCH_PAGE_SIZE;
+        // Minimum number of pages to fit object (object might be > 1 page)
         while(free - (int)(size + sizeof(kmem_objctl_t) + sizeof(slab_t)) < 0)
             free *= 2, cache -> order++;
         free -= sizeof(slab_t);
+        // Really calculate how much can fit
         while(free - (int)(size + sizeof(kmem_objctl_t)) >= 0)
             free -= size + sizeof(kmem_objctl_t), cache -> slab_objects++;
 
@@ -73,6 +76,32 @@ namespace kmem
         if(cache -> slab_size >= size && cache -> slab_size - size <= delta)
             delta = cache -> slab_size - size, best = cache;
         return best;
+    }
+
+    static slabcache_t* find_cache_kmalloc(const void* buf)
+    {
+        list_head_t* cur = &root_cache.node;
+        slab_t* ptr = NULL;
+
+        while(cur != NULL)
+        {
+            slabcache_t* cache = LIST_ENTRY(cur, slabcache_t, node);
+            if(strstr(cache -> name, "ubxela") != NULL)
+            {
+                foreach_llist_entry(ptr, node, cache -> list_full.next)
+                {
+                    if(IS_OBJECT_IN_SLAB(cache, ptr, buf))
+                        return cache;
+                }
+                foreach_llist_entry(ptr, node, cache -> list_partial.next)
+                {
+                    if(IS_OBJECT_IN_SLAB(cache, ptr, buf))
+                        return cache;
+                }
+            }
+            cur = cache -> node.next;
+        }
+        return NULL;
     }
 
     void init()
@@ -120,8 +149,8 @@ namespace kmem
              */
 
             list_node_t* page = NULL;
-            pmm::alloc_pages_contig(cache -> order, page);
-            // TODO: Fix
+            pmm::get_allocator().AllocateContiguous(1 << (cache -> order), (uintptr_t) &page);
+            // TODO: Make more portable
             slab = (slab_t*) (pmm::get_phys(LIST_ENTRY(page, page_t, node)) + ARCH_KMALLOC_BASE);
             INIT_LLIST(&slab -> node);
 
@@ -133,7 +162,16 @@ namespace kmem
             slab -> objects = (void*)((virt_t) slab + sizeof(slab_t) + cache -> slab_objects * sizeof(kmem_objctl_t) + slab -> colour_offset);
             cache -> colour_next = (cache -> colour_next + 1) % (cache -> colour_num + 1);
 
-            memset((void*)((virt_t) slab + sizeof(slab_t)), 0, sizeof(kmem_objctl_t) * cache -> slab_objects);
+            // Fill in bufctl
+            kmem_objctl_t* bufctl = (kmem_objctl_t*)((virt_t) slab + sizeof(slab_t));
+            //void* obj = slab -> objects;
+
+            memset((void*) bufctl, 0, sizeof(kmem_objctl_t) * cache -> slab_objects);
+            for (unsigned int i = 0; i < cache -> slab_objects; i++)
+            {
+                //obj = (void*)(obj + cache -> slab_size);
+                bufctl[i] = i+1;
+            }
         }
 
         // Partial first, then free
@@ -166,7 +204,7 @@ namespace kmem
         return ret;
     }
 
-    void cache_free(slabcache_t* cache, void* obj)
+    void cache_free(slabcache_t* cache, const void* obj)
     {
         if(cache == NULL) return; // TODO: Error
         slab_t* slab = NULL;
@@ -225,5 +263,26 @@ namespace kmem
                 list_append(&cache -> list_free, &slab -> node);
             }
         }
+    }
+
+    void *kmalloc(size_t size)
+    {
+	    size_t j = (size_t) next_pow2l((uint64_t) size);
+        slabcache_t* best = get_cache(j);
+        if(best == NULL || best -> slab_size != j)
+        {
+            best = new_cache(j);
+            strcpy(best -> name, "ubxela\0");
+        }
+	    void* alloc = cache_alloc(j);
+	    return alloc;
+    }
+
+    void kfree(void* obj)
+    {
+        slabcache_t* cache = find_cache_kmalloc(obj);
+        if(cache == NULL) return;
+        cache_free(cache, obj);
+        // TODO: Shrink cache if needed
     }
 }

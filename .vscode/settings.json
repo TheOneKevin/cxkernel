@@ -66,8 +66,11 @@
         "list": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "typeinfo": "cpp"
     },
+
+    "files.eol": "\n",
     
     "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",
     "terminal.integrated.env.linux": {

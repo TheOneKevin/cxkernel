@@ -65,11 +65,11 @@ extern "C" void kernel_main(loader_t args)
     
     kmem::init();
     
-    char* str = (char*) kmem::cache_alloc(20);
-    memset(str, 0, 20);
-    str = "Hello, World!";
+    char* str = (char*) kmem::kmalloc(20);
+    strcpy(str, "Hello, World!\0");
     printf("0x%X %s", (virt_t) str, str);
     fflush(STREAM_OUT);
+    kmem::kfree(str);
 
 #ifdef WITH_TESTS
     UnitTest::main();

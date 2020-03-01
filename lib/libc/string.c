@@ -160,7 +160,7 @@ size_t strlen(const char* str)
     }
 }
 
-// Public domain GCC :))
+// This function is in the public domain.
 int strncmp(const char* s1, const char* s2, register size_t n)
 {
     register unsigned char u1, u2;
@@ -175,4 +175,26 @@ int strncmp(const char* s1, const char* s2, register size_t n)
             return 0;
     }
     return 0;
+}
+
+// This function is in the public domain.
+char* strstr (const char *s1, const char *s2)
+{
+    const char *p = s1;
+    const size_t len = strlen (s2);
+    for (; (p = strchr (p, *s2)) != 0; p++)
+    {
+        if (strncmp (p, s2, len) == 0)
+	        return (char *)p;
+    }
+    return (0);
+}
+
+// This function is in the public domain.
+char* strchr(const char *s, int c)
+{
+    while (*s != (char)c)
+        if (!*s++)
+            return 0;
+    return (char *) s;
 }

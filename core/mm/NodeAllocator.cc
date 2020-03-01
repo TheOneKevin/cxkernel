@@ -80,7 +80,7 @@ namespace pmm
             }
         }
         if(an == NULL)
-            list_append(list_end(&arena_list), &arena->node);
+            list_append(&arena_list, &arena->node);
         else
             list_insert(&an->node, &arena->node);
         // Prepare page array

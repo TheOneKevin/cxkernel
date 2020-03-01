@@ -37,6 +37,8 @@ struct kmem_slabcache
     list_head_t list_partial;
     list_head_t list_full;
 
+    char name[20];
+
     unsigned int order;         //!< Order of cache
     unsigned int slab_size;     //!< Size of one object
     unsigned int slab_objects;  //!< Number of objects per slab
@@ -73,5 +75,7 @@ namespace kmem
     void init();
     slabcache_t* new_cache(size_t);
     void* cache_alloc(size_t);
-    void cache_free(slabcache_t*, void*);
+    void cache_free(slabcache_t*, const void*);
+    void *kmalloc(size_t);
+    void kfree(void*);
 }

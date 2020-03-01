@@ -50,4 +50,7 @@
 #define IS_EVEN( num )      (!IS_ODD( (num) ))
 #define IS_BETWEEN(n,L,H)   ((unsigned char)((n) >= (L) && (n) <= (H)))
 
+static inline uint64_t next_pow2l(uint64_t x){ return x == 1 ? 1 : 1<<(64-__builtin_clzl(x-1)); }
+static inline uint32_t next_pow2(uint32_t x) { return x == 1 ? 1 : 1<<(32-__builtin_clz(x-1));  }
+
 #endif

@@ -182,9 +182,9 @@ namespace platform
         kmap.pages = (page_t*) (g::loader -> pps_start);
         pmm::get_allocator().AddArena(&kmap, g::loader -> bitmap);
 
-        arena.base = max_pa;
+        /*arena.base = max_pa;
         arena.size = (uint32_t)((ARCH_PAGE_ALIGN(x86::g::max_mem) - max_pa) / ARCH_PAGE_SIZE);
         arena.pages = &((page_t*) g::loader -> pps_start)[max_pa / ARCH_PAGE_SIZE];
-        pmm::get_allocator().AddArena(&arena, g::loader -> bitmap);
+        pmm::get_allocator().AddArena(&arena, g::loader -> bitmap);*/
     }
 } // namespace platform
