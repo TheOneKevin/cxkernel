@@ -1,3 +1,14 @@
+/**
+ * Copyright (c) 2020 The cxkernel Authors. All rights reserved.
+ * Use of this source code is governed by a MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT
+ * 
+ * @file   platform.cc
+ * @author Kevin Dai \<kevindai02@outlook.com\>
+ * @date   Created on February 29 2020, 11:12 AM
+ */
+
 /*
  * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style
@@ -169,11 +180,11 @@ namespace platform
         kmap.base = 0;
         kmap.size = max_pa / ARCH_PAGE_SIZE;
         kmap.pages = (page_t*) (g::loader -> pps_start);
-        pmm_add_arena(&kmap, g::loader -> bitmap);
+        pmm::get_allocator().AddArena(&kmap, g::loader -> bitmap);
 
         arena.base = max_pa;
         arena.size = (uint32_t)((ARCH_PAGE_ALIGN(x86::g::max_mem) - max_pa) / ARCH_PAGE_SIZE);
         arena.pages = &((page_t*) g::loader -> pps_start)[max_pa / ARCH_PAGE_SIZE];
-        pmm_add_arena(&arena, g::loader -> bitmap);
+        pmm::get_allocator().AddArena(&arena, g::loader -> bitmap);
     }
 } // namespace platform

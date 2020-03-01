@@ -73,9 +73,9 @@ namespace arch
             OS_DBG("Map 0x%X -> 0x%X (0x%X)\n", phys, virt, flags);
             if(page_dir[pdid] == 0) // Page table does not exist yet
             {
-                void* page = alloca(pmm::GetPhysicalAllocator().GetSize());
-                pmm::GetPhysicalAllocator().AllocateSingle((uintptr_t) page);
-                auto addr = (uint32_t) pmm::GetPhysicalAllocator().PageToPhysical((uintptr_t) page);
+                void* page = alloca(pmm::get_allocator().GetSize());
+                pmm::get_allocator().AllocateSingle((uintptr_t) page);
+                auto addr = (uint32_t) pmm::get_allocator().PageToPhysical((uintptr_t) page);
                 page_dir[pdid] = addr | (PDE_RW | PDE_PR);
                 __tlb32_flush_single(ptvd);
                 memset((void*) ptvd, 0, ARCH_PAGE_SIZE);
@@ -115,9 +115,9 @@ namespace arch
             
             if(rpage_dir[pdid] == 0) // Page table does not exist yet
             {
-                void* page = alloca(pmm::GetPhysicalAllocator().GetSize());
-                pmm::GetPhysicalAllocator().AllocateSingle((uintptr_t) page);
-                auto addr = (uint64_t) pmm::GetPhysicalAllocator().PageToPhysical((uintptr_t) page);
+                void* page = alloca(pmm::get_allocator().GetSize());
+                pmm::get_allocator().AllocateSingle((uintptr_t) page);
+                auto addr = (uint64_t) pmm::get_allocator().PageToPhysical((uintptr_t) page);
                 rpage_dir[pdid] = addr | (PDE_RW | PDE_PR);
                 __tlb32_flush_single(ptvd);
                 memset((void*) ptvd, 0, ARCH_PAGE_SIZE);

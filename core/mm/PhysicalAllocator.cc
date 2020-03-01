@@ -23,18 +23,6 @@
 
 namespace pmm
 {
-    static PhysicalAllocator* allocator = NULL;
-
-    void SetPhysicalAllocator(PhysicalAllocator* alloc)
-    {
-        allocator = alloc;
-    }
-
-    PhysicalAllocator& GetPhysicalAllocator()
-    {
-        return static_cast<PhysicalAllocator&>(*allocator);
-    }
-
     void PhysicalAllocator::AddArena(pmm_arena_t* arena, bitmap_t* bt)
     {
         // Do nothing
@@ -72,6 +60,6 @@ namespace pmm
 
     size_t PhysicalAllocator::GetSize()
     {
-        return sizeof(list_node_t); // Note without the pointer
+        return sizeof(list_node_t*);
     }
 }

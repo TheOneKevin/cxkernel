@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Debug Unit uNDALC_drv",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/cmake-build/UnitTest_NodeAllocator_App",
-            "args": [],
+            "program": "${workspaceFolder}/build/cmake-build/uNDALC_drv",
+            "args": [ "${input:argv}" ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
@@ -91,6 +91,14 @@
             ],
             "preLaunchTask": "Launch QEMU Debug",
             "postDebugTask": "Kill All QEMU Instances"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "argv",
+            "description": "argv[]",
+            "type": "promptString",
+            "default": "1"
         }
     ]
 }

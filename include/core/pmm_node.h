@@ -39,7 +39,7 @@ namespace pmm
         int GetType() override;
     };
 
-    PhysicalAllocator* GetPmmNodeAllocator();
+    PhysicalAllocator* GetNodeAllocator();
 }
 
 #endif

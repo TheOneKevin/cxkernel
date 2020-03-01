@@ -12,7 +12,7 @@
             "cStandard": "c99",
             "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x86",
-            "compileCommands": "${workspaceFolder}/build/cmake-build/compile_commands.json",
+            "compileCommands": "build/cmake-build/compile_commands.json",
             "compilerArgs": [],
             "browse": {
                 "path": [
@@ -23,6 +23,33 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }
+        },
+        {
+            "name": "WSL",
+            "includePath": [
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/build",
+                "${workspaceFolder}/lib/elf/include",
+                "${workspaceFolder}/lib/libc/include",
+                "${workspaceFolder}/lib/ebl/include",
+                "${workspaceFolder}/lib/openlibm/include",
+                "${workspaceFolder}/lib/openlibm/src"
+            ],
+            "defines": [
+                "__KERNEL__",
+                "__FILENAME_CUSTOM__=\"\""
+            ],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "gcc-x86",
+            "compilerArgs": [
+                "-ffreestanding",
+                "-std=c++14",
+                "-fno-rtti",
+                "-fno-exceptions",
+                "-nostdinc++"
+            ]
         }
     ],
     "version": 4

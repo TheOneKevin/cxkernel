@@ -12,25 +12,46 @@
 #include <assert.h>
 #include "core/memory.h"
 
-void pmm_add_arena(pmm_arena_t* arena, bitmap_t* bt)
+namespace pmm
 {
-    pmm::GetPhysicalAllocator().AddArena(arena, bt);
-}
+    static PhysicalAllocator* allocator = NULL;
 
-size_t pmm_alloc_pages(size_t cnt, list_head_t* pages)
-{
-    ASSERT(pmm::GetPhysicalAllocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
-    return pmm::GetPhysicalAllocator().Allocate(cnt, (uintptr_t) pages);
-}
+    void set_allocator(PhysicalAllocator* alloc)
+    {
+        allocator = alloc;
+    }
 
-size_t pmm_free(list_head_t* pages)
-{
-    ASSERT(pmm::GetPhysicalAllocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
-    return pmm::GetPhysicalAllocator().Free((uintptr_t) pages);
-}
+    PhysicalAllocator& get_allocator()
+    {
+        return static_cast<PhysicalAllocator&>(*allocator);
+    }
 
-phys_t pmm_get_phys(page_t* page)
-{
-    ASSERT(pmm::GetPhysicalAllocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
-    return pmm::GetPhysicalAllocator().PageToPhysical((uintptr_t) page);
+    void add_arena(pmm_arena_t* arena, bitmap_t* bt)
+    {
+        get_allocator().AddArena(arena, bt);
+    }
+
+    size_t alloc_pages(size_t cnt, list_head_t* pages)
+    {
+        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().Allocate(cnt, (uintptr_t) pages);
+    }
+
+    size_t alloc_pages_contig(size_t cnt, list_head_t* pages)
+    {
+        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().AllocateContiguous(cnt, (uintptr_t) pages);
+    }
+
+    size_t free(list_head_t* pages)
+    {
+        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().Free((uintptr_t) pages);
+    }
+
+    phys_t get_phys(page_t* page)
+    {
+        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().PageToPhysical((uintptr_t) page);
+    }
 }

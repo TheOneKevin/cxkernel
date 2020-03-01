@@ -48,8 +48,8 @@ extern "C" void kernel_main(loader_t args)
     g::loader = &__copy__loader;
     
     // Transfer over loader bitmap allocator
-    pmm::SetPhysicalAllocator(pmm::GetBootAllocator());
-    pmm::GetPhysicalAllocator().AddArena(NULL, args.bitmap);
+    pmm::set_allocator(pmm::GetBootAllocator());
+    pmm::get_allocator().AddArena(NULL, args.bitmap);
     
     // Start early init
     arch::early_init(args);
@@ -60,21 +60,16 @@ extern "C" void kernel_main(loader_t args)
     platform::init();
     
     // Switch allocator to linked list
-    pmm::SetPhysicalAllocator(pmm::GetPmmNodeAllocator());
+    pmm::set_allocator(pmm::GetNodeAllocator());
     platform::meminit();
     
-    kmem_init();
+    kmem::init();
     
-    /*char* str = (char*) kmem_cache_alloc(20);
+    char* str = (char*) kmem::cache_alloc(20);
     memset(str, 0, 20);
     str = "Hello, World!";
     printf("0x%X %s", (virt_t) str, str);
     fflush(STREAM_OUT);
-
-    list_node_t pages;
-    INIT_LLIST(&pages);
-    pmm_alloc_pages(1, (uintptr_t) &pages);
-    pmm_free((uintptr_t) &pages);*/
 
 #ifdef WITH_TESTS
     UnitTest::main();

@@ -28,6 +28,15 @@
             }
         },
         {
+            "label": "Make Tests",
+            "type": "shell",
+            "command": "make test --no-print-directory -C build/cmake-build/",
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": "absolute"
+            }
+        },
+        {
             "label": "Make Clean",
             "type": "shell",
             "command": "make clean --no-print-directory -C build/cmake-build/",
@@ -39,6 +48,14 @@
         {
             "label": "Launch QEMU Debug",
             "type": "shell",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
             "isBackground": true,
             "problemMatcher": [
                 {
@@ -57,16 +74,12 @@
                     }
                 }
             ],
-            "command": [
-                "qemu-system-i386 -S -gdb tcp::1234",
-                "-boot d -cdrom build/bin/LiquiDOS.iso -m 128",
-                "-serial file:logs/COM1.log -monitor stdio"
-            ]
+            "command": "${workspaceFolder}/build/scripts/launch_qemu.sh"
         },
         {
             "label": "Launch QEMU Kernel Tests",
             "type": "shell",
-            "command": [ 
+            "command": [
                 "qemu-system-i386 -display none",
                 "-boot d -cdrom build/bin/LiquiDOS.iso -m 128 -enable-kvm -cpu host,-pae",
                 "-chardev stdio,id=char0,logfile=logs/COM3.log",
@@ -78,11 +91,12 @@
             "label": "Launch QEMU",
             "type": "shell",
             "linux": {
-                "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256 -enable-kvm -cpu host"
+                "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
             },
             "windows": {
                 "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "Kill All QEMU Instances",

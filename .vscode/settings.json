@@ -48,7 +48,10 @@
     ],
 
     "psi-header.changes-tracking": {
-        "autoHeader": "manualSave"
+        "autoHeader": "manualSave",
+        "exclude": [
+            "json"
+        ]
     },
 
     "files.associations": {
@@ -56,17 +59,14 @@
         "common.h": "c",
         "compiler.h": "c",
         "config.h": "c",
-        "cstddef": "cpp",
-        "cwchar": "cpp",
+        "unordered_map": "cpp",
+        "chrono": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
         "string": "cpp",
-        "type_traits": "cpp",
-        "array": "cpp",
-        "optional": "cpp",
-        "istream": "cpp",
-        "ostream": "cpp",
-        "system_error": "cpp",
-        "tuple": "cpp",
-        "utility": "cpp"
+        "vector": "cpp",
+        "memory_resource": "cpp"
     },
     
     "C_Cpp.errorSquiggles": "EnabledIfIncludesResolve",
@@ -78,10 +78,10 @@
         "Ceedling",
         "Karlesky",
         "Voord",
-        "cxkernel",
-        "kevindai"
+        "cxkernel"
     ],
     "cSpell.logLevel": "Information",
 
-    "cmakeExplorer.buildDir": "build/cmake-build/"
+    "cmakeExplorer.buildDir": "build/cmake-build/",
+    "cmakeExplorer.buildConfig": "Debug"
 }

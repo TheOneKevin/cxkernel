@@ -86,10 +86,10 @@ struct region
     struct region* parent;
 };
 
-void pmm_add_arena(pmm_arena_t*, bitmap_t*);
+/*void pmm_add_arena(pmm_arena_t*, bitmap_t*);
 size_t pmm_alloc_pages(size_t, list_head_t* pages);
 size_t pmm_free(list_head_t* pages);
-phys_t pmm_get_phys(page_t* page);
+phys_t pmm_get_phys(page_t* page);*/
 
 __END_CDECLS
 
@@ -101,7 +101,7 @@ namespace pmm
     {
     public:
         virtual void AddArena(pmm_arena_t* arena, bitmap_t* bt = NULL);
-        virtual phys_t PageToPhysical(uintptr_t page);
+        virtual phys_t PageToPhysical(uintptr_t page);        
         virtual size_t Allocate(size_t, uintptr_t pages);
         virtual size_t AllocateSingle(uintptr_t pages);
         virtual size_t AllocateContiguous(size_t, uintptr_t pages);
@@ -109,8 +109,14 @@ namespace pmm
         virtual int GetType();
         virtual size_t GetSize();
     };
-    void SetPhysicalAllocator(PhysicalAllocator*);
-    PhysicalAllocator& GetPhysicalAllocator();
+
+    void set_allocator(PhysicalAllocator*);
+    PhysicalAllocator& get_allocator();
+    void add_arena(pmm_arena_t* arena, bitmap_t* bt);
+    size_t alloc_pages(size_t cnt, list_head_t* pages);
+    size_t alloc_pages_contig(size_t cnt, list_head_t* pages);
+    size_t free(list_head_t* pages);
+    phys_t get_phys(page_t* page);
 }
 
 #endif

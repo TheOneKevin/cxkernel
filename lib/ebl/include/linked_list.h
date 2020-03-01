@@ -89,7 +89,7 @@ static inline void list_append(list_head_t* head, list_node_t* node)
     head -> next = node;
 }
 
-static inline void list_insert(list_head_t* head, list_head_t* node)
+static inline void list_insert(list_head_t* head, list_node_t* node)
 {
     node -> next = head;
     node -> prev = head -> prev;

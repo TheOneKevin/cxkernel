@@ -26,6 +26,7 @@
 
 #ifndef IS_HOSTED
     #include <panic.h>
+    #include <assert.h>
 #endif
 
 #define PAGE_IS_IN_ARENA(p, a) \
@@ -40,6 +41,11 @@
 namespace pmm
 {
     static PmmNode __internal_PmmNodeAllocator;
+
+    PhysicalAllocator* GetNodeAllocator()
+    {
+        return static_cast<PhysicalAllocator*>(&__internal_PmmNodeAllocator);
+    }
 
     phys_t PmmNode::PageToPhysical(uintptr_t page)
     {
@@ -95,17 +101,20 @@ namespace pmm
                 if(bitmap_tstbit(bt -> bitmap, i))
                 {
                     list_remove(&arena->pages[i].node);
+                    arena->pages[i].flags |= CX_PAGE_OCCUPIED;
                     arena->free--;
                 }
             }
         }
-        OS_PRN("Loaded 0x%X free page_t entries\n", list_count(arena->free_list.next));
+        OS_PRN("Loaded 0x%X free page_t entries\n", list_count(&arena->free_list));
     }
 
     size_t PmmNode::Allocate(size_t cnt, uintptr_t p)
     {
-        list_node_t* pages = (list_node_t*) p;
-        INIT_LLIST(pages);
+        list_node_t head;
+        INIT_LLIST(&head);
+        list_head_t** pages = (list_head_t**) p;
+
         size_t ret = 0;
         if(cnt == 0) return 0;
         pmm_arena_t* arena;
@@ -113,17 +122,24 @@ namespace pmm
         {
             while(ret < cnt)
             {
+                if(arena -> free == 0 || arena -> free_list.next == NULL)
+                    goto end;
                 page_t* pg = LIST_ENTRY(
-                    list_remove(list_end(&arena->free_list)),
+                    list_remove(arena->free_list.next),
                     page_t, node
                 );
-                if(!pg) return ret;
+                // TODO: Maybe move check into linked_list library? (Check for list head)
+                if(!pg  || (pg->node.prev == &pg->node && pg->node.next == NULL))
+                    goto end;
                 pg->flags |= CX_PAGE_OCCUPIED;
                 arena->free--;
-                list_append(list_end(pages), &pg->node);
+                list_append(&head, &pg->node);
                 ret++;
             }
         }
+end:
+        *pages = head.next;
+        (*pages) -> prev = *pages;
         return ret;
     }
 
@@ -134,12 +150,15 @@ namespace pmm
 
     size_t PmmNode::AllocateContiguous(size_t cnt, uintptr_t p)
     {
-        list_node_t* pages = (list_node_t*) p;
+        list_node_t head;
+        INIT_LLIST(&head);
+        list_node_t** pages = (list_head_t**) p;
+
         size_t ret = 0;
         if(cnt == 0) return 0;
 
         // Search all arenas...
-        size_t r1 = 0;
+        size_t r1 = 0x7FFFFFFF;
         int idx = 0;
         pmm_arena_t* farena = NULL;
 
@@ -150,12 +169,12 @@ namespace pmm
             size_t r2 = 0;
             for(int i = 0; i < (int) arena -> size; i++)
             {
-                if(CHECK_MFLG(arena -> pages[i].flags, CX_PAGE_OCCUPIED))
+                if(!CHECK_MFLG(arena -> pages[i].flags, CX_PAGE_OCCUPIED) && r2 < cnt)
                     r2++;
                 else
                 {
                     if(r2 <= r1 && r2 >= cnt)
-                        idx = i, r1 = r2, farena = arena;
+                        idx = i-1, r1 = r2, farena = arena;
                     if(r2 == cnt)
                         goto done;
                     r2 = 0;
@@ -166,15 +185,18 @@ namespace pmm
 done:
         // Allocate the run!
         if(r1 != cnt || !farena) return 0;
-        for(int i = idx; i < (int) r1; i++)
+        for(int i = 0; i < (int) r1; i++)
         {
-            page_t* pg = &farena -> pages[i];
+            page_t* pg = &farena -> pages[idx-i];
             list_remove(&pg->node);
             pg->flags |= CX_PAGE_OCCUPIED;
             farena->free--;
-            list_append(list_end(pages), &pg->node);
+            list_append(&head, &pg->node);
             ret++;
         }
+
+        *pages = head.next;
+        (*pages) -> prev = *pages;
 
         OS_DBG("Contiguous allocation at 0x%llX for %d pages\n", PmmNode::PageToPhysical((uintptr_t)(&farena -> pages[idx])), ret);
 
@@ -183,11 +205,17 @@ done:
 
     size_t PmmNode::Free(uintptr_t p)
     {
-        list_node_t* pages = (list_node_t*) p;
+        list_head_t* pages = (list_head_t*) alloca(sizeof(list_head_t));
+        INIT_LLIST(pages);
+        list_node_t* pglist = *((list_node_t**) p);
+        // TODO: list_join()
+        pages -> next = pglist;
+        pglist -> prev = pages;
+
         size_t ret = 0;
         while(pages->next != NULL)
         {
-            page_t* pg = LIST_ENTRY(list_remove(list_end(pages)), TYPEOF(page_t), node);
+            page_t* pg = LIST_ENTRY(list_remove(pages->next), TYPEOF(page_t), node);
             pmm_arena_t* arena;
             foreach_llist_entry(arena, node, arena_list.next)
             {
@@ -201,16 +229,13 @@ done:
                 }
             }
         }
+
+        *((list_node_t**) p) = pages -> next;
         return ret;
     }
 
     int PmmNode::GetType()
     {
         return PMM_TYPE_LIST;
-    }
-
-    PhysicalAllocator* GetPmmNodeAllocator()
-    {
-        return static_cast<PhysicalAllocator*>(&__internal_PmmNodeAllocator);
     }
 } // namespace

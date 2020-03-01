@@ -63,15 +63,15 @@ struct kmem_free_block
     size_t size;        //!< Size of virtual address block
 };
 
-void* kmalloc(size_t size);
-void kfree(void*);
-
 void* vmalloc(size_t size);
 void vfree(void*);
 
-void kmem_init();
-slabcache_t* kmem_new_cache(size_t);
-void* kmem_cache_alloc(size_t);
-void kmem_cache_free(slabcache_t*, void*);
-
 __END_CDECLS
+
+namespace kmem
+{
+    void init();
+    slabcache_t* new_cache(size_t);
+    void* cache_alloc(size_t);
+    void cache_free(slabcache_t*, void*);
+}

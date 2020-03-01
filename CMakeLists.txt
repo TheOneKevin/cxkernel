@@ -1,3 +1,12 @@
+# Copyright (c) 2019 The cxkernel Authors. All rights reserved.
+# Use of this source code is governed by a MIT-style
+# license that can be found in the LICENSE file or at
+# https://opensource.org/licenses/MIT
+# 
+# @file   CMakeLists.txt
+# @author Kevin Dai \<kevindai02@outlook.com\>
+# @date   Created on Jun 2 2019, 7:04 PM
+
 cmake_minimum_required(VERSION 3.5)
 project(osdev)
 include(build/utils.cmake)

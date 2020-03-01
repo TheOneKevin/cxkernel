@@ -47,6 +47,12 @@
 #define HALT_CPU           asm volatile ("hlt");
 #define DEBUG_EXIT         asm volatile ("outw %1, %0"::"dN"(0x604),"a"(0x0|0x2000));
 
+#if ARCH_TYPE == ARCH_x86_32
+    #include "arch/x86/32/arch_defs.h"
+#elif ARCH_TYPE == ARCH_x86_64
+    #include "arch/x86/64/arch_defs.h"
+#endif
+
 #ifdef __cplusplus
 
 namespace x86_32

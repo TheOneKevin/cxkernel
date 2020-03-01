@@ -9,12 +9,11 @@ osInfo[/etc/debian_version]=apt-get
 for f in ${!osInfo[@]}
 do
     if [[ -f $f ]];then
-        ${osInfo[$f]} install git
-        ${osInfo[$f]} install nasm
-        ${osInfo[$f]} install xorriso
-        ${osInfo[$f]} install quilt
-        ${osInfo[$f]} install minicom
-        ${osInfo[$f]} install grub-pc grub-pc-bin grub-rescue-pc
+        ${osInfo[$f]} install -y git nasm gcc-multilib g++-multilib
+        ${osInfo[$f]} install -y xorriso
+        ${osInfo[$f]} install -y quilt
+        ${osInfo[$f]} install -y minicom
+        ${osInfo[$f]} install -y grub-pc grub-pc-bin grub-rescue-pc
     fi
 done
 
