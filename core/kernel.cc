@@ -18,7 +18,7 @@
 #include "system.h"
 #include "platform.h"
 #include "core/memory.h"
-#include "core/pmm_node.h"
+#include "core/nodealloc.h"
 #include "core/bootalloc.h"
 #include "arch/interface.h"
 

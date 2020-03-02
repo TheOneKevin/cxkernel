@@ -148,6 +148,15 @@ namespace platform
             x86::g::max_mem = MAX(x86::g::max_mem, mmap->addr + mmap->len);
         
         // Map the lower XX MiB/GiB into upper memory
+        //
+        // We can first map the area between 0xC000`0000 and 0xE000`0000 to
+        // a continuous strip of physical memory, i.e.:
+        // Phys: 0 1 2 3 . . . 6 7 8 9 (. represents a memory hole)
+        // Virt: 0 1 2 3 6 7 8 9       (note the continuity and the lack of holes)
+        // Naturally, the address range of the virtual mappings would be smaller
+        // than that of the physical if memory holes exist. What's more important
+        // is that as a result, PHYSICALLY CONTINUOUS MEMORY WILL BE CONTINUOUS
+        // IN THE VIRTUAL ADDRESS SPACE AS WELL.
         virt_t va = 0;
         ARCH_FOREACH_MMAP(mmap, x86::g::mbt, 0)
         {

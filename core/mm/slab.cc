@@ -46,7 +46,6 @@ namespace kmem
         while(free - (int)(size + sizeof(kmem_objctl_t) + sizeof(slab_t)) < 0)
             free *= 2, cache -> order++;
         free -= sizeof(slab_t);
-        // Really calculate how much can fit
         while(free - (int)(size + sizeof(kmem_objctl_t)) >= 0)
             free -= size + sizeof(kmem_objctl_t), cache -> slab_objects++;
 
@@ -106,15 +105,6 @@ namespace kmem
 
     void init()
     {
-        // We can first map the area between 0xC000`0000 and 0xE000`0000 to
-        // a continuous strip of physical memory, i.e.:
-        // Phys: 0 1 2 3 . . . 6 7 8 9 (. represents a memory hole)
-        // Virt: 0 1 2 3 6 7 8 9       (note the continuity and the lack of holes)
-        // Naturally, the address range of the virtual mappings would be smaller
-        // than that of the physical if memory holes exist. What's more important
-        // is that as a result, PHYSICALLY CONTINUOUS MEMORY WILL BE CONTINUOUS
-        // IN THE VIRTUAL ADDRESS SPACE AS WELL.
-
         init_cache(&root_cache, sizeof(slabcache_t));
         new_cache(sizeof(pmm_freeblock_t));
     }
@@ -142,10 +132,15 @@ namespace kmem
         {
             /**
              *  Layout of a single slab:
-             * +--------+-----------------+---------------+--------------
-             * | slab_t | kmem_objctl_t[] | color padding | objects[]  =>
-             * +--------+-----------------+---------------+--------------
+             * +--------+-----------------+---------------+---------------+----------+
+             * | slab_t | kmem_objctl_t[] | color padding | objects[]  => | bufctl[] |
+             * +--------+-----------------+---------------+---------------+----------+
              * ^ void* page
+             * Note: bufctl[i] = i+1
+             * bufctl [i] [i+1] [i+2] ...
+             *         +---^ +---^ etc...
+             * Which means that when we free, we can consult bufctl to give us the next
+             * free object. See https://www.kernel.org/doc/gorman/html/understand/understand011.html
              */
 
             list_node_t* page = NULL;
@@ -164,12 +159,12 @@ namespace kmem
 
             // Fill in bufctl
             kmem_objctl_t* bufctl = (kmem_objctl_t*)((virt_t) slab + sizeof(slab_t));
-            //void* obj = slab -> objects;
-
+            void* obj = slab -> objects;
             memset((void*) bufctl, 0, sizeof(kmem_objctl_t) * cache -> slab_objects);
             for (unsigned int i = 0; i < cache -> slab_objects; i++)
             {
-                //obj = (void*)(obj + cache -> slab_size);
+                // TODO: CTOR
+                obj = (void*)((virt_t) obj + cache -> slab_size);
                 bufctl[i] = i+1;
             }
         }

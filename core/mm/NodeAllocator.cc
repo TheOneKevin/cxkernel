@@ -20,7 +20,7 @@
 #include "system.h"
 #include "core/vm.h"
 #include "arch/interface.h"
-#include "core/pmm_node.h"
+#include "core/nodealloc.h"
 
 // This file will be unit tested, so we should set up a standalone environment
 

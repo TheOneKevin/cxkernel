@@ -13,14 +13,15 @@
 
 #include "core/memory.h"
 
-void vmm_new_aspace(vmm_region_t** region)
+namespace vmm
 {
+    void new_aspace(vmm_region_t** region)
+    {
     
+    }
+
+    void free_aspace(vmm_region_t** region)
+    {
+
+    }
 }
-
-void vmm_free_aspace(vmm_region_t** region)
-{
-
-}
-
-
