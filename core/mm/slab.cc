@@ -132,9 +132,9 @@ namespace kmem
         {
             /**
              *  Layout of a single slab:
-             * +--------+-----------------+---------------+---------------+----------+
-             * | slab_t | kmem_objctl_t[] | color padding | objects[]  => | bufctl[] |
-             * +--------+-----------------+---------------+---------------+----------+
+             * +--------+-----------------+---------------+
+             * | slab_t | kmem_objctl_t[] | color padding | objects...
+             * +--------+-----------------+---------------+
              * ^ void* page
              * Note: bufctl[i] = i+1
              * bufctl [i] [i+1] [i+2] ...

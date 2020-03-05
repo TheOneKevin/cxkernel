@@ -17,7 +17,8 @@
 #endif
 
 #include "common.h"
-#include <openlibm.h>
+
+// #include <openlibm.h>
 
 // Find maximum of a and b, avoids double evaluation too.
 #define MAX(a,b) ({ TYPEOF (a) _a = (a); TYPEOF (b) _b = (b); _a > _b ? _a : _b; })

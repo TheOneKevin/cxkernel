@@ -119,8 +119,8 @@ include_directories(lib/elf/include)
 include_directories(lib/libc/include)
 #include_directories(lib/uclibcxx/include)
 include_directories(lib/ebl/include)
-include_directories(lib/openlibm/include)
-include_directories(lib/openlibm/src)
+#include_directories(lib/openlibm/include)
+#include_directories(lib/openlibm/src)
 
 # Set output directory
 set(EXECUTABLE_OUTPUT_PATH ../bin)

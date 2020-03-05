@@ -54,4 +54,46 @@ namespace pmm
         ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
         return get_allocator().PageToPhysical((uintptr_t) page);
     }
+
+    #pragma GCC diagnostic ignored "-Wunused-parameter"
+    
+    void PhysicalAllocator::AddArena(pmm_arena_t* arena, bitmap_t* bt)
+    {
+        // Do nothing
+    }
+
+    phys_t PhysicalAllocator::PageToPhysical(uintptr_t page)
+    {
+        return -1;
+    }
+
+    size_t PhysicalAllocator::Allocate(size_t sz, uintptr_t pages)
+    {
+        return 0;
+    }
+
+    size_t PhysicalAllocator::AllocateSingle(uintptr_t pages)
+    {
+        return Allocate(1, pages);
+    }
+
+    size_t PhysicalAllocator::AllocateContiguous(size_t sz, uintptr_t pages)
+    {
+        return 0;
+    }
+
+    size_t PhysicalAllocator::Free(uintptr_t pages)
+    {
+        return 0;
+    }
+
+    int PhysicalAllocator::GetType()
+    {
+        return PMM_TYPE_OTHER;
+    }
+
+    size_t PhysicalAllocator::GetSize()
+    {
+        return sizeof(list_node_t*);
+    }
 }

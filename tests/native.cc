@@ -21,7 +21,7 @@
 #define OS_PRN(f_, ...) printf((f_), ##__VA_ARGS__)
 
 #include "core/vm.h"
-#include "core/nodealloc.h"
+#include "core/pmm_node.h"
 
 #include "../core/mm/NodeAllocator.cc"
 #include "../core/mm/PhysicalAllocator.cc"

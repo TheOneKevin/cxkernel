@@ -18,7 +18,7 @@
 #include "system.h"
 #include "platform.h"
 #include "core/memory.h"
-#include "core/nodealloc.h"
+#include "core/pmm_node.h"
 #include "core/bootalloc.h"
 #include "arch/interface.h"
 
@@ -65,11 +65,11 @@ extern "C" void kernel_main(loader_t args)
     
     kmem::init();
     
-    char* str = (char*) kmem::kmalloc(20);
+    char* str = new char[20];
     strcpy(str, "Hello, World!\0");
     printf("0x%X %s", (virt_t) str, str);
     fflush(STREAM_OUT);
-    kmem::kfree(str);
+    delete[] str;
 
 #ifdef WITH_TESTS
     UnitTest::main();

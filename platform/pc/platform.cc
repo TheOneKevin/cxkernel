@@ -1,14 +1,3 @@
-/**
- * Copyright (c) 2020 The cxkernel Authors. All rights reserved.
- * Use of this source code is governed by a MIT-style
- * license that can be found in the LICENSE file or at
- * https://opensource.org/licenses/MIT
- * 
- * @file   platform.cc
- * @author Kevin Dai \<kevindai02@outlook.com\>
- * @date   Created on February 29 2020, 11:12 AM
- */
-
 /*
  * Copyright (c) 2019 The cxkernel Authors. All rights reserved.
  * Use of this source code is governed by a MIT-style
