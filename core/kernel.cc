@@ -21,6 +21,7 @@
 #include "core/pmm_node.h"
 #include "core/bootalloc.h"
 #include "arch/interface.h"
+#include "arch/debug.h"
 
 #ifdef WITH_TESTS
     #include "unitytest.h"
@@ -48,8 +49,8 @@ extern "C" void kernel_main(loader_t args)
     g::loader = &__copy__loader;
     
     // Transfer over loader bitmap allocator
-    pmm::set_allocator(pmm::GetBootAllocator());
-    pmm::get_allocator().AddArena(NULL, args.bitmap);
+    pmm::set_allocator(pmm::get_bootallocator());
+    pmm::get_allocator().add_arena(NULL, args.bitmap);
     
     // Start early init
     arch::early_init(args);
@@ -60,7 +61,7 @@ extern "C" void kernel_main(loader_t args)
     platform::init();
     
     // Switch allocator to linked list
-    pmm::set_allocator(pmm::GetNodeAllocator());
+    pmm::set_allocator(pmm::get_nodeallocator());
     platform::meminit();
     
     kmem::init();
@@ -75,7 +76,7 @@ extern "C" void kernel_main(loader_t args)
     UnitTest::main();
     DEBUG_EXIT;
 #else
-    //Execute start module
+    //Execute start thread
 #endif
     for(;;) HALT_CPU;
 }

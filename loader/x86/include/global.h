@@ -20,7 +20,7 @@ __BEGIN_CDECLS
 
 // This initializes the bitmap (declared in bootmem.cc)
 void init_bootmm32();
-void init_pps32(uint32_t);
+DEPRECATED("Do not use") void init_pps32(uint32_t);
 bool pmm_update_all(void);
 phys_t pmm_alloc_page(bool clear = true);
 void pmm_free_page(phys_t address);

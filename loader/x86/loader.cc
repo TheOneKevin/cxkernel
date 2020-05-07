@@ -61,8 +61,6 @@ namespace loader
         
         OS_DBG("Kernel image end: 0x%X\n", my_pps_hard);
 
-        init_pps32(my_pps_hard);
-
         OS_DBG("=== Loader will now exit ===\n");
         get_mmu().map(ARCH_STACK_BOTTOM - 1*ARCH_PAGE_SIZE, pmm_alloc_page(false), PTE_PR | PTE_RW | PTE_NX);
         memset((void*)(ARCH_STACK_BOTTOM - ARCH_PAGE_SIZE), 0, ARCH_PAGE_SIZE);

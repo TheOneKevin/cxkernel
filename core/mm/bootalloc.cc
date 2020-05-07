@@ -26,19 +26,19 @@ namespace pmm
 {
     static BootAllocator __internal_BootAllocator;
 
-    PhysicalAllocator* GetBootAllocator()
+    PhysicalAllocator* get_bootallocator()
     {
         return static_cast<PhysicalAllocator*>(&__internal_BootAllocator);
     }
 
-    phys_t BootAllocator::PageToPhysical(uintptr_t page)
+    phys_t BootAllocator::page_to_physical(uintptr_t page)
     {
         return ((bafree_t*) page) -> addr;
     }
 
     // If we run out of room, we search the bitmap again to find
     // a single free page frame.
-    bool BootAllocator::UpdateAll(void)
+    bool BootAllocator::update_all(void)
     {
     #ifdef ALLOCATE_FIRST
         _ptr = (size_t) bitmap_firstz(alloc_map);
@@ -51,14 +51,14 @@ namespace pmm
         return false;
     }
 
-    size_t BootAllocator::AllocateSingle(uintptr_t p)
+    size_t BootAllocator::allocate_single(uintptr_t p)
     {
     #ifdef ALLOCATE_FIRST
         if(bitmap_tstbit(alloc_map -> bitmap, _ptr) || _ptr >= alloc_map -> bit_count)
-            BootAllocator::UpdateAll();
+            BootAllocator::update_all();
     #else
         if(bitmap_tstbit(alloc_map.bitmap, _ptr) || _ptr <= 1)
-            BootAllocator::UpdateAll(); // If it is not a free page, find one
+            BootAllocator::update_all(); // If it is not a free page, find one
     #endif
         bitmap_setbit(alloc_map -> bitmap, _ptr);
     #ifdef ALLOCATE_FIRST
@@ -69,17 +69,17 @@ namespace pmm
         return 1;
     }
 
-    void BootAllocator::AddArena(pmm_arena_t* arena, bitmap_t* bt)
+    void BootAllocator::add_arena(pmm_arena_t* arena, bitmap_t* bt)
     {
         if(bt != NULL)
         {
             OS_PRN("Loaded 0x%X bitmapped pages\n", bt->bit_count);
             alloc_map = bt;
-            BootAllocator::UpdateAll();
+            BootAllocator::update_all();
         }
     }
 
-    size_t BootAllocator::Free(uintptr_t st)
+    size_t BootAllocator::free(uintptr_t st)
     {
         int pages = ((bafree_t*) st) -> pages;
         phys_t address = ((bafree_t*) st) -> addr;
@@ -89,12 +89,12 @@ namespace pmm
         return 1;
     }
 
-    int BootAllocator::GetType()
+    int BootAllocator::get_type()
     {
         return PMM_TYPE_BOOT;
     }
 
-    size_t BootAllocator::GetSize()
+    size_t BootAllocator::get_size()
     {
         return sizeof(bafree_t);
     }

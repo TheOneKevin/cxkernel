@@ -24,7 +24,7 @@
 #include "include/global.h"
 
 // Comment out by default.
-#define ALLOCATE_FIRST
+// #define ALLOCATE_FIRST
 // #define ANNOYING_LOG
 
 #ifdef ANNOYING_LOG

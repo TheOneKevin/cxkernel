@@ -14,7 +14,7 @@
 
 __BEGIN_CDECLS
 
-void initialize_debugger(void);
+void set_debug_traps(void);
 void breakpoint(void);
 
 __END_CDECLS

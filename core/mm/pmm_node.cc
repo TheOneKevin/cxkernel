@@ -42,12 +42,12 @@ namespace pmm
 {
     static PmmNode __internal_PmmNodeAllocator;
 
-    PhysicalAllocator* GetNodeAllocator()
+    PhysicalAllocator* get_nodeallocator()
     {
         return static_cast<PhysicalAllocator*>(&__internal_PmmNodeAllocator);
     }
 
-    phys_t PmmNode::PageToPhysical(uintptr_t page)
+    phys_t PmmNode::page_to_physical(uintptr_t page)
     {
         pmm_arena_t* arena;
         foreach_llist_entry(arena, node, arena_list.next)
@@ -58,7 +58,7 @@ namespace pmm
         return 0;
     }
 
-    void PmmNode::AddArena(pmm_arena_t* arena, bitmap_t* bt)
+    void PmmNode::add_arena(pmm_arena_t* arena, bitmap_t* bt)
     {
         if(arena == NULL)
         {
@@ -110,7 +110,7 @@ namespace pmm
         OS_PRN("Loaded 0x%X free page_t entries\n", list_count(&arena->free_list));
     }
 
-    size_t PmmNode::Allocate(size_t cnt, uintptr_t p)
+    size_t PmmNode::allocate(size_t cnt, uintptr_t p)
     {
         list_node_t head;
         INIT_LLIST(&head);
@@ -144,12 +144,12 @@ end:
         return ret;
     }
 
-    size_t PmmNode::AllocateSingle(uintptr_t p)
+    size_t PmmNode::allocate_single(uintptr_t p)
     {
-        return Allocate(1, p);
+        return allocate(1, p);
     }
 
-    size_t PmmNode::AllocateContiguous(size_t cnt, uintptr_t p)
+    size_t PmmNode::allocate_contiguous(size_t cnt, uintptr_t p)
     {
         list_node_t head;
         INIT_LLIST(&head);
@@ -199,12 +199,12 @@ done:
         *pages = head.next;
         (*pages) -> prev = *pages;
 
-        OS_DBG("Contiguous allocation at 0x%llX for %d pages\n", PmmNode::PageToPhysical((uintptr_t)(&farena -> pages[idx])), ret);
+        OS_DBG("Contiguous allocation at 0x%llX for %d pages\n", PmmNode::page_to_physical((uintptr_t)(&farena -> pages[idx])), ret);
 
         return ret;
     }
 
-    size_t PmmNode::Free(uintptr_t p)
+    size_t PmmNode::free(uintptr_t p)
     {
         list_head_t* pages = (list_head_t*) alloca(sizeof(list_head_t));
         INIT_LLIST(pages);
@@ -235,7 +235,7 @@ done:
         return ret;
     }
 
-    int PmmNode::GetType()
+    int PmmNode::get_type()
     {
         return PMM_TYPE_LIST;
     }

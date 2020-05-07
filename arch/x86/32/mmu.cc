@@ -47,7 +47,7 @@ namespace arch
 {
     // Default implementations
     void Mmu::init() { }
-    void Mmu::map(uint64_t virt, uint64_t phys, uint64_t flags) { }
+    void Mmu::map(virt_t virt, phys_t phys, uint64_t flags) { }
     static Mmu __dummy_mmu;
 
     // Override virtual classes
@@ -60,7 +60,8 @@ namespace arch
         {
             OS_PRN("Registered paging without PAE\n");
         }
-        void map(uint64_t a, uint64_t b, uint64_t c) override
+
+        void map(virt_t a, phys_t b, uint64_t c) override
         {
             auto virt = (uint32_t) a;
             auto phys = (uint32_t) b;
@@ -73,9 +74,9 @@ namespace arch
             OS_DBG("Map 0x%X -> 0x%X (0x%X)\n", phys, virt, flags);
             if(page_dir[pdid] == 0) // Page table does not exist yet
             {
-                void* page = alloca(pmm::get_allocator().GetSize());
-                pmm::get_allocator().AllocateSingle((uintptr_t) page);
-                auto addr = (uint32_t) pmm::get_allocator().PageToPhysical((uintptr_t) page);
+                void* page = alloca(pmm::get_allocator().get_size());
+                pmm::get_allocator().allocate_single((uintptr_t) page);
+                auto addr = (uint32_t) pmm::get_allocator().page_to_physical((uintptr_t) page);
                 page_dir[pdid] = addr | (PDE_RW | PDE_PR);
                 __tlb32_flush_single(ptvd);
                 memset((void*) ptvd, 0, ARCH_PAGE_SIZE);
@@ -94,7 +95,8 @@ namespace arch
         {
             OS_PRN("Registered paging with PAE\n");
         }
-        void map(uint64_t a, uint64_t b, uint64_t c) override
+
+        void map(virt_t a, phys_t b, uint64_t c) override
         {
             // Type parameters
             auto virt = (uint32_t) a;
@@ -115,9 +117,9 @@ namespace arch
             
             if(rpage_dir[pdid] == 0) // Page table does not exist yet
             {
-                void* page = alloca(pmm::get_allocator().GetSize());
-                pmm::get_allocator().AllocateSingle((uintptr_t) page);
-                auto addr = (uint64_t) pmm::get_allocator().PageToPhysical((uintptr_t) page);
+                void* page = alloca(pmm::get_allocator().get_size());
+                pmm::get_allocator().allocate_single((uintptr_t) page);
+                auto addr = (uint64_t) pmm::get_allocator().page_to_physical((uintptr_t) page);
                 rpage_dir[pdid] = addr | (PDE_RW | PDE_PR);
                 __tlb32_flush_single(ptvd);
                 memset((void*) ptvd, 0, ARCH_PAGE_SIZE);

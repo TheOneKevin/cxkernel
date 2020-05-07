@@ -100,14 +100,14 @@ namespace pmm
     class PhysicalAllocator
     {
     public:
-        virtual void AddArena(pmm_arena_t* arena, bitmap_t* bt = NULL);
-        virtual phys_t PageToPhysical(uintptr_t page);        
-        virtual size_t Allocate(size_t, uintptr_t pages);
-        virtual size_t AllocateSingle(uintptr_t pages);
-        virtual size_t AllocateContiguous(size_t, uintptr_t pages);
-        virtual size_t Free(uintptr_t pages);
-        virtual int GetType();
-        virtual size_t GetSize();
+        virtual void add_arena(pmm_arena_t* arena, bitmap_t* bt = NULL);
+        virtual phys_t page_to_physical(uintptr_t page);        
+        virtual size_t allocate(size_t, uintptr_t pages);
+        virtual size_t allocate_single(uintptr_t pages);
+        virtual size_t allocate_contiguous(size_t, uintptr_t pages);
+        virtual size_t free(uintptr_t pages);
+        virtual int get_type();
+        virtual size_t get_size();
     };
 
     void set_allocator(PhysicalAllocator*);

@@ -101,9 +101,7 @@
         {
             "label": "Kill All QEMU Instances",
             "type": "shell",
-            "linux": {
-                "command": "pkill qemu"
-            },
+            "command": "pkill qemu",
             "problemMatcher": []
         }
     ],

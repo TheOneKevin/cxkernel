@@ -14,7 +14,7 @@ include(build/utils.cmake)
 # All configure options
 set(TARGET "x86"        CACHE STRING "Target platform [x86_32, x86_64]")
 set(BUILD_TYPE ""       CACHE STRING "Build type (leave blank if you want to configure options)")
-set(WITH_PAE        ON  CACHE BOOL   "Enable PAE support")
+set(WITH_PAE        OFF CACHE BOOL   "Enable PAE support")
 set(CUSTOM_FILENAME OFF CACHE BOOL   "Use the custome __FILENAME__ instead of __FILE__")
 # Setting BUILD_TYPE will override many of these options
 set(LOG_ENABLE      ON  CACHE BOOL   "[!!] Enable logging to serial")

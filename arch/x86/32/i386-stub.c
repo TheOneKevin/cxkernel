@@ -189,7 +189,7 @@ int gdb_i386errcode;
  * Likewise, the vector number here (since GDB only gets the signal
  * number through the usual means, and that's not very specific).
  */
-int gdb_i386vector = -1;
+// int gdb_i386vector = -1;
 //!@cond
 /* GDB stores segment registers in 32-bit words (that's just the way
    m-i386v.h is written).  So zero the appropriate areas in registers.  */
@@ -703,7 +703,7 @@ void handle_exception(int exceptionVector)
     int addr, length;
     char *ptr;
     //int newPC = 0;
-    gdb_i386vector = exceptionVector;
+    //gdb_i386vector = exceptionVector;
     if (remote_debug)
         printf("vector=%d, sr=0x%x, pc=0x%x\n", exceptionVector, registers[PS], registers[PC]);
 
@@ -847,8 +847,9 @@ void handle_exception(int exceptionVector)
  * This function is used to set up exception handlers for tracing and
  * breakpoints
  */
-void initialize_debugger(void)
+void set_debug_traps(void)
 {
+    gdb_i386errcode = -1;
     initGdbSerial();
     stackPtr = &remcomStack[STACKSIZE / sizeof(int) - 1];
     exceptionHandler(0, (unsigned int) _catchException0);
@@ -878,6 +879,7 @@ void initialize_debugger(void)
  */
 void breakpoint(void)
 {
+    gdb_i386errcode = 0;
     if (initialized)
         asm volatile("int $0x3");
 }

@@ -31,19 +31,19 @@ namespace pmm
     private:
         bitmap_t* alloc_map;
         phys_t _ptr;
-        bool UpdateAll(void);
+        bool update_all(void);
 
     public:
         // Other stuff
-        void AddArena(pmm_arena_t*, bitmap_t* bt = NULL) override;
-        phys_t PageToPhysical(uintptr_t page) override;
-        size_t AllocateSingle(uintptr_t page) override;
-        size_t Free(uintptr_t st) override;
-        int GetType() override;
-        size_t GetSize() override;
+        void add_arena(pmm_arena_t*, bitmap_t* bt = NULL) override;
+        phys_t page_to_physical(uintptr_t page) override;
+        size_t allocate_single(uintptr_t page) override;
+        size_t free(uintptr_t st) override;
+        int get_type() override;
+        size_t get_size() override;
     };
 
-    PhysicalAllocator* GetBootAllocator();
+    PhysicalAllocator* get_bootallocator();
 }
 
 #endif

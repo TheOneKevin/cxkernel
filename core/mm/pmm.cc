@@ -28,71 +28,71 @@ namespace pmm
 
     void add_arena(pmm_arena_t* arena, bitmap_t* bt)
     {
-        get_allocator().AddArena(arena, bt);
+        get_allocator().add_arena(arena, bt);
     }
 
     size_t alloc_pages(size_t cnt, list_head_t** pages)
     {
-        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
-        return get_allocator().Allocate(cnt, (uintptr_t) pages);
+        ASSERT(get_allocator().get_type() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().allocate(cnt, (uintptr_t) pages);
     }
 
     size_t alloc_pages_contig(size_t cnt, list_head_t** pages)
     {
-        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
-        return get_allocator().AllocateContiguous(cnt, (uintptr_t) pages);
+        ASSERT(get_allocator().get_type() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().allocate_contiguous(cnt, (uintptr_t) pages);
     }
 
     size_t free(list_head_t** pages)
     {
-        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
-        return get_allocator().Free((uintptr_t) pages);
+        ASSERT(get_allocator().get_type() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().free((uintptr_t) pages);
     }
 
     phys_t get_phys(page_t* page)
     {
-        ASSERT(get_allocator().GetType() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
-        return get_allocator().PageToPhysical((uintptr_t) page);
+        ASSERT(get_allocator().get_type() == PMM_TYPE_LIST, "Are you using the wrong allocator?");
+        return get_allocator().page_to_physical((uintptr_t) page);
     }
 
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     
-    void PhysicalAllocator::AddArena(pmm_arena_t* arena, bitmap_t* bt)
+    void PhysicalAllocator::add_arena(pmm_arena_t* arena, bitmap_t* bt)
     {
         // Do nothing
     }
 
-    phys_t PhysicalAllocator::PageToPhysical(uintptr_t page)
+    phys_t PhysicalAllocator::page_to_physical(uintptr_t page)
     {
         return -1;
     }
 
-    size_t PhysicalAllocator::Allocate(size_t sz, uintptr_t pages)
+    size_t PhysicalAllocator::allocate(size_t sz, uintptr_t pages)
     {
         return 0;
     }
 
-    size_t PhysicalAllocator::AllocateSingle(uintptr_t pages)
+    size_t PhysicalAllocator::allocate_single(uintptr_t pages)
     {
-        return Allocate(1, pages);
+        return allocate(1, pages);
     }
 
-    size_t PhysicalAllocator::AllocateContiguous(size_t sz, uintptr_t pages)
-    {
-        return 0;
-    }
-
-    size_t PhysicalAllocator::Free(uintptr_t pages)
+    size_t PhysicalAllocator::allocate_contiguous(size_t sz, uintptr_t pages)
     {
         return 0;
     }
 
-    int PhysicalAllocator::GetType()
+    size_t PhysicalAllocator::free(uintptr_t pages)
+    {
+        return 0;
+    }
+
+    int PhysicalAllocator::get_type()
     {
         return PMM_TYPE_OTHER;
     }
 
-    size_t PhysicalAllocator::GetSize()
+    size_t PhysicalAllocator::get_size()
     {
         return sizeof(list_node_t*);
     }

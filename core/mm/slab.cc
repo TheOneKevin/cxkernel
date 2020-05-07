@@ -120,7 +120,7 @@ namespace kmem
 
     void* cache_alloc(size_t size)
     {
-        if(pmm::get_allocator().GetType() != PMM_TYPE_LIST)
+        if(pmm::get_allocator().get_type() != PMM_TYPE_LIST)
             return NULL;
 
         slabcache_t* cache = get_cache(size);
@@ -144,7 +144,7 @@ namespace kmem
              */
 
             list_node_t* page = NULL;
-            pmm::get_allocator().AllocateContiguous(1 << (cache -> order), (uintptr_t) &page);
+            pmm::get_allocator().allocate_contiguous(1 << (cache -> order), (uintptr_t) &page);
             // TODO: Make more portable
             slab = (slab_t*) (pmm::get_phys(LIST_ENTRY(page, page_t, node)) + ARCH_KMALLOC_BASE);
             INIT_LLIST(&slab -> node);

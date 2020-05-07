@@ -129,9 +129,9 @@ extern "C" void TestAllocationEdge()
     list_head_t* p = NULL;
     list_head_t head; INIT_LLIST(&head);
 
-    pmm::get_allocator().AddArena(&arena, &bitmap);
+    pmm::get_allocator().add_arena(&arena, &bitmap);
     prealloc_checks(nfree);
-    size_t sz = pmm::get_allocator().Allocate(nfree, (uintptr_t) &p);
+    size_t sz = pmm::get_allocator().allocate(nfree, (uintptr_t) &p);
     head.next = p;
     TEST_ASSERT_EQUAL_size_t(nfree, sz);
     postalloc_checks(nfree, nfree, sz, &head);
@@ -149,9 +149,9 @@ extern "C" void TestAllocCont()
     list_head_t* p = NULL;
     list_head_t head; INIT_LLIST(&head);
 
-    pmm::get_allocator().AddArena(&arena, &bitmap);
+    pmm::get_allocator().add_arena(&arena, &bitmap);
     prealloc_checks(nfree);
-    size_t sz = pmm::get_allocator().AllocateContiguous(nfree, (uintptr_t) &p);
+    size_t sz = pmm::get_allocator().allocate_contiguous(nfree, (uintptr_t) &p);
     head.next = p;
     TEST_ASSERT_EQUAL_size_t(nfree, sz);
     postalloc_checks(nfree, nfree, sz, &head);
@@ -169,13 +169,13 @@ extern "C" void TestAllocFree()
 
     list_head_t* p = NULL;
     list_head_t head; INIT_LLIST(&head);
-    pmm::get_allocator().AddArena(&arena, &bitmap);
+    pmm::get_allocator().add_arena(&arena, &bitmap);
     prealloc_checks(nfree);
     
     for(int i = 0; i < MAX_ITER; i++)
     {
         auto t1 = high_resolution_clock::now();
-        size_t sz1 = pmm::get_allocator().Allocate(nfree, (uintptr_t) &p);
+        size_t sz1 = pmm::get_allocator().allocate(nfree, (uintptr_t) &p);
         auto t2 = high_resolution_clock::now();
         avg1 += duration_cast<std::chrono::nanoseconds>(t2-t1).count();
 
@@ -184,7 +184,7 @@ extern "C" void TestAllocFree()
         postalloc_checks(nfree, nfree, sz1, &head);
 
         t1 = high_resolution_clock::now();
-        size_t sz2 = pmm::get_allocator().Free((uintptr_t) &p);
+        size_t sz2 = pmm::get_allocator().free((uintptr_t) &p);
         t2 = high_resolution_clock::now();
         avg2 += duration_cast<std::chrono::nanoseconds>(t2-t1).count();
         
@@ -208,20 +208,20 @@ extern "C" void TestAllocError()
     list_head_t* p = NULL;
     list_head_t head; INIT_LLIST(&head);
     
-    pmm::get_allocator().AddArena(&arena, &bitmap);
+    pmm::get_allocator().add_arena(&arena, &bitmap);
     prealloc_checks(nfree);
-    size_t sz1 = pmm::get_allocator().Allocate(nfree + alloc_size, (uintptr_t) &p);
+    size_t sz1 = pmm::get_allocator().allocate(nfree + alloc_size, (uintptr_t) &p);
     head.next = p;
     TEST_ASSERT_EQUAL_size_t(nfree, sz1);
     postalloc_checks(nfree, nfree, sz1, &head);
     TEST_ASSERT_NOT_EQUAL(nfree + alloc_size, sz1);
 
-    size_t sz2 = pmm::get_allocator().Free((uintptr_t) &p);
+    size_t sz2 = pmm::get_allocator().free((uintptr_t) &p);
     head.next = p;
     postfree_checks(sz1, sz2, &head);
 }
 
-extern "C" void TestDoubleFree()
+extern "C" void TestDoublefree()
 {
 
 }

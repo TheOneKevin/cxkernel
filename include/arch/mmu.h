@@ -12,6 +12,7 @@
 #pragma once
 
 #include "common.h"
+#include "types.h"
 
 #ifdef __cplusplus
 
@@ -21,7 +22,7 @@ namespace arch
     {
     public:
         virtual void init();
-        virtual void map(uint64_t virt, uint64_t phys, uint64_t flags);
+        virtual void map(virt_t virt, phys_t phys, uint64_t flags);
     };
 
     Mmu& get_mmu();

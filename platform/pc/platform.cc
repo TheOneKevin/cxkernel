@@ -125,8 +125,9 @@ namespace platform
         pic::remap(IRQ0, IRQ0 + 8);
         pic::mask(0xFF, 0xFF);
         serial::init(COM1);
-        serial::init(COM2);
         memset(interrupts::handlers, 0, sizeof(interrupts::handlers));
+
+        
     }
 
     static phys_t max_pa = 0;
@@ -136,16 +137,17 @@ namespace platform
         ARCH_FOREACH_MMAP(mmap, x86::g::mbt, 0)
             x86::g::max_mem = MAX(x86::g::max_mem, mmap->addr + mmap->len);
         
+        //
         // Map the lower XX MiB/GiB into upper memory
         //
         // We can first map the area between 0xC000`0000 and 0xE000`0000 to
         // a continuous strip of physical memory, i.e.:
         // Phys: 0 1 2 3 . . . 6 7 8 9 (. represents a memory hole)
         // Virt: 0 1 2 3 6 7 8 9       (note the continuity and the lack of holes)
-        // Naturally, the address range of the virtual mappings would be smaller
-        // than that of the physical if memory holes exist. What's more important
-        // is that as a result, PHYSICALLY CONTINUOUS MEMORY WILL BE CONTINUOUS
-        // IN THE VIRTUAL ADDRESS SPACE AS WELL.
+        // 
+        // PHYSICALLY CONTINUOUS MEMORY WILL BE CONTINUOUS IN THE VIRTUAL ADDRESS SPACE AS WELL.
+        // Therefore to map contiguous vm, one need only map contiguous pm.
+        //
         virt_t va = 0;
         ARCH_FOREACH_MMAP(mmap, x86::g::mbt, 0)
         {
@@ -178,11 +180,11 @@ namespace platform
         kmap.base = 0;
         kmap.size = max_pa / ARCH_PAGE_SIZE;
         kmap.pages = (page_t*) (g::loader -> pps_start);
-        pmm::get_allocator().AddArena(&kmap, g::loader -> bitmap);
+        pmm::get_allocator().add_arena(&kmap, g::loader -> bitmap);
 
         /*arena.base = max_pa;
         arena.size = (uint32_t)((ARCH_PAGE_ALIGN(x86::g::max_mem) - max_pa) / ARCH_PAGE_SIZE);
         arena.pages = &((page_t*) g::loader -> pps_start)[max_pa / ARCH_PAGE_SIZE];
-        pmm::get_allocator().AddArena(&arena, g::loader -> bitmap);*/
+        pmm::get_allocator().add_arena(&arena, g::loader -> bitmap);*/
     }
 } // namespace platform
