@@ -18,7 +18,7 @@
 #include <math.h>
 
 #include "platform/pc/vga.h"
-#include "core/vm.h"
+#include "core/memory.h"
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/paging.h"
 #include "include/global.h"
@@ -58,6 +58,8 @@ namespace loader
 
             my_pps_hard = MAX(my_pps_hard, v + ARCH_PAGE_ALIGN(ctx.phdr32[i].p_memsz));
         }
+
+        init_pps32(my_pps_hard);
         
         OS_DBG("Kernel image end: 0x%X\n", my_pps_hard);
 

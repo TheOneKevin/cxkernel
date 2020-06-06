@@ -22,11 +22,10 @@
 #define OS_PRN(f_, ...) printf((f_), ##__VA_ARGS__)
 #define ASSERT
 
-#include "core/vm.h"
+#include "core/memory.h"
 #include "core/pmm_node.h"
 
-#include "../core/mm/NodeAllocator.cc"
-#include "../core/mm/PhysicalAllocator.cc"
+#include "../core/mm/pmm_node.cc"
 #include "../core/mm/pmm.cc"
 
 #define MAX_ITER 140000
@@ -34,7 +33,7 @@
 static page_t pages[1024];
 static uint32_t bitarray[32];
 
-static pmm_arena_t arena;
+static arena_t arena;
 static bitmap_t bitmap;
 
 // Overkill
@@ -244,7 +243,7 @@ int main(int argc, char* argv[])
                 RUN_TEST(TestAllocError);
             break;
         case 3:
-            RUN_TEST(TestDoubleFree);
+            //RUN_TEST(TestDoubleFree);
             break;
         case 4:
             for(int i = 0; i < MAX_ITER; i++)

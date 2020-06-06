@@ -26,7 +26,7 @@ namespace pmm
         return static_cast<PhysicalAllocator&>(*allocator);
     }
 
-    void add_arena(pmm_arena_t* arena, bitmap_t* bt)
+    void add_arena(arena_t* arena, bitmap_t* bt)
     {
         get_allocator().add_arena(arena, bt);
     }
@@ -57,7 +57,7 @@ namespace pmm
 
     #pragma GCC diagnostic ignored "-Wunused-parameter"
     
-    void PhysicalAllocator::add_arena(pmm_arena_t* arena, bitmap_t* bt)
+    void PhysicalAllocator::add_arena(arena_t* arena, bitmap_t* bt)
     {
         // Do nothing
     }

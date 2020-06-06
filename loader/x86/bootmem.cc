@@ -18,7 +18,7 @@
 #include <assert.h>
 
 #include "arch/x86/paging.h"
-#include "core/vm.h"
+#include "core/memory.h"
 #include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/cpu.h"
 #include "include/global.h"

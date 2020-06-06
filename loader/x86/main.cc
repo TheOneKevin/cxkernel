@@ -70,6 +70,7 @@ void init32()
     ASSERT_HARD(ctx.strtab32 != NULL, "Malformed kernel (no strtab).");
     ASSERT_HARD(ctx.symtab32 != NULL, "Malformed kernel (no symtab).");
     loader::get_mmu().init();
+    BOCHS_MAGIC_BREAK();
     loader::run_program32(ctx);
     for(;;);
 }

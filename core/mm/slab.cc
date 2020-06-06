@@ -106,7 +106,6 @@ namespace kmem
     void init()
     {
         init_cache(&root_cache, sizeof(slabcache_t));
-        new_cache(sizeof(pmm_freeblock_t));
     }
 
     slabcache_t* new_cache(size_t size)

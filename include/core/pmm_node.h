@@ -12,7 +12,7 @@
 #pragma once
 
 #include "common.h"
-#include "core/vm.h"
+#include "core/memory.h"
 
 #ifdef __cplusplus
 
@@ -31,7 +31,7 @@ namespace pmm
         ~PmmNode() { }
 
         phys_t page_to_physical(uintptr_t page) override;
-        void add_arena(pmm_arena_t* arena, bitmap_t* bt = NULL) override;
+        void add_arena(arena_t* arena, bitmap_t* bt = NULL) override;
         size_t allocate(size_t cnt, uintptr_t pages) override;
         size_t allocate_single(uintptr_t pages) override;
         size_t allocate_contiguous(size_t cnt, uintptr_t pages) override;

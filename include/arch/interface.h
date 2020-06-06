@@ -22,9 +22,6 @@
 #ifndef ARCH_PAGE_SIZE
     #define ARCH_PAGE_SIZE
 #endif
-#ifndef ARCH_SYSCALL_INT_NO
-    #define ARCH_SYSCALL_INT_NO
-#endif
 #ifndef ARCH_PAGE_ALIGN
     #define ARCH_PAGE_ALIGN
 #endif

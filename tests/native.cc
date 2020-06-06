@@ -20,7 +20,7 @@
 #define OS_LOG(f_, ...) printf((f_), ##__VA_ARGS__)
 #define OS_PRN(f_, ...) printf((f_), ##__VA_ARGS__)
 
-#include "core/vm.h"
+#include "core/memory.h"
 #include "core/pmm_node.h"
 
 #include "../core/mm/NodeAllocator.cc"
@@ -29,7 +29,7 @@
 static page_t pages[1024];
 static uint32_t bitarray[32];
 
-static pmm_arena_t arena;
+static arena_t arena;
 static bitmap_t bitmap;
 
 // Overkill

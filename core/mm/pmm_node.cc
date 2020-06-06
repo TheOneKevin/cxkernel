@@ -18,7 +18,7 @@
 #include <string.h>
 #include "arch/x86/arch_utils.h"
 #include "system.h"
-#include "core/vm.h"
+#include "core/memory.h"
 #include "arch/interface.h"
 #include "core/pmm_node.h"
 
@@ -49,7 +49,7 @@ namespace pmm
 
     phys_t PmmNode::page_to_physical(uintptr_t page)
     {
-        pmm_arena_t* arena;
+        arena_t* arena;
         foreach_llist_entry(arena, node, arena_list.next)
         {
             if(PAGE_IS_IN_ARENA(page, arena))
@@ -58,7 +58,7 @@ namespace pmm
         return 0;
     }
 
-    void PmmNode::add_arena(pmm_arena_t* arena, bitmap_t* bt)
+    void PmmNode::add_arena(arena_t* arena, bitmap_t* bt)
     {
         if(arena == NULL)
         {
@@ -70,7 +70,7 @@ namespace pmm
         INIT_LLIST(&arena->node);
         INIT_LLIST(&arena->free_list);
         arena->free = 0;
-        pmm_arena_t* an = NULL;
+        arena_t* an = NULL;
         if(arena_list.next != NULL)
         {
             foreach_llist_entry(an, node, arena_list.next)
@@ -118,7 +118,7 @@ namespace pmm
 
         size_t ret = 0;
         if(cnt == 0) return 0;
-        pmm_arena_t* arena;
+        arena_t* arena;
         foreach_llist_entry(arena, node, arena_list.next)
         {
             while(ret < cnt)
@@ -161,10 +161,10 @@ end:
         // Search all arenas...
         size_t r1 = 0x7FFFFFFF;
         int idx = 0;
-        pmm_arena_t* farena = NULL;
+        arena_t* farena = NULL;
 
         // Start brute-force search...
-        pmm_arena_t* arena;
+        arena_t* arena;
         foreach_llist_entry(arena, node, arena_list.next)
         {
             size_t r2 = 0;
@@ -217,7 +217,7 @@ done:
         while(pages->next != NULL)
         {
             page_t* pg = LIST_ENTRY(list_remove(pages->next), TYPEOF(page_t), node);
-            pmm_arena_t* arena;
+            arena_t* arena;
             foreach_llist_entry(arena, node, arena_list.next)
             {
                 if(PAGE_IS_IN_ARENA(pg, arena))

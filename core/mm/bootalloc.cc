@@ -69,7 +69,7 @@ namespace pmm
         return 1;
     }
 
-    void BootAllocator::add_arena(pmm_arena_t* arena, bitmap_t* bt)
+    void BootAllocator::add_arena(arena_t* arena, bitmap_t* bt)
     {
         if(bt != NULL)
         {

@@ -14,16 +14,12 @@
 #include "arch/x86/cpu.h"
 #include "arch/x86/llio.h"
 
-extern "C" {
-
 struct cpuid_leaf _cpuid[MAX_SUPPORTED_CPUID + 1];
 struct cpuid_leaf _cpuid_ext[MAX_SUPPORTED_CPUID_EXT - (uint32_t) CPUID_EXT_BASE + 1];
 uint32_t max_cpuid = 0;
 uint32_t max_ext_cpuid = 0;
 
 enum cpu_vendor_list x86_vendor;
-
-}
 
 static void x86_cpuid_init(void)
 {

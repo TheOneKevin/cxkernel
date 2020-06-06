@@ -14,7 +14,7 @@
 #include "common.h"
 #include <bitmap.h>
 #include "arch/types.h"
-#include "core/vm.h"
+#include "core/memory.h"
 
 #ifdef __cplusplus
 
@@ -35,7 +35,7 @@ namespace pmm
 
     public:
         // Other stuff
-        void add_arena(pmm_arena_t*, bitmap_t* bt = NULL) override;
+        void add_arena(arena_t*, bitmap_t* bt = NULL) override;
         phys_t page_to_physical(uintptr_t page) override;
         size_t allocate_single(uintptr_t page) override;
         size_t free(uintptr_t st) override;

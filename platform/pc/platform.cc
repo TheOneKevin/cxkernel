@@ -88,7 +88,7 @@ namespace platform
 {
     using namespace pc;
 
-    static pmm_arena_t arena =
+    static arena_t arena =
     {
 #if ARCH_TYPE == ARCH_x86_32
         .node = { NULL, NULL },
@@ -102,7 +102,7 @@ namespace platform
 #endif
     };
 
-    static pmm_arena_t kmap =
+    static arena_t kmap =
     {
 #if ARCH_TYPE == ARCH_x86_32
         .node = { NULL, NULL },

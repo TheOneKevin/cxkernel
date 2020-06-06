@@ -15,12 +15,12 @@
 
 namespace vmm
 {
-    void new_aspace(vmm_region_t** region)
+    void new_aspace(region_t** region)
     {
-    
+        
     }
 
-    void free_aspace(vmm_region_t** region)
+    void free_aspace(region_t** region)
     {
 
     }
