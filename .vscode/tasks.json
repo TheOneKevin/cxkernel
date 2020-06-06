@@ -74,13 +74,17 @@
                     }
                 }
             ],
-            "command": "${workspaceFolder}/build/scripts/launch_qemu.sh"
+            "command": [
+                "if grep -q Microsoft /proc/version; then export qemu=qemu-system-i386.exe; else export qemu=qemu-system-i386; fi;",
+                "$qemu -S -gdb tcp::1234 -boot d -cdrom build/bin/LiquiDOS.iso -m 128 -serial file:logs/_COM1.log -monitor stdio"
+            ]
         },
         {
             "label": "Launch QEMU Kernel Tests",
             "type": "shell",
             "command": [
-                "qemu-system-i386 -display none",
+                "if grep -q Microsoft /proc/version; then export qemu=qemu-system-i386.exe; else export qemu=qemu-system-i386; fi;",
+                "$qemu -display none",
                 "-boot d -cdrom build/bin/LiquiDOS.iso -m 128 -enable-kvm -cpu host,-pae",
                 "-chardev stdio,id=char0,logfile=logs/COM3.log",
                 "-monitor pty -serial file:logs/COM1.log -serial null -serial chardev:char0"
@@ -91,7 +95,10 @@
             "label": "Launch QEMU",
             "type": "shell",
             "linux": {
-                "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
+                "command": [
+                    "if grep -q Microsoft /proc/version; then export qemu=qemu-system-i386.exe; else export qemu=qemu-system-i386; fi;",
+                    "$qemu -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
+                ]
             },
             "windows": {
                 "command": "qemu-system-i386 -boot d -cdrom build/bin/LiquiDOS.iso -m 256"
@@ -101,7 +108,9 @@
         {
             "label": "Kill All QEMU Instances",
             "type": "shell",
-            "command": "pkill qemu",
+            "command": [
+                "pkill qemu"
+            ],
             "problemMatcher": []
         }
     ],
@@ -111,8 +120,8 @@
             "id": "buildTarget",
             "description": "Which target do you want to build for?",
             "options": [
-              "x86_32",
-              //"x86_64"
+                "x86_32",
+                //"x86_64"
             ],
             "default": "x86_32"
         },
@@ -121,10 +130,10 @@
             "id": "buildType",
             "description": "Which type of build do you want to configure for?",
             "options": [
-              "Debug",
-              "Release",
-              "Integration_Test",
-              "Unit_Test"
+                "Debug",
+                "Release",
+                "Integration_Test",
+                "Unit_Test"
             ],
             "default": "Debug"
         },

@@ -63,6 +63,8 @@ cmake-build-debug-wsl/
 *.su
 logs/
 CMakeCache.txt
+**/bochs/bochsout.txt
+**/bochs/serial.txt
 
 # Git
 .git/

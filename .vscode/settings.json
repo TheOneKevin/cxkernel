@@ -38,6 +38,14 @@
 			"forceToTop": true
         },
         {
+            "language": "asm",
+            "begin": "",
+			"prefix": "; ",
+			"end": "",
+			"blankLinesAfter": 1,
+			"forceToTop": true
+        },
+        {
             "language": "*",
             "begin": "",
 			"prefix": "# ",
@@ -50,8 +58,9 @@
     "psi-header.changes-tracking": {
         "autoHeader": "manualSave",
         "exclude": [
-            "json"
-        ]
+            "json", "markdown"
+        ],
+        "enforceHeader": false
     },
 
     "files.associations": {
@@ -59,59 +68,7 @@
         "common.h": "c",
         "compiler.h": "c",
         "config.h": "c",
-        "unordered_map": "cpp",
-        "chrono": "cpp",
         "*.tcc": "cpp",
-        "deque": "cpp",
-        "list": "cpp",
-        "string": "cpp",
-        "vector": "cpp",
-        "memory_resource": "cpp",
-        "typeinfo": "cpp",
-        "new": "cpp",
-        "array": "cpp",
-        "atomic": "cpp",
-        "cctype": "cpp",
-        "clocale": "cpp",
-        "cmath": "cpp",
-        "complex": "cpp",
-        "cstdarg": "cpp",
-        "cstddef": "cpp",
-        "cstdint": "cpp",
-        "cstdio": "cpp",
-        "cstdlib": "cpp",
-        "cstring": "cpp",
-        "ctime": "cpp",
-        "cwchar": "cpp",
-        "cwctype": "cpp",
-        "exception": "cpp",
-        "algorithm": "cpp",
-        "functional": "cpp",
-        "iterator": "cpp",
-        "map": "cpp",
-        "memory": "cpp",
-        "numeric": "cpp",
-        "optional": "cpp",
-        "random": "cpp",
-        "ratio": "cpp",
-        "set": "cpp",
-        "string_view": "cpp",
-        "system_error": "cpp",
-        "tuple": "cpp",
-        "type_traits": "cpp",
-        "utility": "cpp",
-        "fstream": "cpp",
-        "initializer_list": "cpp",
-        "iosfwd": "cpp",
-        "iostream": "cpp",
-        "istream": "cpp",
-        "limits": "cpp",
-        "ostream": "cpp",
-        "sstream": "cpp",
-        "stdexcept": "cpp",
-        "streambuf": "cpp",
-        "cfenv": "cpp",
-        "cinttypes": "cpp",
         "debug.h": "c"
     },
 
@@ -122,16 +79,8 @@
         "PATH": "${env:PATH}:${workspaceFolder}/build/toolchain/cross/x86_64/bin/"
     },
 
-    "cSpell.words": [
-        "Ceedling",
-        "Karlesky",
-        "Voord",
-        "cxkernel"
-    ],
-    "cSpell.logLevel": "Information",
-
     "cmakeExplorer.buildDir": "build/cmake-build/",
-    "cmakeExplorer.buildConfig": "Debug",
     "grammarly.userWords": [],
     "C_Cpp.default.intelliSenseMode": "gcc-x86",
+    "cmake.configureOnOpen": false
 }
