@@ -110,10 +110,10 @@ namespace loader
             pdpt[1] = pmm_alloc_page();
             pdpt[2] = pmm_alloc_page();
             pdpt[3] = pmm_alloc_page();
-            ((uint64_t*) pdpt[2])[508] = ((uint64_t) pdpt[0]) | (PDE_PR | PDE_RW);
-            ((uint64_t*) pdpt[2])[509] = ((uint64_t) pdpt[1]) | (PDE_PR | PDE_RW);
-            ((uint64_t*) pdpt[2])[510] = ((uint64_t) pdpt[2]) | (PDE_PR | PDE_RW);
-            ((uint64_t*) pdpt[2])[511] = ((uint64_t) pdpt[3]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[3])[508] = ((uint64_t) pdpt[0]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[3])[509] = ((uint64_t) pdpt[1]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[3])[510] = ((uint64_t) pdpt[2]) | (PDE_PR | PDE_RW);
+            ((uint64_t*) pdpt[3])[511] = ((uint64_t) pdpt[3]) | (PDE_PR | PDE_RW);
 
             // Map the first 4 MiB
             auto* pt0 = (uint64_t*) pmm_alloc_page();
@@ -150,7 +150,7 @@ namespace loader
         }
         void map(uint64_t a, uint64_t b, uint64_t c) override
         {
-            // Type parameters
+            // Add type to parameters
             auto virt = (uint32_t) a;
             auto phys = (uint64_t) b;
             auto flags = (uint64_t) c;
@@ -162,8 +162,10 @@ namespace loader
             uint32_t pdid = ARCH_PAE_GET_PD_IDX(virt);
             uint32_t ptid = ARCH_PAE_GET_PT_IDX(virt);
             
-            auto* rpage_dir = (uint64_t*) ARCH_PAE_GET_VIRT(2UL, 510, 508 + ppid);
-            auto ptvd = (uint64_t) ARCH_PAE_GET_VIRT(2UL, 508 + ppid, pdid);
+            // rpage_dir is the target recursive page directory
+            // ptvd is the virtual address of the target page table
+            auto* rpage_dir = (uint64_t*) ARCH_PAE_GET_VIRT(3UL, 511, 508 + ppid);
+            auto ptvd = (uint64_t) ARCH_PAE_GET_VIRT(3UL, 508 + ppid, pdid);
 
             OS_DBG("Map 0x%lX -> 0x%X (0x%lX)\n", phys, virt, flags);
             

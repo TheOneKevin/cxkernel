@@ -110,8 +110,8 @@ namespace arch
             uint32_t pdid = ARCH_PAE_GET_PD_IDX(virt);
             uint32_t ptid = ARCH_PAE_GET_PT_IDX(virt);
             
-            auto* rpage_dir = (uint64_t*) ARCH_PAE_GET_VIRT(2UL, 510, 508 + ppid);
-            auto ptvd = (uint64_t) ARCH_PAE_GET_VIRT(2UL, 508 + ppid, pdid);
+            auto* rpage_dir = (uint64_t*) ARCH_PAE_GET_VIRT(3UL, 511, 508 + ppid);
+            auto ptvd = (uint64_t) ARCH_PAE_GET_VIRT(3UL, 508 + ppid, pdid);
 
             OS_DBG("Map 0x%lX -> 0x%X (0x%lX)\n", phys, virt, flags);
             
