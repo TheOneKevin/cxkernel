@@ -3,32 +3,19 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/include/",
                 "${workspaceFolder}/build/",
                 "${workspaceFolder}/lib/elf/include",
                 "${workspaceFolder}/lib/libc/include",
                 "${workspaceFolder}/lib/ebl/include",
-                "${workspaceFolder}/lib/openlibm/include",
-                "${workspaceFolder}/lib/openlibm/src",
-                "/usr/include/x86_64-linux-gnu/c++/7"
+                "${workspaceFolder}/lib/openlibm/include"
             ],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c99",
             "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x86",
             "compileCommands": "${workspaceFolder}/build/cmake-build/compile_commands.json",
-            "compilerArgs": [],
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/",
-                    "${workspaceFolder}/lib/",
-                    "${workspaceFolder}/include/",
-                    "${workspaceFolder}/build/",
-                    "/usr/include/x86_64-linux-gnu/c++/7"
-                ],
-                "limitSymbolsToIncludedHeaders": true
-            }
+            "compilerArgs": []
         }
     ],
     "version": 4

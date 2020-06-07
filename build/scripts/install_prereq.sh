@@ -20,9 +20,12 @@ done
 echo Downloading toolchain...
 git clone https://github.com/rm-hull/barebones-toolchain.git toolchain
 
-echo Now patching openlibm...
+echo Now cloning libraries...
+rm -rf ../lib/openlibm
+git clone https://github.com/JuliaMath/openlibm.git ../lib/openlibm/
 
+echo Now patching libraries...
+sleep 1 # I'm not sure why we need this but we do...
 cd ../lib/
-rm -rf openlibm
-git clone https://github.com/JuliaMath/openlibm.git openlibm/
-quilt push
+quilt push -a
+cd ../build/

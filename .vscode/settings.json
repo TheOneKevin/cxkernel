@@ -69,7 +69,8 @@
         "compiler.h": "c",
         "config.h": "c",
         "*.tcc": "cpp",
-        "debug.h": "c"
+        "debug.h": "c",
+        "cstdint": "cpp"
     },
 
     "files.eol": "\n",

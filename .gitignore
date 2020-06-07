@@ -12,7 +12,7 @@ tests/build/
 Testing/
 
 # Patches and libraries
-lib/.pc/
+*/.pc/
 lib/openlibm/
 
 # IDE Folders
