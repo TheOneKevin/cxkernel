@@ -19,8 +19,7 @@
 
 #include "platform/pc/vga.h"
 #include "core/memory.h"
-#include "arch/x86/interface/arch_interface.h"
-#include "arch/x86/paging.h"
+#include "arch/interface.h"
 #include "include/global.h"
 
 extern bitmap_t alloc_map; // pmm bitmap
@@ -30,7 +29,7 @@ namespace loader
     void run_program32(elf::Context &ctx)
     {
         for(int i = 0; i < 0x100000; i += ARCH_PAGE_SIZE)
-            get_mmu().map(ARCH_VIRT_BASE + i, i, PTE_RW | PTE_PR);
+            get_mmu().map(ARCH_GET_PHYS(i), i, PTE_RW | PTE_PR);
         
         uint32_t my_pps_hard = 0;
 

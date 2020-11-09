@@ -17,6 +17,9 @@
 
 #include "common.h"
 #include "system.h"
+#include "arch/types.h"
+#include "arch/mmu.h"
+
 #include STRINGIFY(arch/TARGET_FOLDER/interface/arch_interface.h)
 
 #ifndef ARCH_PAGE_SIZE

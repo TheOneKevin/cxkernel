@@ -11,6 +11,9 @@
 
 #pragma once
 
+#define ARCH_PAGE_SHIFT     12
+#define ARCH_PAGE_SIZE      (1 << (ARCH_PAGE_SHIFT))
+#define ARCH_PAGE_MASK      (~(ARCH_PAGE_SIZE - 1))
 #define ARCH_VIRT_BASE      0xE0000000
 #define ARCH_STACK_BOTTOM   0xFF800000
 #define ARCH_KMALLOC_LENGTH 0x20000000

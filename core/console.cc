@@ -16,10 +16,14 @@
 
 using namespace platform;
 
+// Dummy consle implementation
+
 void Console::putc(char c) { }
 void Console::log(char c)  { }
 void Console::clear(void)  { }
 char Console::getc(void)   { return 0; }
+
+// C-like wrapper
 
 extern "C" void console_emit(char c)
 {

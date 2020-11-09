@@ -87,7 +87,7 @@ void exception_handler(regs_t* r) // Our exception handler called from the assem
     fprintf(STREAM_ERR, "cr0: 0x%08X cr2: 0x%08X cr3: 0x%08X cr4: 0x%08X\n\n", read_cr0(), read_cr2(), read_cr3(), read_cr4());
     fprintf(STREAM_ERR, "eflags: 0x%08X eip: 0x%08X ss: 0x%08X\n", r->eflags, r->eip, r->ss);
 
-    for(;;) HALT;
+    for(;;) HALT_CPU;
 }
 
 extern "C" void isr_handler(regs_t* r)

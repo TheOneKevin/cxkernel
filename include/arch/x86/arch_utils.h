@@ -11,14 +11,8 @@
 
 #pragma once
 
-#if ARCH_TYPE == ARCH_x86_32
-    #include "arch/x86/32/arch_defs.h"
-#elif ARCH_TYPE == ARCH_x86_64
-    #include "arch/x86/64/arch_defs.h"
-#endif
-
-#ifndef __ASSEMBLER__
 #include "common.h"
+#include "arch/interface.h"
 #include "arch/x86/multiboot.h"
 
 #define __typev__(TYPE, v) TYPE v
@@ -27,11 +21,7 @@
     for(__typev__(multiboot_memory_map_t*, var) = (multiboot_memory_map_t *) ((mbt) -> mmap_addr + (off)); \
     (unsigned int) (var) < (mbt) -> mmap_addr + (mbt) -> mmap_length + (off); \
     var = (multiboot_memory_map_t *) ((unsigned int) (var) + (var) -> size + sizeof((var) -> size)))
-#define ARCH_VIRT_PHYS(addr) ((addr) + ARCH_VIRT_BASE)
-#define ARCH_PAGE_NUMBER(addr) ((addr) >> ARCH_PAGE_SHIFT)
-#define HALT asm volatile ("hlt");
 
 __BEGIN_CDECLS
 
 __END_CDECLS
-#endif // __ASSEMBLER__

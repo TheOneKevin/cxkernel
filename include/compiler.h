@@ -29,6 +29,7 @@
 #define __GET_CALLER(x) __builtin_return_address(0)
 #define __GET_FRAME(x)  __builtin_frame_address(0)
 #define DEPRECATED(x)   __attribute__((deprecated(x)))
+
 #ifdef CUSTOM_FILENAME
     #define __FILENAME__ __FILENAME_CUSTOM__
 #else

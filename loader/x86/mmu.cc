@@ -17,8 +17,7 @@
 #include <assert.h>
 #include "arch/x86/cpu.h"
 #include "arch/x86/llio.h"
-#include "arch/x86/interface/arch_interface.h"
-#include "arch/x86/paging.h"
+#include "arch/interface.h"
 #include "include/global.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"

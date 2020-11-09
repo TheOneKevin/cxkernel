@@ -15,9 +15,9 @@
 #include <math.h>
 
 #include "core/memory.h"
+#include "arch/interface.h"
 #include "arch/x86/global.h"
 #include "arch/x86/arch_utils.h"
-#include "arch/x86/interface/arch_interface.h"
 #include "arch/x86/cpu.h"
 #include "platform.h"
 #include "platform/interrupts.h"

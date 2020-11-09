@@ -31,7 +31,9 @@
 using ctor_func = void (*)();
 extern ctor_func _ctors_start;
 extern ctor_func _ctors_end;
-__NOINLINE __NO_OPTIMIZE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
+
+[[gnu::noinline]][[gnu::optimize("O0")]]
+void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 
 // Some global variable stuff
 static elf::Context ctx;

@@ -38,7 +38,7 @@
 // Arch-specific stuff
 #include "arch/x86/cpu.h"
 #include "arch/x86/arch_utils.h"
-#include "arch/x86/interface/arch_types.h"
+#include "arch/types.h"
 
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
@@ -46,7 +46,9 @@
 using ctor_func = void (*)();
 extern ctor_func _ctors_start;
 extern ctor_func _ctors_end;
-__NO_OPTIMIZE __NOINLINE void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
+
+[[gnu::noinline]][[gnu::optimize("O0")]]
+void dummy_ctor(void) { } EXPORT_CTOR(dummy_ctor);
 
 using namespace loader;
 

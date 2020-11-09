@@ -10,6 +10,9 @@
                 "${workspaceFolder}/lib/ebl/include",
                 "${workspaceFolder}/lib/openlibm/include"
             ],
+            "defines": [
+                "__FILENAME_CUSTOM__=\"\""
+            ],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c99",
             "cppStandard": "c++11",
