@@ -1,0 +1,31 @@
+{
+    "files.associations": {
+        "*.h": "cpp",
+        "array": "cpp",
+        "chrono": "cpp",
+        "cwchar": "cpp",
+        "string": "cpp",
+        "exception": "cpp",
+        "iterator": "cpp",
+        "initializer_list": "cpp",
+        "iosfwd": "cpp",
+        "istream": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "ratio": "cpp",
+        "stdexcept": "cpp",
+        "thread": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
+    },
+
+    // Have some fun with the icons :)
+    "material-icon-theme.folders.associations": {
+        "core": "home",
+        "arch": "target",
+        "platform": "core",
+        "loader": "upload"
+    },
+    "nasm.outputFormat": "elf32"
+}

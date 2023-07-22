@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/",
+                "${workspaceFolder}/core/include",
+                "${workspaceFolder}/lib"
+            ],
+            "defines": [
+                "ARCH_FOLDER=x86-64",
+                "PLAT_FOLDER=pc"
+            ],
+            "compilerPath": "C:/Program Files/LLVM/bin/clang++.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Linux WSL",
+            "includePath": [
+                "${workspaceFolder}/",
+                "${workspaceFolder}/core/include",
+                "${workspaceFolder}/lib"
+            ],
+            "defines": [
+                "ARCH_FOLDER=x86-64",
+                "PLAT_FOLDER=pc"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
