@@ -24,13 +24,14 @@
                 "${workspaceFolder}/lib"
             ],
             "defines": [
-                "ARCH_FOLDER=x86-64",
-                "PLAT_FOLDER=pc"
+                "ARCH_TARGET=x86-64",
+                "PLAT_TARGET=pc"
             ],
             "compilerPath": "/usr/bin/clang++",
             "cStandard": "c17",
             "cppStandard": "c++20",
-            "intelliSenseMode": "clang-x64"
+            "intelliSenseMode": "clang-x64",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ],
     "version": 4

@@ -2,28 +2,28 @@ ENTRY(_start)
 SECTIONS
 {
     . = 0x100000;
-    _lodr_start = .;
+    loader_begin_ = .;
 
-    .text ALIGN (4K) : AT (ADDR (.text))
+    .text ALIGN (4K):
     {
         *(.multiboot)
         *(.text*)
         *(.gnu.linkonce.t.*)
     }
 
-    .rodata ALIGN (4K) : AT (ADDR (.rodata))
+    .rodata ALIGN (4K):
     {
         *(.rodata*)
         *(.gnu.linkonce.r.*)
     }
 
-    .data ALIGN (4K) : AT (ADDR (.data))
+    .data ALIGN (4K):
     {
         *(.data*)
         *(.gnu.linkonce.d.*)
     }
 
-    .bss ALIGN (4K) : AT (ADDR (.bss))
+    .bss ALIGN (4K):
     {
         *(COMMON)
         *(.bss*)
@@ -31,5 +31,5 @@ SECTIONS
         *(.bootloader_stack)
     }
 
-    _lodr_end = .;
+    loader_end_ = .;
 }

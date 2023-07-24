@@ -34,4 +34,14 @@ namespace ebl {
     {
         return static_cast<typename remove_reference<T>::type&&>(arg);
     }
+
+    template<typename T>
+    static inline T max(T const& a, T const& b) {
+        return a < b ? b : a;
+    }
+
+    template<typename T>
+    static inline T min(T const& a, T const& b) {
+        return a < b ? a : b;
+    }
 } // namespace ebl

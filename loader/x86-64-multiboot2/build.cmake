@@ -2,6 +2,7 @@ set(SOURCES "")
 
 # Add all sources
 file(GLOB SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/core/assert.cc"
         "${CMAKE_CURRENT_SOURCE_DIR}/lib/ebl/*.cc"
         "${CMAKE_CURRENT_SOURCE_DIR}/lib/elf/*.cc"
         "${CMAKE_CURRENT_LIST_DIR}/*.cc"

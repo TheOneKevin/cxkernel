@@ -1,4 +1,5 @@
 #include "assert.h"
+#include <ebl/stdio.h>
 
 void assert(bool condition) {
     if(!condition) [[unlikely]] {
@@ -7,8 +8,8 @@ void assert(bool condition) {
 }
 
 void assert(bool condition, const char* message) {
-    (void) message;
     if(!condition) [[unlikely]] {
+        ebl::kerr("Assertion failed: %s\n", message);
         for(;;);
     }
 }

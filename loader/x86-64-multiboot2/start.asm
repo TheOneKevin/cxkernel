@@ -1,29 +1,36 @@
 [BITS 32]
 ALIGN 4
 
+%define MULTIBOOT2_HEADER_MAGIC 0xe85250d6
+%define GRUB_MULTIBOOT_ARCHITECTURE_I386 0
+%define MULTIBOOT_HEADER_TAG_FRAMEBUFFER 5
+%define MULTIBOOT_HEADER_TAG_OPTIONAL 1
+%define MULTIBOOT_HEADER_TAG_END 0
+
 ; Declare constants for the multiboot header
 ; ref: https://forum.osdev.org/viewtopic.php?f=1&t=39370
-; FIXME: Stop using so many magic numbers
+; ref: https://www.gnu.org/software/grub/manual/multiboot2/multiboot.html
 SECTION .multiboot ALIGN=4
-header_start:
-    dd 0xe85250d6
-    dd 0
-    dd header_end - header_start
-    dd 0x100000000 - (0xe85250d6 + 0 + (header_end - header_start))
-
+multiboot_header_start:
+    dd MULTIBOOT2_HEADER_MAGIC
+    dd GRUB_MULTIBOOT_ARCHITECTURE_I386
+    dd multiboot_header_end - multiboot_header_start
+    dd -(MULTIBOOT2_HEADER_MAGIC + GRUB_MULTIBOOT_ARCHITECTURE_I386 + \
+        (multiboot_header_end - multiboot_header_start))
 ALIGN 8
-    dw 5
-    dw 1
-    dd 20
+framebuffer_tag_start:
+    dw MULTIBOOT_HEADER_TAG_FRAMEBUFFER
+    dw MULTIBOOT_HEADER_TAG_OPTIONAL
+    dd framebuffer_tag_end - framebuffer_tag_start
     dd 1024
     dd 768
     dd 32
-
+framebuffer_tag_end:
 ALIGN 8
-    dw 0
+    dw MULTIBOOT_HEADER_TAG_END
     dw 0
     dd 8
-header_end:
+multiboot_header_end:
 
 ; The multiboot standard does not define the value of the stack pointer register
 ; (esp) and it is up to the kernel to provide a stack. This allocates room for a
@@ -52,9 +59,11 @@ SECTION .text
 _start:
     cli
     mov esp, stack_top
-    push ebx        ; Set up stack & push grub multiboot structs
+    push 0
+    popf                ; Reset EFLAGS
+    push ebx            ; Set up stack & push grub multiboot structs
     push eax
-    call main       ; Call our C code
+    call main           ; Call our C code
     cli
 .0b:
     hlt
@@ -62,15 +71,15 @@ _start:
 
 [GLOBAL load_gdt]
 load_gdt:
-    mov eax, [esp+4]  ; Get the pointer to the GDT, passed as a parameter.
-    lgdt [eax]        ; Load the new GDT pointer
-    mov ax, 0x10      ; 0x10 is the offset in the GDT to our data segment
-    mov ds, ax        ; Load all data segment selectors
+    mov eax, [esp+4]    ; Get the pointer to the GDT, passed as a parameter.
+    lgdt [eax]          ; Load the new GDT pointer
+    mov ax, 0x10        ; 0x10 is the offset in the GDT to our data segment
+    mov ds, ax          ; Load all data segment selectors
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
-    jmp 0x08:.flush   ; 0x08 is the offset to our code segment: Far jump!
+    jmp 0x08:.flush     ; 0x08 is the offset to our code segment: Far jump!
 .flush:
     ret
 

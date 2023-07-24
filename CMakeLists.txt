@@ -11,8 +11,8 @@ set(TARGET_PLATFORM pc)
 include(${CMAKE_CURRENT_SOURCE_DIR}/scripts/toolchain.cmake)
 
 # Define macros
-add_compile_definitions(ARCH_FOLDER=x86-64)
-add_compile_definitions(PLAT_FOLDER=pc)
+add_compile_definitions(ARCH_TARGET=x86-64)
+add_compile_definitions(PLAT_TARGET=pc)
 
 # Loader target
 add_executable(cxloader "")

@@ -310,7 +310,7 @@ static void stream_log(char c, char** buf)
     (void) buf;
     *stream_buffer[1]++ = c;
     if(c == '\n' || (stream_buffer[1] - &stream_buffer_org[1][0]) > 512)
-        fflush(ebl::COUT);
+        fflush(ebl::CLOG);
 }
 
 static void stream_out(char c, char** buf)
@@ -351,6 +351,37 @@ int fprintf(char file, const char* format, ...)
         case ebl::CERR: ret = ssprintf(stream_err, 0, format, args); break;
         default:        ret = ssprintf(stream_out, 0, format, args); break;
     }
+    va_end(args);
+    return ret;
+}
+
+//===----------------------------------------------------------------------===//
+// C++ wrapper functions
+
+
+int ebl::kout(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    int ret = -1;
+    ret = ssprintf(stream_out, 0, format, args);
+    va_end(args);
+    return ret;
+}
+
+int ebl::kerr(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    int ret = -1;
+    ret = ssprintf(stream_err, 0, format, args);
+    va_end(args);
+    return ret;
+}
+
+int ebl::klog(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    int ret = -1;
+    ret = ssprintf(stream_log, 0, format, args);
     va_end(args);
     return ret;
 }

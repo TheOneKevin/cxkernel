@@ -5,6 +5,10 @@ namespace ebl {
     constexpr int COUT = 0;
     constexpr int CERR = 1;
     constexpr int CLOG = 2;
+
+    int kout(const char* format, ...);
+    int kerr(const char* format, ...);
+    int klog(const char* format, ...);
 };
 
 extern void console_emit(char c);

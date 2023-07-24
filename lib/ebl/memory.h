@@ -56,9 +56,4 @@ private:
     U* ptr_;
 };
 
-/*template<typename T, typename... Args>
-Ptr<T> make_unique(Args&&... args) noexcept {
-    return Ptr<T>{new T(forward<Args>(args)...)};
-}*/
-
 } // namespace ebl

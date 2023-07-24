@@ -1,5 +1,6 @@
 #pragma once
 
+#include "arch/types.h"
 #include "memory.h"
 
 namespace ebl {
@@ -43,8 +44,14 @@ public:
     // A node in the list, containing both data and intrusive pointers.
     struct list_node {
         friend class IntrusiveMultilist;
-        list_node* prev[N];
-        list_node* next[N];
+        union {
+            list_node* prev[N];
+            vaddr_t virt0_[N];
+        };
+        union {
+            list_node* next[N];
+            vaddr_t virt1_[N];
+        };
         T value;
         explicit operator T*() { return &value; }
     private:

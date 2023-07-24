@@ -17,7 +17,16 @@
         "thread": "cpp",
         "tuple": "cpp",
         "type_traits": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "bit": "cpp",
+        "memory": "cpp",
+        "limits": "cpp",
+        "optional": "cpp",
+        "algorithm": "cpp"
     },
 
     // Have some fun with the icons :)
@@ -27,5 +36,6 @@
         "platform": "core",
         "loader": "upload"
     },
-    "nasm.outputFormat": "elf32"
+    "nasm.outputFormat": "elf32",
+    "editor.rulers": [ 80, 100 ]
 }

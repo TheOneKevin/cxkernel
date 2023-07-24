@@ -1,0 +1,56 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Build",
+			"command": "make",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "never",
+				"revealProblems": "onProblem",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Clean",
+			"command": "make clean",
+			"options": {
+				"cwd": "${workspaceFolder}/build"
+			},
+			"presentation": {
+				"reveal": "never",
+				"panel": "shared"
+			}
+		},
+		{
+			"type": "shell",
+			"label": "Launch QEMU",
+			"linux": {
+				"command": "./launch_qemu.sh"
+			},
+			"options": {
+				"cwd": "${workspaceFolder}/scripts"
+			},
+			"isBackground": true,
+			"problemMatcher": [],
+			"dependsOn": [
+				"Build"
+			]
+		}
+	]
+}

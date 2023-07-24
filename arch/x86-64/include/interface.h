@@ -1,11 +1,6 @@
 #pragma once
 
 #include <stdint.h>
-
-// Declare types first to eliminate problems
-typedef uint64_t vaddr_t;
-typedef uint64_t paddr_t;
-
 #include "asm.h"
 #include "thread.h"
 

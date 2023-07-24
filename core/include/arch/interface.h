@@ -3,6 +3,7 @@
 #include <ebl/util.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <arch/types.h>
 
 namespace core {
     struct thread;
@@ -33,4 +34,4 @@ namespace arch {
 } // namespace arch
 
 // Include the arch-specific interface header last.
-#include STRINGIFY(arch/ARCH_FOLDER/include/interface.h)
+#include STRINGIFY(arch/ARCH_TARGET/include/interface.h)
