@@ -11,9 +11,11 @@ namespace ebl {
     int klog(const char* format, ...);
 };
 
-extern void console_emit(char c);
-extern void console_puts(char const* c);
-extern void console_log(char const* c);
+namespace platform {
+    void console_emit(char c);
+    void console_puts(char const* c);
+    void console_log(char const* c);
+} // namespace platform
 
 /**
  * Prints a formatted string to the screen

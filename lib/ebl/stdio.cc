@@ -274,6 +274,8 @@ int vsprintf(char* buf, const char* fmt, va_list args)
 //===----------------------------------------------------------------------===//
 // Helper functions
 
+using namespace platform;
+
 static char  stream_buffer_org[2][512];
 static char* stream_buffer[] = {
     &stream_buffer_org[0][0], &stream_buffer_org[1][0]
