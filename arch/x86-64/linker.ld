@@ -1,7 +1,7 @@
 ENTRY(kernel_entry)
 SECTIONS
 {
-    . = 0xffffffff80000000;
+    . = 0xffff800000000000;
     _kernel_start = .;
 
     .text ALIGN (4K) :
@@ -23,7 +23,18 @@ SECTIONS
         *(.gnu.linkonce.d.*)
     }
 
-    .kstrtab : { *(kstrtab) }
+    .kstrtab ALIGN (4K) :
+    {
+        *(kstrtab)
+    }
+
+    .init_array ALIGN (4K) :
+    {
+        init_array_start_ = .;
+        KEEP (*(SORT(.init_array.*)))
+        KEEP (*(.init_array ))
+        init_array_end_ = .;
+    }
 
     .bss ALIGN (4K) :
     {

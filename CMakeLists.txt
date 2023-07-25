@@ -6,6 +6,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(TARGET_LOADER multiboot2)
 set(TARGET_ARCH x86-64)
 set(TARGET_PLATFORM pc)
+# Set this depending on architecture
+set(MCMODEL large)
 
 # Setup toolchain
 include(${CMAKE_CURRENT_SOURCE_DIR}/scripts/toolchain.cmake)

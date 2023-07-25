@@ -16,10 +16,10 @@ target_link_options(
         -T ${CMAKE_CURRENT_LIST_DIR}/linker.ld
         LINKER:--apply-dynamic-relocs
         LINKER:-z,max-page-size=0x1000
-        -no-pie -mabi=sysv -m64 -mcmodel=kernel
+        -no-pie -mabi=sysv -m64 -mcmodel=${MCMODEL}
 )
 target_compile_options(
         cxkernel PRIVATE
         $<$<COMPILE_LANGUAGE:CXX>:${STANDARD_CXX_FLAGS}
-                -mcmodel=kernel -fno-pie -mabi=sysv -m64>
+                -mcmodel=${MCMODEL} -fno-pie -mabi=sysv -m64>
 )
