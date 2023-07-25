@@ -69,20 +69,37 @@ _start:
     hlt
     jmp .0b
 
-[GLOBAL load_gdt]
-load_gdt:
-    mov eax, [esp+4]    ; Get the pointer to the GDT, passed as a parameter.
+[GLOBAL enter_longmode]
+enter_longmode:
+    xchg bx, bx
+    mov eax, [esp+4]
+    mov cr3, eax
+    mov eax, 0x20
+    mov cr4, eax
+    mov ecx, 0xC0000080
+    rdmsr
+    or  eax, 0x100
+    wrmsr
+    mov eax, 0x80000011
+    mov cr0, eax
+    mov eax, [esp+8]    ; Get the pointer to the GDT, passed as a parameter.
     lgdt [eax]          ; Load the new GDT pointer
+    jmp 0x08:_start64   ; 0x08 is the offset to our code segment: Far jump!
+.flush:
+    ret
+
+[BITS 64]
+[GLOBAL _start64]
+_start64:
     mov ax, 0x10        ; 0x10 is the offset in the GDT to our data segment
     mov ds, ax          ; Load all data segment selectors
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
-    jmp 0x08:.flush     ; 0x08 is the offset to our code segment: Far jump!
-.flush:
-    ret
-
-[GLOBAL jump32]
-jump32:
+    mov rbx, QWORD [esp+12]
+    call rbx            ; Jump to the kernel's entry point!
     cli
+    hlt
+.0b:
+    jmp .0b

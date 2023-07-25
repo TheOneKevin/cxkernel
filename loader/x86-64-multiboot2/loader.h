@@ -4,26 +4,21 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "core/vm.h"
+#include "arch/interface.h"
+
+namespace ns = x86_64;
 
 struct range;
-struct multiboot_tag_list;
-struct multiboot_mmap_list;
+class multiboot_tag_list;
+class multiboot_mmap_list;
 
 //===----------------------------------------------------------------------===//
 // Functions
 
-namespace arch {
-    constexpr unsigned int page_size = 4096;
-    constexpr vaddr_t page_align_down(vaddr_t addr) {
-        return addr & ~(page_size - 1);
-    }
-    constexpr vaddr_t page_align_up(vaddr_t addr) {
-        return (addr + page_size - 1) & ~(page_size - 1);
-    }
-};
-
 void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap);
-void enable_paging();
+uint64_t setup_paging();
+void map_page(paddr_t phys, vaddr_t virt, ns::page_flags flags);
+paddr_t pmm_alloc_page();
 
 //===----------------------------------------------------------------------===//
 // Range class for memory ranges

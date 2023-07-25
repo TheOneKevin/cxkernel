@@ -28,6 +28,7 @@ static decltype(pfndb_mlist)::list<0> pfndb_rsrvlist{};
 using page_node_t = decltype(pfndb_mlist)::list_node;
 static_assert(sizeof(page_node_t) - sizeof(core::page) == sizeof(vaddr_t)*2,
     "Size of page node is unexpected given size of page struct!");
+static page_node_t* pfndb_arr = nullptr;
 
 //===----------------------------------------------------------------------===//
 // Pre-PMM early alloc functions
@@ -116,12 +117,12 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap) {
     const paddr_t total_phys_pgs = largest_phys_addr / arch::page_size;
     const paddr_t pfndb_sz_bytes = total_phys_pgs * sizeof(page_node_t);
     const paddr_t pfndb_sz_pgs = arch::page_align_up(pfndb_sz_bytes) / arch::page_size;
-    auto* pfndb_arr = (page_node_t*) early_pmm_alloc_cts(pfndb_sz_pgs);
+    pfndb_arr = (page_node_t*) early_pmm_alloc_cts(pfndb_sz_pgs);
     ebl::memset((void*) pfndb_arr, 0, pfndb_sz_bytes);
 
     // Preserve PFN database while disposing of mmap structs
     reserved_memory[2].begin = (paddr_t) pfndb_arr;
-    reserved_memory[2].end = (paddr_t) pfndb_arr + pfndb_sz_pgs*arch::page_size;
+    reserved_memory[2].end = (paddr_t) pfndb_arr + pfndb_sz_bytes;
 
     // Initialize PFN database
     for(paddr_t i = 0; i < total_phys_pgs; i++) {
@@ -136,7 +137,8 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap) {
     ebl::klog("PFN DB size: %lu free + %lu used = %lu total\n",
         (uint64_t) pfndb_freelist.size(), (uint64_t) pfndb_rsrvlist.size(),
         (uint64_t) pfndb_freelist.size() + pfndb_rsrvlist.size());
-    ebl::klog("PFN DB addr: %lx - %lx\n", (paddr_t) pfndb_arr, (paddr_t) pfndb_arr+pfndb_sz_bytes-1);
+    ebl::klog("PFN DB addr: %lx - %lx\n",
+        (paddr_t) pfndb_arr, (paddr_t) pfndb_arr+pfndb_sz_bytes-1);
     assert(pfndb_freelist.size() + pfndb_rsrvlist.size() == total_phys_pgs,
         "PFN database list sizes are incorrect!");
 }
@@ -144,6 +146,46 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap) {
 //===----------------------------------------------------------------------===//
 // Enable paging
 
-void enable_paging() {
+static ns::pml4e* pml4;
 
+paddr_t pmm_alloc_page() {
+    auto* node = pfndb_freelist.pop_front_unsafe();
+    if(node == nullptr)
+        assert(false, "Out of memory!\n");
+    pfndb_rsrvlist.push_back_unsafe(node);
+    // Get i such that pfndb_arr[i] == node
+    const paddr_t i = node - pfndb_arr;
+    assert(&pfndb_arr[i] == node, "PFN database is corrupted!");
+    // Reset page
+    auto page = i * arch::page_size;
+    ebl::memset((void*) page, 0, arch::page_size);
+    return page;
+}
+
+void map_page(paddr_t phys, vaddr_t virt, ns::page_flags flags) {
+    assert(phys % arch::page_size == 0, "Physical address is not page-aligned!");
+    assert(virt % arch::page_size == 0, "Virtual address is not page-aligned!");
+    // ebl::klog("Mapping phys -> virt: %lx -> %lx\n", phys, virt);
+    auto* pml4e = &pml4[ns::pml4e_index(virt)];
+    if(!pml4e->f.present) {
+        pml4e->data = pmm_alloc_page() | 1 | flags.data;
+    }
+    auto* pdpte = &((ns::pdpte*)(pml4e->data & 0xFFFFF800))[ns::pdpte_index(virt)];
+    if(!pdpte->f.present) {
+        pdpte->data = pmm_alloc_page() | 1 | flags.data;
+    }
+    auto* pde = &((ns::pde*)(pdpte->data & 0xFFFFF800))[ns::pde_index(virt)];
+    if(!pde->f.present) {
+        pde->data = pmm_alloc_page() | 1 | flags.data;
+    }
+    auto* pte = &(((ns::pte*)(pde->data & 0xFFFFF800))[ns::pte_index(virt)]);
+    if(!pte->f.present) {
+        pte->data = phys | 1 | flags.data;
+    }
+}
+
+uint64_t setup_paging() {
+    pml4 = (ns::pml4e*) pmm_alloc_page();
+    ebl::memset(pml4, 0, arch::page_size);
+    return (uint64_t) pml4;
 }

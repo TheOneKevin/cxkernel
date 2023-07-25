@@ -3,64 +3,21 @@
 #include <ebl/util.h>
 #include <ebl/stdio.h>
 #include <ebl/string.h>
+#include <elf/elf.h>
+#include <ebl/status.h>
 
 //===----------------------------------------------------------------------===//
 // Global variables and structures
-// NOTE: System V ABI gaurentees bitfield order in packed structs,
-//       even though the C++ standard does not.
-
-// Figure 3.8 from Intel SDM 3.4.5
-struct PACKED gdt_entry {
-    uint16_t limit_low      : 16;
-    uint16_t base_low       : 16;
-    uint8_t  base_middle    : 8;
-    uint8_t  seg_type       : 4;
-    uint8_t  desc_type      : 1;
-    uint8_t  desc_priv      : 2;
-    uint8_t  present        : 1;
-    uint8_t  limit_high     : 4;
-    uint8_t  available      : 1;
-    uint8_t  long_mode      : 1;
-    uint8_t  op_size        : 1;
-    uint8_t  granularity    : 1;
-    uint8_t  base_high      : 8;
-
-    gdt_entry() = default;
-    
-    gdt_entry(uint32_t base, uint32_t limit, uint8_t type) {
-        limit_low = limit & 0xFFFF;
-        base_low = base & 0xFFFF;
-        base_middle = (base >> 16) & 0xFF;
-        seg_type = type & 0xF;
-        desc_type = 1;
-        desc_priv = 00;
-        present = 1;
-        limit_high = (limit >> 16) & 0xF;
-        available = 0;
-        long_mode = 1;
-        op_size = 1;
-        granularity = 1;
-        base_high = (base >> 24) & 0xFF;
-    }
-};
-static_assert(sizeof(struct gdt_entry) == 8, "gdt_entry is not 8 bytes long!");
-
-// Figure 2.6 from Intel SDM 2.4.1
-struct [[gnu::packed]] gdt_ptr {
-    uint16_t limit : 16;
-    uint64_t base  : 64;
-};
-static_assert(sizeof(struct gdt_ptr) == 10, "gdt_ptr is not 10 bytes long!");
 
 // Define initial GDT entries
-static struct gdt_entry gdt[3] {
-    gdt_entry{}, // null
-    gdt_entry{0, 0xFFFFFFFF, 0b1010}, // code
-    gdt_entry{0, 0xFFFFFFFF, 0b0010}, // data
+static ns::gdt_entry gdt[3] {
+    ns::gdt_entry{}, // null
+    ns::gdt_entry{0, 0, 0b1000}, // code
+    ns::gdt_entry{0, 0, 0b0010}, // data
 };
 
 // Pointer to GDT
-static struct gdt_ptr gdt_ptr {
+static ns::gdt_ptr gdt_ptr {
     .limit = sizeof(gdt) - 1,
     .base = (uint64_t) &gdt
 };
@@ -91,6 +48,8 @@ static void console_init(int port) {
     outb(port + 4, 0x0B); // IRQs enabled, RTS/DSR set
 }
 
+namespace platform {
+
 void console_emit(char c) {
     while((inb(COM1+5) & 0x20) == 0);
     outb(COM1, c);
@@ -107,13 +66,19 @@ void console_log(char const* c) {
     }
 }
 
+} // namespace platform
+
 //===----------------------------------------------------------------------===//
 // Main entry point (called from start.s)
 
 extern "C" void(*init_array_start_)();
 extern "C" void(*init_array_end_)();
+extern "C" void enter_longmode(
+    uint32_t pml4_ptr, uint32_t gdt_ptr, uint64_t entry_point, uint32_t magic);
 
-extern "C" void main(int sig, unsigned long ptr) {
+extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
+    status_t ec = E::SUCCESS;
+
     // Run .init_array
     for(auto* fn = &init_array_start_; fn != &init_array_end_; fn++) (*fn)();
 
@@ -162,9 +127,62 @@ extern "C" void main(int sig, unsigned long ptr) {
         range{module->mod_start, module->mod_end - 1}
     };
     bootstrap_pmm(reserved, mmap);
-    enable_paging();
+    auto pml4 = setup_paging();
 
-    // Switch mode, load GDT and jump to kernel
+    // Identity map the lower 2 MiB
+    for(int i = 0; i < 0x200000; i += arch::page_size) {
+        map_page(i, i, ns::page_flags{
+            .f {
+                .writable = 1,
+                .user = 0
+            }
+        });
+    }
+
+    // Load and map the kernel ELF
+    elf::Context ctx{};
+    ec = elf::Context::load(ctx, (void*) module->mod_start);
+    assert(ec, "Failed to load ELF");
+    assert(ctx.is_64bits(), "Kernel must be 64-bit");
+    for(auto& ph : ctx.get_header<elf64_phdr_t>()) {
+        if(ph.p_type != PT_LOAD) continue;
+        assert(ph.p_align == (uint64_t) arch::page_size,
+            "Program section not aligned - all sections must be page-aligned!");
+        vaddr_t v = ph.p_vaddr;
+        paddr_t p = (paddr_t) ctx.get_image() + ph.p_offset;
+        const ns::page_flags flags{
+            .f {
+                .writable = 1,
+                .user = 0
+            }
+        };
+        // Should we allocate more memory? Check filesz versus memsz.
+        if(ph.p_filesz != ph.p_memsz) {
+            // Get size of data within file
+            size_t size = (size_t) ebl::max(ph.p_filesz, ph.p_memsz);
+            for(uint64_t i = 0; i < arch::page_align_up(ph.p_memsz); i += arch::page_size) {
+                // Allocate and map pages
+                auto page = pmm_alloc_page();
+                map_page(page, v+i, flags);
+                // Copy data from file if possible
+                if(i < size) {
+                    ebl::memcpy((void*) page, (void*) ((uint32_t) p+i), arch::page_size);
+                }
+            }
+        } else {
+            for(uint64_t i = 0; i < ph.p_memsz; i += arch::page_size)
+                map_page(p+i, v+i, flags);
+        }
+    }
+
+    auto* img = static_cast<elf64_ehdr_t*>(ctx.get_image());
+    ebl::kout("Jumping to kernel at %016lx\n", img->e_entry);
+    enter_longmode(
+        (uint32_t) pml4,
+        (uint32_t) &gdt_ptr,
+        (uint64_t) img->e_entry,
+        (uint32_t) 0xDEADBEEF
+    );
 
     for(;;);
 }

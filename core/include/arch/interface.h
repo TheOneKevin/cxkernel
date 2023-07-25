@@ -11,6 +11,14 @@ namespace core {
 
 namespace arch {
 
+    constexpr vaddr_t page_align_down(vaddr_t addr) {
+        // NOTE: We expect page_size to be defined by types.h
+        return addr & ~(page_size - 1);
+    }
+    constexpr vaddr_t page_align_up(vaddr_t addr) {
+        return (addr + page_size - 1) & ~(page_size - 1);
+    }
+
     struct spinlock_backend;
     struct spinlock_state;
     struct thread_backend;
