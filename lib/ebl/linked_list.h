@@ -75,8 +75,8 @@ private:
         bool operator== (const iterator& a) const { return list == a.list; };
         bool operator!= (const iterator& a) const { return list != a.list; };
     private:
-        list_node* list;
         int i;
+        list_node* list;
     };
 
 public:
@@ -105,26 +105,36 @@ public:
         // Pushes existing node to the front of the list.
         void push_front(LPtr<T> elem) {
             list_node* node = container_of(elem.get());
+            push_front_unsafe(node);
+            elem.release();
+        }
+        // push_front but with raw pointers
+        void push_front_unsafe(list_node* node) {
             if(root != nullptr) {
                 node->next[i] = root;
+                node->prev[i] = nullptr;
                 root->prev[i] = node;
             } else {
                 tail = node;
             }
             root = node;
-            elem.release();
         }
         // Pushes existing node to the back of the list.
         void push_back(LPtr<T> elem) {
             list_node* node = container_of(elem.get());
-            if(root == nullptr) {
-                root = node;
-            } else {
+            push_back_unsafe(node);
+            elem.release();
+        }
+        // push_back but with raw pointers
+        void push_back_unsafe(list_node* node) {
+            if(tail != nullptr) {
                 node->prev[i] = tail;
+                node->next[i] = nullptr;
                 tail->next[i] = node;
+            } else {
+                root = node;
             }
             tail = node;
-            elem.release();
         }
         // Pop the first node from the list.
         LPtr<T> pop_front() {
@@ -154,17 +164,23 @@ public:
         iterator begin() const { return iterator(i, root); }
         // Returns an iterator to the end of the list.
         iterator end() const { return iterator(i, nullptr); }
+        // Get list size
+        size_t size() const {
+            size_t size = 0;
+            for(auto it = begin(); it != end(); ++it, ++size);
+            return size;
+        }
     };
 
 public:
     // Constructs an empty list.
     IntrusiveMultilist() noexcept { };
     // Construct a new node and do nothing with it
-    template <typename... Args>
+    /*template <typename... Args>
     LPtr<T> construct(Args&&... args) {
         auto node = new list_node(forward<Args>(args)...);
         return LPtr<T>{node};
-    }
+    }*/
 };
 
 } // namespace ebl
