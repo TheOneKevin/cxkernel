@@ -110,7 +110,14 @@ void console_log(char const* c) {
 //===----------------------------------------------------------------------===//
 // Main entry point (called from start.s)
 
+extern "C" void(*init_array_start_)();
+extern "C" void(*init_array_end_)();
+
 extern "C" void main(int sig, unsigned long ptr) {
+    // Run .init_array
+    for(auto* fn = &init_array_start_; fn != &init_array_end_; fn++) (*fn)();
+
+    // Initial checks
     (void) gdt_ptr;
     console_init(COM1);
     console_init(COM2);
@@ -137,12 +144,6 @@ extern "C" void main(int sig, unsigned long ptr) {
     }
     assert(mmap != nullptr, "Memory map not found!");
 
-    // Reserve MBI structures so our PMM doesn't overwrite them
-    reserved_memory[1].begin = module->mod_start;
-    reserved_memory[1].end = module->mod_end;
-    reserved_memory[2].begin = (vaddr_t) mmap;
-    reserved_memory[2].end = (vaddr_t) mmap + mmap->size;
-
     // Print the memory map
     ebl::klog("Memory map:\n");
     for(auto* entry : multiboot_mmap_list{mmap}) {
@@ -156,8 +157,14 @@ extern "C" void main(int sig, unsigned long ptr) {
                 "unknown");
     }
 
-    // Initialize PMM
-    bootstrap_pmm(mmap);
+    // Initialize PMM and enable paging
+    const range reserved[1] {
+        range{module->mod_start, module->mod_end - 1}
+    };
+    bootstrap_pmm(reserved, mmap);
+    enable_paging();
+
+    // Switch mode, load GDT and jump to kernel
 
     for(;;);
 }

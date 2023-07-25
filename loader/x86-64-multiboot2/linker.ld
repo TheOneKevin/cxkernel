@@ -17,6 +17,14 @@ SECTIONS
         *(.gnu.linkonce.r.*)
     }
 
+    .init_array :
+    {
+        init_array_start_ = .;
+        KEEP (*(SORT(.init_array.*)))
+        KEEP (*(.init_array ))
+        init_array_end_ = .;
+    }
+
     .data ALIGN (4K):
     {
         *(.data*)

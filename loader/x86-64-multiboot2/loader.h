@@ -5,6 +5,10 @@
 #include <stddef.h>
 #include "core/vm.h"
 
+struct range;
+struct multiboot_tag_list;
+struct multiboot_mmap_list;
+
 //===----------------------------------------------------------------------===//
 // Functions
 
@@ -18,7 +22,8 @@ namespace arch {
     }
 };
 
-void bootstrap_pmm(struct multiboot_tag_mmap *mmap);
+void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap);
+void enable_paging();
 
 //===----------------------------------------------------------------------===//
 // Range class for memory ranges
@@ -28,9 +33,6 @@ struct range {
     uint64_t begin;
     uint64_t end;
 };
-
-constexpr int num_reserved_ranges = 3;
-extern range reserved_memory[num_reserved_ranges];
 
 //===----------------------------------------------------------------------===//
 // Iterator class for MBI tags
