@@ -4,7 +4,7 @@
 		{
 			"type": "shell",
 			"label": "Build",
-			"command": "make",
+			"command": "make -j$(nproc)",
 			"group": {
 				"kind": "build",
 				"isDefault": true
