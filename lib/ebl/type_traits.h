@@ -42,6 +42,10 @@ inline constexpr bool is_constructible_v = is_constructible<T, Args...>::value;
 template <bool, class T = void> struct enable_if {};
 template <class T> struct enable_if<true, T> {typedef T type;};
 
+template <class T, class M> M get_member_type(M T:: *);
+
+template <class... T> struct always_false : ebl::false_type {};
+
 /*===----------------------------------------------------------------------===*/
 // ref: ??? (I forgot where I got this from)
 

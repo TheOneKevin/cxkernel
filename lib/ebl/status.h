@@ -9,4 +9,5 @@ enum E {
 struct status_t {
     E e;
     status_t(E e) : e{e} {}
+    operator bool() const { return e == E::SUCCESS; }
 };

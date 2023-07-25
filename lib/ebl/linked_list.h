@@ -110,9 +110,9 @@ public:
         }
         // push_front but with raw pointers
         void push_front_unsafe(list_node* node) {
+            node->next[i] = root;
+            node->prev[i] = nullptr;
             if(root != nullptr) {
-                node->next[i] = root;
-                node->prev[i] = nullptr;
                 root->prev[i] = node;
             } else {
                 tail = node;
@@ -127,9 +127,9 @@ public:
         }
         // push_back but with raw pointers
         void push_back_unsafe(list_node* node) {
+            node->prev[i] = tail;
+            node->next[i] = nullptr;
             if(tail != nullptr) {
-                node->prev[i] = tail;
-                node->next[i] = nullptr;
                 tail->next[i] = node;
             } else {
                 root = node;
@@ -138,6 +138,10 @@ public:
         }
         // Pop the first node from the list.
         LPtr<T> pop_front() {
+            return LPtr<T>{pop_front_unsafe()};
+        }
+        // pop_front but with raw pointers
+        list_node* pop_front_unsafe() {
             if(root == nullptr) return nullptr;
             list_node* node = root;
             root = root->next[i];
@@ -146,10 +150,14 @@ public:
             } else {
                 tail = nullptr;
             }
-            return LPtr<T>{node};
+            return node;
         }
         // Pop the last node from the list.
         LPtr<T> pop_back() {
+            return LPtr<T>{pop_back_unsafe()};
+        }
+        // pop_back but with raw pointers
+        list_node* pop_back_unsafe() {
             if(root == nullptr) return nullptr;
             list_node* node = tail;
             tail = tail->prev[i];
@@ -158,7 +166,7 @@ public:
             } else {
                 root = nullptr;
             }
-            return LPtr<T>{node};
+            return node;
         }
         // Returns an iterator to the beginning of the list.
         iterator begin() const { return iterator(i, root); }
