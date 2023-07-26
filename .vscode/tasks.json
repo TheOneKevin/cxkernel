@@ -51,6 +51,46 @@
 			"dependsOn": [
 				"Build"
 			]
+		},
+		{
+            "label": "Launch QEMU Debug",
+            "type": "shell",
+			"linux": {
+				"command": [
+					"tmux new-session -d -s qemu ./launch_qemu.sh -debug;",
+					"sleep 1;"
+				]
+			},
+			"options": {
+				"cwd": "${workspaceFolder}/scripts"
+			},
+			"problemMatcher": [],
+			"dependsOn": [
+				"Build"
+			]
+        },
+		{
+			"label": "Create gdbinit",
+			"type": "shell",
+			"linux": {
+				"command": "./create_gdbinit.sh ${workspaceFolder}/build/"
+			},
+			"options": {
+				"cwd": "${workspaceFolder}/scripts"
+			},
+			"problemMatcher": [],
+			"hide": true,
+			"dependsOn": [
+				"Launch QEMU Debug"
+			]
+		},
+		{
+			"label": "Kill TMUX",
+			"type": "shell",
+			"linux": {
+				"command": "tmux kill-session -t qemu; echo ''"
+			},
+			"hide": true
 		}
 	]
 }

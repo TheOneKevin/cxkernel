@@ -15,10 +15,10 @@ set(CONFIG_USE_PRIVATE_LIBGCC TRUE)
 # Set up the compiler and linker
 set(CMAKE_CXX_STANDARD 20)
 set(STANDARD_LINKER_FLAGS
-        -lgcc -nostdlib -ffreestanding
+        -lgcc -nostdlib -ffreestanding -g
 )
 set(STANDARD_CXX_FLAGS
-        -Wall -Wextra
+        -Wall -Wextra -g -Og
         -fno-rtti -fno-exceptions -nostdinc++
         -fno-omit-frame-pointer -fno-stack-protector
         -ffreestanding -mno-red-zone
