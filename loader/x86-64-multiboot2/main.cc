@@ -1,10 +1,13 @@
 #include "loader.h"
 #include "assert.h"
+#include "loaderabi.h"
 #include <ebl/util.h>
 #include <ebl/stdio.h>
 #include <ebl/string.h>
 #include <elf/elf.h>
 #include <ebl/status.h>
+
+#define NL "\n"
 
 //===----------------------------------------------------------------------===//
 // Global variables and structures
@@ -71,10 +74,12 @@ void console_log(char const* c) {
 //===----------------------------------------------------------------------===//
 // Main entry point (called from start.s)
 
+static struct loader_state state {};
 extern "C" void(*init_array_start_)();
 extern "C" void(*init_array_end_)();
 extern "C" void enter_longmode(
-    uint32_t pml4_ptr, uint32_t gdt_ptr, uint64_t entry_point, uint32_t magic);
+    uint32_t pml4_ptr, uint32_t gdt_ptr, uint64_t entry_point,
+    uint64_t state_ptr, uint64_t stack);
 
 extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
     status_t ec = E::SUCCESS;
@@ -87,6 +92,18 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
     console_init(COM1);
     console_init(COM2);
     assert(sig == MULTIBOOT2_BOOTLOADER_MAGIC, "Invalid multiboot2 signature");
+
+    // FIXME: Check CPUID feature flags
+    // Enable SSE ref Intel SDM Vol 3 10.6
+    asm volatile(
+        "mov %%cr0, %%eax"  NL
+        "and $0xFFFB, %%ax" NL // Clear CR0.EM
+        "or $0x2, %%ax"     NL // Set CR0.MP
+        "mov %%eax, %%cr0"  NL
+        "mov %%cr4, %%eax"  NL
+        "or $0x600, %%ax"   NL // Set CR4.OSFXSR and CR4.OSXMMEXCPT
+        "mov %%eax, %%cr4"  NL
+    ::: "eax");
 
     // Search for kernel module
     struct multiboot_tag_module* module = nullptr;
@@ -147,7 +164,11 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
     for(auto& ph : ctx.get_header<elf64_phdr_t>()) {
         if(ph.p_type != PT_LOAD) continue;
         assert(ph.p_align == (uint64_t) arch::page_size,
-            "Program section not aligned - all sections must be page-aligned!");
+            "Program section not aligned - all sections must be page-aligned");
+        assert(ph.p_vaddr >= x86_64::kernel_base,
+            "Program section not in kernel address space");
+        assert(ph.p_vaddr + ph.p_memsz < x86_64::kernel_limit,
+            "Program section exceeds kernel address space");
         vaddr_t v = ph.p_vaddr;
         paddr_t p = (paddr_t) ctx.get_image() + ph.p_offset;
         const ns::page_flags flags{
@@ -175,13 +196,62 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
         }
     }
 
+    // Allocate some space for the kernel stack
+    // NOTE: The gaurd page for the kernel stack is going to be there anyway
+    map_page(pmm_alloc_page(), x86_64::kernel_stack_limit, ns::page_flags{
+        .f {
+            .writable = 1,
+            .user = 0,
+            .execute_disable = 0
+        }
+    });
+
+    // Map PFNDB
+    for(paddr_t i = 0; i < pfndb_sz_pgs; i++) {
+        map_page(
+            (paddr_t) pfndb_arr + i * arch::page_size,
+            x86_64::kernel_pfndb_base + i * arch::page_size,
+            ns::page_flags{
+                .f {
+                    .writable = 1,
+                    .user = 0,
+                    .execute_disable = 0
+                }
+            });
+    }
+
+    // Shift pointers in PFNDB
+    const paddr_t pfndb_offset = x86_64::kernel_pfndb_base - (paddr_t) pfndb_arr;
+    for(paddr_t i = 0; i < total_phys_pgs; i++) {
+        if(pfndb_arr[i].virt0_[0] != 0)
+            pfndb_arr[i].virt0_[0] += pfndb_offset;
+        if(pfndb_arr[i].virt1_[0] != 0)
+            pfndb_arr[i].virt1_[0] += pfndb_offset;
+    }
+    
+    // Initialize loader state
+    pfndb_freelist.shift(pfndb_offset);
+    pfndb_rsrvlist.shift(pfndb_offset);
+    state = loader_state {
+        .magic_start = LOADER_ABI_MAGIC_START,
+        .kernel_elf = (vaddr_t) module->mod_start,
+        .pfndb_rsrvlist = pfndb_rsrvlist,
+        .pfndb_freelist = pfndb_freelist,
+        .pfndb_base = x86_64::kernel_pfndb_base,
+        .total_phys_pgs = total_phys_pgs,
+        .arch_state{},
+        .magic_end = LOADER_ABI_MAGIC_END
+    };
+    
+    // Get entry and jump!
     auto* img = static_cast<elf64_ehdr_t*>(ctx.get_image());
     ebl::kout("Jumping to kernel at %016lx\n", img->e_entry);
     enter_longmode(
         (uint32_t) pml4,
         (uint32_t) &gdt_ptr,
         (uint64_t) img->e_entry,
-        (uint32_t) 0xDEADBEEF
+        (uint64_t) &state,
+        x86_64::kernel_stack_base
     );
 
     for(;;);

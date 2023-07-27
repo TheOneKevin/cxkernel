@@ -2,10 +2,12 @@
 
 #include <ebl/type_traits.h>
 
+#define ABI_ALIGN 8 // FIXME: Modify per-architecture
 #define FENCE do { __asm__ volatile("" ::: "memory"); } while(0)
 #define STRINGIFY_HIDDEN(x) #x
 #define STRINGIFY(x) STRINGIFY_HIDDEN(x)
-#define PACKED __attribute__ ((packed))
+#define PACKED __attribute__((packed))
+#define ABICOMPAT __attribute__ ((aligned(ABI_ALIGN)))
 
 #define DELETE_COPY_ASSIGN(T) \
     T(const T&) = delete; T& operator=(const T&) = delete;

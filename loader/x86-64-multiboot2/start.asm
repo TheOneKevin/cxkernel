@@ -42,12 +42,12 @@ multiboot_header_end:
 ; System V ABI standard and de-facto extensions. The compiler will assume the
 ; stack is properly aligned and failure to align the stack will result in
 ; undefined behavior.
-SECTION .bootloader_stack nobits alloc write ALIGN=4
-[GLOBAL stack_top]
-[GLOBAL stack_bottom]
-stack_bottom:
-    resb 4096
-stack_top:
+SECTION .bootloader_stack nobits alloc write ALIGN=16
+[GLOBAL stack_top_]
+[GLOBAL stack_bottom_]
+stack_bottom_:
+    resb 1024
+stack_top_:
 
 ; The linker script specifies _start as the entry point to the kernel and the
 ; bootloader will jump to this position once the kernel has been loaded. It
@@ -58,12 +58,12 @@ SECTION .text
 
 _start:
     cli
-    mov esp, stack_top
+    mov esp, stack_top_
     push 0
-    popf                ; Reset EFLAGS
-    push ebx            ; Set up stack & push grub multiboot structs
+    popf                    ; Reset EFLAGS
+    push ebx                ; Set up stack & push grub multiboot structs
     push eax
-    call main           ; Call our C code
+    call main               ; Call our C code
     cli
 .0b:
     hlt
@@ -74,31 +74,36 @@ enter_longmode:
     xchg bx, bx
     mov eax, [esp+4]
     mov cr3, eax
-    mov eax, 0x20
+    mov eax, cr4
+    or  eax, 0x20           ; CR4.PAE
     mov cr4, eax
-    mov ecx, 0xC0000080
+    mov ecx, 0xC0000080     ; IA32_EFER MSR, ref 2.2.1 SDM Vol 3
     rdmsr
-    or  eax, 0x100
+    or  eax, 0x100          ; IA32_EFER.LME
     wrmsr
-    mov eax, 0x80000011
+    mov eax, cr0
+    or  eax, 0x80000001     ; CR0.PE,PG ref Figure 2-7 SDM Vol 3
     mov cr0, eax
-    mov eax, [esp+8]    ; Get the pointer to the GDT, passed as a parameter.
-    lgdt [eax]          ; Load the new GDT pointer
-    jmp 0x08:_start64   ; 0x08 is the offset to our code segment: Far jump!
+    mov eax, [esp+8]        ; Get the pointer to the GDT, passed as a parameter.
+    lgdt [eax]              ; Load the new GDT pointer
+    jmp 0x08:_start64       ; 0x08 is the offset to our code segment: Far jump!
 .flush:
     ret
 
 [BITS 64]
 [GLOBAL _start64]
 _start64:
-    mov ax, 0x10        ; 0x10 is the offset in the GDT to our data segment
-    mov ds, ax          ; Load all data segment selectors
+    xchg bx, bx
+    mov ax, 0x10            ; 0x10 is the offset in the GDT to our data segment
+    mov ds, ax              ; Load all data segment selectors
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
-    mov rbx, QWORD [esp+12]
-    call rbx            ; Jump to the kernel's entry point!
+    mov rdi, QWORD [esp+20] ; Load kernel arg0
+    mov rax, QWORD [esp+12]
+    mov rsp, QWORD [esp+28] ; Load stack virtual address
+    call rax                ; Jump to the kernel's entry point!
     cli
     hlt
 .0b:

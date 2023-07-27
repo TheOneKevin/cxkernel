@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "asm.h"
 #include "thread.h"
+#include "types.h"
 
 namespace arch {
 
@@ -16,6 +17,9 @@ namespace arch {
 
     struct irq_vector {
         uint8_t vector;
+    };
+
+    struct loader_state {
     };
 
     inline void spin_lock(spinlock_backend* lock) {
@@ -39,20 +43,21 @@ namespace arch {
     }
 
     inline void spin_save_state(spinlock_state* state) {
-        state->flags = x86_save_flags();
+        state->flags = x86_64::save_flags();
         disable_interrupts();
     }
 
     inline void spin_restore_state(spinlock_state const* state) {
-        x86_restore_flags(state->flags); // Restore will re-enable interrupts.
+        // Restore will re-enable interrupts.
+        x86_64::restore_flags(state->flags);
     }
 
     inline void enable_interrupts() {
-        x86_sti();
+        x86_64::sti();
     }
 
     inline void disable_interrupts() {
-        x86_cli();
+        x86_64::cli();
     }
 
 }

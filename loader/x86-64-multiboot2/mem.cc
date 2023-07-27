@@ -22,13 +22,12 @@ static multiboot_mmap_list mmap_list{nullptr};
 static auto mmap_it = mmap_list.begin();
 
 // List-based PMM structs (free list and reserved list)
-static ebl::IntrusiveMultilist<1, core::page> pfndb_mlist{};
-static decltype(pfndb_mlist)::list<0> pfndb_freelist{};
-static decltype(pfndb_mlist)::list<0> pfndb_rsrvlist{};
-using page_node_t = decltype(pfndb_mlist)::list_node;
-static_assert(sizeof(page_node_t) - sizeof(core::page) == sizeof(vaddr_t)*2,
-    "Size of page node is unexpected given size of page struct!");
-static page_node_t* pfndb_arr = nullptr;
+core::pfndb_list_t pfndb_freelist{};
+core::pfndb_list_t pfndb_rsrvlist{};
+page_node_t* pfndb_arr = nullptr;
+paddr_t total_phys_pgs = 0;
+paddr_t pfndb_sz_bytes = 0;
+paddr_t pfndb_sz_pgs = 0;
 
 //===----------------------------------------------------------------------===//
 // Pre-PMM early alloc functions
@@ -114,9 +113,9 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap) {
     largest_phys_addr = arch::page_align_down(largest_phys_addr);
 
     // Allocate PFN database
-    const paddr_t total_phys_pgs = largest_phys_addr / arch::page_size;
-    const paddr_t pfndb_sz_bytes = total_phys_pgs * sizeof(page_node_t);
-    const paddr_t pfndb_sz_pgs = arch::page_align_up(pfndb_sz_bytes) / arch::page_size;
+    total_phys_pgs = largest_phys_addr / arch::page_size;
+    pfndb_sz_bytes = total_phys_pgs * sizeof(page_node_t);
+    pfndb_sz_pgs = arch::page_align_up(pfndb_sz_bytes) / arch::page_size;
     pfndb_arr = (page_node_t*) early_pmm_alloc_cts(pfndb_sz_pgs);
     ebl::memset((void*) pfndb_arr, 0, pfndb_sz_bytes);
 
@@ -187,5 +186,13 @@ void map_page(paddr_t phys, vaddr_t virt, ns::page_flags flags) {
 uint64_t setup_paging() {
     pml4 = (ns::pml4e*) pmm_alloc_page();
     ebl::memset(pml4, 0, arch::page_size);
+    // Self-referencing entry
+    pml4[511].data = (uint64_t) pml4 | ns::page_flags{
+        .f {
+            .present = 1,
+            .writable = 1,
+            .user = 0
+        }
+    }.data;
     return (uint64_t) pml4;
 }

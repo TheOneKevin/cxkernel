@@ -23,6 +23,7 @@ namespace arch {
     struct spinlock_state;
     struct thread_backend;
     struct irq_vector;
+    struct loader_state;
     typedef void (*irq_handler_t)(void*);
 
     void irq_install_handler(irq_vector vector, irq_handler_t fn);
@@ -38,6 +39,8 @@ namespace arch {
     void disable_interrupts();
 
     void switch_thread(core::thread& oldthread, core::thread& newthread);
+    
+    void init(loader_state* state);
 
 } // namespace arch
 

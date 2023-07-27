@@ -3,17 +3,19 @@
 #include <stdint.h>
 #include <ebl/util.h>
 
-static inline void x86_sti() {
+namespace x86_64 {
+
+static inline void sti() {
     FENCE;
     asm volatile("sti");
 }
 
-static inline void x86_cli() {
+static inline void cli() {
     asm volatile("cli");
     FENCE;
 }
 
-static inline uint32_t x86_save_flags() {
+static inline uint32_t save_flags() {
     uint32_t state;
     asm volatile(
         "pushf;"
@@ -23,7 +25,7 @@ static inline uint32_t x86_save_flags() {
 }
 
 
-static inline void x86_restore_flags(uint32_t flags) {
+static inline void restore_flags(uint32_t flags) {
     asm volatile(
         "push %0;"
         "popf"
@@ -31,3 +33,14 @@ static inline void x86_restore_flags(uint32_t flags) {
         : "memory", "cc");
 }
 
+static inline void outb(uint16_t port, uint8_t value) {
+    asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
+}
+
+static inline uint8_t inb(uint16_t port) {
+    uint8_t ret;
+    asm volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
+    return ret;
+}
+
+} // namespace 64

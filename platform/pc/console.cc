@@ -1,6 +1,8 @@
 #include "platform/interface.h"
+#include "arch/interface.h"
 
 using namespace pc;
+using namespace x86_64;
 
 static void console_init_port(int port) {
     outb(port + 1, 0x00); // Disable all interrupts

@@ -13,8 +13,32 @@ namespace arch {
 }
 
 namespace x86_64 {
+
+    //===------------------------------------------------------------------===//
+    // Paging helper functions
+
+    // Canonicalizes a virtual address
+    constexpr vaddr_t canonicalize(vaddr_t addr) {
+        static_assert(sizeof(vaddr_t) == sizeof(int64_t));
+        return ((int64_t) addr << 16) >> 16;
+    }
+
+    // Gets the physical address from a PML4E, PDPTE, PDE, and PTE index
+    constexpr uint64_t phys_from_index(
+        uint16_t pml4e_index,
+        uint16_t pdpte_index,
+        uint16_t pde_index,
+        uint16_t pte_index
+    ) {
+        return canonicalize(
+            ((uint64_t) (pml4e_index & 0x1FF) << 39) |
+            ((uint64_t) (pdpte_index & 0x1FF) << 30) |
+            ((uint64_t) (pde_index & 0x1FF) << 21) |
+            ((uint64_t) (pte_index & 0x1FF) << 12));
+    }
+
     // Gets the index of the PML4 entry for a virtual address
-    // ref: Figure 4-8 from Intel SDM 4.5.4
+    // ref: Figure 4-8 from Intel SDM Vol 3 4.5.4
     constexpr uint16_t pml4e_index(vaddr_t addr) {
         return (addr >> 39) & 0x1FF;
     }
@@ -31,7 +55,20 @@ namespace x86_64 {
         return (addr >> 12) & 0x1FF;
     }
 
-    // ref: Figure 4-11 from Intel SDM 4.5.4
+    //===------------------------------------------------------------------===//
+    // Virtual memory layout
+    
+    constexpr uint64_t kernel_base = 0xFFFF800000000000;
+    constexpr uint64_t kernel_limit = phys_from_index(pml4e_index(kernel_base)+1,0,0,0);
+    // FIXME: Support KASLR
+    constexpr uint64_t kernel_stack_limit = kernel_limit - arch::page_size;
+    constexpr uint64_t kernel_stack_base = kernel_stack_limit + arch::page_size - 8;
+    constexpr uint64_t kernel_pfndb_base = kernel_limit;
+
+    //===------------------------------------------------------------------===//
+    // CPU structures
+
+    // ref: Figure 4-11 from Intel SDM Vol 3 4.5.4
     struct PACKED generic_page_entry_raw {
         uint8_t present : 1;
         uint8_t writable : 1;
@@ -64,7 +101,7 @@ namespace x86_64 {
     static_assert(sizeof(pde) == 8, "Size of pde is incorrect!");
     static_assert(sizeof(pte) == 8, "Size of pte is incorrect!");
 
-    // ref: Figure 3-8 from Intel SDM 3.4.5
+    // ref: Figure 3-8 from Intel SDM Vol 3 3.4.5
     struct PACKED gdt_entry {
         uint16_t limit_low      : 16;
         uint16_t base_low       : 16;
@@ -100,7 +137,7 @@ namespace x86_64 {
     };
     static_assert(sizeof(struct gdt_entry) == 8, "gdt_entry is not 8 bytes long!");
 
-    // ref: Figure 2-6 from Intel SDM 2.4.1
+    // ref: Figure 2-6 from Intel SDM Vol 3 2.4.1
     struct PACKED gdt_ptr {
         uint16_t limit : 16;
         uint64_t base  : 64;

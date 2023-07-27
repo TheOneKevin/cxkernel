@@ -1,7 +1,8 @@
 #pragma once
 
-#include "arch/types.h"
 #include "memory.h"
+#include <stddef.h>
+#include "arch/types.h"
 
 namespace ebl {
 
@@ -42,7 +43,7 @@ class IntrusiveMultilist final {
     static_assert(N > 0, "Number of lists (N) must be greater than 0");
 public:
     // A node in the list, containing both data and intrusive pointers.
-    struct list_node {
+    struct ABICOMPAT list_node {
         friend class IntrusiveMultilist;
         union {
             list_node* prev[N];
@@ -67,29 +68,45 @@ private:
 
 private:
     // An iterator for the list, implements required iterator functions.
+    template<int i>
     class iterator {
     public:
-        iterator(int i, list_node* x): i{i}, list{x} { };
+        iterator(list_node* x): list{x} { };
         T& operator *() const { return list -> value; }
         iterator& operator ++() { list = list -> next[i]; return *this; }
         bool operator== (const iterator& a) const { return list == a.list; };
         bool operator!= (const iterator& a) const { return list != a.list; };
     private:
-        int i;
         list_node* list;
     };
 
 public:
     // Selects a single list from the multilist
     template<int i>
-    class list final {
+    struct ABICOMPAT list final {
+    private:
         static_assert(i < N, "Multilist select index (i) cannot exceed total list count N");
         friend class IntrusiveMultilist;
-        list_node* root;
-        list_node* tail; // FIXME: Is this needed?
+        union {
+            list_node* root;
+            vaddr_t virt0_;
+        };
+        union {
+            list_node* tail; // FIXME: Is this needed?
+            vaddr_t virt1_;
+        };
     public:
         // Constructs an empty list.
         list(): root{nullptr}, tail{nullptr} { };
+#ifdef LOADER
+        // Shift pointers by an offset
+        void shift(vaddr_t offset) {
+            if(virt0_ != 0)
+                virt0_ += offset;
+            if(virt1_ != 0)
+                virt1_ += offset;
+        }
+#endif
         // Returns a reference to the data contained in the first node.
         list_node* first() const {
             return root;
@@ -169,9 +186,9 @@ public:
             return node;
         }
         // Returns an iterator to the beginning of the list.
-        iterator begin() const { return iterator(i, root); }
+        iterator<i> begin() const { return iterator<i>(root); }
         // Returns an iterator to the end of the list.
-        iterator end() const { return iterator(i, nullptr); }
+        iterator<i> end() const { return iterator<i>(nullptr); }
         // Get list size
         size_t size() const {
             size_t size = 0;
