@@ -53,8 +53,8 @@
 			]
 		},
 		{
-            "label": "Launch QEMU Debug",
-            "type": "shell",
+			"label": "Launch QEMU Debug",
+			"type": "shell",
 			"linux": {
 				"command": [
 					"tmux new-session -d -s qemu ./launch_qemu.sh -debug;",
@@ -65,10 +65,11 @@
 				"cwd": "${workspaceFolder}/scripts"
 			},
 			"problemMatcher": [],
+			"hide": true,
 			"dependsOn": [
 				"Build"
 			]
-        },
+		},
 		{
 			"label": "Create gdbinit",
 			"type": "shell",

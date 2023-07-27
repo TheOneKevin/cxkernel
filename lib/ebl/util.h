@@ -2,7 +2,10 @@
 
 #include <ebl/type_traits.h>
 
-#define ABI_ALIGN 8 // FIXME: Modify per-architecture
+#ifndef ABI_ALIGN
+    #error "ABI_ALIGN not defined (check your build setup)"
+#endif
+
 #define FENCE do { __asm__ volatile("" ::: "memory"); } while(0)
 #define STRINGIFY_HIDDEN(x) #x
 #define STRINGIFY(x) STRINGIFY_HIDDEN(x)
