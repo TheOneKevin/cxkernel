@@ -60,4 +60,10 @@ namespace arch {
         x86_64::cli();
     }
 
+    [[noreturn]] inline void halt() {
+        asm volatile("hlt");
+        for(;;);
+        __builtin_unreachable();
+    }
+
 }

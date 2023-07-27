@@ -37,6 +37,7 @@ namespace arch {
 
     void enable_interrupts();
     void disable_interrupts();
+    [[noreturn]] void halt();
 
     void switch_thread(core::thread& oldthread, core::thread& newthread);
     

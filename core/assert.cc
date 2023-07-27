@@ -5,7 +5,7 @@
 void assert(bool condition) {
     if(!condition) [[unlikely]] {
         arch::disable_interrupts();
-        for(;;);
+        arch::halt();
     }
 }
 
@@ -13,6 +13,6 @@ void assert(bool condition, const char* message) {
     if(!condition) [[unlikely]] {
         ebl::kerr("Assertion failed: %s\n", message);
         arch::disable_interrupts();
-        for(;;);
+        arch::halt();
     }
 }

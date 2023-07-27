@@ -242,7 +242,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
         .arch_state{},
         .magic_end = LOADER_ABI_MAGIC_END
     };
-    
+
     // Get entry and jump!
     auto* img = static_cast<elf64_ehdr_t*>(ctx.get_image());
     ebl::kout("Jumping to kernel at %016lx\n", img->e_entry);
@@ -254,5 +254,6 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
         x86_64::kernel_stack_base
     );
 
-    for(;;);
+    assert(false, "Something terrible happend x_x");
+    arch::halt();
 }
