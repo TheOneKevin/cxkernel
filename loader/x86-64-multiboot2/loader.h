@@ -8,7 +8,6 @@
 #include "arch/interface.h"
 
 namespace ns = x86_64;
-using page_node_t = core::pfndb_node_t;
 
 struct range;
 class multiboot_tag_list;
@@ -17,9 +16,9 @@ class multiboot_mmap_list;
 extern paddr_t total_phys_pgs;
 extern paddr_t pfndb_sz_bytes;
 extern paddr_t pfndb_sz_pgs;
-extern page_node_t* pfndb_arr;
-extern core::pfndb_list_t pfndb_freelist;
-extern core::pfndb_list_t pfndb_rsrvlist;
+extern core::pfndb_node* pfndb_arr;
+extern core::pfndb_head pfndb_freelist;
+extern core::pfndb_head pfndb_rsrvlist;
 
 //===----------------------------------------------------------------------===//
 // Functions

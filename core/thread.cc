@@ -4,9 +4,8 @@
 using ebl::move;
 
 namespace g {
-    decltype(thread_mlist) thread_mlist{};
-    decltype(thread_queue) thread_queue{};
-    decltype(current_thread) current_thread{nullptr};
+    core::thread_list_head thread_queue{};
+    ebl::LPtr<core::thread> current_thread{nullptr};
 }
 
 namespace core {

@@ -42,3 +42,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/platform/${TARGET_PLATFORM}/build.cmake)
 
 # Final boot image target
 include(${CMAKE_CURRENT_SOURCE_DIR}/scripts/grub.cmake)
+
+# Library tests
+include(${CMAKE_CURRENT_SOURCE_DIR}/lib/tests/build.cmake)

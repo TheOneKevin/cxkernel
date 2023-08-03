@@ -7,7 +7,7 @@ namespace core {
 
     struct wait_queue {
     private:
-        decltype(g::thread_mlist)::list<0> queue_;
+        core::thread_list_head queue_;
 
     public:
         wait_queue() : queue_{} {}

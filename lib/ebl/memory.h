@@ -11,14 +11,13 @@ template<typename T> class LinkedRef { typedef T type; };
 
 /**
  * @brief A unique pointer to a linked list node.
- * @ref ebl::IntrusiveMultilist
+ * @ref ebl::IntrusiveListNode
  * 
  * @tparam T Type of the list node's value.
  */
 template<typename T>
 class LPtr {
-    using V = typename LinkedRef<T>::type;
-    using U = typename V::list_node;
+    using U = typename LinkedRef<T>::type;
 public:
     LPtr() noexcept : ptr_{nullptr} { }
     LPtr(LPtr&& other) noexcept : ptr_{other.ptr_} {
