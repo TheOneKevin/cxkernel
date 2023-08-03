@@ -11,6 +11,8 @@ set(MCMODEL large)
 
 # Setup toolchain
 include(${CMAKE_CURRENT_SOURCE_DIR}/scripts/toolchain.cmake)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Define macros
 add_compile_definitions(ARCH_TARGET=x86-64)
@@ -31,7 +33,7 @@ target_include_directories(
         cxkernel PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/lib"
         "${CMAKE_CURRENT_SOURCE_DIR}/core/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/arch/x86-64/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/arch"
         "${CMAKE_CURRENT_SOURCE_DIR}/"
 )
 include(${CMAKE_CURRENT_SOURCE_DIR}/core/build.cmake)

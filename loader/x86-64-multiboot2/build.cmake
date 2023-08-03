@@ -33,7 +33,7 @@ target_include_directories(
 target_link_options(
         cxloader PRIVATE
         ${STANDARD_LINKER_FLAGS}
-        -T ${CMAKE_CURRENT_LIST_DIR}/linker.ld
+        LINKER:-T${CMAKE_CURRENT_LIST_DIR}/linker.ld
         LINKER:--apply-dynamic-relocs
         LINKER:-z,max-page-size=0x1000
         -mabi=sysv -m32

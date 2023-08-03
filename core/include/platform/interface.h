@@ -12,4 +12,4 @@ void console_log(char const* c);
 } // namespace platform
 
 // Include the platform-specific interface header last.
-#include STRINGIFY(platform/PLAT_TARGET/include/interface.h)
+#include STRINGIFY(platform/PLAT_TARGET/interface.h)

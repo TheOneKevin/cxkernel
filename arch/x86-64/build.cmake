@@ -13,7 +13,7 @@ target_sources(cxkernel PRIVATE ${SOURCES})
 target_link_options(
         cxkernel PRIVATE
         ${STANDARD_LINKER_FLAGS}
-        -T ${CMAKE_CURRENT_LIST_DIR}/linker.ld
+        LINKER:-T${CMAKE_CURRENT_LIST_DIR}/linker.ld
         LINKER:--apply-dynamic-relocs
         LINKER:-z,max-page-size=0x1000
         -no-pie -mabi=sysv -m64 -mcmodel=${MCMODEL}

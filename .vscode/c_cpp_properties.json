@@ -3,9 +3,11 @@
         {
             "name": "Linux WSL",
             "includePath": [
-                "${workspaceFolder}/",
+                "${workspaceFolder}",
+                "${workspaceFolder}/arch",
                 "${workspaceFolder}/core/include",
-                "${workspaceFolder}/lib"
+                "${workspaceFolder}/lib",
+                "${workspaceFolder}/platform"
             ],
             "defines": [
                 "ARCH_TARGET=x86-64",

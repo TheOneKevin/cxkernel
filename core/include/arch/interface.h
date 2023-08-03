@@ -46,4 +46,4 @@ namespace arch {
 } // namespace arch
 
 // Include the arch-specific interface header last.
-#include STRINGIFY(arch/ARCH_TARGET/include/interface.h)
+#include STRINGIFY(arch/ARCH_TARGET/interface.h)

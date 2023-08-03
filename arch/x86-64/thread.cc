@@ -1,6 +1,6 @@
 #include "core/thread.h"
 #include "arch/interface.h"
-#include "arch/x86-64/include/thread.h"
+#include "arch/x86-64/thread.h"
 
 #define NL "\n"
 

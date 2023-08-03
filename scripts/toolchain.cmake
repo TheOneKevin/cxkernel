@@ -13,7 +13,6 @@ set(CMAKE_CXX_LINK_EXECUTABLE
 set(CONFIG_USE_PRIVATE_LIBGCC TRUE)
 
 # Set up the compiler and linker
-set(CMAKE_CXX_STANDARD 20)
 set(STANDARD_LINKER_FLAGS
         -lgcc -nostdlib -ffreestanding -g
 )

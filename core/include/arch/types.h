@@ -2,4 +2,4 @@
 
 #include "ebl/util.h"
 
-#include STRINGIFY(arch/ARCH_TARGET/include/types.h)
+#include STRINGIFY(arch/ARCH_TARGET/types.h)
