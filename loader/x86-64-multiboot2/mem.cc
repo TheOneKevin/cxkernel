@@ -22,7 +22,7 @@ static multiboot_mmap_list mmap_list{nullptr};
 static auto mmap_it = mmap_list.begin();
 
 // List-based PMM structs (free list and reserved list)
-using page_node_t = core::pfndb_node;
+using page_node_t = core::page_node;
 decltype(pfndb_freelist) pfndb_freelist{};
 decltype(pfndb_rsrvlist) pfndb_rsrvlist{};
 page_node_t* pfndb_arr = nullptr;

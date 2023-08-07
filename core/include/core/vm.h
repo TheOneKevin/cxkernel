@@ -17,13 +17,11 @@ namespace core {
             struct address_space* address_space;
         };
     };
-    using pfndb_node = ebl::IntrusiveListNode<core::page, 1>;
-    using pfndb_head = pfndb_node::list<0>;
-    static_assert(sizeof(pfndb_node) - sizeof(core::page) == sizeof(vaddr_t)*2,
+    using page_node = ebl::IntrusiveListNode<core::page, 1>;
+    using pfndb_head = page_node::list<0>;
+    static_assert(sizeof(page_node) - sizeof(core::page) == sizeof(vaddr_t)*2,
         "Size of page node is unexpected given size of page struct!");
 }
 
-// Associate core::page with pfndb_node
-template<> struct ebl::LinkedRef<core::page> {
-    typedef core::pfndb_node type;
-};
+// Do not associate core::page with page_node
+ProhibitLinkedRef(core::page);

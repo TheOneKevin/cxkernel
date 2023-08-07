@@ -23,8 +23,8 @@ namespace core {
         struct arch::thread_backend backend;
     };
 
-    using thread_list_node = ebl::IntrusiveListNode<thread, 1>;
-    using thread_list_head = thread_list_node::list<0>;
+    using thread_node = ebl::IntrusiveListNode<thread, 1>;
+    using thread_list_head = thread_node::list<0>;
 
     void thread_preempt();
     void thread_yield();
@@ -39,6 +39,4 @@ namespace g {
 }
 
 // Associate core::thread with thread_mlist's node
-template<> struct ebl::LinkedRef<core::thread> {
-    typedef core::thread_list_node type;
-};
+MakeLinkedRef(core::thread);

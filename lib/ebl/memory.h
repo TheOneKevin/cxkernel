@@ -7,7 +7,23 @@ namespace ebl {
  * 
  * @tparam T Type of the list node's value.
  */
-template<typename T> class LinkedRef { typedef T type; };
+template<typename T> struct LinkedRef { typedef T type; };
+
+/**
+ * @brief Macro to associate a linked list node with its value type.
+ *        No other linked-list node types can use the same value type.
+ *        This will ensure any LPtr<T> will be able to uniquely convert to T*.
+ */
+#define MakeLinkedRef(T) \
+    template<> struct ebl::LinkedRef<T> { typedef T##_node type; }
+
+/**
+ * @brief Does the opposite of MakeLinkedRef. This is useful for lists whose
+ *        nodes are NOT heap-allocated. So LPtr<T> is illegal to use (as it
+ *        will attempt to delete the node).
+ */
+#define ProhibitLinkedRef(T) \
+    template<> struct ebl::LinkedRef<T> { typedef void type; }
 
 /**
  * @brief A unique pointer to a linked list node.

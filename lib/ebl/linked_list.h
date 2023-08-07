@@ -6,6 +6,14 @@
 
 namespace ebl {
 
+//! @brief Checks if the LinkedRef type matches the IntrusiveListNode type.
+//!        This is used to ensure that the LPtr<T> type is used correctly.
+//!        See: MakeLinkedRef, ProhibitLinkedRef
+#define LPtrCheck \
+    static_assert( \
+        ebl::is_same_v<IntrusiveListNode<T, N>, typename LinkedRef<T>::type>, \
+        "LinkedRef<T>::type does not match the IntrusiveListNode<T, N> caller");
+
 // A node in the list, containing both data and intrusive pointers.
 template<typename T, int N>
 class ABICOMPAT IntrusiveListNode {
@@ -164,22 +172,26 @@ public:
         }
         // Pushes existing node to the back of the list.
         void push_back(LPtr<T> elem) {
+            LPtrCheck;
             list_node* node = container_of(elem.get());
             push_back_unsafe(node);
             elem.release();
         }
         // Pushes existing node to the front of the list.
         void push_front(LPtr<T> elem) {
+            LPtrCheck;
             list_node* node = container_of(elem.get());
             push_front_unsafe(node);
             elem.release();
         }
         // Pop the first node from the list.
         LPtr<T> pop_front() {
+            LPtrCheck;
             return LPtr<T>{pop_front_unsafe()};
         }
         // Pop the last node from the list.
         LPtr<T> pop_back() {
+            LPtrCheck;
             return LPtr<T>{pop_back_unsafe()};
         }
         // Returns an iterator to the beginning of the list.
@@ -198,5 +210,7 @@ public:
         }
     };
 };
+
+#undef LPtrCheck
 
 } // namespace ebl
