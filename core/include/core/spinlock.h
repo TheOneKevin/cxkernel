@@ -2,13 +2,14 @@
 
 #include "arch/interface.h"
 #include <ebl/guard.h>
+#include <ebl/thread_safety.h>
 
 namespace core {
 
 /**
  * @brief Spinlock WITH disabling interrupts.
  */
-class Spinlock final {
+class CAPABILITY("mutex") Spinlock final {
     friend class ebl::Guard<Spinlock>;
 private:
     // Private policy class for ebl::Guard.
@@ -18,10 +19,10 @@ private:
         Spinlock* lock_;
     public:
         Policy(Spinlock* lock) : irq_flags_{}, lock_{lock} {}
-        void lock() {
+        void lock() ACQUIRE(lock_) NO_THREAD_SAFETY_ANALYSIS {
             lock_->lock(irq_flags_);
         }
-        void unlock() {
+        void unlock() RELEASE(lock_) NO_THREAD_SAFETY_ANALYSIS {
             if(lock_ != nullptr) [[likely]] {
                 lock_->unlock(irq_flags_);
                 lock_ = nullptr;

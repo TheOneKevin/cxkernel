@@ -24,6 +24,7 @@ namespace arch {
     struct thread_backend;
     struct irq_vector;
     struct loader_state;
+    struct percpu;
     typedef void (*irq_handler_t)(void*);
 
     void irq_install_handler(irq_vector vector, irq_handler_t fn);
@@ -39,9 +40,13 @@ namespace arch {
     void disable_interrupts();
     [[noreturn]] void halt();
 
-    void switch_thread(core::thread& oldthread, core::thread& newthread);
+    void switch_thread(core::thread* oldthread, core::thread* newthread);
     
     void init(loader_state* state);
+
+    int cpu_num();
+    percpu* get_percpu();
+    core::thread* get_current_thread();
 
 } // namespace arch
 

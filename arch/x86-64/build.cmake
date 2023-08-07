@@ -21,5 +21,5 @@ target_link_options(
 target_compile_options(
         cxkernel PRIVATE
         $<$<COMPILE_LANGUAGE:CXX>:${STANDARD_CXX_FLAGS}
-                -mcmodel=${MCMODEL} -fno-pie -mabi=sysv -m64>
+                -mcmodel=${MCMODEL} -fno-pie -mabi=sysv -m64 -Wthread-safety>
 )

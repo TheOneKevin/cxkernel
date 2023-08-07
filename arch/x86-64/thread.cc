@@ -6,7 +6,9 @@
 
 namespace arch {
 
-void switch_thread(core::thread& oldthread, core::thread& newthread) {
+void switch_thread(core::thread* oldthread, core::thread* newthread) {
+    get_percpu()->curthread = newthread;
+
     // Assumes SystemV ABI
     // ref: https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf
     // FIXME: Should I move this to a separate assembly file?
@@ -27,7 +29,7 @@ void switch_thread(core::thread& oldthread, core::thread& newthread) {
         "pop %%rbp"         NL
         "pop %%rbx"         NL
         "popf"              NL // Restore flags
-        :: "r"(&oldthread.backend.sp), "r"(&newthread.backend.sp)
+        :: "r"(&oldthread->backend.sp), "r"(&newthread->backend.sp)
     );
 }
 

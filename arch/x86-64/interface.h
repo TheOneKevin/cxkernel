@@ -22,6 +22,12 @@ namespace arch {
     struct loader_state {
     };
 
+    struct percpu {
+        struct percpu* self;
+        int cpu_num;
+        core::thread* curthread;
+    };
+
     inline void spin_lock(spinlock_backend* lock) {
         #define NL "\n"
         asm volatile(
@@ -64,6 +70,18 @@ namespace arch {
         asm volatile("hlt");
         for(;;);
         __builtin_unreachable();
+    }
+
+    inline int cpu_num() {
+        return (int) x86_64::read_gs_offset64(offsetof(percpu, cpu_num));
+    }
+
+    inline percpu* get_percpu() {
+        return (percpu*) x86_64::read_gs_offset64(offsetof(percpu, self));
+    }
+
+    inline core::thread* get_current_thread() {
+        return (core::thread*) x86_64::read_gs_offset64(offsetof(percpu, curthread));
     }
 
 }

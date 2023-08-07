@@ -24,6 +24,14 @@ static inline uint32_t save_flags() {
     return state;
 }
 
+static inline uint64_t read_gs_offset64(uintptr_t offset) {
+    uint64_t ret;
+    asm volatile(
+        "movq %%gs:%1, %0"
+        : "=r"(ret)
+        : "m"(*(uint64_t*)(offset)));
+    return ret;
+}
 
 static inline void restore_flags(uint32_t flags) {
     asm volatile(

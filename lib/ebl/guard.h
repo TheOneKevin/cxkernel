@@ -1,11 +1,12 @@
 #pragma once
 
-#include "ebl/type_traits.h"
+#include <ebl/thread_safety.h>
+#include <ebl/type_traits.h>
 
 namespace ebl {
 
 template<class T>
-class Guard final {
+class SCOPED_CAPABILITY Guard final {
     using Policy = typename T::Policy;
     template<class V> using has_lock = decltype(declval<V&>().lock());
     template<class V> using has_unlock = decltype(declval<V&>().unlock());
@@ -17,13 +18,17 @@ class Guard final {
         "T::Policy must be constructible with T*");
 
 public:
-    explicit Guard(T* lock) : impl_{Policy{lock}} {
+    explicit Guard(T* lock) ACQUIRE(lock) : impl_{Policy{lock}} {
         impl_.lock();
     }
-    void release() {
+    Guard(T* lock1, Guard<T>&& lock2) ACQUIRE(lock1) RELEASE(lock2) : impl_{Policy{lock1}} {
+        lock2.release();
+        impl_.lock();
+    }
+    void release() RELEASE() {
         impl_.unlock();
     }
-    ~Guard() {
+    ~Guard() RELEASE() {
         release();
     }
 

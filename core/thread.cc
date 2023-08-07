@@ -1,24 +1,23 @@
 #include "core/thread.h"
 #include "core/spinlock.h"
+#include "core/mp.h"
+#include <ebl/thread_safety.h>
 
 using ebl::move;
+using ebl::LPtr;
+using namespace core;
 
-namespace g {
-    core::thread_list_head thread_queue{};
-    ebl::LPtr<core::thread> current_thread{nullptr};
-}
+static struct core::percpu percpu_arr[16];
+struct core::percpu* g::percpu = (core::percpu*) &percpu_arr;
 
-namespace core {
-
-void thread_preempt() {
+void core::thread_preempt() {
     // FIXME: Improve this alongside sched.cc, for now just yield.
     thread_yield();
 }
 
-void thread_yield() {
-    g::current_thread->state = threadstate::READY;
-    g::thread_queue.push_back(move(g::current_thread));
-    schedule_next_thread();
+void core::thread_yield() {
+    auto* oldthread = arch::get_current_thread();
+    oldthread->state = threadstate::READY;
+    get_percpu()->thread_queue.push_back(thread_node::container_of(oldthread));
+    schedule_next_thread(oldthread);
 }
-
-} // namespace core

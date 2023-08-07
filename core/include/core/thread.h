@@ -2,8 +2,10 @@
 
 #include "core/vm.h"
 #include "arch/interface.h"
+#include "core/spinlock.h"
 #include <ebl/linked_list.h>
 #include <ebl/memory.h>
+#include <ebl/thread_safety.h>
 
 namespace core {
 
@@ -28,15 +30,9 @@ namespace core {
 
     void thread_preempt();
     void thread_yield();
-    void schedule_next_thread();
+    void schedule_next_thread(thread* oldthread);
 
 } // namespace kernel
-
-// Global variables (thread queues etc.)
-namespace g {
-    extern core::thread_list_head thread_queue;
-    extern ebl::LPtr<core::thread> current_thread;
-}
 
 // Associate core::thread with thread_mlist's node
 MakeLinkedRef(core::thread);
