@@ -1,32 +1,7 @@
 {
     "files.associations": {
         "*.h": "cpp",
-        "array": "cpp",
-        "chrono": "cpp",
-        "cwchar": "cpp",
-        "string": "cpp",
-        "exception": "cpp",
-        "iterator": "cpp",
-        "initializer_list": "cpp",
-        "iosfwd": "cpp",
-        "istream": "cpp",
-        "new": "cpp",
-        "ostream": "cpp",
-        "ratio": "cpp",
-        "stdexcept": "cpp",
-        "thread": "cpp",
-        "tuple": "cpp",
-        "type_traits": "cpp",
-        "utility": "cpp",
-        "deque": "cpp",
-        "unordered_map": "cpp",
-        "vector": "cpp",
-        "string_view": "cpp",
-        "bit": "cpp",
-        "memory": "cpp",
-        "limits": "cpp",
-        "optional": "cpp",
-        "algorithm": "cpp"
+        "*.cc": "cpp"
     },
 
     // Have some fun with the icons :)
@@ -37,5 +12,17 @@
         "loader": "upload"
     },
     "nasm.outputFormat": "elf32",
-    "editor.rulers": [ 80, 100 ]
+    "editor.rulers": [ 80, 100 ],
+    "[cmake]": {
+        "editor.tabSize": 8,
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": true
+    },
+    "C_Cpp.codeAnalysis.runAutomatically": false,
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
+    "C_Cpp.codeAnalysis.exclude": {
+        "**/build/**": true
+    },
+    "C_Cpp.autoAddFileAssociations": false
 }

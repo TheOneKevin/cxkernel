@@ -10,7 +10,17 @@
 				"isDefault": true
 			},
 			"problemMatcher": [
-				"$gcc"
+				"$gcc",
+				{
+					"owner": "linker",
+					"pattern": {
+						"regexp": "^(ld): (error): (.*)$",
+						"file": 1,
+						"severity": 2,
+						"message": 3
+					},
+					"fileLocation": ["relative","${workspaceFolder}/build"]
+				}
 			],
 			"options": {
 				"cwd": "${workspaceFolder}/build"
