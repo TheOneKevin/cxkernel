@@ -6,6 +6,14 @@ file(GLOB SOURCES
         "${CMAKE_CURRENT_LIST_DIR}/*.asm"
 )
 
+# Manually set the language + flags for the assembly file
+set_source_files_properties(
+        "${CMAKE_CURRENT_LIST_DIR}/entry.asm"
+        PROPERTIES
+        LANGUAGE ASM_NASM
+        COMPILE_FLAGS "-felf64 -Fdwarf"
+)
+
 # Update target sources
 target_sources(cxkernel PRIVATE ${SOURCES})
 
@@ -21,5 +29,5 @@ target_link_options(
 target_compile_options(
         cxkernel PRIVATE
         $<$<COMPILE_LANGUAGE:CXX>:${STANDARD_CXX_FLAGS}
-                -mcmodel=${MCMODEL} -fno-pie -mabi=sysv -m64 -Wthread-safety>
+                -mcmodel=${MCMODEL} -fno-pie -mabi=sysv -m64>
 )

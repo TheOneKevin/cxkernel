@@ -36,8 +36,8 @@ set(STANDARD_LINKER_FLAGS
         -lgcc -nostdlib -ffreestanding -g
 )
 set(STANDARD_CXX_FLAGS
-        -Wall -Wextra -g -Og
+        -Wall -Wextra -Werror -g -Og
         -fno-rtti -fno-exceptions -nostdinc++
         -fno-omit-frame-pointer -fno-stack-protector
-        -ffreestanding -mno-red-zone
+        -ffreestanding -mno-red-zone -Wthread-safety
 )

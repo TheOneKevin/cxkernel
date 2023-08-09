@@ -14,9 +14,9 @@
 
 // Define initial GDT entries
 static ns::gdt_entry gdt[3] {
-    ns::gdt_entry{}, // null
-    ns::gdt_entry{0, 0, 0b1000}, // code
-    ns::gdt_entry{0, 0, 0b0010}, // data
+    ns::gdt_entry{},
+    ns::gdt_entry{0, 0, x86_64::segment_type::CODE_EXECUTE_READ},
+    ns::gdt_entry{0, 0, x86_64::segment_type::DATA_READ_WRITE}
 };
 
 // Pointer to GDT

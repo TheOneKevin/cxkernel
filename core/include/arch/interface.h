@@ -3,8 +3,9 @@
 #include <ebl/util.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <arch/types.h>
+#include "arch/types.h"
 
+struct loader_state;
 namespace core {
     struct thread;
 }
@@ -42,7 +43,7 @@ namespace arch {
 
     void switch_thread(core::thread* oldthread, core::thread* newthread);
     
-    void init(loader_state* state);
+    void init(::loader_state* state);
 
     int cpu_num();
     percpu* get_percpu();

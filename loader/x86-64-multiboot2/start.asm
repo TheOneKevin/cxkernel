@@ -71,7 +71,6 @@ _start:
 
 [GLOBAL enter_longmode]
 enter_longmode:
-    xchg bx, bx
     mov eax, [esp+4]
     mov cr3, eax
     mov eax, cr4
@@ -93,7 +92,6 @@ enter_longmode:
 [BITS 64]
 [GLOBAL _start64]
 _start64:
-    xchg bx, bx
     mov ax, 0x10            ; 0x10 is the offset in the GDT to our data segment
     mov ds, ax              ; Load all data segment selectors
     mov es, ax

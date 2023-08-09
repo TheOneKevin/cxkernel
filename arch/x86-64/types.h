@@ -101,6 +101,21 @@ namespace x86_64 {
     static_assert(sizeof(pde) == 8, "Size of pde is incorrect!");
     static_assert(sizeof(pte) == 8, "Size of pte is incorrect!");
 
+    // ref: Table 3-1 from Intel SDM Vol 3 3.4.5.1
+    enum class segment_type : uint8_t {
+        DATA_READ = 0b0000,
+        DATA_READ_WRITE = 0b0010,
+        CODE_EXECUTE_ACCESSED = 0b1001,
+        CODE_EXECUTE_READ = 0b1010
+    };
+
+    // ref: Table 3-2 from Intel SDM Vol 3 3.5
+    enum class descriptor_type : uint8_t {
+        TASK_GATE = 0b0101,
+        INTERRUPT_GATE = 0b1110,
+        TRAP_GATE = 0b1111,
+    };
+
     // ref: Figure 3-8 from Intel SDM Vol 3 3.4.5
     struct PACKED gdt_entry {
         uint16_t limit_low      : 16;
@@ -119,11 +134,11 @@ namespace x86_64 {
 
         gdt_entry() = default;
         
-        gdt_entry(uint32_t base, uint32_t limit, uint8_t type) {
+        gdt_entry(uint32_t base, uint32_t limit, segment_type type) {
             limit_low = limit & 0xFFFF;
             base_low = base & 0xFFFF;
             base_middle = (base >> 16) & 0xFF;
-            seg_type = type & 0xF;
+            seg_type = (uint8_t) type & 0xF;
             desc_type = 1;
             desc_priv = 00;
             present = 1;
@@ -143,4 +158,50 @@ namespace x86_64 {
         uint64_t base  : 64;
     };
     static_assert(sizeof(struct gdt_ptr) == 10, "gdt_ptr is not 10 bytes long!");
+
+    // ref: Figure 6-8 from Intel SDM Vol 3 6.14.1
+    struct PACKED idt_entry {
+        uint16_t offset_low  : 16;
+        uint16_t selector    : 16;
+        uint8_t  ist         : 3;
+        uint8_t  reserved0   : 5;
+        uint8_t  type        : 4;
+        uint8_t  zero        : 1;
+        uint8_t  dpl         : 2;
+        uint8_t  present     : 1;
+        uint16_t offset_mid  : 16;
+        uint32_t offset_high : 32;
+        uint32_t reserved1   : 32;
+        idt_entry() = default;
+        idt_entry(uint64_t isr_fn, descriptor_type type) {
+            offset_low = isr_fn & 0xFFFF;
+            selector = 0x08;
+            ist = 0;
+            reserved0 = 0;
+            this->type = (uint8_t) type & 0xF;
+            zero = 0;
+            dpl = 0;
+            present = 1;
+            offset_mid = (isr_fn >> 16) & 0xFFFF;
+            offset_high = (isr_fn >> 32) & 0xFFFFFFFF;
+            reserved1 = 0;
+        }
+    };
+    static_assert(sizeof(struct idt_entry) == 16, "idt_entry is not 16 bytes long!");
+
+    // ref: Figure 6-1 from Intel SDM Vol 3 6.10
+    struct PACKED idt_ptr {
+        uint16_t limit : 16;
+        uint64_t base  : 64;
+    };
+    static_assert(sizeof(struct idt_ptr) == 10, "idt_ptr is not 6 bytes long!");
+
+    struct PACKED int_frame {
+        uint64_t rdi, rsi, rbp, rbx, rdx, rcx, rax;         // pushed by isr_handler
+        uint64_t r8, r9, r10, r11, r12, r13, r14, r15;      // pushed by isr_handler
+        uint64_t vector;                                    // pushed by isrN
+        uint64_t err_code;                                  // pushed by isrN
+        uint64_t rip, cs, flags;                            // pushed by cpu
+        uint64_t user_sp, user_ss;                          // pushed by cpu if CPL changes
+    };
 }

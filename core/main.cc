@@ -37,6 +37,9 @@ extern "C" void kernel_entry(uint64_t state_ptr) {
             "PFN DB size mismatch, possible corruption");
     }
 
+    // Architecture-specific init
+    arch::init(&g::loader_state_);
+
     arch::disable_interrupts();
     arch::halt();
 }

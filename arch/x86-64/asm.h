@@ -15,6 +15,12 @@ static inline void cli() {
     FENCE;
 }
 
+static inline uint64_t read_cr2() {
+    uint64_t ret;
+    asm volatile("mov %%cr2, %0" : "=r"(ret));
+    return ret;
+}
+
 static inline uint32_t save_flags() {
     uint32_t state;
     asm volatile(
