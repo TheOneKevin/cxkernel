@@ -1,6 +1,5 @@
 #include "arch/types.h"
 #include "arch/interface.h"
-#include "x86-64/internal.h"
 #include "x86-64/asm.h"
 #include <ebl/stdio.h>
 
@@ -12,7 +11,6 @@ static x86_64::idt_ptr idt_reg_ptr {
 static arch::irq_handler_t irq_handlers[256] { };
 static void exception_handler(x86_64::int_frame& r, uint64_t rsp);
 extern "C" uint64_t isr_stub_table;
-extern "C" void load_idt(void* ptr);
 
 extern "C" void isr_handler(void* arg) {
     auto* regs = (x86_64::int_frame*) arg;
@@ -126,15 +124,14 @@ void exception_handler(x86_64::int_frame& r, uint64_t rsp) {
         "|  If you see this message again, please report |\n"
         "|  this to the developers.                      |\n"
         "|               _                               |\n"
-        "|         __   |-|             THE SYSTEM       |\n"
-        "|  jgs   [xx]  |=|            IS DEAD! x.x      |\n"
-        "|        ====`o\"^\" 0                            |\n"
+        "|         __   |-|           THE SYSTEM         |\n"
+        "|  jgs   [Ll]  |=|          IS DEAD! x.x        |\n"
+        "|        ====`o'^'                              |\n"
         "+===============================================+\n\n"
     );
 
     arch::halt();
 }
-
 
 void x86_64::init_idt() {
     for(int i = 0; i < 256; i++) {
@@ -144,5 +141,5 @@ void x86_64::init_idt() {
         };
         irq_handlers[i] = nullptr;
     }
-    load_idt((void*) &idt_reg_ptr);
+    asm volatile("lidt %0" : : "m" (idt_reg_ptr));
 }

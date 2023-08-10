@@ -40,6 +40,11 @@ extern "C" void kernel_entry(uint64_t state_ptr) {
     // Architecture-specific init
     arch::init(&g::loader_state_);
 
-    arch::disable_interrupts();
+    // Platform-specific init
+    platform::init();
+
+    // Enable interrupts and hand-off to the scheduler (FIXME: implement)
+    arch::enable_interrupts();
+    asm volatile("int $0x3");
     arch::halt();
 }

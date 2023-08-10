@@ -2,27 +2,17 @@
 
 SECTION .text
 
-[GLOBAL load_idt]
-load_idt:
-    lidt [rdi]
-    ret
-
 %assign i 0
 %rep 256
-    %if (i = 8) || (i >= 10 && i <= 14) || (i = 17) || (i = 20) || (i = 30)
-        ;[GLOBAL isr%+i]
-        isr%+i:
-            cli
+    isr%+i:
+        cli
+        %if (i = 8) || (i >= 10 && i <= 14) || (i = 17) || (i = 20) || (i = 30)        
             push i
-            jmp irq_stub
-    %else
-        ;[GLOBAL isr%+i]
-        isr%+i:
-            cli
+        %else
             push 0
             push i
-            jmp irq_stub
-    %endif
+        %endif
+        jmp irq_stub
     %assign i i+1
 %endrep
 

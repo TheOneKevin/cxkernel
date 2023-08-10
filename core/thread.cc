@@ -7,9 +7,6 @@ using ebl::move;
 using ebl::LPtr;
 using namespace core;
 
-static struct core::percpu percpu_arr[16];
-struct core::percpu* g::percpu = (core::percpu*) &percpu_arr;
-
 void core::thread_preempt() {
     // FIXME: Improve this alongside sched.cc, for now just yield.
     thread_yield();

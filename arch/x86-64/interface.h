@@ -81,7 +81,13 @@ namespace arch {
     }
 
     inline core::thread* get_current_thread() {
-        return (core::thread*) x86_64::read_gs_offset64(offsetof(percpu, curthread));
+        return get_percpu()->curthread;
     }
 
-}
+} // namespace arch
+
+namespace x86_64 {
+
+    void init_idt();
+
+} // namespace x86_64
