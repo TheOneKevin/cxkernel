@@ -26,15 +26,15 @@ extern "C" void isr_handler(void* arg) {
     }
 }
 
-void arch::irq_install_handler(irq_vector vector, irq_handler_t fn) {
+void arch::irq_install_handler(IrqVector vector, irq_handler_t fn) {
     irq_handlers[vector.vector] = fn;
 }
 
-void arch::irq_remove_handler(irq_vector vector) {
+void arch::irq_remove_handler(IrqVector vector) {
     irq_handlers[vector.vector] = nullptr;
 }
 
-arch::irq_handler_t arch::irq_get_handler(irq_vector vector) {
+arch::irq_handler_t arch::irq_get_handler(IrqVector vector) {
     return irq_handlers[vector.vector];
 }
 

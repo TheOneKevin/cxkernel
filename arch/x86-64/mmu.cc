@@ -7,9 +7,14 @@
 using x86_64::page_flags;
 
 static void map_single_page(paddr_t phys, vaddr_t virt, page_flags flags) {
-    
+    (void) phys;
+    (void) virt;
+    (void) flags;
 }
 
 void x86_64::map_pages(core::page_node* pages, vaddr_t virt, page_flags flags) {
-
+    (void) pages;
+    (void) virt;
+    (void) flags;
+    (void) map_single_page;
 }

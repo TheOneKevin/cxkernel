@@ -6,7 +6,7 @@
 
 namespace arch {
 
-void switch_thread(core::thread* oldthread, core::thread* newthread) {
+void switch_thread(core::Thread* oldthread, core::Thread* newthread) {
     get_percpu()->curthread = newthread;
 
     // Assumes SystemV ABI

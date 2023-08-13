@@ -18,7 +18,7 @@ void Mutex::lock() {
 	} else /* if(state_ == State::LOCKED) */ {
         // Atomically put the thread to sleep -- be careful of wakeup races
         auto* cur_th_ptr = arch::get_current_thread();
-        cur_th_ptr->state = threadstate::BLOCKED;
+        cur_th_ptr->state = ThreadState::BLOCKED;
         wait_queue_.push_back_unsafe(thread_list_type::container_of(cur_th_ptr));
         arch::spin_unlock(&lock_);
         schedule_next_thread(cur_th_ptr);
@@ -44,7 +44,7 @@ void Mutex::unlock() {
 		// Otherwise, wake up the next thread in the queue
 		// and pass on the lock without unlocking it
 		auto next_th = wait_queue_.pop_front();
-		next_th->state = threadstate::READY;
+		next_th->state = ThreadState::READY;
 		core::get_percpu().thread_queue.push_back(move(next_th));
 	}
 	arch::spin_unlock(&lock_);

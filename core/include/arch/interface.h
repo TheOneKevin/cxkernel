@@ -5,9 +5,9 @@
 #include <stdint.h>
 #include "arch/types.h"
 
-struct loader_state;
+struct LoaderState;
 namespace core {
-    struct thread;
+    struct Thread;
 }
 
 namespace arch {
@@ -20,35 +20,35 @@ namespace arch {
         return (addr + page_size - 1) & ~(page_size - 1);
     }
 
-    struct spinlock_backend;
-    struct spinlock_state;
-    struct thread_backend;
-    struct irq_vector;
-    struct loader_state;
-    struct percpu;
-    struct address_space;
+    struct SpinlockBackend;
+    struct SpinlockState;
+    struct ThreadBackend;
+    struct IrqVector;
+    struct LoaderState;
+    struct PerCPU;
+    struct AddressSpace;
     typedef void (*irq_handler_t)(void*);
 
-    void irq_install_handler(irq_vector vector, irq_handler_t fn);
-    void irq_remove_handler(irq_vector vector);
-    irq_handler_t irq_get_handler(irq_vector vector);
+    void irq_install_handler(IrqVector vector, irq_handler_t fn);
+    void irq_remove_handler(IrqVector vector);
+    irq_handler_t irq_get_handler(IrqVector vector);
 
-    void spin_lock(spinlock_backend* lock);
-    void spin_unlock(spinlock_backend* lock);
-    void spin_save_state(spinlock_state* state);
-    void spin_restore_state(spinlock_state const* state);
+    void spin_lock(SpinlockBackend* lock);
+    void spin_unlock(SpinlockBackend* lock);
+    void spin_save_state(SpinlockState* state);
+    void spin_restore_state(SpinlockState const* state);
 
     void enable_interrupts();
     void disable_interrupts();
     [[noreturn]] void halt();
 
-    void switch_thread(core::thread* oldthread, core::thread* newthread);
+    void switch_thread(core::Thread* oldthread, core::Thread* newthread);
     
-    void init(::loader_state* state);
+    void init(::LoaderState* state);
 
     int cpu_num();
-    percpu* get_percpu();
-    core::thread* get_current_thread();
+    PerCPU* get_percpu();
+    core::Thread* get_current_thread();
 
     bool is_heap_address(vaddr_t addr);
     void* grow_heap(unsigned int num_pages);

@@ -32,9 +32,9 @@ private:
         FREE,
         LOCKED,
     };
-    struct arch::spinlock_backend lock_;
+    struct arch::SpinlockBackend lock_;
     thread_list_head wait_queue_;
-    core::thread* owner_;
+    core::Thread* owner_;
     State state_;
 private:
     void lock();

@@ -5,7 +5,7 @@
 #include <ebl/stdio.h>
 
 namespace g {
-    loader_state loader_state_{};
+    LoaderState loader_state_{};
     auto& pfndb_freelist = loader_state_.pfndb_freelist;
     auto& pfndb_rsrvlist = loader_state_.pfndb_rsrvlist;
     auto& total_phys_pgs = loader_state_.total_phys_pgs;
@@ -23,7 +23,7 @@ extern "C" void kernel_entry(uint64_t state_ptr) {
     platform::console_puts("Hello, world (from the kernel)!\n");
 
     // Save state and check integrity
-    g::loader_state_ = *(loader_state*) state_ptr;
+    g::loader_state_ = *(LoaderState*) state_ptr;
     assert(
         g::loader_state_.magic_start == LOADER_ABI_MAGIC_START &&
         g::loader_state_.magic_end == LOADER_ABI_MAGIC_END,

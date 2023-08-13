@@ -14,8 +14,8 @@ template<typename T> struct LinkedRef { typedef T type; };
  *        No other linked-list node types can use the same value type.
  *        This will ensure any LPtr<T> will be able to uniquely convert to T*.
  */
-#define MakeLinkedRef(T) \
-    template<> struct ebl::LinkedRef<T> { typedef T##_node type; }
+#define MakeLinkedRef(T, V) \
+    template<> struct ebl::LinkedRef<T> { typedef V type; }
 
 /**
  * @brief Does the opposite of MakeLinkedRef. This is useful for lists whose

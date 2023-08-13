@@ -7,6 +7,7 @@
 
 typedef uint64_t vaddr_t;
 typedef uint64_t paddr_t;
+typedef uint64_t timestamp_t;
 
 namespace arch {
     constexpr unsigned int page_size = 4096;

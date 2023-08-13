@@ -7,32 +7,32 @@
 
 namespace arch {
 
-    struct spinlock_backend {
+    struct SpinlockBackend {
         volatile uint32_t x = 0;
     };
 
-    struct spinlock_state {
+    struct SpinlockState {
         uint32_t flags;
     };
 
-    struct irq_vector {
+    struct IrqVector {
         uint8_t vector;
     };
 
-    struct loader_state {
+    struct LoaderState {
     };
 
-    struct percpu {
-        struct percpu* self;
+    struct PerCPU {
+        struct PerCPU* self;
         int cpu_num;
-        core::thread* curthread;
+        core::Thread* curthread;
     };
 
-    struct address_space {
+    struct AddressSpace {
         x86_64::pml4e* pml4;
     };
 
-    inline void spin_lock(spinlock_backend* lock) {
+    inline void spin_lock(SpinlockBackend* lock) {
         #define NL "\n"
         asm volatile(
             "lock bts $0, (%0)"     NL
@@ -48,16 +48,16 @@ namespace arch {
         #undef NL
     }
 
-    inline void spin_unlock(spinlock_backend* lock) {
+    inline void spin_unlock(SpinlockBackend* lock) {
         lock->x = 0;
     }
 
-    inline void spin_save_state(spinlock_state* state) {
+    inline void spin_save_state(SpinlockState* state) {
         state->flags = x86_64::save_flags();
         disable_interrupts();
     }
 
-    inline void spin_restore_state(spinlock_state const* state) {
+    inline void spin_restore_state(SpinlockState const* state) {
         // Restore will re-enable interrupts.
         x86_64::restore_flags(state->flags);
     }
@@ -77,14 +77,14 @@ namespace arch {
     }
 
     inline int cpu_num() {
-        return (int) x86_64::read_gs_offset64(offsetof(percpu, cpu_num));
+        return (int) x86_64::read_gs_offset64(offsetof(PerCPU, cpu_num));
     }
 
-    inline percpu* get_percpu() {
-        return (percpu*) x86_64::read_gs_offset64(offsetof(percpu, self));
+    inline PerCPU* get_percpu() {
+        return (PerCPU*) x86_64::read_gs_offset64(offsetof(PerCPU, self));
     }
 
-    inline core::thread* get_current_thread() {
+    inline core::Thread* get_current_thread() {
         return get_percpu()->curthread;
     }
 

@@ -1,3 +1,3 @@
 #include "core/mp.h"
 
-struct core::percpu g::percpu[MAX_SMP_CPUS] = {};
+struct core::PerCPU g::percpu[MAX_SMP_CPUS] = {};

@@ -2,12 +2,12 @@
 
 using namespace core;
 
-void Spinlock::lock(arch::spinlock_state& x) {
+void Spinlock::lock(arch::SpinlockState& x) {
     arch::spin_save_state(&x);
     arch::spin_lock(&backend_);
 }
 
-void Spinlock::unlock(arch::spinlock_state const& x) {
+void Spinlock::unlock(arch::SpinlockState const& x) {
     arch::spin_restore_state(&x);
     arch::spin_unlock(&backend_);
 }

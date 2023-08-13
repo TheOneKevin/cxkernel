@@ -15,7 +15,7 @@ private:
     // Private policy class for ebl::Guard.
     struct Policy {
     private:
-        arch::spinlock_state irq_flags_;
+        arch::SpinlockState irq_flags_;
         Spinlock* lock_;
     public:
         Policy(Spinlock* lock) : irq_flags_{}, lock_{lock} {}
@@ -30,10 +30,10 @@ private:
         }
     };
 private:
-    struct arch::spinlock_backend backend_;
+    struct arch::SpinlockBackend backend_;
 private:
-    void lock(arch::spinlock_state& x);
-    void unlock(arch::spinlock_state const& x);
+    void lock(arch::SpinlockState& x);
+    void unlock(arch::SpinlockState const& x);
 public:
     Spinlock() : backend_{} {}
 };
@@ -61,7 +61,7 @@ private:
         }
     };
 private:
-    struct arch::spinlock_backend backend_;
+    struct arch::SpinlockBackend backend_;
 private:
     void lock();
     void unlock();

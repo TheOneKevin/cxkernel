@@ -30,10 +30,10 @@ public:
         };
         T value;
         explicit operator T*() { return &value; }
-    private:
+    public:
         template<typename... Args>
         node(Args&&... args) noexcept
-            : value{forward<Args>(args)...}, prev{nullptr}, next{nullptr} { };
+            : prev{nullptr}, next{nullptr}, value{forward<Args>(args)...} { };
     };
 private:
     using list_node = node;

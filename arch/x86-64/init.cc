@@ -6,13 +6,13 @@
 #include "assert.h"
 #include "core/thread.h"
 
-static arch::percpu percpu_array[MAX_SMP_CPUS]{};
-static core::thread boot_thread {
+static arch::PerCPU percpu_array[MAX_SMP_CPUS]{};
+static core::Thread boot_thread {
     .name = "Kernel boot thread",
     .address_space = nullptr
 };
 
-void arch::init(::loader_state* state) {
+void arch::init(::LoaderState* state) {
     (void) state;
 
     // Initialize percpu array

@@ -82,7 +82,7 @@ void console_log(char const* c) {
 //===----------------------------------------------------------------------===//
 // Main entry point (called from start.s)
 
-static struct loader_state state {};
+static struct LoaderState state {};
 extern "C" void(*init_array_start_)();
 extern "C" void(*init_array_end_)();
 extern "C" void enter_longmode(
@@ -240,7 +240,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
     // Initialize loader state
     pfndb_freelist.shift(pfndb_offset);
     pfndb_rsrvlist.shift(pfndb_offset);
-    state = loader_state {
+    state = LoaderState {
         .magic_start = LOADER_ABI_MAGIC_START,
         .kernel_elf = (vaddr_t) module->mod_start,
         .pfndb_rsrvlist = pfndb_rsrvlist,
