@@ -26,6 +26,7 @@ namespace arch {
     struct irq_vector;
     struct loader_state;
     struct percpu;
+    struct address_space;
     typedef void (*irq_handler_t)(void*);
 
     void irq_install_handler(irq_vector vector, irq_handler_t fn);
@@ -48,6 +49,9 @@ namespace arch {
     int cpu_num();
     percpu* get_percpu();
     core::thread* get_current_thread();
+
+    bool is_heap_address(vaddr_t addr);
+    void* grow_heap(unsigned int num_pages);
 
 } // namespace arch
 

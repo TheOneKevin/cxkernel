@@ -22,11 +22,13 @@ namespace core {
         char name[30];
         enum threadstate state;
         struct kernstack stack;
+        struct address_space* address_space;
         struct arch::thread_backend backend;
     };
 
-    using thread_node = ebl::IntrusiveListNode<thread, 1>;
-    using thread_list_head = thread_node::list<0>;
+    using thread_list_type = ebl::IntrusiveList<thread, 1>;
+    using thread_node = thread_list_type::node;
+    using thread_list_head = thread_list_type::list<0>;
 
     void thread_preempt();
     void thread_yield();

@@ -57,4 +57,15 @@ static inline uint8_t inb(uint16_t port) {
     return ret;
 }
 
-} // namespace 64
+enum class MSR : uint32_t {
+    IA32_GS_BASE = 0xC0000101,
+    IA32_KERNEL_GS_BASE = 0xC0000102
+};
+
+static inline void wrmsr(MSR sel, uint64_t value) {
+    uint32_t low = value & 0xFFFFFFFF;
+    uint32_t high = value >> 32;
+    asm volatile ("wrmsr" : : "c"(sel), "a"(low), "d"(high));
+}
+
+} // namespace x86_64

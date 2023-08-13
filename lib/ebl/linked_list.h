@@ -6,30 +6,37 @@
 
 namespace ebl {
 
-//! @brief Checks if the LinkedRef type matches the IntrusiveListNode type.
+//! @brief Checks if the LinkedRef type matches the IntrusiveList type.
 //!        This is used to ensure that the LPtr<T> type is used correctly.
 //!        See: MakeLinkedRef, ProhibitLinkedRef
 #define LPtrCheck \
     static_assert( \
-        ebl::is_same_v<IntrusiveListNode<T, N>, typename LinkedRef<T>::type>, \
-        "LinkedRef<T>::type does not match the IntrusiveListNode<T, N> caller");
+        ebl::is_same_v<IntrusiveList<T, N>::list_node, typename LinkedRef<T>::type>, \
+        "LinkedRef<T>::type does not match the IntrusiveList<T, N> caller");
 
 // A node in the list, containing both data and intrusive pointers.
 template<typename T, int N>
-class ABICOMPAT IntrusiveListNode {
-    using list_node = IntrusiveListNode;
+class ABICOMPAT IntrusiveList {
 public:
-    union {
-        list_node* prev[N];
-        vaddr_t virt0_[N];
+    struct node {
+        friend class IntrusiveList;
+        union {
+            node* prev[N];
+            vaddr_t virt0_[N];
+        };
+        union {
+            node* next[N];
+            vaddr_t virt1_[N];
+        };
+        T value;
+        explicit operator T*() { return &value; }
+    private:
+        template<typename... Args>
+        node(Args&&... args) noexcept
+            : value{forward<Args>(args)...}, prev{nullptr}, next{nullptr} { };
     };
-    union {
-        list_node* next[N];
-        vaddr_t virt1_[N];
-    };
-    T value;
-    explicit operator T*() { return &value; }
-
+private:
+    using list_node = node;
 private:
     // An iterator for the list, implements required iterator functions.
     template<int i>
@@ -61,11 +68,6 @@ public:
         auto node = new list_node(forward<Args>(args)...);
         return LPtr<T>{node};
     }
-
-private:
-    template<typename... Args>
-    IntrusiveListNode(Args&&... args) noexcept
-        : value{forward<Args>(args)...}, prev{nullptr}, next{nullptr} { };
 
 public:
     // Selects a single list from the multilist

@@ -28,6 +28,10 @@ namespace arch {
         core::thread* curthread;
     };
 
+    struct address_space {
+        x86_64::pml4e* pml4;
+    };
+
     inline void spin_lock(spinlock_backend* lock) {
         #define NL "\n"
         asm volatile(
@@ -84,10 +88,14 @@ namespace arch {
         return get_percpu()->curthread;
     }
 
+    inline bool is_heap_address(vaddr_t addr) {
+        (void) addr;
+        return false;
+    }
+
+    inline void* grow_heap(unsigned int num_pages) {
+        (void) num_pages;
+        return nullptr;
+    }
+
 } // namespace arch
-
-namespace x86_64 {
-
-    void init_idt();
-
-} // namespace x86_64

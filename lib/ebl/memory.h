@@ -27,7 +27,7 @@ template<typename T> struct LinkedRef { typedef T type; };
 
 /**
  * @brief A unique pointer to a linked list node.
- * @ref ebl::IntrusiveListNode
+ * @ref ebl::IntrusiveList
  * 
  * @tparam T Type of the list node's value.
  */

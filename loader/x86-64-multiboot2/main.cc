@@ -9,6 +9,14 @@
 
 #define NL "\n"
 
+constexpr uint16_t kernel_pml4_idx = ns::pml4e_index(0xFFFF800000000000);
+constexpr uint64_t kernel_base = ns::phys_from_index(kernel_pml4_idx,0,0,0);
+constexpr uint64_t kernel_limit = ns::phys_from_index(kernel_pml4_idx+1,0,0,0);
+constexpr uint64_t kernel_stack_limit = kernel_limit - arch::page_size;
+constexpr uint64_t kernel_stack_base = kernel_stack_limit + arch::page_size - 8;
+constexpr uint64_t kernel_pfndb_base = ns::phys_from_index(kernel_pml4_idx+2,0,0,0);
+// constexpr uint64_t kernel_slab_base = ns::phys_from_index(kernel_pml4_idx+3,0,0,0);
+
 //===----------------------------------------------------------------------===//
 // Global variables and structures
 
@@ -165,9 +173,9 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
         if(ph.p_type != PT_LOAD) continue;
         assert(ph.p_align == (uint64_t) arch::page_size,
             "Program section not aligned - all sections must be page-aligned");
-        assert(ph.p_vaddr >= x86_64::kernel_base,
+        assert(ph.p_vaddr >= kernel_base,
             "Program section not in kernel address space");
-        assert(ph.p_vaddr + ph.p_memsz < x86_64::kernel_limit,
+        assert(ph.p_vaddr + ph.p_memsz < kernel_limit,
             "Program section exceeds kernel address space");
         vaddr_t v = ph.p_vaddr;
         paddr_t p = (paddr_t) ctx.get_image() + ph.p_offset;
@@ -198,7 +206,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
 
     // Allocate some space for the kernel stack
     // NOTE: The gaurd page for the kernel stack is going to be there anyway
-    map_page(pmm_alloc_page(), x86_64::kernel_stack_limit, ns::page_flags{
+    map_page(pmm_alloc_page(), kernel_stack_limit, ns::page_flags{
         .f {
             .writable = 1,
             .user = 0,
@@ -210,7 +218,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
     for(paddr_t i = 0; i < pfndb_sz_pgs; i++) {
         map_page(
             (paddr_t) pfndb_arr + i * arch::page_size,
-            x86_64::kernel_pfndb_base + i * arch::page_size,
+            kernel_pfndb_base + i * arch::page_size,
             ns::page_flags{
                 .f {
                     .writable = 1,
@@ -221,7 +229,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
     }
 
     // Shift pointers in PFNDB
-    const paddr_t pfndb_offset = x86_64::kernel_pfndb_base - (paddr_t) pfndb_arr;
+    const paddr_t pfndb_offset = kernel_pfndb_base - (paddr_t) pfndb_arr;
     for(paddr_t i = 0; i < total_phys_pgs; i++) {
         if(pfndb_arr[i].virt0_[0] != 0)
             pfndb_arr[i].virt0_[0] += pfndb_offset;
@@ -237,7 +245,6 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
         .kernel_elf = (vaddr_t) module->mod_start,
         .pfndb_rsrvlist = pfndb_rsrvlist,
         .pfndb_freelist = pfndb_freelist,
-        .pfndb_base = x86_64::kernel_pfndb_base,
         .total_phys_pgs = total_phys_pgs,
         .arch_state{},
         .magic_end = LOADER_ABI_MAGIC_END
@@ -251,7 +258,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
         (uint32_t) &gdt_ptr,
         (uint64_t) img->e_entry,
         (uint64_t) &state,
-        x86_64::kernel_stack_base
+        kernel_stack_base
     );
 
     assert(false, "Something terrible happend x_x");

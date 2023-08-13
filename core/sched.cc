@@ -10,7 +10,7 @@ using namespace core;
 void core::schedule_next_thread(thread* oldthread) {
     using namespace arch;
     // FIXME: Improve this. For now, just pick the head of the list.
-    auto* newthread = get_percpu()->thread_queue.pop_front_unsafe();
+    auto* newthread = get_percpu().thread_queue.pop_front_unsafe();
     assert(newthread != nullptr);
     assert(oldthread != nullptr);
     switch_thread(oldthread, &newthread->value);

@@ -1,6 +1,7 @@
 #include "arch/types.h"
 #include "arch/interface.h"
 #include "x86-64/asm.h"
+#include "x86-64/private.h"
 #include <ebl/stdio.h>
 
 static x86_64::idt_entry idt[256] {};

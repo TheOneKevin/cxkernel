@@ -15,6 +15,6 @@ void core::thread_preempt() {
 void core::thread_yield() {
     auto* oldthread = arch::get_current_thread();
     oldthread->state = threadstate::READY;
-    get_percpu()->thread_queue.push_back(thread_node::container_of(oldthread));
+    get_percpu().thread_queue.push_back(thread_list_type::container_of(oldthread));
     schedule_next_thread(oldthread);
 }

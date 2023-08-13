@@ -56,16 +56,6 @@ namespace x86_64 {
     }
 
     //===------------------------------------------------------------------===//
-    // Virtual memory layout
-    
-    constexpr uint64_t kernel_base = 0xFFFF800000000000;
-    constexpr uint64_t kernel_limit = phys_from_index(pml4e_index(kernel_base)+1,0,0,0);
-    // FIXME: Support KASLR
-    constexpr uint64_t kernel_stack_limit = kernel_limit - arch::page_size;
-    constexpr uint64_t kernel_stack_base = kernel_stack_limit + arch::page_size - 8;
-    constexpr uint64_t kernel_pfndb_base = kernel_limit;
-
-    //===------------------------------------------------------------------===//
     // CPU structures
 
     // ref: Figure 4-11 from Intel SDM Vol 3 4.5.4
