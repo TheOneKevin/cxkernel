@@ -2,18 +2,6 @@
     "configurations": [
         {
             "name": "Linux WSL",
-            "includePath": [
-                "${workspaceFolder}",
-                "${workspaceFolder}/arch",
-                "${workspaceFolder}/core/include",
-                "${workspaceFolder}/lib",
-                "${workspaceFolder}/platform"
-            ],
-            "defines": [
-                "ARCH_TARGET=x86-64",
-                "PLAT_TARGET=pc",
-                "ABI_ALIGN=8"
-            ],
             "compilerPath": "/usr/bin/clang++",
             "cStandard": "c17",
             "cppStandard": "c++20",

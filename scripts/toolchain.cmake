@@ -41,3 +41,20 @@ set(STANDARD_CXX_FLAGS
         -fno-omit-frame-pointer -fno-stack-protector
         -ffreestanding -mno-red-zone -Wthread-safety
 )
+
+# Set up coverage flags for clang
+set(CLANG_COVERAGE_OPTIONS -fprofile-instr-generate -fcoverage-mapping)
+
+# Add new test function
+function(add_llvm_coverage_test TEST_NAME)
+        target_compile_options(${TEST_NAME} PRIVATE ${CLANG_COVERAGE_OPTIONS})
+        target_link_options(${TEST_NAME} PRIVATE ${CLANG_COVERAGE_OPTIONS})
+        add_test(NAME ${TEST_NAME} COMMAND $<TARGET_FILE:${TEST_NAME}>)
+        set_property(
+                TEST ${TEST_NAME} PROPERTY ENVIRONMENT
+                "LLVM_PROFILE_FILE=${CMAKE_CURRENT_BINARY_DIR}/${TEST_NAME}.profraw"
+        )
+endfunction()
+
+# Enable testing!
+enable_testing()

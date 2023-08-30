@@ -17,3 +17,11 @@ target_include_directories(
         PUBLIC
         ${DOCTEST_INCLUDE_DIR}
 )
+
+add_llvm_coverage_test(library_tests)
+
+# TODO: Run these 3 commands after...
+# llvm-profdata merge -sparse library_tests.profraw -o library_tests.profdata
+# llvm-cov show -output-dir=coverage/report -format=html -instr-profile=library_tests.profdata -object=library_tests
+# llvm-cov export -format=lcov -instr-profile=library_tests.profdata -object=library_tests > coverage/lcov.info
+# --ignore-filename-regex="build|lib/tests/.*"
