@@ -25,5 +25,7 @@
     "C_Cpp.codeAnalysis.exclude": {
         "**/build/**": true
     },
-    "C_Cpp.autoAddFileAssociations": false
+    "C_Cpp.autoAddFileAssociations": false,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.errorSquiggles": "disabled"
 }

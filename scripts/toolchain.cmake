@@ -33,10 +33,10 @@ set(CONFIG_USE_PRIVATE_LIBGCC TRUE)
 
 # Set up the compiler and linker
 set(STANDARD_LINKER_FLAGS
-        -lgcc -nostdlib -ffreestanding -g
+        -lgcc -nostdlib -ffreestanding -g -gdwarf-4
 )
 set(STANDARD_CXX_FLAGS
-        -Wall -Wextra -Werror -g -Og
+        -Wall -Wextra -Werror -g -gdwarf-4 -Og
         -fno-rtti -fno-exceptions -nostdinc++
         -fno-omit-frame-pointer -fno-stack-protector
         -ffreestanding -mno-red-zone -Wthread-safety
