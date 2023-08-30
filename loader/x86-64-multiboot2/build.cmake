@@ -36,11 +36,11 @@ target_link_options(
         LINKER:-T${CMAKE_CURRENT_LIST_DIR}/linker.ld
         LINKER:--apply-dynamic-relocs
         LINKER:-z,max-page-size=0x1000
-        -mabi=sysv -m32
+        -no-pie -mabi=sysv -m32
 )
 target_compile_options(
         cxloader PRIVATE
-        $<$<COMPILE_LANGUAGE:CXX>:${STANDARD_CXX_FLAGS} -mabi=sysv -m32>
+        $<$<COMPILE_LANGUAGE:CXX>:${STANDARD_CXX_FLAGS} -fno-pie -m32>
 )
 
 # Update target properties
