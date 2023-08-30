@@ -1,54 +1,87 @@
 #pragma once
 
+#include "ebl/bit.h"
+#include "loaderabi.h"
 #include "arch/types.h"
 #include "core/spinlock.h"
 #include <stdint.h>
+#include <ebl/status.h>
 #include <ebl/linked_list.h>
 #include <ebl/memory.h>
 
 namespace core {
     struct ABICOMPAT Page;
-    struct VmMapping;
+    struct VmObject;
     struct VmRegion;
     struct AddressSpace;
 
-    using page_list_type = ebl::IntrusiveList<Page, 1>;
-    using page_list_head = page_list_type::list<0>;
-    using vm_mapping_list_type = ebl::IntrusiveList<VmMapping, 1>;
-    using vm_mapping_list_head = vm_mapping_list_type::list<0>;
-    using vm_region_list_type = ebl::IntrusiveList<VmRegion, 1>;
-    using vm_region_list_head = vm_region_list_type::list<0>;
+    struct VmObject final : ebl::RefCountable<VmObject*> {
+    private:
+        core::Spinlock lock_;
+        ebl::IntrusiveList<Page> pages_;
+    };
 
-    struct VmMapping {
-        vaddr_t offset;
-        vaddr_t limit;
-        page_list_head pages;
+    enum class VmRegionType : uint8_t {
+        HOLE = 0,
+        MAPPING = 1,
+        REGION = 2
     };
-    struct VmRegion {
-        vaddr_t base;
-        vaddr_t size;
-        uint32_t flags;
-        struct VmRegion* parent;
-        vm_region_list_head children;
-        vm_mapping_list_head mappings;
+
+    union VmRegionFlags {
+        using T = uint8_t;
+        T value;
+        ebl::BitField<T, 0, 1> cap_read;
+        ebl::BitField<T, 1, 1> cap_write;
+        ebl::BitField<T, 2, 1> cap_execute;
+        ebl::BitField<T, 3, 1> cap_specific;
+        ebl::BitField<T, 0, 4> capability;
+        ebl::BitField<VmRegionType, 4, 2> type;
     };
-    struct AddressSpace {
-        struct VmRegion* user_root;
-        struct VmRegion* kernel_root;
-        struct arch::AddressSpace backend;
+
+    struct VmRegion final : ebl::RefCountable<VmRegion*>, ebl::IntrusiveListNode<VmRegion> {
+    public:
+        status_t allocate_vmr_compact(
+            size_t size, uint8_t align_pow2, VmRegionFlags flags,
+            ebl::RefPtr<VmRegion>& vmr_out);
+        status_t allocate_vmr_sparse(
+            size_t size, uint8_t align_pow2, VmRegionFlags flags,
+            ebl::RefPtr<VmRegion>& vmr_out);
+        status_t map_pages(
+            vaddr_t offset, size_t size, VmRegionFlags flags,
+            ebl::RefPtr<VmObject> object, vaddr_t vmo_offset,
+            arch::mmu_flags mmu_flags, ebl::RefPtr<VmRegion>& map_out);
+        status_t protect(vaddr_t addr, vaddr_t size, arch::mmu_flags flags);
+    private:
+        status_t split(vaddr_t offset, size_t size, ebl::RefPtr<VmRegion>& vmr_out);
+    private:
+        vaddr_t base_;
+        vaddr_t size_;
+        VmRegionFlags flags_;
+        ebl::RefPtr<VmRegion> parent_;
+        ebl::RefPtr<AddressSpace> aspace_;
+        ebl::RefPtr<VmObject> object_;
+        ebl::IntrusiveList<VmRegion> children_;
     };
-    struct ABICOMPAT Page {
+
+    struct AddressSpace final : ebl::RefCountable<AddressSpace*> {
+    public:
+        arch::AddressSpace& arch() { return backend_; }
+    private:
+        VmRegion user_root_;
+        VmRegion kernel_root_;
+        arch::AddressSpace backend_;
+        core::Spinlock lock_;
+    };
+
+    struct ABICOMPAT Page final : ebl::IntrusiveListNode<Page> {
         uint32_t flags;
         core::Spinlock lock;
         union {
             vaddr_t u3_;
             struct AddressSpace* address_space;
         };
+        paddr_t paddr() const {
+            return (this - g::loader_state_.pfndb_arr) * arch::page_size;
+        }
     };
-    using page_node = page_list_type::node;
-    static_assert(sizeof(page_node) - sizeof(Page) == sizeof(vaddr_t)*2,
-        "Size of page node is unexpected given size of page struct!");
 }
-
-// Do not associate core::page with page_node
-ProhibitLinkedRef(core::Page);

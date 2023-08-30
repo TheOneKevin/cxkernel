@@ -3,9 +3,8 @@
 #include "core/thread.h"
 #include "core/mp.h"
 #include <ebl/guard.h>
+#include <ebl/linked_list.h>
 
-using ebl::move;
-using ebl::LPtr;
 using namespace core;
 
 void Mutex::lock() {
@@ -19,7 +18,7 @@ void Mutex::lock() {
         // Atomically put the thread to sleep -- be careful of wakeup races
         auto* cur_th_ptr = arch::get_current_thread();
         cur_th_ptr->state = ThreadState::BLOCKED;
-        wait_queue_.push_back_unsafe(thread_list_type::container_of(cur_th_ptr));
+        wait_queue_.push_back_unsafe(cur_th_ptr);
         arch::spin_unlock(&lock_);
         schedule_next_thread(cur_th_ptr);
         arch::spin_lock(&lock_);
@@ -43,9 +42,9 @@ void Mutex::unlock() {
 	} else {
 		// Otherwise, wake up the next thread in the queue
 		// and pass on the lock without unlocking it
-		auto next_th = wait_queue_.pop_front();
+		auto next_th = wait_queue_.pop_front_unsafe();
 		next_th->state = ThreadState::READY;
-		core::get_percpu().thread_queue.push_back(move(next_th));
+		core::get_percpu().thread_queue.push_back_unsafe(next_th);
 	}
 	arch::spin_unlock(&lock_);
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface.h"
+#include "types.h"
 
 namespace arch {
 

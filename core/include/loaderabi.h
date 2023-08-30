@@ -1,19 +1,27 @@
 #pragma once
 
 #include <elf/elf.h>
-#include "core/vm.h"
+#include <ebl/linked_list.h>
 #include "arch/interface.h"
+
+namespace core {
+    struct ABICOMPAT Page;
+}
 
 // I love boba :)
 constexpr uint32_t LOADER_ABI_MAGIC_START = 0xCAFEB0BA;
 constexpr uint32_t LOADER_ABI_MAGIC_END   = 0xBADBEEEF;
  
-struct PACKED ABICOMPAT LoaderState {
+struct PACKED ABICOMPAT LoaderState final {
     uint32_t magic_start;
     vaddr_t kernel_elf;
-    core::page_list_head pfndb_rsrvlist;
-    core::page_list_head pfndb_freelist;
+    ebl::IntrusiveList<core::Page> pfndb_rsrvlist;
+    ebl::IntrusiveList<core::Page> pfndb_freelist;
     paddr_t total_phys_pgs;
+    union {
+        core::Page* pfndb_arr;
+        vaddr_t unused0_;
+    };
     arch::LoaderState arch_state;
     uint32_t magic_end;
 };

@@ -1,13 +1,15 @@
 #pragma once
 
 enum E {
-    SUCCESS = 0,
+    OK = 0,
     INVALID,
-    NOT_IMPLEMENTED
+    NOT_IMPLEMENTED,
+    OUT_OF_MEMORY,
+    PERMISSION_DENIED
 };
 
 struct status_t {
     E e;
     status_t(E e) : e{e} {}
-    operator bool() const { return e == E::SUCCESS; }
+    operator bool() const { return e == E::OK; }
 };

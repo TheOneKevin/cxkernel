@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/thread.h"
+#include "ebl/linked_list.h"
 #include <ebl/guard.h>
 #include <ebl/thread_safety.h>
 
@@ -33,7 +34,7 @@ private:
         LOCKED,
     };
     struct arch::SpinlockBackend lock_;
-    thread_list_head wait_queue_;
+    ebl::IntrusiveList<Thread> wait_queue_;
     core::Thread* owner_;
     State state_;
 private:

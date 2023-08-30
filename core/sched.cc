@@ -13,5 +13,5 @@ void core::schedule_next_thread(Thread* oldthread) {
     auto* newthread = get_percpu().thread_queue.pop_front_unsafe();
     assert(newthread != nullptr);
     assert(oldthread != nullptr);
-    switch_thread(oldthread, &newthread->value);
+    switch_thread(oldthread, newthread);
 }

@@ -1,49 +1,159 @@
 #pragma once
 
+#include "ebl/type_traits.h"
 #include "memory.h"
 #include <stddef.h>
 #include "arch/types.h"
 
 namespace ebl {
 
-//! @brief Checks if the LinkedRef type matches the IntrusiveList type.
-//!        This is used to ensure that the LPtr<T> type is used correctly.
-//!        See: MakeLinkedRef, ProhibitLinkedRef
-#define LPtrCheck \
-    static_assert( \
-        ebl::is_same_v<IntrusiveList<T, N>::list_node, typename LinkedRef<T>::type>, \
-        "LinkedRef<T>::type does not match the IntrusiveList<T, N> caller");
-
-// A node in the list, containing both data and intrusive pointers.
-template<typename T, int N>
-class ABICOMPAT IntrusiveList {
-public:
-    struct node {
-        friend class IntrusiveList;
-        union {
-            node* prev[N];
-            vaddr_t virt0_[N];
-        };
-        union {
-            node* next[N];
-            vaddr_t virt1_[N];
-        };
-        T value;
-        explicit operator T*() { return &value; }
-    public:
-        template<typename... Args>
-        node(Args&&... args) noexcept
-            : prev{nullptr}, next{nullptr}, value{forward<Args>(args)...} { };
+template<typename T, int N = 1>
+struct ABICOMPAT IntrusiveListNode {
+    static constexpr int NumberOfLists = N;
+    union {
+        T* next[N];
+        vaddr_t virt0_[N];
     };
-private:
-    using list_node = node;
+    union {
+        T* prev[N];
+        vaddr_t virt1_[N];
+    };
+};
+
+template<typename T, int i = 0>
+class ABICOMPAT IntrusiveList {
+    struct iterator;
+    union {
+        T* root;
+        vaddr_t virt0_;
+    };
+    static consteval bool check_validity() {
+        return (i < T::NumberOfLists) &&
+            ebl::is_base_of_v<IntrusiveListNode<T, T::NumberOfLists>, T>;
+    }
+public:
+    // Constructs an empty list.
+    IntrusiveList(): root{nullptr} { };
+#ifdef LOADER
+    // Shift pointers by an offset
+    void shift(vaddr_t offset) {
+        static_assert(check_validity());
+        if(virt0_ != 0)
+            virt0_ += offset;
+    }
+#endif
+    // Returns a reference to the data contained in the first node.
+    T* first() const {
+        static_assert(check_validity());
+        return root;
+    }
+    // Returns a reference to the data contained in the last node.
+    T* last() const {
+        static_assert(check_validity());
+        if(root == nullptr)
+            return nullptr;
+        return root->prev[i];
+    }
+    // Returns if this list is empty.
+    bool empty() const {
+        static_assert(check_validity());
+        return root == nullptr;
+    }
+    // Inserts new_node before node. Does nothing if the
+    // node is nullptr or equal to new_node.
+    void insert_before_unsafe(T* node, T* new_node) {
+        static_assert(check_validity());
+        if(node == nullptr || new_node == nullptr || node == new_node)
+            return;
+        node->prev[i]->next[i] = new_node;
+        new_node->prev[i] = node->prev[i];
+        new_node->next[i] = node;
+        node->prev[i] = new_node;
+    }
+    // Remove node from the list. Does nothing if the node is nullptr.
+    void remove_unsafe(T* node) {
+        static_assert(check_validity());
+        if(node == nullptr)
+            return;
+        node->prev[i]->next[i] = node->next[i];
+        node->next[i]->prev[i] = node->prev[i];
+        node->prev[i] = nullptr;
+        node->next[i] = nullptr;
+    }
+    // push_front but with raw pointers
+    void push_front_unsafe(T* node) {
+        static_assert(check_validity());
+        if(root == nullptr) {
+            root = node;
+            node->prev[i] = node;
+            node->next[i] = node;
+        } else {
+            insert_before_unsafe(root, node);
+            root = node;
+        }
+    }
+    // push_back but with raw pointers
+    void push_back_unsafe(T* node) {
+        static_assert(check_validity());
+        if(root == nullptr) {
+            root = node;
+            node->prev[i] = node;
+            node->next[i] = node;
+        } else {
+            insert_before_unsafe(root, node);
+        }
+    }
+    // pop_front but with raw pointers
+    T* pop_front_unsafe() {
+        static_assert(check_validity());
+        T* node = root;
+        if(root == nullptr) // Size of list is 0
+            return nullptr;
+        if(root->next[i] == root) { // Size of list is 1
+            root = nullptr;
+            return node;
+        }
+        root = root->next[i];
+        remove_unsafe(node);
+        return node;
+    }
+    // pop_back but with raw pointers
+    T* pop_back_unsafe() {
+        static_assert(check_validity());
+        T* node = root->prev[i];
+        if(root == nullptr) // Size of list is 0
+            return nullptr;
+        if(root == node) { // Size of list is 1
+            root = nullptr;
+            return node;
+        }
+        remove_unsafe(node);
+        if(node == root)
+            root = nullptr;
+        return node;
+    }
+    // Returns an iterator to the beginning of the list.
+    iterator begin() const {
+        static_assert(check_validity());
+        return iterator(root, false);
+    }
+    // Returns an iterator to the end of the list.
+    iterator end() const {
+        static_assert(check_validity());
+        return iterator(root, root != nullptr);
+    }
+    // Get list size
+    size_t size() const {
+        static_assert(check_validity());
+        size_t size = 0;
+        for(auto it = begin(); it != end(); ++it, ++size);
+        return size;
+    }
 private:
     // An iterator for the list, implements required iterator functions.
-    template<int i>
-    class iterator {
-    public:
-        iterator(list_node* x, bool flag): list{x}, flag{flag} { };
-        T& operator *() const { return list -> value; }
+    struct iterator {
+        iterator(T* x, bool flag): list{x}, flag{flag} { };
+        T& operator *() const { return *list; }
         iterator& operator ++() {
             flag = true;
             list = list -> next[i];
@@ -54,165 +164,9 @@ private:
         bool operator!= (const iterator& a) const {
             return list != a.list || flag != a.flag; };
     private:
-        list_node* list;
+        T* list;
         bool flag;
     };
-
-public:
-    static list_node* container_of(T* ptr) {
-        return (list_node*)((char*)ptr - offsetof(list_node, value));
-    }
-
-    template <typename... Args>
-    static LPtr<T> construct(Args&&... args) {
-        auto node = new list_node(forward<Args>(args)...);
-        return LPtr<T>{node};
-    }
-
-public:
-    // Selects a single list from the multilist
-    // Implementation is based off a circularly linked list
-    template<int i>
-    struct ABICOMPAT list final {
-    private:
-        static_assert(i < N, "Multilist select index (i) cannot exceed total list count N");
-        friend class IntrusiveMultilist;
-        union {
-            list_node* root;
-            vaddr_t virt0_;
-        };
-    public:
-        // Constructs an empty list.
-        list(): root{nullptr} { };
-#ifdef LOADER
-        // Shift pointers by an offset
-        void shift(vaddr_t offset) {
-            if(virt0_ != 0)
-                virt0_ += offset;
-        }
-#endif
-        // Returns a reference to the data contained in the first node.
-        list_node* first() const {
-            return root;
-        }
-        // Returns a reference to the data contained in the last node.
-        list_node* last() const {
-            if(root == nullptr)
-                return nullptr;
-            return root->prev[i];
-        }
-        // Returns if this list is empty.
-        bool empty() const {
-            return root == nullptr;
-        }
-        // Inserts new_node before node. Does nothing if the
-        // node is nullptr or equal to new_node.
-        void insert_before_unsafe(list_node* node, list_node* new_node) {
-            if(node == nullptr || new_node == nullptr || node == new_node)
-                return;
-            node->prev[i]->next[i] = new_node;
-            new_node->prev[i] = node->prev[i];
-            new_node->next[i] = node;
-            node->prev[i] = new_node;
-        }
-        // Remove node from the list. Does nothing if the node is nullptr.
-        void remove_unsafe(list_node* node) {
-            if(node == nullptr)
-                return;
-            node->prev[i]->next[i] = node->next[i];
-            node->next[i]->prev[i] = node->prev[i];
-            node->prev[i] = nullptr;
-            node->next[i] = nullptr;
-        }
-        // push_front but with raw pointers
-        void push_front_unsafe(list_node* node) {
-            if(root == nullptr) {
-                root = node;
-                node->prev[i] = node;
-                node->next[i] = node;
-            } else {
-                insert_before_unsafe(root, node);
-                root = node;
-            }
-        }
-        // push_back but with raw pointers
-        void push_back_unsafe(list_node* node) {
-            if(root == nullptr) {
-                root = node;
-                node->prev[i] = node;
-                node->next[i] = node;
-            } else {
-                insert_before_unsafe(root, node);
-            }
-        }
-        // pop_front but with raw pointers
-        list_node* pop_front_unsafe() {
-            list_node* node = root;
-            if(root == nullptr) // Size of list is 0
-                return nullptr;
-            if(root->next[i] == root) { // Size of list is 1
-                root = nullptr;
-                return node;
-            }
-            root = root->next[i];
-            remove_unsafe(node);
-            return node;
-        }
-        // pop_back but with raw pointers
-        list_node* pop_back_unsafe() {
-            list_node* node = root->prev[i];
-            if(root == nullptr) // Size of list is 0
-                return nullptr;
-            if(root == node) { // Size of list is 1
-                root = nullptr;
-                return node;
-            }
-            remove_unsafe(node);
-            if(node == root)
-                root = nullptr;
-            return node;
-        }
-        // Pushes existing node to the back of the list.
-        void push_back(LPtr<T> elem) {
-            LPtrCheck;
-            list_node* node = container_of(elem.get());
-            push_back_unsafe(node);
-            elem.release();
-        }
-        // Pushes existing node to the front of the list.
-        void push_front(LPtr<T> elem) {
-            LPtrCheck;
-            list_node* node = container_of(elem.get());
-            push_front_unsafe(node);
-            elem.release();
-        }
-        // Pop the first node from the list.
-        LPtr<T> pop_front() {
-            LPtrCheck;
-            return LPtr<T>{pop_front_unsafe()};
-        }
-        // Pop the last node from the list.
-        LPtr<T> pop_back() {
-            LPtrCheck;
-            return LPtr<T>{pop_back_unsafe()};
-        }
-        // Returns an iterator to the beginning of the list.
-        iterator<i> begin() const {
-            return iterator<i>(root, false);
-        }
-        // Returns an iterator to the end of the list.
-        iterator<i> end() const {
-            return iterator<i>(root, root != nullptr);
-        }
-        // Get list size
-        size_t size() const {
-            size_t size = 0;
-            for(auto it = begin(); it != end(); ++it, ++size);
-            return size;
-        }
-    };
 };
-
-#undef LPtrCheck
 
 } // namespace ebl

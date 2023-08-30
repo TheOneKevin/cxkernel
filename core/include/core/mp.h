@@ -2,12 +2,13 @@
 
 #include "core/thread.h"
 #include "arch/interface.h"
+#include "ebl/linked_list.h"
 
 constexpr int MAX_SMP_CPUS = 32;
 
 namespace core {
     struct PerCPU {
-        core::thread_list_head thread_queue{};
+        ebl::IntrusiveList<Thread> thread_queue{};
     };
 }
 

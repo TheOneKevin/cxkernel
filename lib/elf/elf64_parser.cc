@@ -49,5 +49,5 @@ status_t N::Context64::load(elf64_ehdr_t *hdr) {
     phdr = (elf64_phdr_t*)((uintptr_t) hdr + hdr->e_phoff);
     symtab = find_section(".symtab");
     strtab = find_section(".strtab");
-    return E::SUCCESS;
+    return E::OK;
 }

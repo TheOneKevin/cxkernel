@@ -46,6 +46,35 @@ template <class T, class M> M get_member_type(M T:: *);
 
 template <class... T> struct always_false : ebl::false_type {};
 
+// conditional
+template<bool B, class T, class F> struct conditional { typedef T type; };
+template<class T, class F> struct conditional<false, T, F> { typedef F type; };
+template<bool B, class T, class F>
+using conditional_t = typename conditional<B, T, F>::type;
+
+// is_base_of
+template <class B, class D>
+struct is_base_of : public internal::integral_constant<bool, __is_base_of(B, D)> {};
+template <class B, class D>
+inline constexpr bool is_base_of_v = is_base_of<B, D>::value;
+
+// is_integral
+template <class T>  struct is_integral                     : public false_type {};
+template <>         struct is_integral<bool>               : public true_type {};
+template <>         struct is_integral<char>               : public true_type {};
+template <>         struct is_integral<signed char>        : public true_type {};
+template <>         struct is_integral<unsigned char>      : public true_type {};
+template <>         struct is_integral<wchar_t>            : public true_type {};
+template <>         struct is_integral<short>              : public true_type {};
+template <>         struct is_integral<unsigned short>     : public true_type {};
+template <>         struct is_integral<int>                : public true_type {};
+template <>         struct is_integral<unsigned int>       : public true_type {};
+template <>         struct is_integral<long>               : public true_type {};
+template <>         struct is_integral<unsigned long>      : public true_type {};
+template <>         struct is_integral<long long>          : public true_type {};
+template <>         struct is_integral<unsigned long long> : public true_type {};
+template <class T>  inline constexpr bool is_integral_v = is_integral<T>::value;
+
 /*===----------------------------------------------------------------------===*/
 // ref: ??? (I forgot where I got this from)
 
@@ -93,5 +122,14 @@ using is_detected_exact = is_same<Expected, detected_t<Op, Args...>>;
 
 template<class Expected, template<class...> class Op, class... Args>
 inline constexpr bool is_detected_exact_v = is_detected_exact<Expected, Op, Args...>::value;
+
+/*===----------------------------------------------------------------------===*/
+// Determines if T is a complete type. Requires clang-13 or later.
+// ref: https://devblogs.microsoft.com/oldnewthing/20190710-00/?p=102678
+
+template<typename T, typename G = decltype([](){})>
+consteval bool is_type_complete() {
+    return requires { typename void_t<decltype(sizeof(T))>; };
+}
 
 } // namespace ebl

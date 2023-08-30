@@ -9,6 +9,8 @@
 
 namespace core {
 
+    struct Thread;
+
     enum class ThreadState {
         RUN, READY, SLEEP, BLOCKED, ZOMBIE
     };
@@ -18,23 +20,16 @@ namespace core {
         size_t size;
     };
 
-    struct Thread final {
+    struct Thread final : ebl::RefCountable<Thread>, ebl::IntrusiveListNode<Thread> {
         char name[30];
         enum ThreadState state;
         struct KernStack stack;
-        struct AddressSpace* address_space;
+        ebl::RefPtr<AddressSpace> address_space;
         struct arch::ThreadBackend backend;
     };
-
-    using thread_list_type = ebl::IntrusiveList<Thread, 1>;
-    using thread_node = thread_list_type::node;
-    using thread_list_head = thread_list_type::list<0>;
 
     void thread_preempt();
     void thread_yield();
     void schedule_next_thread(Thread* oldthread);
 
 } // namespace kernel
-
-// Associate core::thread with thread_mlist's node
-MakeLinkedRef(core::Thread, core::thread_node);

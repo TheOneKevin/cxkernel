@@ -22,10 +22,9 @@ static multiboot_mmap_list mmap_list{nullptr};
 static auto mmap_it = mmap_list.begin();
 
 // List-based PMM structs (free list and reserved list)
-using page_node_t = core::page_node;
 decltype(pfndb_freelist) pfndb_freelist{};
 decltype(pfndb_rsrvlist) pfndb_rsrvlist{};
-page_node_t* pfndb_arr = nullptr;
+core::Page* pfndb_arr = nullptr;
 paddr_t total_phys_pgs = 0;
 paddr_t pfndb_sz_bytes = 0;
 paddr_t pfndb_sz_pgs = 0;
@@ -115,9 +114,9 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap) {
 
     // Allocate PFN database
     total_phys_pgs = largest_phys_addr / arch::page_size;
-    pfndb_sz_bytes = total_phys_pgs * sizeof(page_node_t);
+    pfndb_sz_bytes = total_phys_pgs * sizeof(core::Page);
     pfndb_sz_pgs = arch::page_align_up(pfndb_sz_bytes) / arch::page_size;
-    pfndb_arr = (page_node_t*) early_pmm_alloc_cts(pfndb_sz_pgs);
+    pfndb_arr = (core::Page*) early_pmm_alloc_cts(pfndb_sz_pgs);
     ebl::memset((void*) pfndb_arr, 0, pfndb_sz_bytes);
 
     // Preserve PFN database while disposing of mmap structs

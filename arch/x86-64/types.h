@@ -4,6 +4,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <ebl/util.h>
 
 typedef uint64_t vaddr_t;
 typedef uint64_t paddr_t;
@@ -14,47 +15,6 @@ namespace arch {
 }
 
 namespace x86_64 {
-
-    //===------------------------------------------------------------------===//
-    // Paging helper functions
-
-    // Canonicalizes a virtual address
-    constexpr vaddr_t canonicalize(vaddr_t addr) {
-        static_assert(sizeof(vaddr_t) == sizeof(int64_t));
-        return ((int64_t) addr << 16) >> 16;
-    }
-
-    // Gets the physical address from a PML4E, PDPTE, PDE, and PTE index
-    constexpr uint64_t phys_from_index(
-        uint16_t pml4e_index,
-        uint16_t pdpte_index,
-        uint16_t pde_index,
-        uint16_t pte_index
-    ) {
-        return canonicalize(
-            ((uint64_t) (pml4e_index & 0x1FF) << 39) |
-            ((uint64_t) (pdpte_index & 0x1FF) << 30) |
-            ((uint64_t) (pde_index & 0x1FF) << 21) |
-            ((uint64_t) (pte_index & 0x1FF) << 12));
-    }
-
-    // Gets the index of the PML4 entry for a virtual address
-    // ref: Figure 4-8 from Intel SDM Vol 3 4.5.4
-    constexpr uint16_t pml4e_index(vaddr_t addr) {
-        return (addr >> 39) & 0x1FF;
-    }
-    // ref: pml4e_index
-    constexpr uint16_t pdpte_index(vaddr_t addr) {
-        return (addr >> 30) & 0x1FF;
-    }
-    // ref: pml4e_index
-    constexpr uint16_t pde_index(vaddr_t addr) {
-        return (addr >> 21) & 0x1FF;
-    }
-    // ref: pml4e_index
-    constexpr uint16_t pte_index(vaddr_t addr) {
-        return (addr >> 12) & 0x1FF;
-    }
 
     //===------------------------------------------------------------------===//
     // CPU structures
@@ -195,4 +155,49 @@ namespace x86_64 {
         uint64_t rip, cs, flags;                            // pushed by cpu
         uint64_t user_sp, user_ss;                          // pushed by cpu if CPL changes
     };
+
+    //===------------------------------------------------------------------===//
+    // Paging helper functions
+
+    // Canonicalizes a virtual address
+    constexpr vaddr_t canonicalize(vaddr_t addr) {
+        static_assert(sizeof(vaddr_t) == sizeof(int64_t));
+        return ((int64_t) addr << 16) >> 16;
+    }
+
+    // Gets the virtual address from a PML4E, PDPTE, PDE, and PTE index
+    constexpr uint64_t virt_from_index(
+        uint16_t pml4e_index,
+        uint16_t pdpte_index,
+        uint16_t pde_index,
+        uint16_t pte_index
+    ) {
+        return canonicalize(
+            ((uint64_t) (pml4e_index & 0x1FF) << 39) |
+            ((uint64_t) (pdpte_index & 0x1FF) << 30) |
+            ((uint64_t) (pde_index & 0x1FF) << 21) |
+            ((uint64_t) (pte_index & 0x1FF) << 12));
+    }
+
+    // Gets the index of the PML4 entry for a virtual address
+    // ref: Figure 4-8 from Intel SDM Vol 3 4.5.4
+    constexpr uint16_t pml4e_index(vaddr_t addr) {
+        return (addr >> 39) & 0x1FF;
+    }
+    // ref: pml4e_index
+    constexpr uint16_t pdpte_index(vaddr_t addr) {
+        return (addr >> 30) & 0x1FF;
+    }
+    // ref: pml4e_index
+    constexpr uint16_t pde_index(vaddr_t addr) {
+        return (addr >> 21) & 0x1FF;
+    }
+    // ref: pml4e_index
+    constexpr uint16_t pte_index(vaddr_t addr) {
+        return (addr >> 12) & 0x1FF;
+    }
 }
+
+namespace arch {
+    typedef x86_64::page_flags mmu_flags;
+} // namespace arch

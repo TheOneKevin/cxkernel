@@ -21,6 +21,12 @@ static inline uint64_t read_cr2() {
     return ret;
 }
 
+static inline uint64_t read_cr3() {
+    uint64_t ret;
+    asm volatile("mov %%cr3, %0" : "=r"(ret));
+    return ret;
+}
+
 static inline uint32_t save_flags() {
     uint32_t state;
     asm volatile(

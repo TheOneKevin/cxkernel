@@ -16,9 +16,9 @@ class multiboot_mmap_list;
 extern paddr_t total_phys_pgs;
 extern paddr_t pfndb_sz_bytes;
 extern paddr_t pfndb_sz_pgs;
-extern core::page_node* pfndb_arr;
-extern core::page_list_head pfndb_freelist;
-extern core::page_list_head pfndb_rsrvlist;
+extern core::Page* pfndb_arr;
+extern ebl::IntrusiveList<core::Page> pfndb_freelist;
+extern ebl::IntrusiveList<core::Page> pfndb_rsrvlist;
 
 //===----------------------------------------------------------------------===//
 // Functions

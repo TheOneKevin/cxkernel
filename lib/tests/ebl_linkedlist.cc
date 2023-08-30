@@ -4,10 +4,10 @@
 #include "ebl/memory.h"
 #include "ebl/util.h"
 
-using list_type = ebl::IntrusiveList<int, 1>;
-using list_node = list_type::node;
-template<> struct ebl::LinkedRef<int> {
-    typedef list_node type;
+struct TestStruct : ebl::IntrusiveListNode<TestStruct> {
+    int data;
+    TestStruct(int data): data(data) { }
+    operator int&() { return data; }
 };
 
 TEST_CASE("intrusive linked list test") {
@@ -16,11 +16,11 @@ TEST_CASE("intrusive linked list test") {
     for(int i = 0; i < data_size; i++)
         data[i] = i+1;
     
-    list_type::list<0> list1;
-    list_type::list<0> list2;
+    ebl::IntrusiveList<TestStruct> list1;
+    ebl::IntrusiveList<TestStruct> list2;
 
     SUBCASE("push_back / pop_back") {
-        for(auto& v : data) list1.push_back(list_type::construct(v));
+        for(auto& v : data) list1.push_back_unsafe(new TestStruct(v));
         int i = 0;
         for(auto& v : list1) {
             CHECK(v == data[i]);
@@ -29,14 +29,14 @@ TEST_CASE("intrusive linked list test") {
         CHECK(list1.size() == data_size);
         while(!list1.empty()) {
             i--;
-            auto v = list1.pop_back();
+            auto v = list1.pop_back_unsafe();
             CHECK(*v == data[i]);
         }
         CHECK(list1.size() == 0);
     }
 
     SUBCASE("push_front / pop_front") {
-        for(auto& v : data) list1.push_front(list_type::construct(v));
+        for(auto& v : data) list1.push_front_unsafe(new TestStruct(v));
         int i = data_size;
         for(auto& v : list1) {
             i--;
@@ -46,17 +46,17 @@ TEST_CASE("intrusive linked list test") {
         i = data_size;
         while(!list1.empty()) {
             i--;
-            auto v = list1.pop_front();
+            auto v = list1.pop_front_unsafe();
             CHECK(*v == data[i]);
         }
         CHECK(list1.size() == 0);
     }
 
     SUBCASE("move") {
-        for(auto& v : data) list1.push_back(list_type::construct(v));
+        for(auto& v : data) list1.push_back_unsafe(new TestStruct(v));
         while(!list1.empty()) {
-            auto v = list1.pop_front();
-            list2.push_back(ebl::move(v));
+            auto v = list1.pop_front_unsafe();
+            list2.push_back_unsafe(ebl::move(v));
         }
         CHECK(list1.size() == 0);
         CHECK(list2.size() == data_size);
@@ -65,6 +65,6 @@ TEST_CASE("intrusive linked list test") {
             CHECK(v == data[i]);
             i++;
         }
-        while(!list2.empty()) list2.pop_front();
+        while(!list2.empty()) list2.pop_front_unsafe();
     }
 }

@@ -1,5 +1,7 @@
 #include "core/vm.h"
 #include "arch/interface.h"
+#include "ebl/linked_list.h"
+#include "ebl/status.h"
 
 namespace x86_64 {
 
@@ -12,6 +14,6 @@ namespace x86_64 {
     // Internal (non-interface) arch-specific functions
 
     void init_idt();
-    void map_pages(core::page_node* pages, vaddr_t virt, page_flags flags);
+    status_t map_pages(ebl::IntrusiveList<core::Page>& pages, vaddr_t virt, page_flags flags);
 
 } // namespace x86_64

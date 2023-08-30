@@ -9,12 +9,13 @@
 static arch::PerCPU percpu_array[MAX_SMP_CPUS]{};
 static core::Thread boot_thread {
     .name = "Kernel boot thread",
-    .address_space = nullptr
+    .address_space{}
+};
+static core::AddressSpace boot_aspace {
+    // Nothing to be done here
 };
 
-void arch::init(::LoaderState* state) {
-    (void) state;
-
+void arch::init() {
     // Initialize percpu array
     for(int i = 0; i < MAX_SMP_CPUS; i++) {
         percpu_array[i].self = &percpu_array[i];
@@ -29,6 +30,10 @@ void arch::init(::LoaderState* state) {
     assert(arch::get_percpu()->self == &percpu_array[0], "Boot percpu pointer is not correct");
 
     // Install placeholder thread struct
+    boot_aspace.arch() = arch::AddressSpace {
+        .pml4 = x86_64::read_cr3()
+    };
+    boot_thread.address_space = ebl::AdoptRef(&boot_aspace);
     percpu_array[0].curthread = &boot_thread;
     assert(arch::get_current_thread() == &boot_thread, "Boot thread is not current thread");
     

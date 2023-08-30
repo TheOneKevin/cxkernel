@@ -10,12 +10,12 @@
 #define NL "\n"
 
 constexpr uint16_t kernel_pml4_idx = ns::pml4e_index(0xFFFF800000000000);
-constexpr uint64_t kernel_base = ns::phys_from_index(kernel_pml4_idx,0,0,0);
-constexpr uint64_t kernel_limit = ns::phys_from_index(kernel_pml4_idx+1,0,0,0);
+constexpr uint64_t kernel_base = ns::virt_from_index(kernel_pml4_idx,0,0,0);
+constexpr uint64_t kernel_limit = ns::virt_from_index(kernel_pml4_idx+1,0,0,0);
 constexpr uint64_t kernel_stack_limit = kernel_limit - arch::page_size;
 constexpr uint64_t kernel_stack_base = kernel_stack_limit + arch::page_size - 8;
-constexpr uint64_t kernel_pfndb_base = ns::phys_from_index(kernel_pml4_idx+2,0,0,0);
-// constexpr uint64_t kernel_slab_base = ns::phys_from_index(kernel_pml4_idx+3,0,0,0);
+constexpr uint64_t kernel_pfndb_base = ns::virt_from_index(kernel_pml4_idx+2,0,0,0);
+constexpr uint64_t kernel_slab_base = ns::virt_from_index(kernel_pml4_idx+3,0,0,0);
 
 //===----------------------------------------------------------------------===//
 // Global variables and structures
@@ -90,7 +90,7 @@ extern "C" void enter_longmode(
     uint64_t state_ptr, uint64_t stack);
 
 extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
-    status_t ec = E::SUCCESS;
+    status_t ec = E::OK;
 
     // Run .init_array
     for(auto* fn = &init_array_start_; fn != &init_array_end_; fn++) (*fn)();
@@ -246,7 +246,15 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
         .pfndb_rsrvlist = pfndb_rsrvlist,
         .pfndb_freelist = pfndb_freelist,
         .total_phys_pgs = total_phys_pgs,
-        .arch_state{},
+        .pfndb_arr = pfndb_arr,
+        .arch_state {
+            .kernel_base = kernel_base,
+            .kernel_limit = kernel_limit,
+            .kernel_stack_base = kernel_stack_base,
+            .kernel_stack_limit = kernel_stack_limit,
+            .kernel_pfndb_base = kernel_pfndb_base,
+            .kernel_slab_base = kernel_slab_base
+        },
         .magic_end = LOADER_ABI_MAGIC_END
     };
 

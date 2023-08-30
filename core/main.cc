@@ -1,14 +1,11 @@
 #include "assert.h"
 #include "loaderabi.h"
 #include "platform/interface.h"
-#include "core/pmm.h"
+#include "core/mem.h"
 #include <ebl/stdio.h>
 
 namespace g {
     LoaderState loader_state_{};
-    auto& pfndb_freelist = loader_state_.pfndb_freelist;
-    auto& pfndb_rsrvlist = loader_state_.pfndb_rsrvlist;
-    auto& total_phys_pgs = loader_state_.total_phys_pgs;
 }
 
 extern "C" void(*init_array_start_)();
@@ -38,7 +35,7 @@ extern "C" void kernel_entry(uint64_t state_ptr) {
     }
 
     // Architecture-specific init
-    arch::init(&g::loader_state_);
+    arch::init();
 
     // Platform-specific init
     platform::init();

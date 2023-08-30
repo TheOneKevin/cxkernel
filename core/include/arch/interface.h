@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ebl/util.h>
+#include <ebl/type_traits.h>
 #include <stddef.h>
 #include <stdint.h>
 #include "arch/types.h"
@@ -14,17 +15,17 @@ namespace arch {
 
     constexpr vaddr_t page_align_down(vaddr_t addr) {
         // NOTE: We expect page_size to be defined by types.h
-        return addr & ~(page_size - 1);
+        return ebl::align_down<vaddr_t>(addr, page_size);
     }
     constexpr vaddr_t page_align_up(vaddr_t addr) {
-        return (addr + page_size - 1) & ~(page_size - 1);
+        return ebl::align_up<vaddr_t>(addr, page_size);
     }
 
     struct SpinlockBackend;
     struct SpinlockState;
     struct ThreadBackend;
     struct IrqVector;
-    struct LoaderState;
+    struct ABICOMPAT LoaderState;
     struct PerCPU;
     struct AddressSpace;
     typedef void (*irq_handler_t)(void*);
@@ -44,14 +45,11 @@ namespace arch {
 
     void switch_thread(core::Thread* oldthread, core::Thread* newthread);
     
-    void init(::LoaderState* state);
+    void init();
 
     int cpu_num();
     PerCPU* get_percpu();
     core::Thread* get_current_thread();
-
-    bool is_heap_address(vaddr_t addr);
-    void* grow_heap(unsigned int num_pages);
 
 } // namespace arch
 

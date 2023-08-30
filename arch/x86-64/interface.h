@@ -5,6 +5,10 @@
 #include "thread.h"
 #include "types.h"
 
+namespace core {
+    struct Thread;
+}
+
 namespace arch {
 
     struct SpinlockBackend {
@@ -19,7 +23,13 @@ namespace arch {
         uint8_t vector;
     };
 
-    struct LoaderState {
+    struct ABICOMPAT LoaderState {
+        vaddr_t kernel_base;
+        vaddr_t kernel_limit;
+        vaddr_t kernel_stack_base;
+        vaddr_t kernel_stack_limit;
+        vaddr_t kernel_pfndb_base;
+        vaddr_t kernel_slab_base;
     };
 
     struct PerCPU {
@@ -29,7 +39,7 @@ namespace arch {
     };
 
     struct AddressSpace {
-        x86_64::pml4e* pml4;
+        uint64_t pml4;
     };
 
     inline void spin_lock(SpinlockBackend* lock) {
