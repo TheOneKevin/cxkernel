@@ -1,13 +1,6 @@
-# Get all source files
-file(GLOB SOURCES "${CMAKE_CURRENT_LIST_DIR}/*.cc")
-list(
-        APPEND
-        SOURCES
-        # Add .cc sources here
-)
-
 # Define library_tests target
-add_executable(library_tests ${SOURCES})
+file(GLOB EBL_TEST_SOURCES "${CMAKE_CURRENT_LIST_DIR}/ebl_*.cc")
+add_executable(library_tests ${EBL_TEST_SOURCES})
 target_include_directories(
         library_tests
         PRIVATE
@@ -17,8 +10,25 @@ target_include_directories(
         PUBLIC
         ${DOCTEST_INCLUDE_DIR}
 )
-
 add_llvm_coverage_test(library_tests)
+
+# Define kernel_tests target
+add_executable(
+        kernel_tests
+        "${CMAKE_CURRENT_LIST_DIR}/kernel_vmm.cc"
+        "${CMAKE_CURRENT_SOURCE_DIR}/core/vmm.cc"
+)
+target_include_directories(
+        kernel_tests
+        PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib
+        ${CMAKE_CURRENT_SOURCE_DIR}/core/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/arch
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        PUBLIC
+        ${DOCTEST_INCLUDE_DIR}
+)
+add_llvm_coverage_test(kernel_tests)
 
 # TODO: Run these 3 commands after...
 # llvm-profdata merge -sparse library_tests.profraw -o library_tests.profdata

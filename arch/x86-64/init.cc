@@ -8,8 +8,7 @@
 
 static arch::PerCPU percpu_array[MAX_SMP_CPUS]{};
 static core::Thread boot_thread {
-    .name = "Kernel boot thread",
-    .address_space{}
+    "Kernel boot thread"
 };
 static core::AddressSpace boot_aspace {
     // Nothing to be done here

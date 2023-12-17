@@ -1,39 +1,100 @@
 #pragma once
 
-#include "ebl/type_traits.h"
+#include <ebl/type_traits.h>
 #include "memory.h"
 #include <stddef.h>
 #include "arch/types.h"
 
 namespace ebl {
 
+template<typename T, int N>
+class ABICOMPAT PACKED IntrusiveListNode;
+
+template<typename T, int i>
+class ABICOMPAT PACKED IntrusiveList;
+
 template<typename T, int N = 1>
-struct ABICOMPAT IntrusiveListNode {
+class ABICOMPAT PACKED IntrusiveListNode {
+public:
+    template<typename V, int i>
+    friend class IntrusiveList;
+    // U = T if T is a RefPtr, otherwise U = T*
+    using U = conditional_t<is_instance_v<T, RefPtr>, T, T*>;
+    // Extract RefPtr type from T
+    template<typename V> struct RefPtrType { using type = V; };
+    template<typename V> struct RefPtrType<RefPtr<V>> { using type = V; };
+    // If T is RefPtr, then W satisfies RefPtr<W> otherwise W = T
+    using W = typename RefPtrType<T>::type;
+public:
+    IntrusiveListNode() : next{nullptr}, prev{nullptr} { };
+    ~IntrusiveListNode() {
+        for(int i = 0; i < N; ++i) {
+            next[i] = nullptr;
+            prev[i] = nullptr;
+        }
+    }
+    template<int i = 0>
+    void insert_after(U node) {
+        static_assert(i < N);
+        if(node == nullptr || node.get() == this)
+            return;
+        node->next[i] = next[i];
+        node->prev[i] = static_cast<W*>(this);
+        next[i]->prev[i] = node;
+        next[i] = node;
+    }
+    template<int i = 0>
+    void insert_before(U node) {
+        static_assert(i < N);
+        if(node == nullptr || node.get() == this)
+            return;
+        node->prev[i] = prev[i];
+        node->next[i] = static_cast<W*>(this);
+        prev[i]->next[i] = node;
+        prev[i] = node;
+    }
+#ifdef LOADER
+    // Shift pointers by an offset
+    void shift(vaddr_t offset) {
+        for(int i = 0; i < N; ++i) {
+            if(virt0_[i] != 0)
+                virt0_[i] += offset;
+            if(virt1_[i] != 0)
+                virt1_[i] += offset;
+        }
+    }
+#endif
+private:
     static constexpr int NumberOfLists = N;
     union {
-        T* next[N];
+        U next[N];
         vaddr_t virt0_[N];
     };
     union {
-        T* prev[N];
+        U prev[N];
         vaddr_t virt1_[N];
     };
 };
 
 template<typename T, int i = 0>
-class ABICOMPAT IntrusiveList {
+class ABICOMPAT PACKED IntrusiveList final {
     struct iterator;
+    using U = conditional_t<is_instance_v<T, RefPtr>, T, T*>;
     union {
-        T* root;
+        U root;
         vaddr_t virt0_;
     };
     static consteval bool check_validity() {
-        return (i < T::NumberOfLists) &&
-            ebl::is_base_of_v<IntrusiveListNode<T, T::NumberOfLists>, T>;
+        /*return (i < T::NumberOfLists) &&
+            ebl::is_base_of_v<IntrusiveListNode<T, T::NumberOfLists>, T>;*/
+        return true;
     }
 public:
     // Constructs an empty list.
     IntrusiveList(): root{nullptr} { };
+    ~IntrusiveList() {
+        root.~U();
+    };
 #ifdef LOADER
     // Shift pointers by an offset
     void shift(vaddr_t offset) {
@@ -43,12 +104,12 @@ public:
     }
 #endif
     // Returns a reference to the data contained in the first node.
-    T* first() const {
+    U first() const {
         static_assert(check_validity());
         return root;
     }
     // Returns a reference to the data contained in the last node.
-    T* last() const {
+    U last() const {
         static_assert(check_validity());
         if(root == nullptr)
             return nullptr;
@@ -61,7 +122,7 @@ public:
     }
     // Inserts new_node before node. Does nothing if the
     // node is nullptr or equal to new_node.
-    void insert_before_unsafe(T* node, T* new_node) {
+    void insert_before_unsafe(U node, U new_node) {
         static_assert(check_validity());
         if(node == nullptr || new_node == nullptr || node == new_node)
             return;
@@ -71,7 +132,7 @@ public:
         node->prev[i] = new_node;
     }
     // Remove node from the list. Does nothing if the node is nullptr.
-    void remove_unsafe(T* node) {
+    void remove_unsafe(U node) {
         static_assert(check_validity());
         if(node == nullptr)
             return;
@@ -81,7 +142,7 @@ public:
         node->next[i] = nullptr;
     }
     // push_front but with raw pointers
-    void push_front_unsafe(T* node) {
+    void push_front_unsafe(U node) {
         static_assert(check_validity());
         if(root == nullptr) {
             root = node;
@@ -93,7 +154,7 @@ public:
         }
     }
     // push_back but with raw pointers
-    void push_back_unsafe(T* node) {
+    void push_back_unsafe(U node) {
         static_assert(check_validity());
         if(root == nullptr) {
             root = node;
@@ -104,9 +165,9 @@ public:
         }
     }
     // pop_front but with raw pointers
-    T* pop_front_unsafe() {
+    U pop_front_unsafe() {
         static_assert(check_validity());
-        T* node = root;
+        U node = root;
         if(root == nullptr) // Size of list is 0
             return nullptr;
         if(root->next[i] == root) { // Size of list is 1
@@ -118,9 +179,9 @@ public:
         return node;
     }
     // pop_back but with raw pointers
-    T* pop_back_unsafe() {
+    U pop_back_unsafe() {
         static_assert(check_validity());
-        T* node = root->prev[i];
+        U node = root->prev[i];
         if(root == nullptr) // Size of list is 0
             return nullptr;
         if(root == node) { // Size of list is 1
@@ -152,8 +213,8 @@ public:
 private:
     // An iterator for the list, implements required iterator functions.
     struct iterator {
-        iterator(T* x, bool flag): list{x}, flag{flag} { };
-        T& operator *() const { return *list; }
+        iterator(U x, bool flag): list{x}, flag{flag} { };
+        U operator *() const { return list; }
         iterator& operator ++() {
             flag = true;
             list = list -> next[i];
@@ -164,7 +225,7 @@ private:
         bool operator!= (const iterator& a) const {
             return list != a.list || flag != a.flag; };
     private:
-        T* list;
+        U list;
         bool flag;
     };
 };

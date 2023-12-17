@@ -4,6 +4,7 @@ enum E {
     OK = 0,
     INVALID,
     NOT_IMPLEMENTED,
+    INVALID_ARGUMENT,
     OUT_OF_MEMORY,
     PERMISSION_DENIED
 };

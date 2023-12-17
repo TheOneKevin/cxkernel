@@ -3,8 +3,21 @@
 #include "ebl/util.h"
 #include "ebl/atomic.h"
 #include <stdint.h>
+#include "ebl/new.h"
+#include "assert.h"
+
+namespace kmem {
+    void* alloc(unsigned int size);
+}
 
 namespace ebl {
+
+/**
+ * @brief A reference-counted pointer to an object. Similar to std::shared_ptr.
+ * 
+ * @tparam T Type of the object.
+ */
+template<typename T> class RefPtr;
 
 /**
  * @brief Intrusively reference-counted object. Objects wishing to be ref-counted
@@ -15,11 +28,13 @@ namespace ebl {
  */
 template<typename T>
 class RefCountable {
+    template<typename V> friend class RefPtr;
 public:
     DELETE_COPY(RefCountable);
     DELETE_MOVE(RefCountable);
     RefCountable() noexcept : ref_count_(0) { }
     ~RefCountable() noexcept { }
+private:
     void add_ref() const noexcept {
         ref_count_.fetch_add(1, memory_order_relaxed);
     }
@@ -37,13 +52,6 @@ public:
 private:
     mutable atomic<int32_t> ref_count_;
 };
-
-/**
- * @brief A reference-counted pointer to an object. Similar to std::shared_ptr.
- * 
- * @tparam T Type of the object.
- */
-template<typename T> class RefPtr;
 
 /**
  * @brief Wraps an RefPtr around a newly-allocated RefCountable object.
@@ -107,6 +115,18 @@ public:
     explicit operator bool() const {
         return !!ptr_;
     }
+    bool operator==(RefPtr const& other) const {
+        return ptr_ == other.ptr_;
+    }
+    bool operator!=(RefPtr const& other) const {
+        return ptr_ != other.ptr_;
+    }
+    bool operator==(ebl::nullptr_t) const {
+        return ptr_ == nullptr;
+    }
+    bool operator!=(ebl::nullptr_t) const {
+        return ptr_ != nullptr;
+    }
 
 private:
     friend RefPtr<T> AdoptRef<T>(T*);
@@ -132,16 +152,48 @@ inline RefPtr<T> AdoptRef(T* ptr) {
 }
 
 template<typename T>
+struct MakeRefPtrHelper;
+
+struct AllocChecker {
+    template<typename T> friend struct MakeRefPtrHelper;
+    AllocChecker() : armed_{false}, result_{false} { }
+    ~AllocChecker() {
+        if(armed_) {
+            // TODO: Implement panic here...
+            assert(false, "AllocChecker failed to be disarmed.");
+        }
+    }
+    bool check() {
+        armed_ = false;
+        return result_;
+    }
+private:
+    void arm(bool result) {
+        armed_ = true;
+        result_ = result;
+    }
+private:
+    bool armed_;
+    bool result_;
+};
+
+template<typename T>
 struct MakeRefPtrHelper {
     template<typename... Args>
-    static RefPtr<T> make_ref(Args&&... args) {
-        return AdoptRef(new T{ebl::forward<Args>(args)...});
+    static RefPtr<T> make_ref(AllocChecker& ac, Args&&... args) {
+        T* ptr = (T*) kmem::alloc(sizeof(T));
+        ac = AllocChecker{}; // We must overwrite the AllocChecker here
+        ac.arm(ptr != nullptr);
+        if(ptr == nullptr)
+            return nullptr;
+        new (&ptr) T{ebl::forward<Args>(args)...};
+        return AdoptRef(ptr);
     }
 };
 
 template<typename T, typename... Args>
-RefPtr<T> MakeRefPtr(Args&&... args) {
-    return MakeRefPtrHelper<T>::make_ref(ebl::forward<Args>(args)...);
+RefPtr<T> MakeRefPtr(AllocChecker& ac, Args&&... args) {
+    return MakeRefPtrHelper<T>::make_ref(ac, ebl::forward<Args>(args)...);
 }
 
 } // namespace ebl

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h>
 #include "asm.h"
 #include "thread.h"
 #include "types.h"
@@ -62,6 +63,14 @@ namespace arch {
         lock->x = 0;
     }
 
+    inline void enable_interrupts() {
+        x86_64::sti();
+    }
+
+    inline void disable_interrupts() {
+        x86_64::cli();
+    }
+
     inline void spin_save_state(SpinlockState* state) {
         state->flags = x86_64::save_flags();
         disable_interrupts();
@@ -70,14 +79,6 @@ namespace arch {
     inline void spin_restore_state(SpinlockState const* state) {
         // Restore will re-enable interrupts.
         x86_64::restore_flags(state->flags);
-    }
-
-    inline void enable_interrupts() {
-        x86_64::sti();
-    }
-
-    inline void disable_interrupts() {
-        x86_64::cli();
     }
 
     [[noreturn]] inline void halt() {

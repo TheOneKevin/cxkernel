@@ -22,8 +22,8 @@ TEST_CASE("intrusive linked list test") {
     SUBCASE("push_back / pop_back") {
         for(auto& v : data) list1.push_back_unsafe(new TestStruct(v));
         int i = 0;
-        for(auto& v : list1) {
-            CHECK(v == data[i]);
+        for(auto v : list1) {
+            CHECK(*v == data[i]);
             i++;
         }
         CHECK(list1.size() == data_size);
@@ -38,9 +38,9 @@ TEST_CASE("intrusive linked list test") {
     SUBCASE("push_front / pop_front") {
         for(auto& v : data) list1.push_front_unsafe(new TestStruct(v));
         int i = data_size;
-        for(auto& v : list1) {
+        for(auto v : list1) {
             i--;
-            CHECK(v == data[i]);
+            CHECK(*v == data[i]);
         }
         CHECK(list1.size() == data_size);
         i = data_size;
@@ -61,8 +61,8 @@ TEST_CASE("intrusive linked list test") {
         CHECK(list1.size() == 0);
         CHECK(list2.size() == data_size);
         int i = 0;
-        for(auto& v : list2) {
-            CHECK(v == data[i]);
+        for(auto v : list2) {
+            CHECK(*v == data[i]);
             i++;
         }
         while(!list2.empty()) list2.pop_front_unsafe();

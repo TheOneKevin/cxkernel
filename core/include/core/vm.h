@@ -1,10 +1,11 @@
 #pragma once
 
-#include "ebl/bit.h"
 #include "loaderabi.h"
 #include "arch/types.h"
 #include "core/spinlock.h"
+#include "core/mutex.h"
 #include <stdint.h>
+#include <ebl/bit.h>
 #include <ebl/status.h>
 #include <ebl/linked_list.h>
 #include <ebl/memory.h>
@@ -15,7 +16,7 @@ namespace core {
     struct VmRegion;
     struct AddressSpace;
 
-    struct VmObject final : ebl::RefCountable<VmObject*> {
+    struct VmObject final : ebl::RefCountable<VmObject> {
     private:
         core::Spinlock lock_;
         ebl::IntrusiveList<Page> pages_;
@@ -38,8 +39,11 @@ namespace core {
         ebl::BitField<VmRegionType, 4, 2> type;
     };
 
-    struct VmRegion final : ebl::RefCountable<VmRegion*>, ebl::IntrusiveListNode<VmRegion> {
+    struct VmRegion final : ebl::RefCountable<VmRegion>,
+                            ebl::IntrusiveListNode<ebl::RefPtr<VmRegion>> {
+        friend struct AddressSpace;
     public:
+        VmRegion() noexcept {};
         status_t allocate_vmr_compact(
             size_t size, uint8_t align_pow2, VmRegionFlags flags,
             ebl::RefPtr<VmRegion>& vmr_out);
@@ -57,23 +61,30 @@ namespace core {
         vaddr_t base_;
         vaddr_t size_;
         VmRegionFlags flags_;
-        ebl::RefPtr<VmRegion> parent_;
-        ebl::RefPtr<AddressSpace> aspace_;
+        VmRegion* parent_;
+        AddressSpace* aspace_;
         ebl::RefPtr<VmObject> object_;
-        ebl::IntrusiveList<VmRegion> children_;
+        ebl::IntrusiveList<ebl::RefPtr<VmRegion>> children_;
     };
 
-    struct AddressSpace final : ebl::RefCountable<AddressSpace*> {
+    struct AddressSpace final : ebl::RefCountable<AddressSpace> {
     public:
+        static ebl::RefPtr<AddressSpace> Create() {
+            return ebl::RefPtr<AddressSpace>(new AddressSpace());
+        }
         arch::AddressSpace& arch() { return backend_; }
+    public:
+        AddressSpace() noexcept {
+            
+        }
     private:
         VmRegion user_root_;
         VmRegion kernel_root_;
         arch::AddressSpace backend_;
-        core::Spinlock lock_;
+        mutable core::Mutex lock_;
     };
 
-    struct ABICOMPAT Page final : ebl::IntrusiveListNode<Page> {
+    struct ABICOMPAT PACKED Page final : ebl::IntrusiveListNode<Page> {
         uint32_t flags;
         core::Spinlock lock;
         union {

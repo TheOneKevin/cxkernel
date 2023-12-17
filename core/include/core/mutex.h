@@ -1,11 +1,13 @@
 #pragma once
 
-#include "core/thread.h"
+#include "arch/interface.h"
 #include "ebl/linked_list.h"
 #include <ebl/guard.h>
 #include <ebl/thread_safety.h>
 
 namespace core {
+
+struct Thread;
 
 /**
  * @brief Mutex
@@ -35,7 +37,7 @@ private:
     };
     struct arch::SpinlockBackend lock_;
     ebl::IntrusiveList<Thread> wait_queue_;
-    core::Thread* owner_;
+    Thread* owner_;
     State state_;
 private:
     void lock();

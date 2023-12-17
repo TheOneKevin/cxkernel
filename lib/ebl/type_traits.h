@@ -58,6 +58,25 @@ struct is_base_of : public internal::integral_constant<bool, __is_base_of(B, D)>
 template <class B, class D>
 inline constexpr bool is_base_of_v = is_base_of<B, D>::value;
 
+// is_instance
+template <class, template <class...> class>
+struct is_instance : public false_type {};
+template <class T, template <class...> class U>
+struct is_instance<U<T>, U> : public true_type {};
+template <class T, template <class...> class U>
+inline constexpr bool is_instance_v = is_instance<T, U>::value;
+
+// is_class
+template <class T> struct is_class
+    : public internal::integral_constant<bool, __is_class(T)> {};
+template <class T> inline constexpr bool is_class_v = is_class<T>::value;
+
+// has_virtual_destructor
+template <class T> struct has_virtual_destructor
+    : public internal::integral_constant<bool, __has_virtual_destructor(T)> {};
+template <class T>
+inline constexpr bool has_virtual_destructor_v = has_virtual_destructor<T>::value;
+
 // is_integral
 template <class T>  struct is_integral                     : public false_type {};
 template <>         struct is_integral<bool>               : public true_type {};

@@ -1,0 +1,37 @@
+###############################################################
+# bochsrc.txt file for DLX Linux disk image.
+###############################################################
+
+# how much memory the emulated machine will have
+megs: 256
+com1: enabled=1, mode=file, dev=../build/serial.txt
+
+# filename of ROM images
+romimage: file="C:/Program Files/Bochs-2.7/BIOS-bochs-latest"
+vgaromimage: file="C:/Program Files/Bochs-2.7/VGABIOS-lgpl-latest"
+
+# what disk images will be used
+ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
+ata0-master: type=cdrom, path="../build/boot.iso", status=inserted
+boot: cdrom
+
+# default config interface is textconfig.
+# config_interface: textconfig
+# config_interface: wx
+
+display_library: win32, options="gui_debug"
+magic_break: enabled=1
+
+# other choices: win32 sdl wx carbon amigaos beos macintosh nogui rfb term svga
+
+# where do we send log messages?
+log: ../build/bochsout.txt
+
+# disable the mouse, since DLX is text only
+mouse: enabled=0
+
+# set up IPS value and clock sync
+cpu: ips=15000000
+clock: sync=both
+
+keyboard: keymap="C:/Program Files/Bochs-2.7/keymaps/x11-pc-us.map"

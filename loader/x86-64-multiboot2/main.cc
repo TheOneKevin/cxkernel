@@ -231,10 +231,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
     // Shift pointers in PFNDB
     const paddr_t pfndb_offset = kernel_pfndb_base - (paddr_t) pfndb_arr;
     for(paddr_t i = 0; i < total_phys_pgs; i++) {
-        if(pfndb_arr[i].virt0_[0] != 0)
-            pfndb_arr[i].virt0_[0] += pfndb_offset;
-        if(pfndb_arr[i].virt1_[0] != 0)
-            pfndb_arr[i].virt1_[0] += pfndb_offset;
+        pfndb_arr[i].shift(pfndb_offset);
     }
     
     // Initialize loader state

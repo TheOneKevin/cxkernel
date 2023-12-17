@@ -1,5 +1,4 @@
 #pragma once
-#define LOADER
 
 #include "multiboot2.h"
 #include <stdint.h>

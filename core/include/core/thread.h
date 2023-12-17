@@ -20,8 +20,14 @@ namespace core {
         size_t size;
     };
 
+    constexpr int thread_name_max = 30;
+
     struct Thread final : ebl::RefCountable<Thread>, ebl::IntrusiveListNode<Thread> {
-        char name[30];
+        Thread(const char* name) noexcept {
+            for(int i = 0; i < thread_name_max; ++i)
+                this->name[i] = name[i];
+        }
+        char name[thread_name_max];
         enum ThreadState state;
         struct KernStack stack;
         ebl::RefPtr<AddressSpace> address_space;

@@ -43,5 +43,7 @@ target_compile_options(
         $<$<COMPILE_LANGUAGE:CXX>:${STANDARD_CXX_FLAGS} -fno-pie -m32>
 )
 
+target_compile_definitions(cxloader PRIVATE LOADER)
+
 # Update target properties
 set_target_properties(cxloader PROPERTIES SUFFIX ".bin")

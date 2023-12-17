@@ -63,8 +63,8 @@ static status_t map_single_page(
 status_t x86_64::map_pages(page_list_head& pages, vaddr_t virt, page_flags flags) {
     page_list_head pt_pages;
     status_t ec = E::OK;
-    for(auto& page : pages) {
-        ec = map_single_page(page.paddr(), virt, flags, pt_pages);
+    for(auto page : pages) {
+        ec = map_single_page(page->paddr(), virt, flags, pt_pages);
         if(ec != E::OK) {
             // FIXME: This function does not clean up mappings properly!
             core::free_phys_pages(pt_pages);
