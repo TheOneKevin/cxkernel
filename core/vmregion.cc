@@ -42,7 +42,7 @@ status_t VmRegion::allocate_vmr_compact(size_t size, uint8_t align_pow2,
         if(aligned_base + size > child->base_ + child->size_)
             continue;
         auto ec = child->split(aligned_base - child->base_, size, vmr_out);
-        if(ec != E::OK)
+        if(!ec)
             return ec;
         vmr_out->flags_.capability = flags.capability;
         return E::OK;

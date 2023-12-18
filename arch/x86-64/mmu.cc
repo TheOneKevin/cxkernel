@@ -35,21 +35,21 @@ static status_t map_single_page(
     status_t ec = E::OK;
     if(!pml4e->f.present) {
         ec = core::alloc_phys_page_single(page);
-        if(ec != E::OK) return ec;
+        if(!ec) return ec;
         pt_pages.push_back_unsafe(page);
         pml4e->data = page->paddr() | 1 | flags.data;
     }
     
     if(!pdpte->f.present) {
         ec = core::alloc_phys_page_single(page);
-        if(ec != E::OK) return ec;
+        if(!ec) return ec;
         pt_pages.push_back_unsafe(page);
         pdpte->data = page->paddr() | 1 | flags.data;
     }
     
     if(!pde->f.present) {
         ec = core::alloc_phys_page_single(page);
-        if(ec != E::OK) return ec;
+        if(!ec) return ec;
         pt_pages.push_back_unsafe(page);
         pde->data = page->paddr() | 1 | flags.data;
     }
@@ -65,7 +65,7 @@ status_t x86_64::map_pages(page_list_head& pages, vaddr_t virt, page_flags flags
     status_t ec = E::OK;
     for(auto page : pages) {
         ec = map_single_page(page->paddr(), virt, flags, pt_pages);
-        if(ec != E::OK) {
+        if(!ec) {
             // FIXME: This function does not clean up mappings properly!
             core::free_phys_pages(pt_pages);
             return ec;
