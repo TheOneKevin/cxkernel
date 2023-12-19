@@ -14,6 +14,6 @@ namespace x86_64 {
     // Internal (non-interface) arch-specific functions
 
     void init_idt();
-    status_t map_pages(ebl::IntrusiveList<core::Page>& pages, vaddr_t virt, page_flags flags);
+    Result<void> map_pages(ebl::IntrusiveList<core::Page>& pages, vaddr_t virt, page_flags flags);
 
 } // namespace x86_64

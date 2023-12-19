@@ -12,7 +12,7 @@ namespace elf {
         struct Context64;
         template<typename U> struct header;
     public:
-        static status_t load(Context& ctx, void* img);
+        static Result<void> load(Context& ctx, void* img);
         bool is_64bits() const { return is_64bits_; }
         template<typename T> header<T> get_header() {
             static_assert(ebl::always_false<T>::value,
@@ -31,7 +31,7 @@ namespace elf {
     
     private:
         struct Context32 {
-            status_t load(elf32_ehdr_t* hdr);
+            Result<void> load(elf32_ehdr_t* hdr);
             elf32_ehdr_t* img;
             elf32_shdr_t* shdr;
             elf32_phdr_t* phdr;
@@ -40,7 +40,7 @@ namespace elf {
         };
 
         struct Context64 {
-            status_t load(elf64_ehdr_t* hdr);
+            Result<void> load(elf64_ehdr_t* hdr);
             elf64_shdr_t* find_section(const char* name);
             elf64_addr_t get_symbol_addr(elf64_addr_t addr);
             char* get_symbol_name(elf64_addr_t addr);

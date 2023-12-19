@@ -4,7 +4,7 @@
 #include "ebl/atomic.h"
 #include <stdint.h>
 #include "ebl/new.h"
-#include "assert.h"
+#include <ebl/assert.h>
 
 namespace kmem {
     void* alloc(unsigned int size);

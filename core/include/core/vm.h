@@ -44,19 +44,19 @@ namespace core {
         friend struct AddressSpace;
     public:
         VmRegion() noexcept {};
-        status_t allocate_vmr_compact(
-            size_t size, uint8_t align_pow2, VmRegionFlags flags,
-            ebl::RefPtr<VmRegion>& vmr_out);
-        status_t allocate_vmr_sparse(
-            size_t size, uint8_t align_pow2, VmRegionFlags flags,
-            ebl::RefPtr<VmRegion>& vmr_out);
-        status_t map_pages(
+        Result<ebl::RefPtr<VmRegion>>
+        allocate_vmr_compact(size_t size, uint8_t align_pow2, VmRegionFlags flags);
+        Result<ebl::RefPtr<VmRegion>>
+        allocate_vmr_sparse(size_t size, uint8_t align_pow2, VmRegionFlags flags);
+        Result<ebl::RefPtr<VmRegion>>
+        map_pages(
             vaddr_t offset, size_t size, VmRegionFlags flags,
             ebl::RefPtr<VmObject> object, vaddr_t vmo_offset,
-            arch::mmu_flags mmu_flags, ebl::RefPtr<VmRegion>& map_out);
-        status_t protect(vaddr_t addr, vaddr_t size, arch::mmu_flags flags);
+            arch::mmu_flags mmu_flags
+        );
+        Result<void> protect(vaddr_t addr, vaddr_t size, arch::mmu_flags flags);
     private:
-        status_t split(vaddr_t offset, size_t size, ebl::RefPtr<VmRegion>& vmr_out);
+        Result<ebl::RefPtr<VmRegion>> split(vaddr_t offset, size_t size);
     private:
         vaddr_t base_;
         vaddr_t size_;

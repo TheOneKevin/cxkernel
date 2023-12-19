@@ -1,4 +1,4 @@
-#include "assert.h"
+#include <ebl/assert.h>
 #include "loaderabi.h"
 #include "platform/interface.h"
 #include "core/mem.h"
@@ -42,6 +42,7 @@ extern "C" void kernel_entry(uint64_t state_ptr) {
 
     // Enable interrupts and hand-off to the scheduler (FIXME: implement)
     arch::enable_interrupts();
+
     asm volatile("int $0x3");
     arch::halt();
 }

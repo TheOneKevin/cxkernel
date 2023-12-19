@@ -3,7 +3,7 @@
 #include "core/mp.h"
 #include "loaderabi.h"
 #include <ebl/stdio.h>
-#include "assert.h"
+#include <ebl/assert.h>
 #include "core/thread.h"
 
 static arch::PerCPU percpu_array[MAX_SMP_CPUS]{};

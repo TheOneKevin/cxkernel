@@ -1,4 +1,4 @@
-#include "assert.h"
+#include <ebl/assert.h>
 #include "core/mutex.h"
 #include "core/slab.h"
 #include <ebl/string.h>

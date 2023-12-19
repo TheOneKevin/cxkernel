@@ -8,17 +8,14 @@ namespace g {
     auto& total_phys_pgs = loader_state_.total_phys_pgs;
 }
 
-status_t core::alloc_phys_page_single(Page*& out) {
+Result<core::Page*> core::alloc_phys_page_single() {
     auto* node = g::pfndb_freelist.pop_front_unsafe();
-    if(node == nullptr) {
-        out = nullptr;
+    if(node == nullptr)
         return E::OUT_OF_MEMORY;
-    }
-    out = node;
-    return E::OK;
+    return node;
 }
 
-status_t core::alloc_phys_pages(unsigned count, ebl::IntrusiveList<Page> &pages)
+Result<void> core::alloc_phys_pages(unsigned count, ebl::IntrusiveList<Page> &pages)
 {
     pages = {};
     for(unsigned i = 0; i < count; i++) {

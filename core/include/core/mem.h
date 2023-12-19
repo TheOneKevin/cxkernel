@@ -5,8 +5,8 @@
 #include "ebl/status.h"
 
 namespace core {
-    status_t alloc_phys_pages(unsigned count, ebl::IntrusiveList<core::Page>& pages);
-    status_t alloc_phys_page_single(Page*& out);
+    Result<void> alloc_phys_pages(unsigned count, ebl::IntrusiveList<core::Page>& pages);
+    Result<Page*> alloc_phys_page_single();
     void free_phys_pages(ebl::IntrusiveList<core::Page>& pages);
     void free_phys_page_single(Page* page);
 }

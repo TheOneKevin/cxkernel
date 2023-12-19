@@ -43,7 +43,7 @@ elf64_shdr_t* N::Context64::find_section(const char* name) {
     return nullptr;
 }
 
-status_t N::Context64::load(elf64_ehdr_t *hdr) {
+Result<void> N::Context64::load(elf64_ehdr_t *hdr) {
     img = hdr;
     shdr = (elf64_shdr_t*)((uintptr_t) hdr + hdr->e_shoff);
     phdr = (elf64_phdr_t*)((uintptr_t) hdr + hdr->e_phoff);

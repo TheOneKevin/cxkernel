@@ -151,4 +151,10 @@ consteval bool is_type_complete() {
     return requires { typename void_t<decltype(sizeof(T))>; };
 }
 
+/*===----------------------------------------------------------------------===*/
+// is_trivially_destructible
+
+template <class T> struct is_trivially_destructible:
+    public internal::integral_constant<bool, __is_trivially_destructible(T)>{};
+
 } // namespace ebl

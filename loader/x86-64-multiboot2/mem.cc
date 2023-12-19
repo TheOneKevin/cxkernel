@@ -1,5 +1,5 @@
 #include "loader.h"
-#include "assert.h"
+#include <ebl/assert.h>
 #include "core/vm.h"
 #include <ebl/util.h>
 #include <ebl/stdio.h>
@@ -98,7 +98,7 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap) {
     mmap_it = mmap_list.begin();
 
     // Print reserved ranges
-    ebl::klog("Reserved ranges:\n");
+    ebl::klog("Additional reserved ranges:\n");
     for(int i = 0; i < num_reserved_ranges; i++) {
         ebl::klog("  %016lx - %016lx\n", reserved_memory[i].begin, reserved_memory[i].end);
     }
@@ -136,7 +136,7 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap *mmap) {
     ebl::klog("PFN DB size: %lu free + %lu used = %lu total\n",
         (uint64_t) pfndb_freelist.size(), (uint64_t) pfndb_rsrvlist.size(),
         (uint64_t) pfndb_freelist.size() + pfndb_rsrvlist.size());
-    ebl::klog("PFN DB addr: %lx - %lx\n",
+    ebl::klog("PFN DB addr: 0x%lx - 0x%lx\n",
         (paddr_t) pfndb_arr, (paddr_t) pfndb_arr+pfndb_sz_bytes-1);
     assert(pfndb_freelist.size() + pfndb_rsrvlist.size() == total_phys_pgs,
         "PFN database list sizes are incorrect!");

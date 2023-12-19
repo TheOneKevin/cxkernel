@@ -1,4 +1,4 @@
-#include "assert.h"
+#include <ebl/assert.h>
 #include "arch/interface.h"
 #include "core/thread.h"
 #include "core/mp.h"

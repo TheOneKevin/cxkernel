@@ -1,5 +1,5 @@
 #include "loader.h"
-#include "assert.h"
+#include <ebl/assert.h>
 #include "loaderabi.h"
 #include <ebl/util.h>
 #include <ebl/stdio.h>
@@ -90,7 +90,7 @@ extern "C" void enter_longmode(
     uint64_t state_ptr, uint64_t stack);
 
 extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
-    status_t ec = E::OK;
+    Result<void> ec = E::OK;
 
     // Run .init_array
     for(auto* fn = &init_array_start_; fn != &init_array_end_; fn++) (*fn)();
@@ -257,7 +257,7 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
 
     // Get entry and jump!
     auto* img = static_cast<elf64_ehdr_t*>(ctx.get_image());
-    ebl::kout("Jumping to kernel at %016lx\n", img->e_entry);
+    ebl::kout("Jumping to kernel at 0x%016lx\n", img->e_entry);
     enter_longmode(
         (uint32_t) pml4,
         (uint32_t) &gdt_ptr,

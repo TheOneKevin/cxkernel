@@ -2,14 +2,14 @@
 #include "core/mem.h"
 #include "x86-64/private.h"
 #include "arch/types.h"
-#include "assert.h"
+#include <ebl/assert.h>
 #include "loaderabi.h"
 
 using x86_64::page_flags;
 using core::Page;
 using page_list_head = ebl::IntrusiveList<core::Page>;
 
-static status_t map_single_page(
+static Result<void> map_single_page(
     paddr_t phys, vaddr_t virt, page_flags flags, page_list_head& pt_pages
 ) {
     namespace ns = x86_64;
@@ -31,25 +31,26 @@ static status_t map_single_page(
     auto* pde = &pd[pde_idx];
     auto* pte = &pt[pte_idx];
 
-    Page* page = nullptr;
-    status_t ec = E::OK;
     if(!pml4e->f.present) {
-        ec = core::alloc_phys_page_single(page);
-        if(!ec) return ec;
+        auto ec = core::alloc_phys_page_single();
+        if(!ec) return ec.status();
+        auto page = ec.unwrap();
         pt_pages.push_back_unsafe(page);
         pml4e->data = page->paddr() | 1 | flags.data;
     }
     
     if(!pdpte->f.present) {
-        ec = core::alloc_phys_page_single(page);
-        if(!ec) return ec;
+        auto ec = core::alloc_phys_page_single();
+        if(!ec) return ec.status();
+        auto page = ec.unwrap();
         pt_pages.push_back_unsafe(page);
         pdpte->data = page->paddr() | 1 | flags.data;
     }
     
     if(!pde->f.present) {
-        ec = core::alloc_phys_page_single(page);
-        if(!ec) return ec;
+        auto ec = core::alloc_phys_page_single();
+        if(!ec) return ec.status();
+        auto page = ec.unwrap();
         pt_pages.push_back_unsafe(page);
         pde->data = page->paddr() | 1 | flags.data;
     }
@@ -60,9 +61,9 @@ static status_t map_single_page(
     return E::OK;
 }
 
-status_t x86_64::map_pages(page_list_head& pages, vaddr_t virt, page_flags flags) {
+Result<void> x86_64::map_pages(page_list_head& pages, vaddr_t virt, page_flags flags) {
     page_list_head pt_pages;
-    status_t ec = E::OK;
+    Result<void> ec = E::OK;
     for(auto page : pages) {
         ec = map_single_page(page->paddr(), virt, flags, pt_pages);
         if(!ec) {

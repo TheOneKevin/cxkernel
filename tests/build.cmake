@@ -15,8 +15,9 @@ add_llvm_coverage_test(library_tests)
 # Define kernel_tests target
 add_executable(
         kernel_tests
+        "${CMAKE_CURRENT_LIST_DIR}/assert.cc"
         "${CMAKE_CURRENT_LIST_DIR}/kernel_vmm.cc"
-        "${CMAKE_CURRENT_SOURCE_DIR}/core/vmm.cc"
+        "${CMAKE_CURRENT_SOURCE_DIR}/core/vmregion.cc"
 )
 target_include_directories(
         kernel_tests

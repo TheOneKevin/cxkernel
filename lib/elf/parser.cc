@@ -9,7 +9,7 @@ static inline bool is_valid_elf(elf32_ehdr_t* h) {
         (h -> e_ident[EI_MAG3] == ELFMAG3);
 }
 
-status_t elf::Context::load(Context& ctx, void* img) {
+Result<void> elf::Context::load(Context& ctx, void* img) {
     auto* hdr = static_cast<elf32_ehdr_t*>(img);
     if(!is_valid_elf(hdr)) {
         return E::INVALID;

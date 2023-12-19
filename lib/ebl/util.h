@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ebl/type_traits.h>
+#include <ebl/source_location.h>
 
 #ifndef ABI_ALIGN
     #error "ABI_ALIGN not defined (check your build setup)"
