@@ -1,37 +1,44 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch doctest",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceRoot}/build/kernel_tests",
+      "cwd": "${workspaceRoot}/build"
+    },
+    {
+      "name": "Launch kernel with GDB (WSL)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/build/cxkernel.sys",
+      "cwd": "${workspaceRoot}",
+      "targetArchitecture": "amd64",
+      "MIMode": "gdb",
+      "miDebuggerArgs": "-nh",
+      "externalConsole": false,
+      "customLaunchSetupCommands": [
         {
-            "name": "Launch kernel with GDB (WSL)",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceRoot}/build/cxkernel.sys",
-            "cwd": "${workspaceRoot}",
-            "targetArchitecture": "amd64",
-            "MIMode": "gdb",
-            "miDebuggerArgs": "-nh",
-            "externalConsole": false,
-            "customLaunchSetupCommands": [
-                {
-                    "text": "source ${workspaceRoot}/build/.gdbinit",
-                    "description": "Connect to QEMU remote debugger"
-                }
-            ],
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "text": "file ${workspaceFolder}/build/cxkernel.sys"
-                }
-            ],
-            "preLaunchTask": "Create gdbinit",
-            "postDebugTask": "Kill TMUX"
+          "text": "source ${workspaceRoot}/build/.gdbinit",
+          "description": "Connect to QEMU remote debugger"
         }
-    ]
+      ],
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "text": "file ${workspaceFolder}/build/cxkernel.sys"
+        }
+      ],
+      "preLaunchTask": "Create gdbinit",
+      "postDebugTask": "Kill TMUX"
+    }
+  ]
 }

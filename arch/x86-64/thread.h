@@ -4,8 +4,8 @@
 
 namespace arch {
 
-    struct ThreadBackend {
-        vaddr_t sp;
-    };
+   struct ThreadBackend {
+      vaddr_t sp;
+   };
 
-}
+} // namespace arch

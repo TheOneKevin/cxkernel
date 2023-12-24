@@ -2,19 +2,19 @@
 #include <stdarg.h>
 
 namespace ebl {
-    constexpr int COUT = 0;
-    constexpr int CERR = 1;
-    constexpr int CLOG = 2;
+   constexpr int COUT = 0;
+   constexpr int CERR = 1;
+   constexpr int CLOG = 2;
 
-    int kout(const char* format, ...);
-    int kerr(const char* format, ...);
-    int klog(const char* format, ...);
-};
+   int kout(const char* format, ...);
+   int kerr(const char* format, ...);
+   int klog(const char* format, ...);
+}; // namespace ebl
 
 namespace platform {
-    void console_emit(char c);
-    void console_puts(char const* c);
-    void console_log(char const* c);
+   void console_emit(char c);
+   void console_puts(char const* c);
+   void console_log(char const* c);
 } // namespace platform
 
 /**

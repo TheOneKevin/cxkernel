@@ -4,13 +4,15 @@
 
 namespace platform {
 
-    void console_init();
-    void console_emit(char c);
-    void console_puts(char const* c);
-    void console_log(char const* c);
-    void init();
+   void console_init();
+   void console_emit(char c);
+   void console_puts(char const* c);
+   void console_log(char const* c);
+   void init();
 
 } // namespace platform
 
 // Include the platform-specific interface header last.
+// clang-format off
 #include STRINGIFY(platform/PLAT_TARGET/interface.h)
+// clang-format on
