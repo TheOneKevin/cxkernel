@@ -11,7 +11,6 @@
 #include "x86-64/types.h"
 
 using namespace core;
-using ebl::AllocChecker;
 using ebl::MakeRefPtr;
 using ebl::RefPtr;
 
@@ -56,9 +55,9 @@ Result<RefPtr<VmRegion>> VmRegion::allocate_vmr_compact(size_t size,
    new_flags.type = VmRegionType::REGION;
    new_flags.capability = flags.capability;
    new_flags.is_root = 0;
-   AllocChecker ac;
-   auto new_vmr = MakeRefPtr<VmRegion>(ac, new_hole_base, new_hole_size, new_flags, aspace_);
-   if(!ac.check()) return E::OUT_OF_MEMORY;
+   auto result = MakeRefPtr<VmRegion>(new_hole_base, new_hole_size, new_flags, aspace_);
+   if(!result) return result.status();
+   auto new_vmr = result.unwrap();
    new_vmr->parent_ = this;
    if(child == nullptr) {
       children_.push_back_unsafe(new_vmr);

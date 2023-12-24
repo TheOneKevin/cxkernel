@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ebl/assert.h>
+#include <ebl/status.h>
 #include <stdint.h>
 
 #include "ebl/atomic.h"
@@ -139,48 +140,21 @@ namespace ebl {
    template <typename T>
    struct MakeRefPtrHelper;
 
-   struct AllocChecker {
-      template <typename T>
-      friend struct MakeRefPtrHelper;
-      AllocChecker() : armed_{false}, result_{false} {}
-      ~AllocChecker() {
-         if(armed_) {
-            // TODO: Implement panic here...
-            assert(false, "AllocChecker failed to be disarmed.");
-         }
-      }
-      bool check() {
-         armed_ = false;
-         return result_;
-      }
-
-     private:
-      void arm(bool result) {
-         armed_ = true;
-         result_ = result;
-      }
-
-     private:
-      bool armed_;
-      bool result_;
-   };
-
    template <typename T>
    struct MakeRefPtrHelper {
       template <typename... Args>
-      static RefPtr<T> make_ref(AllocChecker& ac, Args&&... args) {
+      static Result<RefPtr<T>> make_ref(Args&&... args) {
          T* ptr = (T*)kmem::alloc(sizeof(T));
-         ac = AllocChecker{}; // We must overwrite the AllocChecker here
-         ac.arm(ptr != nullptr);
-         if(ptr == nullptr) return nullptr;
+         if(ptr == nullptr)
+            return E::OUT_OF_MEMORY;
          ptr = new(ptr) T{ebl::forward<Args>(args)...};
          return AdoptRef(ptr);
       }
    };
 
    template <typename T, typename... Args>
-   RefPtr<T> MakeRefPtr(AllocChecker& ac, Args&&... args) {
-      return MakeRefPtrHelper<T>::make_ref(ac, ebl::forward<Args>(args)...);
+   Result<RefPtr<T>> MakeRefPtr(Args&&... args) {
+      return MakeRefPtrHelper<T>::make_ref(ebl::forward<Args>(args)...);
    }
 
 } // namespace ebl
