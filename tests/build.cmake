@@ -29,6 +29,7 @@ target_include_directories(
         PUBLIC
         ${DOCTEST_INCLUDE_DIR}
 )
+target_compile_options(kernel_tests PRIVATE -g)
 add_llvm_coverage_test(kernel_tests)
 
 # TODO: Run these 3 commands after...

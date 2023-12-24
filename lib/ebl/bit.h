@@ -7,9 +7,9 @@ namespace ebl {
     /**
      * @brief Implements platform-independent bitfields.
      * 
-     * @tparam T 
-     * @tparam Index 
-     * @tparam Bits 
+     * @tparam T     The containing type for the bitfield.
+     * @tparam Index The bit offset of the field in the containing type.
+     * @tparam Bits  The number of bits this field occupies.
      */
     template<typename T, int Index, int Bits>
     struct BitField {

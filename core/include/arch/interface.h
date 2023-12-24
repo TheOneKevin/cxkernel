@@ -9,6 +9,7 @@
 struct LoaderState;
 namespace core {
     struct Thread;
+    struct AddressSpace;
 }
 
 namespace arch {
@@ -50,6 +51,8 @@ namespace arch {
     int cpu_num();
     PerCPU* get_percpu();
     core::Thread* get_current_thread();
+
+    void init_aspace(core::AddressSpace& aspace);
 
 } // namespace arch
 

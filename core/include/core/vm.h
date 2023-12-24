@@ -4,6 +4,7 @@
 #include "arch/types.h"
 #include "core/spinlock.h"
 #include "core/mutex.h"
+#include "core/vmregion.h"
 #include <stdint.h>
 #include <ebl/bit.h>
 #include <ebl/status.h>
@@ -22,61 +23,24 @@ namespace core {
         ebl::IntrusiveList<Page> pages_;
     };
 
-    enum class VmRegionType : uint8_t {
-        HOLE = 0,
-        MAPPING = 1,
-        REGION = 2
-    };
-
-    union VmRegionFlags {
-        using T = uint8_t;
-        T value;
-        ebl::BitField<T, 0, 1> cap_read;
-        ebl::BitField<T, 1, 1> cap_write;
-        ebl::BitField<T, 2, 1> cap_execute;
-        ebl::BitField<T, 3, 1> cap_specific;
-        ebl::BitField<T, 0, 4> capability;
-        ebl::BitField<VmRegionType, 4, 2> type;
-    };
-
-    struct VmRegion final : ebl::RefCountable<VmRegion>,
-                            ebl::IntrusiveListNode<ebl::RefPtr<VmRegion>> {
-        friend struct AddressSpace;
-    public:
-        VmRegion() noexcept {};
-        Result<ebl::RefPtr<VmRegion>>
-        allocate_vmr_compact(size_t size, uint8_t align_pow2, VmRegionFlags flags);
-        Result<ebl::RefPtr<VmRegion>>
-        allocate_vmr_sparse(size_t size, uint8_t align_pow2, VmRegionFlags flags);
-        Result<ebl::RefPtr<VmRegion>>
-        map_pages(
-            vaddr_t offset, size_t size, VmRegionFlags flags,
-            ebl::RefPtr<VmObject> object, vaddr_t vmo_offset,
-            arch::mmu_flags mmu_flags
-        );
-        Result<void> protect(vaddr_t addr, vaddr_t size, arch::mmu_flags flags);
-    private:
-        Result<ebl::RefPtr<VmRegion>> split(vaddr_t offset, size_t size);
-    private:
-        vaddr_t base_;
-        vaddr_t size_;
-        VmRegionFlags flags_;
-        VmRegion* parent_;
-        AddressSpace* aspace_;
-        ebl::RefPtr<VmObject> object_;
-        ebl::IntrusiveList<ebl::RefPtr<VmRegion>> children_;
-    };
-
     struct AddressSpace final : ebl::RefCountable<AddressSpace> {
+        friend void arch::init_aspace(AddressSpace&);
     public:
-        static ebl::RefPtr<AddressSpace> Create() {
-            return ebl::RefPtr<AddressSpace>(new AddressSpace());
-        }
         arch::AddressSpace& arch() { return backend_; }
     public:
-        AddressSpace() noexcept {
-            
+        AddressSpace() noexcept
+        : user_root_{0, 0, {}, this},
+          kernel_root_{0, 0, {}, this}
+        {
+            user_root_.flags_.capability = 0b1111;
+            kernel_root_.flags_.capability = 0b1111;
+            user_root_.flags_.type = VmRegionType::REGION;
+            kernel_root_.flags_.type = VmRegionType::REGION;
+            user_root_.flags_.is_root = 1;
+            kernel_root_.flags_.is_root = 1;
         }
+
+        VmRegion& get_user_root() { return user_root_; }
     private:
         VmRegion user_root_;
         VmRegion kernel_root_;

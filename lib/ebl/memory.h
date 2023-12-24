@@ -96,6 +96,7 @@ public:
     // Destructor
     ~RefPtr() {
         destroy(ptr_);
+        ptr_ = nullptr;
     }
     // Swap pointers (this does not affect reference count)
     void swap(RefPtr& other) noexcept {
@@ -186,7 +187,7 @@ struct MakeRefPtrHelper {
         ac.arm(ptr != nullptr);
         if(ptr == nullptr)
             return nullptr;
-        new (&ptr) T{ebl::forward<Args>(args)...};
+        ptr = new (ptr) T{ebl::forward<Args>(args)...};
         return AdoptRef(ptr);
     }
 };

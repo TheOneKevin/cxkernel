@@ -13,6 +13,14 @@ class ABICOMPAT PACKED IntrusiveListNode;
 template<typename T, int i>
 class ABICOMPAT PACKED IntrusiveList;
 
+/**
+ * @brief A node for an intrusive list. Classes that want to be used in an
+ *        intrusive list must inherit from this class.
+ * 
+ * @tparam T The type of the node. If T is a RefPtr, then T is the type of the
+ *           RefPtr, otherwise T is the type of the pointer.
+ * @tparam N The number of lists this node is in. Defaults to 1.
+ */
 template<typename T, int N = 1>
 class ABICOMPAT PACKED IntrusiveListNode {
 public:
@@ -76,19 +84,32 @@ private:
     };
 };
 
+/**
+ * @brief An intrusive list. Classes that want to be used in an intrusive list
+ *        must inherit from IntrusiveListNode (and T given here must be the same
+ *        type as in IntrusiveListNode).
+ * 
+ * @tparam T The type of the node. If T is a RefPtr, then T is the type of the
+ *           RefPtr, otherwise T is the type of the pointer.
+ * @tparam i The index of the list to use. Must not be greater than the number
+ *           of lists the node is in (N). Defaults to 0.
+ */
 template<typename T, int i = 0>
 class ABICOMPAT PACKED IntrusiveList final {
-    struct iterator;
     using U = conditional_t<is_instance_v<T, RefPtr>, T, T*>;
     union {
         U root;
         vaddr_t virt0_;
     };
     static consteval bool check_validity() {
+        // FIXME: This is broken right now
         /*return (i < T::NumberOfLists) &&
             ebl::is_base_of_v<IntrusiveListNode<T, T::NumberOfLists>, T>;*/
         return true;
     }
+public:
+    /// Iterator for the list
+    struct iterator;
 public:
     // Constructs an empty list.
     IntrusiveList(): root{nullptr} { };
@@ -210,11 +231,11 @@ public:
         for(auto it = begin(); it != end(); ++it, ++size);
         return size;
     }
-private:
+public:
     // An iterator for the list, implements required iterator functions.
     struct iterator {
-        iterator(U x, bool flag): list{x}, flag{flag} { };
         U operator *() const { return list; }
+        U operator ->() const { return list; }
         iterator& operator ++() {
             flag = true;
             list = list -> next[i];
@@ -224,6 +245,9 @@ private:
             return list == a.list && flag == a.flag; };
         bool operator!= (const iterator& a) const {
             return list != a.list || flag != a.flag; };
+    private:
+        friend class IntrusiveList;
+        iterator(U x, bool flag): list{x}, flag{flag} { };
     private:
         U list;
         bool flag;

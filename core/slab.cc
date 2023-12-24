@@ -82,7 +82,7 @@ slab* slab_create(slabcache* cache) REQUIRES(cache->lock) {
 
     // Initialize the slab struct
     auto* node = static_cast<slab*>(page);
-    new (&node) slab { 
+    node = new (node) slab { 
         cache, (objctl*) ptr, (void*) ptr
     };
 
@@ -92,7 +92,7 @@ slab* slab_create(slabcache* cache) REQUIRES(cache->lock) {
 slabcache* cache_create(const char* name, unsigned int size, uint16_t order) {
     auto* node = (slabcache*) cache_alloc(slabcache_cache);
     if(!node) return nullptr;
-    new (&node) slabcache { size, order };
+    node = new (node) slabcache { size, order };
     // Copy over the name
     ebl::memcpy(&node->name, name, cache_name_max);
     node->name[cache_name_max-1] = '\0';

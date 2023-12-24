@@ -29,9 +29,7 @@ void arch::init() {
     assert(arch::get_percpu()->self == &percpu_array[0], "Boot percpu pointer is not correct");
 
     // Install placeholder thread struct
-    boot_aspace.arch() = arch::AddressSpace {
-        .pml4 = x86_64::read_cr3()
-    };
+    arch::init_aspace(boot_aspace);
     boot_thread.address_space = ebl::AdoptRef(&boot_aspace);
     percpu_array[0].curthread = &boot_thread;
     assert(arch::get_current_thread() == &boot_thread, "Boot thread is not current thread");

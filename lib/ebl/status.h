@@ -4,21 +4,42 @@
 #include <ebl/util.h>
 #include <ebl/assert.h>
 
+/**
+ * @brief These error codes are used by the kernel to indicate the status of
+ *        an operation. They are used instead of exceptions because C++
+ *        exceptions are not supported in the kernel itself.
+ */
 enum E {
+    // No error.
     OK = 0,
+
+    // Generic error code.
     INVALID,
+
+    // The requested operation is not implemented.
     NOT_IMPLEMENTED,
+
+    // The caller passed an invalid argument to the function.
     INVALID_ARGUMENT,
+
+    // Physical memory allocation failed. Most likely returned by the kernel
+    // slab allocator. Will trigger the kernel paging process and attempt
+    // to free up some memory.
     OUT_OF_MEMORY,
-    PERMISSION_DENIED
+
+    // The caller does not have permission to perform the requested operation
+    PERMISSION_DENIED,
+    
+    // Returned by VmRegion::* when virtual memory allocation fails. This is
+    // technically a out-of-memory error, but we want to distinguish it from
+    // the kernel heap running out of memory.
+    ALLOCATION_FAILED
 };
 
 template<typename T>
 struct Result {
 public:
-    Result(T&& v) : error_{E::OK}, armed_{true} {
-        value_ = ebl::move(v);
-    }
+    Result(T&& v) : value_{ebl::move(v)}, error_{E::OK}, armed_{true} {}
 
     /* implicit */ Result(E e) : unused_{0}, error_{e}, armed_{true} {}
 
@@ -36,7 +57,7 @@ public:
     }
 
     T unwrap() {
-        if(armed_ == false)
+        if(armed_ == true)
             panic("Attempted to unwrap an armed Result");
         if(error_ != E::OK)
             panic("Attempted to unwrap an error Result");
@@ -59,8 +80,16 @@ private:
 template<>
 struct Result<void> {
 public:
-    Result(E e) : error_{e} {}
-    operator bool() const { return error_ == E::OK; }
+    Result(E e) : error_{e}, armed_{true} {}
+    operator bool() {
+        armed_ = false;
+        return error_ == E::OK;
+    }
+    ~Result() {
+        if(armed_ == true)
+            panic("Attempted to destroy an armed Result");
+    }
 private:
     E error_;
+    bool armed_;
 };

@@ -15,6 +15,7 @@ void assert(bool condition, const char *message,
   if (!condition) [[unlikely]] {
     std::cout << "Assertion failed at " << loc.file_name() << ":" << loc.line()
               << " " << loc.function_name() << std::endl;
+    std::cout << "Message: " << message << std::endl;
     throw std::exception();
   }
 }
@@ -22,5 +23,6 @@ void assert(bool condition, const char *message,
 void panic(const char *message, std::source_location const &loc) {
   std::cout << "Kernel panicked at " << loc.file_name() << ":" << loc.line()
             << " " << loc.function_name() << std::endl;
+  std::cout << "Message: " << message << std::endl;
   throw std::exception();
 }

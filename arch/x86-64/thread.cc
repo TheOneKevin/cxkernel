@@ -33,4 +33,12 @@ void switch_thread(core::Thread* oldthread, core::Thread* newthread) {
     );
 }
 
+void init_aspace(core::AddressSpace &aspace) {
+    aspace.arch().pml4 = x86_64::read_cr3();
+    aspace.user_root_.base_ = 0;
+    aspace.user_root_.size_ = 0x00007FFFFFFFFFFF;
+    aspace.kernel_root_.base_ = 0xFFFF800000000000;
+    aspace.kernel_root_.size_ = 0x00007FFFFFFFFFFF;
+}
+
 } // namespace arch
