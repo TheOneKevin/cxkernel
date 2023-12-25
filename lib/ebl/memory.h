@@ -40,13 +40,13 @@ namespace ebl {
       template <typename V, int i>
       friend class IntrusiveList;
 
-     public:
+   public:
       DELETE_COPY(RefCountable);
       DELETE_MOVE(RefCountable);
       RefCountable() noexcept : ref_count_(0) {}
       ~RefCountable() noexcept {}
 
-     private:
+   private:
       void add_ref() const noexcept { ref_count_.fetch_add(1, memory_order_relaxed); }
       bool release() const noexcept {
          auto ref = ref_count_.fetch_sub(1, memory_order_release);
@@ -58,7 +58,7 @@ namespace ebl {
       }
       void adopt() const noexcept { ref_count_.store(1, memory_order_relaxed); }
 
-     private:
+   private:
       mutable atomic<int32_t> ref_count_;
    };
 
@@ -74,7 +74,7 @@ namespace ebl {
 
    template <typename T>
    class RefPtr final {
-     public:
+   public:
       constexpr RefPtr() noexcept : ptr_{nullptr} {}
       constexpr RefPtr(ebl::nullptr_t) noexcept : ptr_{nullptr} {}
       // Construct from raw pointer, pointer must already be adopted
@@ -120,7 +120,7 @@ namespace ebl {
       bool operator==(ebl::nullptr_t) const { return ptr_ == nullptr; }
       bool operator!=(ebl::nullptr_t) const { return ptr_ != nullptr; }
 
-     private:
+   private:
       friend RefPtr<T> AdoptRef<T>(T*);
       enum AdoptTag { ADOPT };
       RefPtr(T* ptr, AdoptTag) : ptr_{ptr} {
@@ -134,7 +134,7 @@ namespace ebl {
          }
       }
 
-     private:
+   private:
       T* ptr_;
    };
 

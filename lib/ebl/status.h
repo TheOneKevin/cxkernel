@@ -39,7 +39,7 @@ enum E {
 
 template <typename T>
 struct Result {
-  public:
+public:
    Result(T&& v) : value_{ebl::move(v)}, error_{E::OK}, armed_{true} {}
 
    /* implicit */ Result(E e) : unused_{0}, error_{e}, armed_{true} {}
@@ -64,7 +64,7 @@ struct Result {
       return ebl::move(value_);
    }
 
-  private:
+private:
    union {
       char unused_;
       T value_;
@@ -75,11 +75,9 @@ struct Result {
 
 template <>
 struct Result<void> {
-  public:
+public:
    Result(E e) : error_{e}, armed_{true} {}
-   operator bool() {
-      return this->status() == E::OK;
-   }
+   operator bool() { return this->status() == E::OK; }
    E status() {
       armed_ = false;
       return error_;
@@ -88,7 +86,7 @@ struct Result<void> {
       if(armed_ == true) panic("Attempted to destroy an armed Result");
    }
 
-  private:
+private:
    E error_;
    bool armed_;
 };

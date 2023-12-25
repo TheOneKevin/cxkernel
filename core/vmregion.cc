@@ -102,10 +102,9 @@ Result<void> VmRegion::destroy() {
    E status = E::OK;
    for(auto child : children_) {
       auto res = child->destroy();
-      if(res)
-         status = res.status();
+      if(res) status = res.status();
    }
-   
+
    return status;
 }
 

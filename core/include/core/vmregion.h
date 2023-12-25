@@ -26,17 +26,16 @@ namespace core {
       ebl::BitField<T, 5, 1> is_root;
    };
 
-   struct VmRegion final : ebl::RefCountable<VmRegion>,
-                           ebl::IntrusiveListNode<VmRegion> {
+   struct VmRegion final : ebl::RefCountable<VmRegion>, ebl::IntrusiveListNode<VmRegion> {
       friend struct AddressSpace;
       friend struct ebl::MakeRefPtrHelper<VmRegion>;
       friend void arch::init_aspace(AddressSpace&);
 
-     private:
+   private:
       VmRegion(vaddr_t base, vaddr_t size, VmRegionFlags flags, AddressSpace* aspace) noexcept
             : base_{base}, size_{size}, flags_{flags}, parent_{nullptr}, aspace_{aspace} {}
 
-     public:
+   public:
       /**
        * @brief
        *
@@ -102,7 +101,7 @@ namespace core {
       auto get_base() const { return base_; }
       auto get_size() const { return size_; }
 
-     private:
+   private:
       /**
        * @brief Find the child region that is immediately above the given offset.
        *
@@ -141,7 +140,7 @@ namespace core {
          }
       }
 
-     private:
+   private:
       /// The (absolute) base address of this region.
       vaddr_t base_;
       /// The size of this region.

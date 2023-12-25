@@ -23,7 +23,7 @@ namespace std {
       // unavoidable.
       using __bsl_ty = decltype(__builtin_source_location());
 
-     public:
+   public:
       // The defaulted __ptr argument is necessary so that the builtin is evaluated
       // in the context of the caller. An explicit value should never be provided.
       static consteval source_location current(

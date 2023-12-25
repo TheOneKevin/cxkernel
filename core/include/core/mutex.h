@@ -16,12 +16,12 @@ namespace core {
    class CAPABILITY("mutex") Mutex final {
       friend class ebl::Guard<Mutex>;
 
-     private:
+   private:
       struct Policy {
-        private:
+      private:
          Mutex* lock_;
 
-        public:
+      public:
          Policy(Mutex* lock) : lock_{lock} {}
          void lock() ACQUIRE(lock_) NO_THREAD_SAFETY_ANALYSIS { lock_->lock(); }
          void unlock() RELEASE(lock_) NO_THREAD_SAFETY_ANALYSIS {
@@ -32,7 +32,7 @@ namespace core {
          }
       };
 
-     private:
+   private:
       enum class State {
          FREE,
          LOCKED,
@@ -42,12 +42,12 @@ namespace core {
       Thread* owner_;
       State state_;
 
-     private:
+   private:
       void lock();
       void unlock();
       bool do_i_hold() const;
 
-     public:
+   public:
       Mutex() : lock_{}, wait_queue_{}, owner_{nullptr}, state_{State::FREE} {}
    };
 

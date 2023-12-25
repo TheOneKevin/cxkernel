@@ -41,17 +41,17 @@ struct range {
 // Iterator class for MBI tags
 
 class multiboot_tag_list {
-  public:
+public:
    class iterator;
    multiboot_tag_list(unsigned long addr, multiboot_uint32_t type) : addr{addr}, type{type} {}
    iterator begin() const { return iterator{addr, type}; }
    iterator end() const { return iterator{}; }
 
-  public:
+public:
    class iterator {
       friend class multiboot_tag_list;
 
-     public:
+   public:
       iterator(unsigned long addr, multiboot_uint32_t type)
             : tag{(struct multiboot_tag*)(addr + 8)}, type{type} {}
       struct multiboot_tag* operator*();
@@ -59,15 +59,15 @@ class multiboot_tag_list {
       bool operator==(const iterator& a) const { return tag == a.tag; }
       bool operator!=(const iterator& a) const { return tag != a.tag; }
 
-     private:
+   private:
       iterator() : tag{nullptr}, type{0} {}
 
-     private:
+   private:
       struct multiboot_tag* tag;
       multiboot_uint32_t type;
    };
 
-  private:
+private:
    unsigned long addr;
    multiboot_uint32_t type;
 };
@@ -76,31 +76,31 @@ class multiboot_tag_list {
 // Iterator class for MBI memory map
 
 class multiboot_mmap_list {
-  public:
+public:
    class iterator;
    multiboot_mmap_list(struct multiboot_tag_mmap* mmap) : mmap{mmap} {}
    iterator begin() const { return iterator{mmap}; }
    iterator end() const { return iterator{}; }
 
-  public:
+public:
    class iterator {
       friend class multiboot_mmap_list;
 
-     public:
+   public:
       explicit iterator(struct multiboot_tag_mmap* mmap) : entry{mmap->entries}, mmap{mmap} {}
       multiboot_memory_map_t* operator*() const { return entry; }
       iterator& operator++();
       bool operator==(const iterator& a) const { return entry == a.entry; }
       bool operator!=(const iterator& a) const { return entry != a.entry; }
 
-     private:
+   private:
       iterator() : entry{nullptr}, mmap{nullptr} {}
 
-     private:
+   private:
       multiboot_memory_map_t* entry;
       struct multiboot_tag_mmap* mmap;
    };
 
-  private:
+private:
    struct multiboot_tag_mmap* mmap;
 };

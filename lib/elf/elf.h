@@ -8,13 +8,13 @@
 namespace elf {
 
    class Context {
-     private:
+   private:
       struct Context32;
       struct Context64;
       template <typename U>
       struct header;
 
-     public:
+   public:
       static Result<void> load(Context& ctx, void* img);
       bool is_64bits() const { return is_64bits_; }
       template <typename T>
@@ -28,10 +28,10 @@ namespace elf {
       // FIXME: Should this be genericized too?
       void* get_image() const { return is_64bits_ ? (void*)impl64_.img : (void*)impl32_.img; }
 
-     public:
+   public:
       Context() {}
 
-     private:
+   private:
       struct Context32 {
          Result<void> load(elf32_ehdr_t* hdr);
          elf32_ehdr_t* img;
@@ -53,10 +53,10 @@ namespace elf {
          elf64_shdr_t* strtab;
       };
 
-     private:
+   private:
       template <typename U>
       struct header {
-        private:
+      private:
          struct iterator {
             iterator(U* hdr) : hdr_{hdr} {}
             iterator& operator++() {
@@ -67,21 +67,21 @@ namespace elf {
             bool operator!=(const iterator& a) const { return hdr_ != a.hdr_; }
             U& operator*() const { return *hdr_; }
 
-           private:
+         private:
             U* hdr_;
          };
 
-        public:
+      public:
          header(U* hdr, uint16_t limit) : hdr_{hdr}, limit_{limit} {}
          iterator begin() const { return iterator{hdr_}; }
          iterator end() const { return iterator{&hdr_[limit_]}; }
 
-        private:
+      private:
          U* hdr_;
          uint16_t limit_;
       };
 
-     private:
+   private:
       union {
          Context64 impl64_;
          Context32 impl32_;

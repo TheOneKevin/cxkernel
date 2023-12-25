@@ -20,7 +20,7 @@ namespace ebl {
       static_assert(is_integral_v<T> && !is_same_v<T, bool>,
                     "Atomic only supports integral types (except bool)");
 
-     public:
+   public:
       void store(T desr, memory_order m = memory_order_seq_cst) volatile noexcept {
          __atomic_store_n(&value_, desr, m);
       }
@@ -90,7 +90,7 @@ namespace ebl {
          return __atomic_fetch_xor(&value_, op, m);
       }
 
-     public:
+   public:
       atomic() noexcept = default;
       atomic(T value) noexcept : value_{value} {}
       DELETE_COPY(atomic);
@@ -98,7 +98,7 @@ namespace ebl {
       atomic& operator=(const atomic&) volatile = delete;
       atomic& operator=(atomic&&) volatile = delete;
 
-     private:
+   private:
       T value_;
    };
 

@@ -39,16 +39,16 @@ namespace ebl {
     */
    template <typename T, int N = 1>
    class ABICOMPAT PACKED IntrusiveListNode {
-     public:
+   public:
       constexpr static int NumberOfLists = N;
 
-     private:
+   private:
       // Assert T is not RefPtr
       static_assert(!is_instance_v<T, RefPtr>, "IntrusiveListNode cannot be used with RefPtr<T>.");
       template <typename V, int i>
       friend class IntrusiveListInternal;
 
-     public:
+   public:
       IntrusiveListNode() : next{nullptr}, prev{nullptr} {};
       ~IntrusiveListNode() {
          for(int i = 0; i < N; ++i) {
@@ -57,7 +57,7 @@ namespace ebl {
          }
       }
 
-     private:
+   private:
       template <int i = 0>
       void insert_after(T* node) {
          static_assert(i < N);
@@ -77,7 +77,7 @@ namespace ebl {
          prev[i] = node;
       }
 
-     public:
+   public:
 #ifdef LOADER
       // Shift pointers by an offset
       void shift(vaddr_t offset) {
@@ -88,7 +88,7 @@ namespace ebl {
       }
 #endif
 
-     private:
+   private:
       union {
          T* next[N];
          vaddr_t virt0_[N];
@@ -109,7 +109,7 @@ namespace ebl {
          vaddr_t virt0_;
       };
 
-     protected:
+   protected:
       static consteval void check_validity() {
          static_assert(has_member_numberoflists_<T>::value,
                        "IntrusiveListInternal must be used with a type T such that T has a static "
@@ -124,11 +124,11 @@ namespace ebl {
                        "T::NumberOfLists");
       }
 
-     public:
+   public:
       /// Iterator for the list
       struct iterator;
 
-     public:
+   public:
 #ifdef LOADER
       // Shift pointers by an offset
       void shift(vaddr_t offset) {
@@ -160,7 +160,7 @@ namespace ebl {
          return size;
       }
 
-     protected:
+   protected:
       // Constructs an empty list.
       IntrusiveListInternal() : root{nullptr} {};
       // Returns a reference to the data contained in the first node.
@@ -245,7 +245,7 @@ namespace ebl {
          return node;
       }
 
-     public:
+   public:
       // An iterator for the list, implements required iterator functions.
       struct iterator {
          T* operator*() const { return list; }
@@ -258,11 +258,11 @@ namespace ebl {
          bool operator==(const iterator& a) const { return list == a.list && flag == a.flag; };
          bool operator!=(const iterator& a) const { return list != a.list || flag != a.flag; };
 
-        private:
+      private:
          friend class IntrusiveListInternal;
          iterator(T* x, bool flag) : list{x}, flag{flag} {};
 
-        private:
+      private:
          T* list;
          bool flag;
       };
@@ -281,7 +281,7 @@ namespace ebl {
    class ABICOMPAT PACKED IntrusiveList final : public IntrusiveListInternal<T, i> {
       using Base = IntrusiveListInternal<T, i>;
 
-     public:
+   public:
       IntrusiveList() : Base{} {};
       ~IntrusiveList() {}
       void push_front(T* node) { Base::push_front_unsafe(node); }
@@ -310,7 +310,7 @@ namespace ebl {
    class ABICOMPAT PACKED IntrusiveList<RefPtr<T>, i> final : public IntrusiveListInternal<T, i> {
       using Base = IntrusiveListInternal<T, i>;
 
-     public:
+   public:
       IntrusiveList() : Base{} {};
       ~IntrusiveList() {}
       void push_front(RefPtr<T> node) {

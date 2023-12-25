@@ -18,7 +18,7 @@ namespace ebl {
                     "T::Policy must support public member: void unlock(void)");
       static_assert(ebl::is_constructible_v<Policy, T*>, "T::Policy must be constructible with T*");
 
-     public:
+   public:
       explicit Guard(T* lock) ACQUIRE(lock) : impl_{Policy{lock}} { impl_.lock(); }
       Guard(T* lock1, Guard<T>&& lock2) ACQUIRE(lock1) RELEASE(lock2) : impl_{Policy{lock1}} {
          lock2.release();
@@ -27,7 +27,7 @@ namespace ebl {
       void release() RELEASE() { impl_.unlock(); }
       ~Guard() RELEASE() { release(); }
 
-     private:
+   private:
       Policy impl_;
    };
 

@@ -13,14 +13,14 @@ namespace core {
    class CAPABILITY("mutex") Spinlock final {
       friend class ebl::Guard<Spinlock>;
 
-     private:
+   private:
       // Private policy class for ebl::Guard.
       struct Policy {
-        private:
+      private:
          arch::SpinlockState irq_flags_;
          Spinlock* lock_;
 
-        public:
+      public:
          Policy(Spinlock* lock) : irq_flags_{}, lock_{lock} {}
          void lock() ACQUIRE(lock_) NO_THREAD_SAFETY_ANALYSIS { lock_->lock(irq_flags_); }
          void unlock() RELEASE(lock_) NO_THREAD_SAFETY_ANALYSIS {
@@ -31,14 +31,14 @@ namespace core {
          }
       };
 
-     private:
+   private:
       struct arch::SpinlockBackend backend_;
 
-     private:
+   private:
       void lock(arch::SpinlockState& x);
       void unlock(arch::SpinlockState const& x);
 
-     public:
+   public:
       Spinlock() : backend_{} {}
    };
 
@@ -48,13 +48,13 @@ namespace core {
    class SpinlockNoIrq final {
       friend class ebl::Guard<SpinlockNoIrq>;
 
-     private:
+   private:
       // Private policy class for ebl::Guard.
       struct Policy {
-        private:
+      private:
          SpinlockNoIrq* lock_;
 
-        public:
+      public:
          Policy(SpinlockNoIrq* lock) : lock_{lock} {}
          void lock() { lock_->lock(); }
          void unlock() {
@@ -65,14 +65,14 @@ namespace core {
          }
       };
 
-     private:
+   private:
       struct arch::SpinlockBackend backend_;
 
-     private:
+   private:
       void lock();
       void unlock();
 
-     public:
+   public:
       SpinlockNoIrq() : backend_{} {}
    };
 

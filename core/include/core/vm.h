@@ -19,7 +19,7 @@ namespace core {
    struct AddressSpace;
 
    struct VmObject final : ebl::RefCountable<VmObject> {
-     private:
+   private:
       core::Spinlock lock_;
       ebl::IntrusiveList<Page> pages_;
    };
@@ -27,10 +27,10 @@ namespace core {
    struct AddressSpace final : ebl::RefCountable<AddressSpace> {
       friend void arch::init_aspace(AddressSpace&);
 
-     public:
+   public:
       arch::AddressSpace& arch() { return backend_; }
 
-     public:
+   public:
       AddressSpace() noexcept : user_root_{0, 0, {}, this}, kernel_root_{0, 0, {}, this} {
          user_root_.flags_.capability = 0b1111;
          kernel_root_.flags_.capability = 0b1111;
@@ -42,7 +42,7 @@ namespace core {
 
       VmRegion& get_user_root() { return user_root_; }
 
-     private:
+   private:
       VmRegion user_root_;
       VmRegion kernel_root_;
       arch::AddressSpace backend_;
