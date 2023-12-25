@@ -5,13 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch doctest",
-      "type": "lldb",
-      "request": "launch",
-      "program": "${workspaceRoot}/build/kernel_tests",
-      "cwd": "${workspaceRoot}/build"
-    },
-    {
       "name": "Launch kernel with GDB (WSL)",
       "type": "cppdbg",
       "request": "launch",

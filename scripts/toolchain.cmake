@@ -55,7 +55,7 @@ function(add_llvm_coverage_test TEST_NAME)
                 ${DOCTEST_INCLUDE_DIR}
         )
         # Add coverage and debug flags
-        target_compile_options(${TEST_NAME} PRIVATE -g ${CLANG_COVERAGE_OPTIONS})
+        target_compile_options(${TEST_NAME} PRIVATE -g -gdwarf-4 ${CLANG_COVERAGE_OPTIONS})
         target_link_options(${TEST_NAME} PRIVATE ${CLANG_COVERAGE_OPTIONS})
         # Add test to CTest using the doctest test runner
         doctest_discover_tests(${TEST_NAME})
