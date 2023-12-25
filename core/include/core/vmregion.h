@@ -27,7 +27,7 @@ namespace core {
    };
 
    struct VmRegion final : ebl::RefCountable<VmRegion>,
-                           ebl::IntrusiveListNode<ebl::RefPtr<VmRegion>> {
+                           ebl::IntrusiveListNode<VmRegion> {
       friend struct AddressSpace;
       friend struct ebl::MakeRefPtrHelper<VmRegion>;
       friend void arch::init_aspace(AddressSpace&);

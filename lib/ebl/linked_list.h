@@ -12,7 +12,22 @@ namespace ebl {
    class ABICOMPAT PACKED IntrusiveListNode;
 
    template <typename T, int i>
-   class ABICOMPAT PACKED IntrusiveList;
+   class ABICOMPAT PACKED IntrusiveListInternal;
+
+   //===-------------------------------------------------------------------===//
+   // has_member_numberoflists_
+
+   namespace {
+      template <class, class = void>
+      struct has_member_numberoflists_ : ebl::false_type {};
+
+      template <class T>
+      struct has_member_numberoflists_<T, ebl::void_t<decltype(&T::NumberOfLists)>>
+            : ebl::true_type {};
+   }; // namespace
+
+   //===-------------------------------------------------------------------===//
+   // IntrusiveListNode
 
    /**
     * @brief A node for an intrusive list. Classes that want to be used in an
@@ -25,21 +40,13 @@ namespace ebl {
    template <typename T, int N = 1>
    class ABICOMPAT PACKED IntrusiveListNode {
      public:
+      constexpr static int NumberOfLists = N;
+
+     private:
+      // Assert T is not RefPtr
+      static_assert(!is_instance_v<T, RefPtr>, "IntrusiveListNode cannot be used with RefPtr<T>.");
       template <typename V, int i>
-      friend class IntrusiveList;
-      // U = T if T is a RefPtr, otherwise U = T*
-      using U = conditional_t<is_instance_v<T, RefPtr>, T, T*>;
-      // Extract RefPtr type from T
-      template <typename V>
-      struct RefPtrType {
-         using type = V;
-      };
-      template <typename V>
-      struct RefPtrType<RefPtr<V>> {
-         using type = V;
-      };
-      // If T is RefPtr, then W satisfies RefPtr<W> otherwise W = T
-      using W = typename RefPtrType<T>::type;
+      friend class IntrusiveListInternal;
 
      public:
       IntrusiveListNode() : next{nullptr}, prev{nullptr} {};
@@ -49,24 +56,28 @@ namespace ebl {
             prev[i] = nullptr;
          }
       }
+
+     private:
       template <int i = 0>
-      void insert_after(U node) {
+      void insert_after(T* node) {
          static_assert(i < N);
-         if(node == nullptr || node.get() == this) return;
+         if(node == nullptr || node == this) return;
          node->next[i] = next[i];
-         node->prev[i] = static_cast<W*>(this);
+         node->prev[i] = this;
          next[i]->prev[i] = node;
          next[i] = node;
       }
       template <int i = 0>
-      void insert_before(U node) {
+      void insert_before(T* node) {
          static_assert(i < N);
-         if(node == nullptr || node.get() == this) return;
+         if(node == nullptr || node == this) return;
          node->prev[i] = prev[i];
-         node->next[i] = static_cast<W*>(this);
+         node->next[i] = this;
          prev[i]->next[i] = node;
          prev[i] = node;
       }
+
+     public:
 #ifdef LOADER
       // Shift pointers by an offset
       void shift(vaddr_t offset) {
@@ -76,40 +87,41 @@ namespace ebl {
          }
       }
 #endif
+
      private:
-      static constexpr int NumberOfLists = N;
       union {
-         U next[N];
+         T* next[N];
          vaddr_t virt0_[N];
       };
       union {
-         U prev[N];
+         T* prev[N];
          vaddr_t virt1_[N];
       };
    };
 
-   /**
-    * @brief An intrusive list. Classes that want to be used in an intrusive list
-    *        must inherit from IntrusiveListNode (and T given here must be the same
-    *        type as in IntrusiveListNode).
-    *
-    * @tparam T The type of the node. If T is a RefPtr, then T is the type of the
-    *           RefPtr, otherwise T is the type of the pointer.
-    * @tparam i The index of the list to use. Must not be greater than the number
-    *           of lists the node is in (N). Defaults to 0.
-    */
+   //===-------------------------------------------------------------------===//
+   // IntrusiveListInternal
+
    template <typename T, int i = 0>
-   class ABICOMPAT PACKED IntrusiveList final {
-      using U = conditional_t<is_instance_v<T, RefPtr>, T, T*>;
+   class ABICOMPAT PACKED IntrusiveListInternal {
       union {
-         U root;
+         T* root;
          vaddr_t virt0_;
       };
-      static consteval bool check_validity() {
-         // FIXME: This is broken right now
-         /*return (i < T::NumberOfLists) &&
-             ebl::is_base_of_v<IntrusiveListNode<T, T::NumberOfLists>, T>;*/
-         return true;
+
+     protected:
+      static consteval void check_validity() {
+         static_assert(has_member_numberoflists_<T>::value,
+                       "IntrusiveListInternal must be used with a type T such that T has a static "
+                       "member NumberOfLists");
+         static_assert(is_base_of_v<IntrusiveListNode<T, T::NumberOfLists>, T>,
+                       "IntrusiveListInternal must be used with a type T such that T inherits from "
+                       "IntrusiveListNode");
+         static_assert(!is_instance_v<T, RefPtr>,
+                       "IntrusiveListInternal cannot be used with RefPtr<T>.");
+         static_assert(i < T::NumberOfLists,
+                       "IntrusiveListInternal must be used with a type T such that i < "
+                       "T::NumberOfLists");
       }
 
      public:
@@ -117,36 +129,55 @@ namespace ebl {
       struct iterator;
 
      public:
-      // Constructs an empty list.
-      IntrusiveList() : root{nullptr} {};
-      ~IntrusiveList() { root.~U(); };
 #ifdef LOADER
       // Shift pointers by an offset
       void shift(vaddr_t offset) {
-         static_assert(check_validity());
+         check_validity();
          if(virt0_ != 0) virt0_ += offset;
       }
 #endif
+      // Returns if this list is empty.
+      bool empty() const {
+         check_validity();
+         return root == nullptr;
+      }
+      // Returns an iterator to the beginning of the list.
+      iterator begin() const {
+         check_validity();
+         return iterator(root, false);
+      }
+      // Returns an iterator to the end of the list.
+      iterator end() const {
+         check_validity();
+         return iterator(root, root != nullptr);
+      }
+      // Get list size
+      size_t size() const {
+         check_validity();
+         size_t size = 0;
+         for(auto it = begin(); it != end(); ++it, ++size)
+            ;
+         return size;
+      }
+
+     protected:
+      // Constructs an empty list.
+      IntrusiveListInternal() : root{nullptr} {};
       // Returns a reference to the data contained in the first node.
-      U first() const {
-         static_assert(check_validity());
+      T* first_unsafe() const {
+         check_validity();
          return root;
       }
       // Returns a reference to the data contained in the last node.
-      U last() const {
-         static_assert(check_validity());
+      T* last_unsafe() const {
+         check_validity();
          if(root == nullptr) return nullptr;
          return root->prev[i];
       }
-      // Returns if this list is empty.
-      bool empty() const {
-         static_assert(check_validity());
-         return root == nullptr;
-      }
       // Inserts new_node before node. Does nothing if the
       // node is nullptr or equal to new_node.
-      void insert_before_unsafe(U node, U new_node) {
-         static_assert(check_validity());
+      void insert_before_unsafe(T* node, T* new_node) {
+         check_validity();
          if(node == nullptr || new_node == nullptr || node == new_node) return;
          node->prev[i]->next[i] = new_node;
          new_node->prev[i] = node->prev[i];
@@ -154,8 +185,8 @@ namespace ebl {
          node->prev[i] = new_node;
       }
       // Remove node from the list. Does nothing if the node is nullptr.
-      void remove_unsafe(U node) {
-         static_assert(check_validity());
+      void remove_unsafe(T* node) {
+         check_validity();
          if(node == nullptr) return;
          node->prev[i]->next[i] = node->next[i];
          node->next[i]->prev[i] = node->prev[i];
@@ -163,8 +194,8 @@ namespace ebl {
          node->next[i] = nullptr;
       }
       // push_front but with raw pointers
-      void push_front_unsafe(U node) {
-         static_assert(check_validity());
+      void push_front_unsafe(T* node) {
+         check_validity();
          if(root == nullptr) {
             root = node;
             node->prev[i] = node;
@@ -175,8 +206,8 @@ namespace ebl {
          }
       }
       // push_back but with raw pointers
-      void push_back_unsafe(U node) {
-         static_assert(check_validity());
+      void push_back_unsafe(T* node) {
+         check_validity();
          if(root == nullptr) {
             root = node;
             node->prev[i] = node;
@@ -186,9 +217,9 @@ namespace ebl {
          }
       }
       // pop_front but with raw pointers
-      U pop_front_unsafe() {
-         static_assert(check_validity());
-         U node = root;
+      T* pop_front_unsafe() {
+         check_validity();
+         T* node = root;
          if(root == nullptr) // Size of list is 0
             return nullptr;
          if(root->next[i] == root) { // Size of list is 1
@@ -200,9 +231,9 @@ namespace ebl {
          return node;
       }
       // pop_back but with raw pointers
-      U pop_back_unsafe() {
-         static_assert(check_validity());
-         U node = root->prev[i];
+      T* pop_back_unsafe() {
+         check_validity();
+         T* node = root->prev[i];
          if(root == nullptr) // Size of list is 0
             return nullptr;
          if(root == node) { // Size of list is 1
@@ -213,30 +244,12 @@ namespace ebl {
          if(node == root) root = nullptr;
          return node;
       }
-      // Returns an iterator to the beginning of the list.
-      iterator begin() const {
-         static_assert(check_validity());
-         return iterator(root, false);
-      }
-      // Returns an iterator to the end of the list.
-      iterator end() const {
-         static_assert(check_validity());
-         return iterator(root, root != nullptr);
-      }
-      // Get list size
-      size_t size() const {
-         static_assert(check_validity());
-         size_t size = 0;
-         for(auto it = begin(); it != end(); ++it, ++size)
-            ;
-         return size;
-      }
 
      public:
       // An iterator for the list, implements required iterator functions.
       struct iterator {
-         U operator*() const { return list; }
-         U operator->() const { return list; }
+         T* operator*() const { return list; }
+         T* operator->() const { return list; }
          iterator& operator++() {
             flag = true;
             list = list->next[i];
@@ -246,13 +259,86 @@ namespace ebl {
          bool operator!=(const iterator& a) const { return list != a.list || flag != a.flag; };
 
         private:
-         friend class IntrusiveList;
-         iterator(U x, bool flag) : list{x}, flag{flag} {};
+         friend class IntrusiveListInternal;
+         iterator(T* x, bool flag) : list{x}, flag{flag} {};
 
         private:
-         U list;
+         T* list;
          bool flag;
       };
+   };
+
+   //===-------------------------------------------------------------------===//
+   // IntrusiveList<T> where T inherits from IntrusiveListNode
+
+   /**
+    * @brief An intrusive list. T must inherit from IntrusiveListNode.
+    *
+    * @tparam T The type of the node. T must inherit from IntrusiveListNode.
+    * @tparam i The index of the list. Must be less than T::NumberOfLists.
+    */
+   template <typename T, int i = 0>
+   class ABICOMPAT PACKED IntrusiveList final : public IntrusiveListInternal<T, i> {
+      using Base = IntrusiveListInternal<T, i>;
+
+     public:
+      IntrusiveList() : Base{} {};
+      ~IntrusiveList() {}
+      void push_front(T* node) { Base::push_front_unsafe(node); }
+      void push_back(T* node) { Base::push_back_unsafe(node); }
+      T* pop_front() { return Base::pop_front_unsafe(); }
+      T* pop_back() { return Base::pop_back_unsafe(); }
+      T* remove(T* node) {
+         Base::remove_unsafe(node);
+         return node;
+      }
+      void insert_before(T* inspt, T* node) { Base::insert_before_unsafe(inspt, node); }
+   };
+
+   //===-------------------------------------------------------------------===//
+   // IntrusiveList<RefPtr<T>> specialization
+
+   /**
+    * @brief A specialization of IntrusiveList<T> for RefPtr<T> where T inherits from
+    *        IntrusiveListNode. The list will automatically add and remove references to the
+    *        objects in the list.
+    *
+    * @tparam T The type of the node. T must inherit from IntrusiveListNode.
+    * @tparam i The index of the list. Must be less than T::NumberOfLists.
+    */
+   template <typename T, int i>
+   class ABICOMPAT PACKED IntrusiveList<RefPtr<T>, i> final : public IntrusiveListInternal<T, i> {
+      using Base = IntrusiveListInternal<T, i>;
+
+     public:
+      IntrusiveList() : Base{} {};
+      ~IntrusiveList() {}
+      void push_front(RefPtr<T> node) {
+         node.get()->add_ref();
+         Base::push_front_unsafe(node.get());
+      }
+      void push_back(RefPtr<T> node) {
+         node.get()->add_ref();
+         Base::push_back_unsafe(node.get());
+      }
+      RefPtr<T> pop_front() {
+         T* ptr = Base::pop_front_unsafe();
+         ptr->release();
+         return RefPtr<T>{ptr};
+      }
+      RefPtr<T> pop_back() {
+         T* ptr = Base::pop_back_unsafe();
+         ptr->release();
+         return RefPtr<T>{ptr};
+      }
+      RefPtr<T> remove(RefPtr<T> node) {
+         Base::remove_unsafe(node.get());
+         return ebl::move(node);
+      }
+      void insert_before(T* inspt, RefPtr<T> node) {
+         node.get()->add_ref();
+         Base::insert_before_unsafe(inspt, node.get());
+      }
    };
 
 } // namespace ebl

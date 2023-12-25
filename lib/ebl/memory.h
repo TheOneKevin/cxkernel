@@ -22,6 +22,9 @@ namespace ebl {
    template <typename T>
    class RefPtr;
 
+   template <typename T, int i>
+   class IntrusiveList;
+
    /**
     * @brief Intrusively reference-counted object. Objects wishing to be ref-counted
     * (i.e., be used with RefPtr) should inherit from this class.
@@ -33,6 +36,9 @@ namespace ebl {
    class RefCountable {
       template <typename V>
       friend class RefPtr;
+
+      template <typename V, int i>
+      friend class IntrusiveList;
 
      public:
       DELETE_COPY(RefCountable);
@@ -145,8 +151,7 @@ namespace ebl {
       template <typename... Args>
       static Result<RefPtr<T>> make_ref(Args&&... args) {
          T* ptr = (T*)kmem::alloc(sizeof(T));
-         if(ptr == nullptr)
-            return E::OUT_OF_MEMORY;
+         if(ptr == nullptr) return E::OUT_OF_MEMORY;
          ptr = new(ptr) T{ebl::forward<Args>(args)...};
          return AdoptRef(ptr);
       }

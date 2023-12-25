@@ -37,7 +37,7 @@ static Result<void> map_single_page(paddr_t phys,
       auto ec = core::alloc_phys_page_single();
       if(!ec) return ec.status();
       auto page = ec.unwrap();
-      pt_pages.push_back_unsafe(page);
+      pt_pages.push_back(page);
       pml4e->data = page->paddr() | 1 | flags.data;
    }
 
@@ -45,7 +45,7 @@ static Result<void> map_single_page(paddr_t phys,
       auto ec = core::alloc_phys_page_single();
       if(!ec) return ec.status();
       auto page = ec.unwrap();
-      pt_pages.push_back_unsafe(page);
+      pt_pages.push_back(page);
       pdpte->data = page->paddr() | 1 | flags.data;
    }
 
@@ -53,7 +53,7 @@ static Result<void> map_single_page(paddr_t phys,
       auto ec = core::alloc_phys_page_single();
       if(!ec) return ec.status();
       auto page = ec.unwrap();
-      pt_pages.push_back_unsafe(page);
+      pt_pages.push_back(page);
       pde->data = page->paddr() | 1 | flags.data;
    }
 

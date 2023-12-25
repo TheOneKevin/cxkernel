@@ -32,19 +32,19 @@ Result<RefPtr<VmRegion>> VmRegion::allocate_vmr_compact(size_t size,
    size_t new_hole_size;
 
    // The child VMR to insert before, to keep sorted order of children_
-   RefPtr<VmRegion> child = nullptr;
+   VmRegion* child = nullptr;
 
    // TODO: Currently, this is just a first-fit allocator.
    const vaddr_t align = ebl::max(1U << align_pow2, arch::page_size);
    assert(size % arch::page_size == 0, "Size is not page-aligned!");
-   foreach_hole([&](RefPtr<VmRegion> x, vaddr_t hole_base, size_t hole_size) -> bool {
+   foreach_hole([&](VmRegion* x, vaddr_t hole_base, size_t hole_size) -> bool {
       auto aligned_base = ebl::align_up(hole_base, align);
       if(aligned_base + size > hole_base + hole_size) return true;
       // Found it.
       new_hole_base = aligned_base;
       new_hole_size = size;
       found_hole = true;
-      child = ebl::move(x);
+      child = x;
       return false;
    });
 
@@ -60,9 +60,9 @@ Result<RefPtr<VmRegion>> VmRegion::allocate_vmr_compact(size_t size,
    auto new_vmr = result.unwrap();
    new_vmr->parent_ = this;
    if(child == nullptr) {
-      children_.push_back_unsafe(new_vmr);
+      children_.push_back(new_vmr);
    } else {
-      new_vmr->insert_before(child);
+      children_.insert_before(child, new_vmr);
    }
    return new_vmr;
 }
@@ -98,7 +98,16 @@ Result<void> VmRegion::protect(vaddr_t addr, vaddr_t size, arch::mmu_flags flags
    return E::NOT_IMPLEMENTED;
 }
 
-Result<void> VmRegion::destroy() { return E::NOT_IMPLEMENTED; }
+Result<void> VmRegion::destroy() {
+   E status = E::OK;
+   for(auto child : children_) {
+      auto res = child->destroy();
+      if(res)
+         status = res.status();
+   }
+   
+   return status;
+}
 
 RefPtr<VmRegion> VmRegion::find_child_above(vaddr_t offset) {
    for(auto child : children_) {

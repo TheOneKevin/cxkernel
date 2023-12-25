@@ -92,7 +92,7 @@ slabcache* cache_create(const char* name, unsigned int size, uint16_t order) {
    // Add the new cache to the cache list
    {
       ebl::Guard guard_{&cache_list_lock};
-      cache_list.push_back_unsafe(node);
+      cache_list.push_back(node);
    }
    return node;
 }
@@ -102,21 +102,21 @@ void* cache_alloc(slabcache* cache) {
    slab* node = nullptr;
    if(cache->partiallist.empty()) {
       // No partial slabs, grab one from the free list
-      node = cache->freelist.pop_front_unsafe();
-      cache->partiallist.push_back_unsafe(node);
+      node = cache->freelist.pop_front();
+      cache->partiallist.push_back(node);
    } else if(cache->freelist.empty()) {
       // No free slabs, create a new one
       node = slab_create(cache);
       if(!node) return nullptr;
-      cache->partiallist.push_back_unsafe(node);
+      cache->partiallist.push_back(node);
    } else {
       // Grab the first partial slab
-      node = cache->partiallist.pop_front_unsafe();
+      node = cache->partiallist.pop_front();
    }
 
    // Grab the first free object from the slab
    ebl::Guard guard_slab_{&node->lock};
-   if(node->inuse + 1 == cache->slab_nobjects) cache->fulllist.push_back_unsafe(node);
+   if(node->inuse + 1 == cache->slab_nobjects) cache->fulllist.push_back(node);
    node->inuse++;
    node->last_alloc_time = 0;
    node->objctl = node->objctl->next_free_obj;
@@ -129,12 +129,12 @@ void cache_free(slab* slab, objctl* obj) {
    ebl::Guard guard2_{&slab->lock};
    if(slab->inuse == slab->parent->slab_nobjects) {
       // Slab was full, move to the partial list
-      slab->parent->fulllist.remove_unsafe(slab);
-      slab->parent->partiallist.push_back_unsafe(slab);
+      slab->parent->fulllist.remove(slab);
+      slab->parent->partiallist.push_back(slab);
    } else if(slab->inuse == 1) {
       // Slab will be empty, move to the free list
-      slab->parent->partiallist.remove_unsafe(slab);
-      slab->parent->freelist.push_back_unsafe(slab);
+      slab->parent->partiallist.remove(slab);
+      slab->parent->freelist.push_back(slab);
    } else {
       // Slab is still partially full, do nothing
    }
@@ -157,7 +157,7 @@ void cache_reap(slabcache* cache) {
 
 void kmem::bootstrap() NO_THREAD_SAFETY_ANALYSIS {
    // Init cache for struct slabcache
-   cache_list.push_back_unsafe(&slabcache_cache_node);
+   cache_list.push_back(&slabcache_cache_node);
 }
 
 void* kmem::alloc(unsigned int size) {

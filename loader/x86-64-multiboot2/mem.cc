@@ -122,9 +122,9 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap* mmap) {
    // Initialize PFN database
    for(paddr_t i = 0; i < total_phys_pgs; i++) {
       if(is_page_reserved(i)) {
-         pfndb_rsrvlist.push_back_unsafe(&pfndb_arr[i]);
+         pfndb_rsrvlist.push_back(&pfndb_arr[i]);
       } else {
-         pfndb_freelist.push_back_unsafe(&pfndb_arr[i]);
+         pfndb_freelist.push_back(&pfndb_arr[i]);
       }
    }
 
@@ -146,9 +146,9 @@ void bootstrap_pmm(const range (&res)[1], struct multiboot_tag_mmap* mmap) {
 static ns::pml4e* pml4;
 
 paddr_t pmm_alloc_page() {
-   auto* node = pfndb_freelist.pop_front_unsafe();
+   auto* node = pfndb_freelist.pop_front();
    if(node == nullptr) assert(false, "Out of memory!\n");
-   pfndb_rsrvlist.push_back_unsafe(node);
+   pfndb_rsrvlist.push_back(node);
    // Get i such that pfndb_arr[i] == node
    const paddr_t i = node - pfndb_arr;
    assert(&pfndb_arr[i] == node, "PFN database is corrupted!");

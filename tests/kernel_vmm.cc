@@ -46,7 +46,7 @@ static int basic_allocate_and_check(core::AddressSpace& as,
       CHECK_MESSAGE(child->get_base() == std::get<1>(allocs[i]),
                     "Checking VMR allocation base address");
       CHECK_MESSAGE(child->get_size() == std::get<2>(allocs[i]), "Checking VMR allocation size");
-      CHECK_MESSAGE(child.get() == results[i].get(), "Checking VMR allocation result");
+      CHECK_MESSAGE(child == results[i].get(), "Checking VMR allocation result");
       i++;
    }
    return i;

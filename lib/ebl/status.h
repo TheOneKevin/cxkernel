@@ -78,8 +78,11 @@ struct Result<void> {
   public:
    Result(E e) : error_{e}, armed_{true} {}
    operator bool() {
+      return this->status() == E::OK;
+   }
+   E status() {
       armed_ = false;
-      return error_ == E::OK;
+      return error_;
    }
    ~Result() {
       if(armed_ == true) panic("Attempted to destroy an armed Result");
