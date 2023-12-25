@@ -14,7 +14,7 @@ union TestUnion {
    ebl::BitField<TestEnum, 8, 2> f4;
 };
 
-TEST_CASE("bitfield test") {
+TEST_CASE("ebl bitfield basic") {
    TestUnion u;
    u.value = 0;
    u.f0 = 0b1;

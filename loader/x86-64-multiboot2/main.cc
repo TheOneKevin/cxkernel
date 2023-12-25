@@ -90,8 +90,6 @@ extern "C" void enter_longmode(uint32_t pml4_ptr,
                                uint64_t stack);
 
 extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
-   Result<void> ec = E::OK;
-
    // Run .init_array
    for(auto* fn = &init_array_start_; fn != &init_array_end_; fn++) (*fn)();
 
@@ -157,8 +155,8 @@ extern "C" [[noreturn]] void main(int sig, unsigned long ptr) {
 
    // Load and map the kernel ELF
    elf::Context ctx{};
-   ec = elf::Context::load(ctx, (void*)module->mod_start);
-   assert(ec, "Failed to load ELF");
+   auto elf_ec = elf::Context::load(ctx, (void*)module->mod_start);
+   assert(elf_ec, "Failed to load ELF");
    assert(ctx.is_64bits(), "Kernel must be 64-bit");
    for(auto& ph : ctx.get_header<elf64_phdr_t>()) {
       if(ph.p_type != PT_LOAD) continue;

@@ -46,7 +46,22 @@ static int basic_allocate_and_check(core::AddressSpace& as,
    return i;
 }
 
-TEST_CASE("basic vmm allocation") {
+template<size_t N>
+using alloc_t = std::array<std::tuple<vaddr_t, vaddr_t>, N>;
+
+template<size_t N>
+static int check_children(core::VmRegion& parent, alloc_t<N> allocs) {
+   int i = 0;
+   for(auto child : parent) {
+      CHECK_MESSAGE(child->get_base() == std::get<0>(allocs[i]),
+                    "Checking VMR allocation base address");
+      CHECK_MESSAGE(child->get_size() == std::get<1>(allocs[i]), "Checking VMR allocation size");
+      i++;
+   }
+   return i;
+}
+
+TEST_CASE("kernel vmregion allocation") {
    auto as = core::AddressSpace{};
    arch::init_aspace(as);
    // (base, size) pairs for allocations
@@ -61,7 +76,7 @@ TEST_CASE("basic vmm allocation") {
    CHECK(static_cast<bool>(as.get_user_root().destroy()));
 }
 
-TEST_CASE("basic out-of-memory") {
+TEST_CASE("kernel vmregion out-of-memory") {
    auto as = core::AddressSpace{};
    arch::init_aspace(as);
    // (base, size) pairs for allocations
@@ -74,5 +89,38 @@ TEST_CASE("basic out-of-memory") {
    // Allocate the regions
    int i = basic_allocate_and_check(as, 4, allocs);
    CHECK(i == 2);
+   CHECK(static_cast<bool>(as.get_user_root().destroy()));
+}
+
+TEST_CASE("kernel vmregion alloc then free") {
+   auto as = core::AddressSpace{};
+   arch::init_aspace(as);
+   // Allocate all the regions
+   auto r1 = as.get_user_root().allocate_vmr_compact(1*arch::page_size, 0, {});
+   auto r2 = as.get_user_root().allocate_vmr_compact(5*arch::page_size, 0, {});
+   // Check that the allocations succeeded
+   CHECK(r1.status() == E::OK);
+   CHECK(r2.status() == E::OK);
+   check_children(as.get_user_root(), alloc_t<2>{{
+      {0 * arch::page_size, 1 * arch::page_size},
+      {1 * arch::page_size, 5 * arch::page_size}
+   }});
+   // Try to allocate one more but fail
+   auto r3 = as.get_user_root().allocate_vmr_compact(1*arch::page_size, 0, {});
+   CHECK(r3.status() == E::ALLOCATION_FAILED);
+   // Free the first region
+   auto r1u = r1.unwrap();
+   CHECK(static_cast<bool>(r1u->destroy()));
+   check_children(as.get_user_root(), alloc_t<1>{{
+      {1 * arch::page_size, 5 * arch::page_size}
+   }});
+   // Allocate a new region
+   auto r4 = as.get_user_root().allocate_vmr_compact(1*arch::page_size, 0, {});
+   CHECK(r4.status() == E::OK);
+   check_children(as.get_user_root(), alloc_t<2>{{
+      {0 * arch::page_size, 1 * arch::page_size},
+      {1 * arch::page_size, 5 * arch::page_size}
+   }});
+   // Destroy the root
    CHECK(static_cast<bool>(as.get_user_root().destroy()));
 }

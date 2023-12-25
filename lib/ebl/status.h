@@ -45,7 +45,8 @@ public:
    /* implicit */ Result(E e) : unused_{0}, error_{e}, armed_{true} {}
 
    ~Result() {
-      value_.~T();
+      if(error_ == E::OK)
+         value_.~T();
    }
 
    operator bool() { return this->status() == E::OK; }
@@ -77,14 +78,16 @@ private:
 template <>
 struct Result<void> {
 public:
-   Result(E e) : error_{e}, armed_{true} {}
+   /* implicit */ Result(E e) : error_{e}, armed_{true} {}
+   Result() : error_{E::OK}, armed_{false} {}
    operator bool() { return this->status() == E::OK; }
    E status() {
       armed_ = false;
       return error_;
    }
    ~Result() {
-      if(armed_ == true) panic("Attempted to destroy an armed Result");
+      if(armed_ == true)
+         panic("Attempted to destroy an armed Result");
    }
 
 private:

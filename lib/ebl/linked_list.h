@@ -104,6 +104,7 @@ namespace ebl {
 
    template <typename T, int i = 0>
    class ABICOMPAT PACKED IntrusiveListInternal {
+   protected:
       union {
          T* root;
          vaddr_t virt0_;
@@ -188,6 +189,7 @@ namespace ebl {
       void remove_unsafe(T* node) {
          check_validity();
          if(node == nullptr) return;
+         if(node == root) root = root->next[i];
          node->prev[i]->next[i] = node->next[i];
          node->next[i]->prev[i] = node->prev[i];
          node->prev[i] = nullptr;
@@ -284,6 +286,8 @@ namespace ebl {
    public:
       IntrusiveList() : Base{} {};
       ~IntrusiveList() {}
+      T* first() const { return Base::first_unsafe(); }
+      T* last() const { return Base::last_unsafe(); }
       void push_front(T* node) { Base::push_front_unsafe(node); }
       void push_back(T* node) { Base::push_back_unsafe(node); }
       T* pop_front() { return Base::pop_front_unsafe(); }
@@ -292,7 +296,11 @@ namespace ebl {
          Base::remove_unsafe(node);
          return node;
       }
-      void insert_before(T* inspt, T* node) { Base::insert_before_unsafe(inspt, node); }
+      void insert_before(T* inspt, T* node) {
+         Base::insert_before_unsafe(inspt, node);
+         if(inspt == Base::root)
+            Base::root = node;
+      }
    };
 
    //===-------------------------------------------------------------------===//
@@ -321,9 +329,17 @@ namespace ebl {
       ~IntrusiveList() {
          check_validity();
          while(!Base::empty()) {
-            auto node = Base::pop_front_unsafe();
-            node->release();
+            auto rptr = pop_front();
+            // Destructor will release the reference
          }
+      }
+      RefPtr<T> first() const {
+         check_validity();
+         return RefPtr<T>{Base::first_unsafe()};
+      }
+      RefPtr<T> last() const {
+         check_validity();
+         return RefPtr<T>{Base::last_unsafe()};
       }
       void push_front(RefPtr<T> node) {
          check_validity();
@@ -350,12 +366,15 @@ namespace ebl {
       RefPtr<T> remove(RefPtr<T> node) {
          check_validity();
          Base::remove_unsafe(node.get());
+         node.get()->release();
          return ebl::move(node);
       }
       void insert_before(T* inspt, RefPtr<T> node) {
          check_validity();
          node.get()->add_ref();
          Base::insert_before_unsafe(inspt, node.get());
+         if(inspt == Base::root)
+            Base::root = node.get();
       }
    };
 
