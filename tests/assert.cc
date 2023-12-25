@@ -1,5 +1,5 @@
 #include <ebl/assert.h>
-
+#include <malloc.h>
 #include <exception>
 #include <iostream>
 
@@ -26,3 +26,8 @@ void panic(const char *message, std::source_location const &loc) {
    std::cout << "Message: " << message << std::endl;
    throw std::exception();
 }
+
+namespace kmem {
+   void* alloc(unsigned int size) { return malloc(size); }
+   void free(void* obj) { ::free(obj); }
+} // namespace kmem

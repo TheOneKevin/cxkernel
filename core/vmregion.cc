@@ -100,17 +100,22 @@ Result<void> VmRegion::protect(vaddr_t addr, vaddr_t size, arch::mmu_flags flags
 
 Result<void> VmRegion::destroy() {
    E status = E::OK;
-   for(auto child : children_) {
+   while(!children_.empty()) {
+      auto child = children_.pop_front();
+      child->parent_ = nullptr;
       auto res = child->destroy();
       if(res) status = res.status();
    }
-
+   if(parent_ != nullptr) {
+      parent_->children_.remove(this);
+   }
    return status;
 }
 
 RefPtr<VmRegion> VmRegion::find_child_above(vaddr_t offset) {
    for(auto child : children_) {
-      if(child->base_ >= this->base_ + offset) return child;
+      if(child->base_ >= this->base_ + offset)
+         return child;
    }
    return nullptr;
 }

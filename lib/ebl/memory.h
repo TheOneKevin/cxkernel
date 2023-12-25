@@ -10,6 +10,7 @@
 
 namespace kmem {
    void* alloc(unsigned int size);
+   void free(void* obj);
 }
 
 namespace ebl {
@@ -45,6 +46,7 @@ namespace ebl {
       DELETE_MOVE(RefCountable);
       RefCountable() noexcept : ref_count_(0) {}
       ~RefCountable() noexcept {}
+      int32_t ref_count() const noexcept { return ref_count_.load(memory_order_relaxed); }
 
    private:
       void add_ref() const noexcept { ref_count_.fetch_add(1, memory_order_relaxed); }
@@ -130,7 +132,14 @@ namespace ebl {
       }
       static void destroy(T* ptr) {
          if(ptr != nullptr && ptr->release()) {
+            // The #if below is to avoid valgrind complaining about
+            // mismatched new/delete pairs.
+#if __STDC_HOSTED__ == 0
             delete ptr;
+#else
+            ptr->~T();
+            kmem::free(ptr);
+#endif
          }
       }
 

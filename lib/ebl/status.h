@@ -44,7 +44,8 @@ public:
 
    /* implicit */ Result(E e) : unused_{0}, error_{e}, armed_{true} {}
 
-   ~Result() { /* v::~T() */
+   ~Result() {
+      value_.~T();
    }
 
    operator bool() { return this->status() == E::OK; }

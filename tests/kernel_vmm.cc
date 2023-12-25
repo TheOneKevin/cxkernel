@@ -1,22 +1,16 @@
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+
 #include "arch/interface.h"
 #include "core/vmregion.h"
 #include "ebl/memory.h"
 #include "ebl/status.h"
 #include "x86-64/types.h"
-#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <malloc.h>
-
 #include <iostream>
-
 #include "core/vm.h"
 #include "doctest.h"
 
 using core::VmRegion;
 using ebl::RefPtr;
-
-namespace kmem {
-   void* alloc(unsigned int size) { return malloc(size); }
-} // namespace kmem
 
 namespace arch {
    void init_aspace(core::AddressSpace& aspace) {
@@ -64,6 +58,7 @@ TEST_CASE("basic vmm allocation") {
    // Allocate the regions
    int i = basic_allocate_and_check(as, 3, allocs);
    CHECK(i == 3);
+   CHECK(static_cast<bool>(as.get_user_root().destroy()));
 }
 
 TEST_CASE("basic out-of-memory") {
@@ -79,4 +74,5 @@ TEST_CASE("basic out-of-memory") {
    // Allocate the regions
    int i = basic_allocate_and_check(as, 4, allocs);
    CHECK(i == 2);
+   CHECK(static_cast<bool>(as.get_user_root().destroy()));
 }

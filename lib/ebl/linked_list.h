@@ -310,32 +310,50 @@ namespace ebl {
    class ABICOMPAT PACKED IntrusiveList<RefPtr<T>, i> final : public IntrusiveListInternal<T, i> {
       using Base = IntrusiveListInternal<T, i>;
 
+      static consteval void check_validity() {
+         static_assert(is_base_of_v<RefCountable<T>, T>,
+                       "IntrusiveListInternal must be used with a type T such that T inherits from "
+                       "RefCountable");
+      }
+
    public:
       IntrusiveList() : Base{} {};
-      ~IntrusiveList() {}
+      ~IntrusiveList() {
+         check_validity();
+         while(!Base::empty()) {
+            auto node = Base::pop_front_unsafe();
+            node->release();
+         }
+      }
       void push_front(RefPtr<T> node) {
+         check_validity();
          node.get()->add_ref();
          Base::push_front_unsafe(node.get());
       }
       void push_back(RefPtr<T> node) {
+         check_validity();
          node.get()->add_ref();
          Base::push_back_unsafe(node.get());
       }
       RefPtr<T> pop_front() {
+         check_validity();
          T* ptr = Base::pop_front_unsafe();
          ptr->release();
          return RefPtr<T>{ptr};
       }
       RefPtr<T> pop_back() {
+         check_validity();
          T* ptr = Base::pop_back_unsafe();
          ptr->release();
          return RefPtr<T>{ptr};
       }
       RefPtr<T> remove(RefPtr<T> node) {
+         check_validity();
          Base::remove_unsafe(node.get());
          return ebl::move(node);
       }
       void insert_before(T* inspt, RefPtr<T> node) {
+         check_validity();
          node.get()->add_ref();
          Base::insert_before_unsafe(inspt, node.get());
       }

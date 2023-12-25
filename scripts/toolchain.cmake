@@ -41,6 +41,20 @@ set(CLANG_COVERAGE_OPTIONS -fprofile-instr-generate -fcoverage-mapping)
 
 # Add new test function
 function(add_llvm_coverage_test TEST_NAME)
+        # Create executable
+        add_executable(${TEST_NAME} ${ARGN})
+        # Link against kernel libraries
+        target_include_directories(
+                ${TEST_NAME}
+                PRIVATE
+                ${CMAKE_CURRENT_SOURCE_DIR}/lib
+                ${CMAKE_CURRENT_SOURCE_DIR}/core/include
+                ${CMAKE_CURRENT_SOURCE_DIR}/arch
+                ${CMAKE_CURRENT_SOURCE_DIR}
+                PUBLIC
+                ${DOCTEST_INCLUDE_DIR}
+        )
+        # Add coverage and debug flags
         target_compile_options(${TEST_NAME} PRIVATE -g ${CLANG_COVERAGE_OPTIONS})
         target_link_options(${TEST_NAME} PRIVATE ${CLANG_COVERAGE_OPTIONS})
         # Add test to CTest using the doctest test runner
