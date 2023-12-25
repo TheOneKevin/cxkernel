@@ -29,10 +29,9 @@ target_include_directories(
         PUBLIC
         ${DOCTEST_INCLUDE_DIR}
 )
-target_compile_options(kernel_tests PRIVATE -g)
 add_llvm_coverage_test(kernel_tests)
 
-# TODO: Run these 3 commands after...
+# TODO: Run these 3 commands after "make test"
 # llvm-profdata merge -sparse library_tests.profraw -o library_tests.profdata
 # llvm-cov show -output-dir=coverage/report -format=html -instr-profile=library_tests.profdata -object=library_tests
 # llvm-cov export -format=lcov -instr-profile=library_tests.profdata -object=library_tests > coverage/lcov.info

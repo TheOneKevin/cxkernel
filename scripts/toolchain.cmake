@@ -1,21 +1,15 @@
 # Include DOCTEST framework
-include(ExternalProject)
-find_package(Git REQUIRED)
-ExternalProject_Add(
-    doctest
-    PREFIX ${CMAKE_BINARY_DIR}/doctest
-    GIT_REPOSITORY https://github.com/doctest/doctest.git
-    TIMEOUT 10
-    UPDATE_COMMAND ${GIT_EXECUTABLE} pull
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND ""
-    INSTALL_COMMAND ""
-    LOG_DOWNLOAD ON
+include(FetchContent)
+FetchContent_Declare(
+        doctest
+        GIT_REPOSITORY  https://github.com/doctest/doctest
+        GIT_TAG         v2.4.11
 )
-
+FetchContent_MakeAvailable(doctest)
 # Expose required variable (DOCTEST_INCLUDE_DIR) to parent scope
-ExternalProject_Get_Property(doctest source_dir)
-set(DOCTEST_INCLUDE_DIR ${source_dir}/doctest CACHE INTERNAL "Path to include folder for doctest")
+set(DOCTEST_INCLUDE_DIR ${doctest_SOURCE_DIR}/doctest CACHE INTERNAL "Path to include folder for doctest")
+# Include scripts/cmake/doctest.cmake from doctest
+include(${doctest_SOURCE_DIR}/scripts/cmake/doctest.cmake)
 
 # Set up assembler
 # ref: Github Kitware/CMake/blob/master/Modules/CMakeASM_NASMInformation.cmake
@@ -47,13 +41,12 @@ set(CLANG_COVERAGE_OPTIONS -fprofile-instr-generate -fcoverage-mapping)
 
 # Add new test function
 function(add_llvm_coverage_test TEST_NAME)
-        target_compile_options(${TEST_NAME} PRIVATE ${CLANG_COVERAGE_OPTIONS})
+        target_compile_options(${TEST_NAME} PRIVATE -g ${CLANG_COVERAGE_OPTIONS})
         target_link_options(${TEST_NAME} PRIVATE ${CLANG_COVERAGE_OPTIONS})
-        add_test(NAME ${TEST_NAME} COMMAND $<TARGET_FILE:${TEST_NAME}>)
-        set_property(
-                TEST ${TEST_NAME} PROPERTY ENVIRONMENT
-                "LLVM_PROFILE_FILE=${CMAKE_CURRENT_BINARY_DIR}/${TEST_NAME}.profraw"
-        )
+        # Add test to CTest using the doctest test runner
+        doctest_discover_tests(${TEST_NAME})
+        # FIXME: Coverage is not working
+        # PROPERTIES ENVIRONMENT "LLVM_PROFILE_FILE=${CMAKE_CURRENT_BINARY_DIR}/${TEST_NAME}.profraw"
 endfunction()
 
 # Enable testing!
